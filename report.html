@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 차트/대시보드 인사이트 타당성 분석 보고서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    
+    <style>
+        /* 기본 폰트 및 설정 */
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            background-color: #f1f5f9; /* Slate-100 */
+            color: #1e293b; /* Slate-800 */
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* A4 시뮬레이션 컨테이너 */
+        .page-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 15mm 20mm;
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 등급 배지 스타일 */
+        .tier-badge { 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            font-weight: 800; 
+            font-size: 0.65rem; 
+            display: inline-block; 
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .tier-1 { background-color: #fee2e2 !important; color: #991b1b !important; border: 1px solid #fca5a5 !important; }
+        .tier-2 { background-color: #ffedd5 !important; color: #9a3412 !important; border: 1px solid #fdba74 !important; }
+        .tier-3 { background-color: #fef9c3 !important; color: #854d0e !important; border: 1px solid #fde047 !important; }
+        .tier-4 { background-color: #f3f4f6 !important; color: #374151 !important; border: 1px solid #d1d5db !important; }
+
+        .score-badge {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* 인쇄 전용 스타일 */
+        @media print {
+            @page { margin: 0; size: A4; }
+            body { background-color: white !important; margin: 0 !important; }
+            .page-container {
+                width: 100% !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                padding: 15mm 20mm !important;
+                box-shadow: none !important;
+                page-break-after: always;
+                display: block !important;
+            }
+            .page-container:last-child { page-break-after: auto; }
+            .no-print { display: none !important; }
+            .break-before { break-before: page; page-break-before: always; }
+            
+            /* 배경색 강제 적용 */
+            .bg-blue-50 { background-color: #eff6ff !important; -webkit-print-color-adjust: exact; }
+            .bg-red-50 { background-color: #fef2f2 !important; -webkit-print-color-adjust: exact; }
+            .bg-slate-800 { background-color: #1e293b !important; color: white !important; -webkit-print-color-adjust: exact; }
+            .bg-indigo-50 { background-color: #eef2ff !important; -webkit-print-color-adjust: exact; }
+            .bg-slate-900 { background-color: #1e293b !important; color: white !important; -webkit-print-color-adjust: exact; }
+        }
+        
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body>
+
+    <!-- 상단 네비게이션 (인쇄 시 숨김) -->
+    <div class="fixed top-0 left-0 right-0 bg-white border-b border-slate-200 z-50 px-6 py-3 flex justify-between items-center shadow-sm no-print">
+        <div class="flex items-center gap-3">
+            <!-- JNF (JenniferSoft) 로고 약어 적용 -->
+            <div class="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-white font-bold text-xs">JNF</div>
+            <div>
+                <h1 class="font-bold text-slate-800 text-sm">Internal Report: AI Feasibility Analysis</h1>
+                <p class="text-xs text-slate-500">기능 타당성 검증 및 우선순위 (Total 3 Pages)</p>
+            </div>
+        </div>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-md flex items-center gap-2">
+            <i class="fas fa-file-pdf"></i> 보고서 출력 (PDF)
+        </button>
+    </div>
+
+    <!-- Page 1: 개요, 평가 매트릭스, Tier 1 -->
+    <div class="page-container">
+        <header class="border-b-2 border-slate-800 pb-4 mb-6">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-slate-900 mb-2 tracking-tight">AI 차트/대시보드 인사이트<br>기능 타당성 및 우선순위 분석</h1>
+                    <div class="flex gap-4 text-sm text-slate-500 mt-2">
+                        <span><i class="far fa-calendar mr-1"></i> 2025-11-25</span>
+                        <span class="border-l border-slate-300 pl-4"><i class="fas fa-code-branch mr-1"></i> Version 2.3</span>
+                        <!-- 작성자 및 소속 변경 -->
+                        <span class="border-l border-slate-300 pl-4"><i class="fas fa-user mr-1"></i> Alvin (APM Team)</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="bg-slate-800 text-white text-[10px] px-2 py-1 rounded font-mono tracking-wider">INTERNAL USE ONLY</span>
+                    <div class="mt-2 text-right">
+                        <div class="text-xl font-bold text-slate-700">33 <span class="text-xs text-slate-400 font-normal">Target Charts</span></div>
+                        <div class="text-xl font-bold text-slate-700">14 <span class="text-xs text-slate-400 font-normal">Target Dashboards</span></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Executive Summary -->
+        <section class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h2 class="text-sm font-bold text-slate-800 mb-2 flex items-center uppercase tracking-wide">
+                <i class="fas fa-check-circle text-green-600 mr-2"></i> Executive Summary
+            </h2>
+            <p class="text-xs text-slate-700 leading-relaxed text-justify mb-2">
+                전체 33개 차트 중 <strong>Tier 1/2에 해당하는 12개 차트(36%)</strong>만이 AI 도입 시 기술적/운영적 효용성을 제공합니다.
+                단순 시계열 차트(Line, Bar)는 직관적인 해석이 가능하여 AI 분석 가치가 낮으므로(Tier 4), 
+                <strong>다차원 상관관계 분석(Topology, Heatmap)</strong>에 개발 및 튜닝 리소스를 집중해야 합니다.
+            </p>
+            <div class="flex gap-2 mt-3">
+                <span class="bg-red-100 text-red-800 text-[10px] px-2 py-1 rounded font-bold">집중 대상: Tier 1 (6개)</span>
+                <span class="bg-orange-100 text-orange-800 text-[10px] px-2 py-1 rounded font-bold">권장 대상: Tier 2 (6개)</span>
+                <span class="bg-slate-200 text-slate-600 text-[10px] px-2 py-1 rounded">비권장/검토: Tier 3~4 (21개)</span>
+            </div>
+        </section>
+
+        <!-- Infographic Image Replacement -->
+        <div class="mb-8 text-center">
+            <div class="relative inline-block rounded-xl overflow-hidden border border-slate-200 bg-white">
+                <img src="https://raw.githubusercontent.com/seogi1004/cdn/refs/heads/main/info.jpg" alt="AI Insight Infographic" class="w-full max-w-2xl mx-auto object-contain">
+                <div class="w-full bg-slate-100 p-1.5 text-slate-500 text-[9px] font-medium text-center border-t border-slate-200">
+                    <i class="fas fa-layer-group mr-2"></i> Strategic Priority & Feasibility Overview
+                </div>
+            </div>
+        </div>
+
+        <section class="flex-grow">
+            <div class="flex items-center justify-between mb-3 border-b border-slate-200 pb-2">
+                <div class="flex items-center gap-2">
+                    <span class="tier-badge tier-1">TIER 1</span>
+                    <h2 class="text-sm font-bold text-slate-800">최우선 개발 및 튜닝 대상 (6 Charts)</h2>
+                </div>
+                <span class="text-[10px] text-slate-500">Criteria: 다차원 데이터, 인과관계 추론 필요</span>
+            </div>
+            <div class="border border-red-200 rounded-lg overflow-hidden shadow-sm">
+                <table class="w-full text-xs text-left text-slate-600">
+                    <thead class="bg-red-50 text-red-900 uppercase font-bold">
+                        <tr>
+                            <th class="px-3 py-2 w-[35%]">차트 명칭 / Key</th>
+                            <th class="px-3 py-2">기술적 분석 가치 및 선정 근거</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-red-100 bg-white">
+                        <tr>
+                            <td class="px-3 py-2">
+                                <div class="font-bold text-slate-800">MSA Topology <span class="text-red-500 ml-1 text-[9px]">(Rank 1)</span></div>
+                                <div class="text-[9px] text-slate-400 font-mono">vue.msa.topology</div>
+                            </td>
+                            <td class="px-3 py-2">Node/Edge 간의 복잡한 의존성 분석. <strong>SPOF(단일 실패 지점)</strong> 및 병목 경로의 자동 식별에 필수적임.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2">
+                                <div class="font-bold text-slate-800">MSA Sankey</div>
+                                <div class="text-[9px] text-slate-400 font-mono">vue.msa.sankey</div>
+                            </td>
+                            <td class="px-3 py-2">트래픽 흐름의 비대칭성 감지. 육안으로 파악하기 힘든 복합적인 흐름 패턴 해석.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2">
+                                <div class="font-bold text-slate-800">SFR Heatmap</div>
+                                <div class="text-[9px] text-slate-400 font-mono">vue.heatmap.sfr</div>
+                            </td>
+                            <td class="px-3 py-2">대량 샘플링 데이터의 시각적 패턴(수직/수평) 분석. <strong>Lock(수직) vs Delay(수평)</strong> 구분.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2">
+                                <div class="font-bold text-slate-800">Problem Heatmap</div>
+                                <div class="text-[9px] text-slate-400 font-mono">vue.heatmap.problem</div>
+                            </td>
+                            <td class="px-3 py-2">시간축 x 문제유형(10분 단위)의 집중도 분석. 연쇄 장애의 <strong>전조 현상</strong> 파악.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2">
+                                <div class="font-bold text-slate-800">Confidence Line</div>
+                                <div class="text-[9px] text-slate-400 font-mono">line.confidence.runtime</div>
+                            </td>
+                            <td class="px-3 py-2">통계적 이상치(신뢰구간 이탈) 판별. 단순 임계값이 아닌 동적 기준 적용.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2">
+                                <div class="font-bold text-slate-800">K8s Workload</div>
+                                <div class="text-[9px] text-slate-400 font-mono">vue.workload.external.k8s</div>
+                            </td>
+                            <td class="px-3 py-2"><strong>5차원 데이터</strong>(Pod/Node/Container/Error/Time) 상관관계 분석. 인간 인지 한계 초과.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page 2: Tier 2/3/4 및 대시보드 점수 산정 -->
+    <div class="page-container break-before">
+        <section class="mb-6">
+            <div class="flex items-center justify-between mb-3 border-b border-slate-200 pb-2">
+                <div class="flex items-center gap-2">
+                    <span class="tier-badge tier-2">TIER 2</span>
+                    <h2 class="text-sm font-bold text-slate-800">높은 효용성 (권장)</h2>
+                </div>
+                <span class="text-[10px] font-bold bg-orange-100 text-orange-800 px-2 py-1 rounded">6 Charts</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white p-2 border border-orange-200 rounded shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-bold text-slate-700">Problem List</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500">우선순위화 및 공통 원인 도출</p>
+                </div>
+                <div class="bg-white p-2 border border-orange-200 rounded shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-bold text-slate-700">Application Map</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500">다변량 성능 상태 비교/시각화</p>
+                </div>
+                <div class="bg-white p-2 border border-orange-200 rounded shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-bold text-slate-700">Active Bubble</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500">3차원 이상치(Outlier) 식별</p>
+                </div>
+                <div class="bg-white p-2 border border-orange-200 rounded shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-bold text-slate-700">X-View</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500">트랜잭션 분포 패턴 밀도 해석</p>
+                </div>
+                <div class="bg-white p-2 border border-orange-200 rounded shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-bold text-slate-700">Business Service Status</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500">비즈니스 계층 구조상 병목 파악</p>
+                </div>
+                <div class="bg-white p-2 border border-orange-200 rounded shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-bold text-slate-700">Active Service List</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500">병목 세션 및 SQL 패턴 분석</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-6 flex gap-6">
+            <div class="flex-1">
+                <div class="flex items-center justify-between mb-2 border-b border-yellow-200 pb-1">
+                    <span class="tier-badge tier-3">TIER 3 (7 Items)</span>
+                    <span class="text-[9px] text-slate-400">선택적 분석 (Optional)</span>
+                </div>
+                <div class="bg-yellow-50/50 rounded border border-yellow-100 p-2 text-[10px] space-y-1">
+                    <div class="flex justify-between"><span class="font-medium">Equalizer CPU</span> <span class="text-slate-500">Wait/Sys 분포</span></div>
+                    <div class="flex justify-between"><span class="font-medium">Equalizer DB Conn</span> <span class="text-slate-500">누수/풀링 패턴</span></div>
+                    <div class="flex justify-between"><span class="font-medium">Equalizer K8s</span> <span class="text-slate-500">Pod 리소스 불균형</span></div>
+                    <div class="flex justify-between"><span class="font-medium">Scoreboard</span> <span class="text-slate-500">트렌드 예측</span></div>
+                    <div class="flex justify-between"><span class="font-medium">Base Line</span> <span class="text-slate-500">단순 비교</span></div>
+                    <div class="flex justify-between"><span class="font-medium">Speed Bar</span> <span class="text-slate-500">백분위수 추이</span></div>
+                    <div class="flex justify-between"><span class="font-medium">EVENT</span> <span class="text-slate-500">에러 집중도</span></div>
+                </div>
+            </div>
+
+            <div class="flex-1">
+                <div class="flex items-center justify-between mb-2 border-b border-slate-200 pb-1">
+                    <span class="tier-badge tier-4">TIER 4 (14 Items)</span>
+                    <span class="text-[9px] text-slate-400">분석 비권장 (Low Utility)</span>
+                </div>
+                <!-- Tier 4 리스트 순서 및 용어 교정 (MD 파일 순서 19~32) -->
+                <div class="bg-slate-50 rounded border border-slate-200 p-2 text-[10px] grid grid-cols-2 gap-x-4 gap-y-1 text-slate-500">
+                    <div>1. Line Runtime</div> <div>2. Line Minute</div>
+                    <div>3. Line Minute Stacked</div> <div>4. Point Runtime</div>
+                    <div>5. Line (24h)</div> <div>6. Line OneTarget</div>
+                    <div>7. Area</div> <div>8. Column Daily</div>
+                    <div>9. Equalizer</div> <div>10. Speed Meter</div>
+                    <div>11. Line RightAngle</div> <div>12. K8s Line Runtime</div>
+                    <div>13. K8s Area Runtime</div> <div>14. K8s Area Negative</div>
+                </div>
+                <div class="mt-2 text-[9px] text-red-500 font-bold text-center">
+                    * 직관적 해석 가능하므로 AI 리소스 낭비 주의
+                </div>
+            </div>
+        </section>
+
+        <section class="flex-grow">
+            <h2 class="text-lg font-bold text-slate-800 mb-3 pb-2 border-b border-slate-200 flex items-center justify-between">
+                <span>대시보드 종합 인사이트 점수 산정 (Scoring Logic)</span>
+                <span class="text-[10px] font-normal text-slate-500 bg-slate-100 px-2 py-1 rounded">Score = (Avg Tier Score) × Bonus Factor</span>
+            </h2>
+            
+            <div class="mb-3 text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-200 flex gap-4">
+                <div><strong>• 기본 점수:</strong> Tier 1(5점), Tier 2(4점), Tier 3(2점), Tier 4(1점)</div>
+                <div><strong>• 보너스 계수:</strong> Tier 1 차트 개수에 따라 ×1.3 ~ ×1.7 가중치 부여</div>
+            </div>
+
+            <div class="overflow-hidden border border-slate-200 rounded-lg shadow-sm">
+                <table class="w-full text-xs text-left">
+                    <thead class="bg-slate-100 text-slate-600 font-bold uppercase">
+                        <tr>
+                            <th class="px-3 py-2 text-center w-10">Rank</th>
+                            <th class="px-3 py-2">대시보드 명</th>
+                            <th class="px-3 py-2">핵심 구성 (Tier 1)</th>
+                            <th class="px-3 py-2 text-center">Raw Score</th>
+                            <th class="px-3 py-2 text-center">Bonus</th>
+                            <th class="px-3 py-2 text-center text-indigo-700">Final</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 bg-white">
+                        <tr class="bg-indigo-50/50">
+                            <td class="px-3 py-2 text-center font-bold text-indigo-700">1</td>
+                            <td class="px-3 py-2 font-bold text-slate-800">Realtime MSA</td>
+                            <td class="px-3 py-2 text-slate-600">Topology (100% 비중)</td>
+                            <td class="px-3 py-2 text-center">5.00</td>
+                            <td class="px-3 py-2 text-center">× 1.3</td>
+                            <td class="px-3 py-2 text-center font-bold text-indigo-700">6.50</td>
+                        </tr>
+                        <tr class="bg-indigo-50/50">
+                            <td class="px-3 py-2 text-center font-bold text-indigo-700">2</td>
+                            <td class="px-3 py-2 font-bold text-slate-800">Application Insight</td>
+                            <td class="px-3 py-2 text-slate-600">SFR, Problem, Confidence</td>
+                            <td class="px-3 py-2 text-center">3.60</td>
+                            <td class="px-3 py-2 text-center">× 1.7</td>
+                            <td class="px-3 py-2 text-center font-bold text-indigo-700">6.12</td>
+                        </tr>
+                        <tr class="bg-indigo-50/50">
+                            <td class="px-3 py-2 text-center font-bold text-indigo-700">3</td>
+                            <td class="px-3 py-2 font-bold text-slate-800">Application Insight Multi</td>
+                            <td class="px-3 py-2 text-slate-600">Problem (Heatmap)</td>
+                            <td class="px-3 py-2 text-center">2.67</td>
+                            <td class="px-3 py-2 text-center">× 1.3</td>
+                            <td class="px-3 py-2 text-center font-bold text-indigo-700">3.47</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 text-center font-medium text-slate-500">4</td>
+                            <td class="px-3 py-2 text-slate-700">Realtime Admin K8S</td>
+                            <td class="px-3 py-2 text-slate-500">K8s Workload (New)</td>
+                            <td class="px-3 py-2 text-center">2.11</td>
+                            <td class="px-3 py-2 text-center">× 1.3</td>
+                            <td class="px-3 py-2 text-center font-bold text-slate-700">2.74</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 text-center font-medium text-slate-500">5~8</td>
+                            <td class="px-3 py-2 text-slate-500 italic" colspan="4">Multi Domain, DB Connection, User, System Resource (1.50 ~ 1.70)</td>
+                        </tr>
+                        <tr class="bg-slate-50 text-[10px] text-slate-400">
+                            <td class="px-3 py-1.5 text-center">9~14</td>
+                            <td class="px-3 py-1.5" colspan="2">Realtime Admin Series, Memory etc.</td>
+                            <td class="px-3 py-1.5 text-center" colspan="3">Avg Score < 1.50 (AI 비권장)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page 3: 근거 및 Future Work 상세 -->
+    <div class="page-container break-before">
+        
+        <!-- 학술적 근거 (대폭 보강) -->
+        <section class="mb-6">
+            <h2 class="text-sm font-bold text-slate-800 mb-3 pb-2 border-b border-slate-200">
+                <i class="fas fa-book-reader mr-2"></i> 학술적 근거 및 업계 동향 검증 (Expanded)
+            </h2>
+            <div class="grid grid-cols-3 gap-3">
+                <!-- 1. 인지과학 -->
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-xs mb-2 text-center">1. 인지과학 (Miller's Law)</h3>
+                    <p class="text-[9px] text-slate-600 leading-relaxed mb-2 text-justify">
+                        <strong>Miller의 법칙(7±2)</strong>에 따르면 인간의 단기 기억 용량은 제한적입니다. 
+                        수십 개의 노드가 얽힌 <strong>MSA Topology</strong>는 인간의 인지 한계를 즉시 초과하므로 AI의 '패턴 인식' 보조가 필수적입니다.
+                    </p>
+                    <div class="bg-slate-50 p-1.5 rounded text-[8px] text-slate-500 border border-slate-100">
+                        * 반면 Line 차트는 'Gestalt 법칙'에 의해 직관적 인식이 가능하여 AI 효용이 낮음.
+                    </div>
+                </div>
+
+                <!-- 2. 경쟁사 동향 -->
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-xs mb-2 text-center">2. 경쟁사 기술 (Trend)</h3>
+                    <ul class="text-[9px] text-slate-600 space-y-2">
+                        <li>
+                            <strong class="text-indigo-700">Dynatrace (Davis AI):</strong>
+                            <span class="block text-[8px] mt-0.5">단순 상관관계가 아닌 'Smartscape' 토폴로지 기반의 <strong>인과관계(Causality)</strong> 분석에 집중.</span>
+                        </li>
+                        <li>
+                            <strong class="text-indigo-700">Datadog (Watchdog):</strong>
+                            <span class="block text-[8px] mt-0.5">설정 없이 이상 징후를 찾는 <strong>Auto-Detection</strong>에 주력. (당사의 Future Work 방향과 일치)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 3. LLM 연구 -->
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-xs mb-2 text-center">3. LLM 최신 연구</h3>
+                    <p class="text-[9px] text-slate-600 leading-relaxed mb-2 text-justify">
+                        LLM은 단순 시계열 수치보다 <strong>구조적 데이터(Graph/Tree)</strong>가 주어졌을 때 할루시네이션이 감소하고 추론 능력이 향상됨이 입증되었습니다.
+                    </p>
+                    <div class="bg-green-50 p-1.5 rounded text-[8px] text-green-700 border border-green-100 font-bold">
+                        → Tier 1(Topology) 집중 전략의 기술적 타당성 확보.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Future Work 상세 -->
+        <section class="flex-grow">
+            <h2 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center justify-between">
+                <span>Future Work: 대시보드 리플레이 + AI Auto-Detect</span>
+                <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-[10px] rounded font-bold uppercase tracking-wider">Technical Roadmap</span>
+            </h2>
+
+            <div class="flex gap-4 mb-4">
+                <div class="w-1/2 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                    <h3 class="font-bold text-indigo-900 text-xs mb-1">패러다임 전환: "Replay & Chain Analysis"</h3>
+                    <p class="text-[10px] text-indigo-800 leading-relaxed">
+                        단일 스냅샷 분석의 한계를 넘어, 과거 시점을 재생(Replay)하며 <strong>시간 순서에 따른 인과관계(Causality)</strong>를 분석합니다. 
+                        장애 인지 시간(MTTD)을 획기적으로 단축하는 것이 목표입니다.
+                    </p>
+                </div>
+                <div class="w-1/2 border border-slate-200 rounded-lg overflow-hidden">
+                    <table class="w-full text-xs text-left">
+                        <thead class="bg-slate-100 text-slate-500 font-bold uppercase text-[9px]">
+                            <tr><th class="px-2 py-1">구분</th><th class="px-2 py-1">현재 (Manual)</th><th class="px-2 py-1 text-indigo-700">미래 (AI Auto)</th></tr>
+                        </thead>
+                        <tbody class="text-[9px]">
+                            <tr class="border-b border-slate-100"><td class="px-2 py-1 font-bold">트리거</td><td class="px-2 py-1">사용자 버튼 클릭</td><td class="px-2 py-1 font-bold text-indigo-600">이상 징후 자동 감지</td></tr>
+                            <tr class="border-b border-slate-100"><td class="px-2 py-1 font-bold">분석 범위</td><td class="px-2 py-1">정지된 화면 (Snapshot)</td><td class="px-2 py-1 font-bold text-indigo-600">연속된 시계열 흐름</td></tr>
+                            <tr><td class="px-2 py-1 font-bold">인스턴스</td><td class="px-2 py-1">현재 시점 기준</td><td class="px-2 py-1 font-bold text-indigo-600">과거 시점 인스턴스 (PRD)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 기술적 구현 상세 -->
+            <div class="bg-white p-3 rounded-lg border border-slate-300 shadow-sm mb-4">
+                <h3 class="font-bold text-slate-800 text-xs mb-2">⚙️ 기술적 구현 계획 (Technical Specification)</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-[10px] font-bold text-slate-700 mb-1">1. Web Worker 아키텍처</h4>
+                        <p class="text-[9px] text-slate-600 mb-2 leading-tight">
+                            UI 블로킹 방지를 위해 백그라운드 분석 워커(`instanceDataWorker.ts` 유사 구조) 활용. 
+                            <code>ANOMALY_DETECTED</code> 이벤트 발행 구조.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold text-slate-700 mb-1">2. 분석 주기 최적화 (이원화)</h4>
+                        <p class="text-[9px] text-slate-600 mb-2 leading-tight">
+                            - <strong>실시간:</strong> 임계값 기반 경량 탐지 (매 프레임)<br>
+                            - <strong>Deep 분석:</strong> 이상 감지 시 LLM 호출 (60초 주기)
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold text-slate-700 mb-1">3. 비용 효율화 (Tiered Analysis)</h4>
+                        <p class="text-[9px] text-slate-600 mb-2 leading-tight">
+                            Browser LLM(Phi-3/Gemini Nano)으로 1차 필터링 후, 필요한 경우만 Server LLM 호출.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold text-slate-700 mb-1">4. 구현 로드맵 (Phases)</h4>
+                        <ul class="text-[9px] text-slate-600 list-disc list-inside">
+                            <li>Phase 1: 과거 인스턴스 조회 구현 (PRD 진행중)</li>
+                            <li>Phase 2: 자동 트리거 및 Worker 개발</li>
+                            <li>Phase 3: 연쇄 장애 패턴 템플릿화</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terminal Simulation: Chain Reaction -->
+            <div class="bg-slate-900 rounded-lg p-4 shadow-lg font-mono text-[10px] leading-relaxed text-white relative h-auto overflow-hidden">
+                <div class="absolute top-2 left-3 flex gap-1 opacity-50">
+                    <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div><div class="w-1.5 h-1.5 rounded-full bg-yellow-500"></div><div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                </div>
+                <div class="mt-4 opacity-90">
+                    <p class="mb-0.5"><span class="text-slate-500">[14:25:00]</span> <span class="text-yellow-400">WARN</span> : [Stacktrace (Heatmap)] DB Query Latency Spike detected.</p>
+                    <p class="mb-0.5"><span class="text-slate-500">[14:27:12]</span> <span class="text-yellow-400">WARN</span> : [Problem (Heatmap)] 'Slow Transaction' count increasing.</p>
+                    <p class="mb-0.5"><span class="text-slate-500">[14:30:05]</span> <span class="text-red-500">CRIT</span> : [MSA Topology] payment-service → external-pg Error Rate 5.5%</p>
+                    <div class="border-t border-slate-700 my-2"></div>
+                    <p class="text-green-400 font-bold mb-1"><i class="fas fa-microchip mr-1"></i> AI Correlation Engine Output:</p>
+                    <p class="text-slate-300">"Cascade Failure Detected: Root Cause identified at <strong>external-pg</strong> (14:25), propagated to <strong>payment-service</strong> (14:30)."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 소속 정보 업데이트 -->
+        <footer class="mt-auto pt-4 border-t border-slate-200 text-center text-[10px] text-slate-400">
+            <p>Confidential Internal Document | JenniferSoft APM Team | © 2025</p>
+        </footer>
+    </div>
+
+</body>
+</html>
