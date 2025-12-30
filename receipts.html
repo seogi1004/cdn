@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JenniferSoft 영수증 AI 자동화 시스템 가이드</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Utilities */
+        .container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .container-sm {
+            max-width: 896px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .font-medium { font-weight: 500; }
+
+        .hidden { display: none; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-wrap { flex-wrap: wrap; }
+        .flex-1 { flex: 1; }
+        .flex-shrink-0 { flex-shrink: 0; }
+
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-12 { gap: 3rem; }
+
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-5 { margin-bottom: 1.25rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-8 { margin-top: 2rem; }
+        .mt-12 { margin-top: 3rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .mr-4 { margin-right: 1rem; }
+        .mr-5 { margin-right: 1.25rem; }
+        .ml-4 { margin-left: 1rem; }
+
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+
+        .w-full { width: 100%; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-2xl { max-width: 42rem; }
+
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-full { border-radius: 9999px; }
+
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+        .overflow-hidden { overflow: hidden; }
+        .break-all { word-break: break-all; }
+        .cursor-pointer { cursor: pointer; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-wide { letter-spacing: 0.025em; }
+
+        .transition-all { transition: all 0.3s ease; }
+        .transition-colors { transition: color 0.2s, background-color 0.2s, border-color 0.2s; }
+
+        /* Colors */
+        .text-white { color: #ffffff; }
+        .text-slate-400 { color: #94a3b8; }
+        .text-slate-500 { color: #64748b; }
+        .text-slate-600 { color: #475569; }
+        .text-slate-700 { color: #334155; }
+        .text-slate-800 { color: #1e293b; }
+        .text-slate-900 { color: #0f172a; }
+        .text-blue-100 { color: #dbeafe; }
+        .text-blue-600 { color: #2563eb; }
+        .text-blue-700 { color: #1d4ed8; }
+        .text-blue-900 { color: #1e3a8a; }
+        .text-green-700 { color: #15803d; }
+        .text-green-800 { color: #166534; }
+        .text-green-900 { color: #14532d; }
+        .text-amber-600 { color: #d97706; }
+        .text-amber-700 { color: #b45309; }
+        .text-amber-800 { color: #92400e; }
+        .text-purple-700 { color: #7c3aed; }
+        .text-red-700 { color: #b91c1c; }
+
+        .bg-white { background-color: #ffffff; }
+        .bg-slate-50 { background-color: #f8fafc; }
+        .bg-slate-100 { background-color: #f1f5f9; }
+        .bg-slate-200 { background-color: #e2e8f0; }
+        .bg-slate-800 { background-color: #1e293b; }
+        .bg-slate-900 { background-color: #0f172a; }
+        .bg-blue-100 { background-color: #dbeafe; }
+        .bg-blue-500 { background-color: #3b82f6; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-green-500 { background-color: #22c55e; }
+        .bg-amber-100 { background-color: #fef3c7; }
+        .bg-amber-500 { background-color: #f59e0b; }
+        .bg-purple-100 { background-color: #f3e8ff; }
+        .bg-purple-500 { background-color: #a855f7; }
+        .bg-red-100 { background-color: #fee2e2; }
+        .bg-rose-500 { background-color: #f43f5e; }
+        .bg-emerald-500 { background-color: #10b981; }
+        .bg-violet-500 { background-color: #8b5cf6; }
+        .bg-yellow-200 { background-color: #fef08a; }
+
+        .border { border: 1px solid; }
+        .border-slate-100 { border-color: #f1f5f9; }
+        .border-slate-200 { border-color: #e2e8f0; }
+        .border-slate-300 { border-color: #cbd5e1; }
+        .border-blue-100 { border-color: #dbeafe; }
+        .border-green-100 { border-color: #dcfce7; }
+
+        /* Text sizes */
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .text-5xl { font-size: 3rem; line-height: 1.2; }
+
+        .leading-relaxed { line-height: 1.625; }
+        .leading-tight { line-height: 1.25; }
+
+        /* Navigation */
+        .nav {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: #1e293b;
+        }
+
+        .nav-brand span:first-child {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 0.25rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            color: #475569;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #475569;
+        }
+
+        .mobile-menu {
+            display: none;
+            background-color: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            padding: 1rem;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 0.5rem 0;
+            color: #475569;
+        }
+
+        .mobile-menu a:hover {
+            color: #2563eb;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+            color: #ffffff;
+            padding: 5rem 1rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.875rem;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Grid layouts */
+        .grid-3 {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 4rem 1rem;
+            margin-top: -2.5rem;
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 4rem 1rem;
+            background-color: #ffffff;
+        }
+
+        .categories-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .categories-inner {
+                flex-direction: row;
+            }
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: 0.75rem;
+        }
+
+        .category-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+
+        .category-badge {
+            font-size: 0.875rem;
+            color: #64748b;
+            background-color: #ffffff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        /* Workflow Section */
+        .workflow {
+            padding: 4rem 1rem;
+            background-color: #f8fafc;
+        }
+
+        .step-card {
+            position: relative;
+            padding-top: 1.5rem;
+        }
+
+        .step-card:first-child {
+            padding-top: 0;
+        }
+
+        .step-card-inner {
+            display: flex;
+            align-items: flex-start;
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            transition: border-color 0.2s;
+        }
+
+        .step-card-inner:hover {
+            border-color: #93c5fd;
+        }
+
+        .step-icon {
+            flex-shrink: 0;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1.25rem;
+        }
+
+        .step-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            margin-left: 0.5rem;
+        }
+
+        .step-title-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            margin-top: 3rem;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .tech-stack-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Guide Section */
+        .guide {
+            padding: 4rem 1rem;
+            background-color: #ffffff;
+        }
+
+        .guide-header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .guide-header {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            height: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            height: 0.5rem;
+            border-radius: 9999px;
+            transition: width 0.5s ease;
+        }
+
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .filter-btn.active {
+            background-color: #1e293b;
+            color: #ffffff;
+        }
+
+        .filter-btn:not(.active) {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
+        .filter-btn:not(.active):hover {
+            background-color: #e2e8f0;
+        }
+
+        .checklist-item {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .checklist-item:hover {
+            border-color: #93c5fd;
+        }
+
+        .checklist-item.hidden {
+            display: none;
+        }
+
+        .check-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .check-icon.checked {
+            background-color: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .check-icon svg {
+            width: 0.875rem;
+            height: 0.875rem;
+            color: #ffffff;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .check-icon.checked svg {
+            opacity: 1;
+        }
+
+        .checklist-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1e293b;
+            transition: all 0.2s;
+        }
+
+        .checklist-title.checked {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        .checklist-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* ID Format boxes */
+        .id-format-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .id-format-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .id-format-box {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid;
+        }
+
+        .id-format-box.folder {
+            background: linear-gradient(to bottom right, #eff6ff, #e0e7ff);
+            border-color: #dbeafe;
+        }
+
+        .id-format-box.sheet {
+            background: linear-gradient(to bottom right, #ecfdf5, #d1fae5);
+            border-color: #dcfce7;
+        }
+
+        .id-format-code {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #334155;
+            word-break: break-all;
+        }
+
+        .id-highlight {
+            background-color: #fef08a;
+            padding: 0 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 700;
+        }
+
+        /* Warnings Section */
+        .warnings {
+            padding: 4rem 1rem;
+            background-color: #f8fafc;
+        }
+
+        .warning-card {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border-left: 4px solid;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .warning-card.amber { border-left-color: #f59e0b; }
+        .warning-card.red { border-left-color: #ef4444; }
+        .warning-card.blue { border-left-color: #3b82f6; }
+        .warning-card.orange { border-left-color: #f97316; }
+        .warning-card.green { border-left-color: #22c55e; }
+        .warning-card.purple { border-left-color: #a855f7; }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .file-formats {
+            margin-top: 2rem;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .format-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .format-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .format-badge.ok {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .format-badge.no {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* Summary Section */
+        .summary {
+            padding: 4rem 1rem;
+            background: linear-gradient(to bottom right, #2563eb, #4338ca);
+            color: #ffffff;
+        }
+
+        .summary-grid {
+            display: grid;
+            gap: 1.5rem;
+            max-width: 42rem;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .summary-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .summary-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        /* Code */
+        code {
+            background-color: #f1f5f9;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-family: monospace;
+        }
+
+        /* Section label */
+        .section-label {
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-label.amber {
+            color: #d97706;
+        }
+
+        /* Chart container */
+        .chart-container {
+            background-color: #f8fafc;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .ml-md-8 {
+                margin-left: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="nav-brand">
+                <span>🧾</span>
+                <span>JenniferSoft <span style="color: #2563eb;">Receipts AI</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#overview" class="nav-link">개요</a>
+                <a href="#workflow" class="nav-link">작동 원리</a>
+                <a href="#guide" class="nav-link">설정 가이드</a>
+                <a href="#warnings" class="nav-link">주의사항</a>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <svg style="width:24px;height:24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="#overview" onclick="closeMobileMenu()">개요</a>
+            <a href="#workflow" onclick="closeMobileMenu()">작동 원리</a>
+            <a href="#guide" onclick="closeMobileMenu()">설정 가이드</a>
+            <a href="#warnings" onclick="closeMobileMenu()">주의사항</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="overview" class="hero">
+        <div class="container-sm text-center">
+            <div class="hero-badge">
+                <span>Powered by Claude 4.5 Sonnet</span>
+            </div>
+            <h1>영수증 처리,<br>이제 AI에게 맡기세요</h1>
+            <p class="text-xl text-blue-100 leading-relaxed max-w-2xl" style="margin: 0 auto;">
+                폴더에 사진만 넣으면 끝.<br>
+                AI가 영수증을 분석하고 경비 내역서에 자동으로 기록합니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <div class="grid-3">
+                <div class="card text-center">
+                    <div class="card-icon bg-blue-100" style="margin: 0 auto 1.25rem;">⚡</div>
+                    <h3 class="font-bold text-xl mb-3 text-slate-800">자동화된 프로세스</h3>
+                    <p class="text-slate-600 leading-relaxed">매시 정각, 시스템이 새로운 영수증을 감지하고 자동으로 처리합니다. 별도의 조작 없이 업로드만 하면 됩니다.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="card-icon bg-purple-100" style="margin: 0 auto 1.25rem;">🧠</div>
+                    <h3 class="font-bold text-xl mb-3 text-slate-800">정밀한 AI 분석</h3>
+                    <p class="text-slate-600 leading-relaxed">날짜, 장소, 금액은 물론 사용 목적까지 문맥을 파악하여 5가지 카테고리로 자동 분류합니다.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="card-icon bg-green-100" style="margin: 0 auto 1.25rem;">📊</div>
+                    <h3 class="font-bold text-xl mb-3 text-slate-800">자동 시트 기록</h3>
+                    <p class="text-slate-600 leading-relaxed">복잡한 엑셀 작업 없이 구글 스프레드시트에 깔끔하게 정리됩니다. 중복 입력도 자동으로 방지됩니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="container">
+            <div class="categories-inner">
+                <div class="flex-1">
+                    <span class="section-label">Auto Classification</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">지원하는 카테고리</h2>
+                    <p class="text-slate-600 mb-8 leading-relaxed">
+                        AI가 영수증 내용을 분석하여 아래 5가지 카테고리 중 가장 적합한 항목으로 자동 분류합니다.
+                    </p>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="category-item">
+                            <span class="category-dot bg-blue-500"></span>
+                            <span class="font-semibold text-slate-800 flex-1">식대 (Food)</span>
+                            <span class="category-badge">점심, 저녁, 회식 등</span>
+                        </div>
+                        <div class="category-item">
+                            <span class="category-dot bg-emerald-500"></span>
+                            <span class="font-semibold text-slate-800 flex-1">교통비 (Traffic)</span>
+                            <span class="category-badge">택시, 주차, 톨비 등</span>
+                        </div>
+                        <div class="category-item">
+                            <span class="category-dot bg-amber-500"></span>
+                            <span class="font-semibold text-slate-800 flex-1">물품구입 (Goods)</span>
+                            <span class="category-badge">사무용품, 소모품 등</span>
+                        </div>
+                        <div class="category-item">
+                            <span class="category-dot bg-violet-500"></span>
+                            <span class="font-semibold text-slate-800 flex-1">서비스 (Service)</span>
+                            <span class="category-badge">인쇄, 배송, 수리 등</span>
+                        </div>
+                        <div class="category-item">
+                            <span class="category-dot bg-rose-500"></span>
+                            <span class="font-semibold text-slate-800 flex-1">접대비 (Reception)</span>
+                            <span class="category-badge">고객 미팅, 선물 등</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 w-full max-w-md">
+                    <div class="chart-container">
+                        <canvas id="categoryChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="workflow">
+        <div class="container-sm">
+            <div class="text-center mb-12">
+                <span class="section-label">How It Works</span>
+                <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">시스템 작동 원리</h2>
+                <p class="text-slate-600">n8n 자동화 워크플로우 기반의 7단계 처리 프로세스</p>
+            </div>
+
+            <div>
+                <!-- Step 1 -->
+                <div class="step-card" style="padding-top: 0;">
+                    <div class="step-card-inner">
+                        <div class="step-icon bg-purple-100">⏰</div>
+                        <div class="flex-1">
+                            <div class="step-title-row">
+                                <h3 class="font-bold text-lg text-slate-800">1. 스케줄링 & 조회</h3>
+                                <span class="step-badge bg-purple-100 text-purple-700">TRIGGER</span>
+                            </div>
+                            <p class="text-slate-600">매 1시간마다 시스템이 동작하여 등록된 구성원 목록을 조회합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="step-card-inner">
+                        <div class="step-icon bg-blue-100">📂</div>
+                        <div class="flex-1">
+                            <div class="step-title-row">
+                                <h3 class="font-bold text-lg text-slate-800">2. 폴더 감시</h3>
+                                <span class="step-badge bg-blue-100 text-blue-700">ACTION</span>
+                            </div>
+                            <p class="text-slate-600">각 구성원의 구글 드라이브 폴더에서 새로운 이미지 파일을 찾습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="step-card-inner">
+                        <div class="step-icon bg-slate-100">🔍</div>
+                        <div class="flex-1">
+                            <div class="step-title-row">
+                                <h3 class="font-bold text-lg text-slate-800">3. 유효성 검사</h3>
+                                <span class="step-badge bg-slate-200 text-slate-700">LOGIC</span>
+                            </div>
+                            <p class="text-slate-600">확장자(JPG, PNG, WEBP) 및 용량(10MB 이하)을 확인하고, 이미 처리된 파일(.backup)은 제외합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-card">
+                    <div class="step-card-inner">
+                        <div class="step-icon bg-amber-100">🤖</div>
+                        <div class="flex-1">
+                            <div class="step-title-row">
+                                <h3 class="font-bold text-lg text-slate-800">4. AI 분석</h3>
+                                <span class="step-badge bg-amber-100 text-amber-700">AI</span>
+                            </div>
+                            <p class="text-slate-600">Claude 4.5 Sonnet 모델이 영수증의 날짜, 장소, 금액, 목적을 정밀하게 추출합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-card">
+                    <div class="step-card-inner">
+                        <div class="step-icon bg-slate-100">⚖️</div>
+                        <div class="flex-1">
+                            <div class="step-title-row">
+                                <h3 class="font-bold text-lg text-slate-800">5. 중복 체크</h3>
+                                <span class="step-badge bg-slate-200 text-slate-700">LOGIC</span>
+                            </div>
+                            <p class="text-slate-600">동일한 날짜와 장소의 내역이 이미 시트에 있는지 확인하여 중복 입력을 방지합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="step-card">
+                    <div class="step-card-inner">
+                        <div class="step-icon bg-blue-100">📝</div>
+                        <div class="flex-1">
+                            <div class="step-title-row">
+                                <h3 class="font-bold text-lg text-slate-800">6. 시트 기록</h3>
+                                <span class="step-badge bg-blue-100 text-blue-700">ACTION</span>
+                            </div>
+                            <p class="text-slate-600">구글 스프레드시트(YYMM 시트)의 빈 행을 찾아 데이터를 입력합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="step-card">
+                    <div class="step-card-inner">
+                        <div class="step-icon bg-green-100">✅</div>
+                        <div class="flex-1">
+                            <div class="step-title-row">
+                                <h3 class="font-bold text-lg text-slate-800">7. 처리 완료</h3>
+                                <span class="step-badge bg-green-100 text-green-700">DONE</span>
+                            </div>
+                            <p class="text-slate-600">처리가 끝난 이미지 파일명을 <code>파일명.jpg.backup</code>으로 변경합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="tech-stack">
+                <h4 class="text-center text-sm font-semibold text-slate-500 uppercase tracking-wide mb-6">Technology Stack</h4>
+                <div class="tech-stack-grid">
+                    <div>
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚙️</div>
+                        <div class="font-bold text-slate-800">n8n</div>
+                        <div class="text-sm text-slate-500">Workflow Automation</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🤖</div>
+                        <div class="font-bold text-slate-800">Claude 4.5</div>
+                        <div class="text-sm text-slate-500">AI Vision Model</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📁</div>
+                        <div class="font-bold text-slate-800">Google Drive</div>
+                        <div class="text-sm text-slate-500">File Storage</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📊</div>
+                        <div class="font-bold text-slate-800">Google Sheets</div>
+                        <div class="text-sm text-slate-500">Data Recording</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Setup Guide Section -->
+    <section id="guide" class="guide">
+        <div class="container-sm">
+            <div class="guide-header">
+                <div>
+                    <span class="section-label">Setup Checklist</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-2">초기 설정 가이드</h2>
+                    <p class="text-slate-600">시스템 사용 전, 아래 항목들을 확인해주세요.</p>
+                </div>
+                <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <span id="progress-text" class="text-blue-600 font-bold text-lg">0/8</span>
+                    <button onclick="resetChecklist()" style="font-size: 0.875rem; color: #64748b; text-decoration: underline; background: none; border: none; cursor: pointer;">초기화</button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button onclick="filterGuide('all')" class="filter-btn active">전체</button>
+                <button onclick="filterGuide('사전 준비')" class="filter-btn">사전 준비</button>
+                <button onclick="filterGuide('권한 설정')" class="filter-btn">권한 설정</button>
+                <button onclick="filterGuide('ID 추출')" class="filter-btn">ID 추출</button>
+            </div>
+
+            <!-- Checklist -->
+            <div id="guide-list"></div>
+
+            <!-- ID Format Info -->
+            <div class="id-format-grid">
+                <div class="id-format-box folder">
+                    <h4 class="font-bold text-blue-900 mb-3 flex items-center">
+                        <span class="mr-2">📁</span> Folder ID 형식
+                    </h4>
+                    <div class="id-format-code">
+                        https://drive.google.com/drive/folders/<span class="id-highlight">여기가_ID</span>?usp=sharing
+                    </div>
+                </div>
+                <div class="id-format-box sheet">
+                    <h4 class="font-bold text-green-900 mb-3 flex items-center">
+                        <span class="mr-2">📊</span> Sheet ID 형식
+                    </h4>
+                    <div class="id-format-code">
+                        https://docs.google.com/spreadsheets/d/<span class="id-highlight">여기가_ID</span>/edit
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warnings Section -->
+    <section id="warnings" class="warnings">
+        <div class="container-sm">
+            <div class="text-center mb-12">
+                <span class="section-label amber">Important Notes</span>
+                <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">주의사항</h2>
+                <p class="text-slate-600">원활한 시스템 사용을 위해 반드시 확인해주세요.</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="warning-card amber">
+                    <div class="flex items-start">
+                        <span class="warning-icon">📱</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">아이폰 HEIC 미지원</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">AI 모델 특성상 아이폰의 고화질 포맷인 HEIC 파일은 지원하지 않습니다. 카메라 설정을 <strong>'높은 호환성(JPG)'</strong>으로 변경하거나 변환 후 업로드해주세요.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-card red">
+                    <div class="flex items-start">
+                        <span class="warning-icon">📦</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">용량 제한 10MB</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">파일 크기가 10MB를 초과하면 동기화되지 않습니다. 이미지 압축 후 업로드해주세요.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-card blue">
+                    <div class="flex items-start">
+                        <span class="warning-icon">🏢</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">회사 계정 필수</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">반드시 회사 구글 계정을 사용해야 합니다. 개인 계정(@gmail.com)은 보안 정책으로 연동이 불가능합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-card orange">
+                    <div class="flex items-start">
+                        <span class="warning-icon">✍️</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">손글씨 인식 한계</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">영수증에 손으로 작성된 <strong>참석자(동반자) 이름</strong>은 필체나 사진 선명도에 따라 정확히 인식되지 않을 수 있습니다. 오류 시 시트에서 직접 수정해주세요.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-card green">
+                    <div class="flex items-start">
+                        <span class="warning-icon">🔄</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">중복 자동 방지</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">같은 날짜, 같은 장소의 영수증이 이미 시트에 있다면 자동으로 건너뜁니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-card purple">
+                    <div class="flex items-start">
+                        <span class="warning-icon">✅</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">처리 완료 표시</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">처리가 완료된 파일은 <code>.backup</code> 확장자가 붙습니다. 삭제해도 무방합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Format Info -->
+            <div class="file-formats">
+                <h4 class="font-bold text-slate-800 mb-4 flex items-center">
+                    <span class="mr-2">📋</span> 지원 파일 형식
+                </h4>
+                <div class="format-badges">
+                    <span class="format-badge ok">✓ JPG</span>
+                    <span class="format-badge ok">✓ JPEG</span>
+                    <span class="format-badge ok">✓ PNG</span>
+                    <span class="format-badge ok">✓ WEBP</span>
+                    <span class="format-badge no">✗ HEIC</span>
+                    <span class="format-badge no">✗ PDF</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section class="summary">
+        <div class="container-sm text-center">
+            <h2 class="text-3xl font-bold mb-6">시스템 연동을 위해 필요한 정보</h2>
+            <p class="text-blue-100 mb-8">아래 두 가지 ID를 담당자(Alvin)에게 전달해주세요.</p>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-card-icon">📁</div>
+                    <h3 class="font-bold text-xl mb-2">Folder ID</h3>
+                    <p class="text-blue-100 text-sm">영수증 사진을 넣을 곳 (입력)</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-icon">📊</div>
+                    <h3 class="font-bold text-xl mb-2">Sheet ID</h3>
+                    <p class="text-blue-100 text-sm">내용이 자동으로 적힐 곳 (출력)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p style="margin-bottom: 0.5rem; color: #cbd5e1; font-weight: 500;">JenniferSoft Receipt Automation System</p>
+        <p class="text-sm">Powered by n8n & Claude 4.5 Sonnet</p>
+    </footer>
+
+    <script>
+        // Data
+        const guideChecklist = [
+            { id: "g1", category: "사전 준비", title: "회사 계정 사용", desc: "반드시 회사 구글 계정을 사용하세요. 개인 계정(@gmail.com)은 보안상 연동되지 않습니다." },
+            { id: "g2", category: "사전 준비", title: "시트 이름 생성", desc: "스프레드시트에 'YYMM' 형식(예: 2512)의 시트 탭을 미리 생성해야 합니다." },
+            { id: "g3", category: "사전 준비", title: "시트 양식 수정", desc: "A열(일 자)의 셀 병합을 해제하고, A7 셀에 '일 자' 텍스트가 있는지 확인하세요." },
+            { id: "g4", category: "사전 준비", title: "시트 행 확보", desc: "예상되는 영수증 개수만큼 빈 행을 미리 확보해주세요. (Beta 버전으로, 행 자동 추가는 추후 개선 예정)" },
+            { id: "g5", category: "권한 설정", title: "드라이브 폴더 권한", desc: "폴더 공유 설정에서 '링크가 있는 모든 사용자' + '편집자' 권한을 부여하세요." },
+            { id: "g6", category: "권한 설정", title: "스프레드시트 권한", desc: "시트 공유 설정에서 '링크가 있는 모든 사용자' + '편집자' 권한을 부여하세요." },
+            { id: "g7", category: "ID 추출", title: "Folder ID 확인", desc: "폴더 URL의 'folders/' 뒷부분 문자열을 복사하세요." },
+            { id: "g8", category: "ID 추출", title: "Sheet ID 확인", desc: "시트 URL의 '/d/'와 '/edit' 사이 문자열을 복사하세요." }
+        ];
+
+        const categories = [
+            { label: "식대", value: 45, color: "#3b82f6" },
+            { label: "교통비", value: 25, color: "#10b981" },
+            { label: "물품구입", value: 15, color: "#f59e0b" },
+            { label: "서비스", value: 10, color: "#8b5cf6" },
+            { label: "접대비", value: 5, color: "#ef4444" }
+        ];
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobile-menu').classList.remove('active');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderGuideList();
+            loadCheckedState();
+            updateProgress();
+            initChart();
+        });
+
+        // Render Guide Checklist
+        function renderGuideList() {
+            const container = document.getElementById('guide-list');
+            container.innerHTML = guideChecklist.map(item => `
+                <div class="checklist-item" data-category="${item.category}" onclick="toggleCheck('${item.id}')">
+                    <div class="flex items-start">
+                        <div class="check-icon" id="icon-${item.id}">
+                            <svg id="svg-${item.id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center justify-between mb-2" style="flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="checklist-title" id="title-${item.id}">${item.title}</span>
+                                <span class="checklist-badge">${item.category}</span>
+                            </div>
+                            <p class="text-slate-600 text-sm">${item.desc}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Toggle Checkbox
+        function toggleCheck(id) {
+            const state = getCheckedState();
+            state[id] = !state[id];
+            saveCheckedState(state);
+            updateCheckUI(id, state[id]);
+            updateProgress();
+        }
+
+        // Update Check UI
+        function updateCheckUI(id, checked) {
+            const icon = document.getElementById(`icon-${id}`);
+            const title = document.getElementById(`title-${id}`);
+            
+            if (checked) {
+                icon.classList.add('checked');
+                title.classList.add('checked');
+            } else {
+                icon.classList.remove('checked');
+                title.classList.remove('checked');
+            }
+        }
+
+        // Local Storage
+        function getCheckedState() {
+            const saved = localStorage.getItem('receipt-guide-checklist');
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        function saveCheckedState(state) {
+            localStorage.setItem('receipt-guide-checklist', JSON.stringify(state));
+        }
+
+        function loadCheckedState() {
+            const state = getCheckedState();
+            Object.keys(state).forEach(id => {
+                if (state[id]) updateCheckUI(id, true);
+            });
+        }
+
+        function resetChecklist() {
+            localStorage.removeItem('receipt-guide-checklist');
+            guideChecklist.forEach(item => updateCheckUI(item.id, false));
+            updateProgress();
+        }
+
+        // Update Progress
+        function updateProgress() {
+            const state = getCheckedState();
+            const checked = Object.values(state).filter(v => v).length;
+            const total = guideChecklist.length;
+            const percent = Math.round((checked / total) * 100);
+            
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            document.getElementById('progress-text').innerText = `${checked}/${total}`;
+        }
+
+        // Filter Guide
+        function filterGuide(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if ((category === 'all' && btn.innerText === '전체') || btn.innerText === category) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            document.querySelectorAll('.checklist-item').forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        // Initialize Chart
+        function initChart() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: categories.map(c => c.label),
+                    datasets: [{
+                        data: categories.map(c => c.value),
+                        backgroundColor: categories.map(c => c.color),
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+    </script>
+</body>
+</html>
