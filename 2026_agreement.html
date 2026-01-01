@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026년 가정 경제 약정서</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Noto Sans KR Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .break-keep { word-break: keep-all; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // 아이콘 컴포넌트 (Lucide Icons 대체 - SVG 직접 구현)
+        const IconShield = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        );
+        const IconCreditCard = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+        );
+        const IconUsers = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        );
+        const IconShoppingBag = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        );
+        const IconXCircle = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+        );
+        const IconCar = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M2 12h20"/></svg>
+        );
+        const IconHeart = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        );
+        const IconChevronDown = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6"/></svg>
+        );
+        const IconChevronUp = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m18 15-6-6-6 6"/></svg>
+        );
+        const IconAlertCircle = ({ size = 24, className = "" }) => (
+             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        );
+
+
+        const Agreement2026 = () => {
+            const [isFixedCostOpen, setIsFixedCostOpen] = React.useState(false);
+
+            const fixedCosts = [
+                { category: '남편 보험', item: '실비 보험료 (메리츠)', cost: 44500, owner: '홍재석' },
+                { category: '남편 보험', item: '암 보험료 (메리츠)', cost: 62550, owner: '홍재석' },
+                { category: '남편 보험', item: '화재 보험료 (메리츠)', cost: 3940, owner: '홍재석' },
+                { category: '남편 보험', item: '운전자 보험료 (현대해상)', cost: 10110, owner: '홍재석' },
+                { category: '자녀 보험', item: '실비 보험료', cost: 14210, owner: '홍리은' },
+                { category: '자녀 보험', item: '어린이 보험료', cost: 57800, owner: '홍리은' },
+                { category: '자녀 교육', item: '방문 수업', cost: 135000, owner: '홍리은' },
+                { category: '자녀 교육', item: '어린이집', cost: 0, owner: '홍리은' },
+                { category: '아내 보험', item: '종합 보험료', cost: 92064, owner: '최지원' },
+                { category: '아내 보험', item: '운전자 보험료 (현대해상)', cost: 9500, owner: '최지원' },
+                { category: '저축', item: '청약 통장 (신한)', cost: 20000, owner: '최지원' },
+                { category: '공과금', item: '통신비 추정', cost: 100000, owner: '최지원' },
+                { category: '차량 유지', item: '자동차세 추정 (연분할)', cost: 25000, owner: '최지원' },
+                { category: '차량 유지', item: '자동차보험 추정 (연분할)', cost: 25000, owner: '최지원' },
+            ];
+
+            const totalFixedCost = fixedCosts.reduce((acc, curr) => acc + curr.cost, 0);
+
+            return (
+                <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-12">
+                    {/* Header */}
+                    <header className="bg-indigo-600 text-white p-6 shadow-lg rounded-b-3xl mb-8">
+                        <div className="max-w-3xl mx-auto text-center">
+                            <div className="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-full mb-3">
+                                <IconShield size={24} className="text-white" />
+                            </div>
+                            <h1 className="text-2xl font-bold mb-2 break-keep">2026년 가정 경제 분리 운영 및 지출 약정서</h1>
+                            <p className="text-indigo-200 text-sm">시행일자: 2026년 1월 1일</p>
+                            <div className="mt-4 flex justify-center gap-4 text-sm font-medium">
+                                <span className="bg-indigo-700 px-3 py-1 rounded-full">관리자(갑): 홍재석</span>
+                                <span className="bg-white text-indigo-700 px-3 py-1 rounded-full">대상자(을): 최지원</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-3xl mx-auto px-4 space-y-8">
+                        
+                        {/* Intro */}
+                        <section className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                            <p className="leading-relaxed text-slate-600 text-center text-sm sm:text-base break-keep">
+                                본 약정서는 2026년도부터 시행되는 부부 재정 분리 원칙에 의거하여, 
+                                <span className="font-bold text-slate-800"> '을'의 소득 관리 및 지출에 대한 명확한 기준</span>을 확립하고 
+                                건전한 가정 경제를 유지하기 위해 작성되었습니다.
+                            </p>
+                        </section>
+
+                        {/* Section 1: Fixed Costs (Collapsible) */}
+                        <section>
+                            <div className="flex items-center gap-2 mb-4 px-2">
+                                <IconCreditCard className="text-indigo-600" size={24} />
+                                <h2 className="text-xl font-bold text-slate-800">1. 고정비 분담 내역</h2>
+                            </div>
+                            <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200 transition-all duration-300">
+                                {/* Header / Toggle Button */}
+                                <button 
+                                    onClick={() => setIsFixedCostOpen(!isFixedCostOpen)}
+                                    className="w-full p-5 bg-slate-50 border-b border-slate-200 flex justify-between items-center hover:bg-slate-100 transition-colors cursor-pointer"
+                                >
+                                    <div className="text-left">
+                                        <span className="font-bold text-slate-600 block text-sm">월 납부 총액 (0순위)</span>
+                                        <span className="text-2xl font-black text-indigo-600">{totalFixedCost.toLocaleString()}원</span>
+                                    </div>
+                                    <div className="flex items-center text-slate-400 text-sm gap-1">
+                                        {isFixedCostOpen ? '접기' : '상세 내역 보기'}
+                                        {isFixedCostOpen ? <IconChevronUp size={20} /> : <IconChevronDown size={20} />}
+                                    </div>
+                                </button>
+                                
+                                {/* Collapsible Content */}
+                                {isFixedCostOpen && (
+                                    <div className="bg-white animate-in slide-in-from-top-2 duration-200">
+                                        <div className="divide-y divide-slate-100">
+                                        {fixedCosts.map((item, index) => (
+                                            <div key={index} className="p-4 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                                            <div>
+                                                <div className="text-xs text-slate-400 font-medium mb-0.5">{item.category} • {item.owner}</div>
+                                                <div className="text-slate-700 font-medium">{item.item}</div>
+                                            </div>
+                                            <div className="text-slate-900 font-bold whitespace-nowrap text-sm">
+                                                {item.cost.toLocaleString()}원
+                                            </div>
+                                            </div>
+                                        ))}
+                                        </div>
+                                        <div className="p-3 bg-indigo-50 text-indigo-700 text-xs text-center font-medium">
+                                        ※ 위 고정비는 급여 수령 직후 0순위로 처리하며 연체 불가
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+
+                        {/* Section 2: 4 Rules */}
+                        <section>
+                            <div className="flex items-center gap-2 mb-4 px-2">
+                                <IconAlertCircle className="text-indigo-600" size={24} />
+                                <h2 className="text-xl font-bold text-slate-800">2. 소비 생활 4대 수칙</h2>
+                            </div>
+                            
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                {/* Rule 1 */}
+                                <div className="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-indigo-500">
+                                    <div className="flex items-center gap-2 mb-2 text-indigo-700 font-bold">
+                                        <IconUsers size={20} />
+                                        <h3>1. 가족 공용 지출</h3>
+                                    </div>
+                                    <p className="text-sm text-slate-600 mb-3 font-medium break-keep">반드시 <span className="text-indigo-600 underline decoration-wavy">가족 공용 카드</span> 사용</p>
+                                    <ul className="text-xs text-slate-500 space-y-1 list-disc pl-4 break-keep">
+                                        <li>허용: 식비, 외식, 육아용품, 생필품</li>
+                                        <li className="text-red-500 font-medium">금지: 개인 기호식품, 의류, 개인 회식</li>
+                                    </ul>
+                                </div>
+
+                                {/* Rule 2 */}
+                                <div className="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-pink-500">
+                                    <div className="flex items-center gap-2 mb-2 text-pink-600 font-bold">
+                                        <IconShoppingBag size={20} />
+                                        <h3>2. 개인 용돈/꾸밈비</h3>
+                                    </div>
+                                    <p className="text-sm text-slate-600 mb-3 font-medium break-keep">반드시 <span className="text-pink-600 underline decoration-wavy">본인 체크 카드</span> 사용</p>
+                                    <ul className="text-xs text-slate-500 space-y-1 list-disc pl-4 break-keep">
+                                        <li>허용: 화장품, 의류, 미용실, 개인 모임</li>
+                                        <li className="text-red-500 font-medium">가족 카드 절대 사용 금지 (적발 시 반환)</li>
+                                    </ul>
+                                </div>
+
+                                {/* Rule 3 */}
+                                <div className="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-red-500">
+                                    <div className="flex items-center gap-2 mb-2 text-red-600 font-bold">
+                                        <IconXCircle size={20} />
+                                        <h3>3. 할부 절대 금지</h3>
+                                    </div>
+                                    <p className="text-sm text-slate-600 mb-3 font-medium break-keep">사치품/고가 물품은 <span className="text-red-600 font-bold">일시불</span>만 허용</p>
+                                    <ul className="text-xs text-slate-500 space-y-1 list-disc pl-4 break-keep">
+                                        <li>목표 금액 저축(적금) 후 구매 원칙</li>
+                                        <li>무이자 할부도 금지 (선 지출 습관 차단)</li>
+                                    </ul>
+                                </div>
+
+                                {/* Rule 4 */}
+                                <div className="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-blue-500">
+                                    <div className="flex items-center gap-2 mb-2 text-blue-600 font-bold">
+                                        <IconCar size={20} />
+                                        <h3>4. 차량 유지 관리</h3>
+                                    </div>
+                                    <p className="text-sm text-slate-600 mb-3 font-medium break-keep">모든 유지비 본인 부담</p>
+                                    <ul className="text-xs text-slate-500 space-y-1 list-disc pl-4 break-keep">
+                                        <li>주유, 세차, 소모품, 수리비 등 전액</li>
+                                        <li>관리 소홀로 인한 수리비도 본인 책임</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Section 3: Etc */}
+                        <section>
+                            <div className="flex items-center gap-2 mb-4 px-2">
+                                <IconHeart className="text-indigo-600" size={24} />
+                                <h2 className="text-xl font-bold text-slate-800">3. 기타 준수 사항</h2>
+                            </div>
+                            <div className="bg-white rounded-2xl shadow-sm p-5 space-y-4 border border-slate-100">
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">1</div>
+                                    <p className="text-sm text-slate-700 break-keep"><span className="font-bold text-slate-900">상호 존중:</span> 규칙을 준수하는 한, 개인 지출 내용에 대해 서로 간섭하지 않는다.</p>
+                                </div>
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">2</div>
+                                    <p className="text-sm text-slate-700 break-keep"><span className="font-bold text-slate-900">투명성:</span> 분기별 1회 또는 필요 시 고정비 및 공용 카드 내역을 공유한다.</p>
+                                </div>
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">3</div>
+                                    <p className="text-sm text-slate-700 break-keep"><span className="font-bold text-slate-900">비상금:</span> 돌발 지출(차량 수리 등)에 대비해 소득의 10% 이상을 비축 권장.</p>
+                                </div>
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">4</div>
+                                    <p className="text-sm text-slate-700 break-keep"><span className="font-bold text-slate-900">기념일/선물:</span> 선물 준비는 전적으로 '갑'의 재량이며, 고가의 선물은 불가능함을 인지한다.</p>
+                                </div>
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">5</div>
+                                    <p className="text-sm text-slate-700 break-keep"><span className="font-bold text-slate-900">공용 자산/지출:</span> 집, 투자, 여행, 가전 등 목돈이 필요한 의사결정은 반드시 사전 합의한다.</p>
+                                </div>
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">6</div>
+                                    <p className="text-sm text-slate-700 break-keep"><span className="font-bold text-slate-900">병원비:</span> 실비 보험 처리를 원칙으로 하며, 차액 및 비급여 항목은 상호 협의한다.</p>
+                                </div>
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">7</div>
+                                    <p className="text-sm text-slate-700 break-keep"><span className="font-bold text-slate-900">경조사:</span> 각자 부담을 원칙으로 하며, 모든 경조사비 지출은 사전에 협의한다.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                    </main>
+                    
+                    <footer className="text-center text-slate-400 text-xs mt-12 pb-4">
+                        © 2026 Household Economy Agreement. All rights reserved.
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Agreement2026 />);
+    </script>
+</body>
+</html>
