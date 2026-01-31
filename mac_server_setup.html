@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mac Server Hybrid Guide v10.5</title>
+    <title>Mac Server Guide v15.0 (M4 Pro Cluster)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -12,20 +12,15 @@
             theme: {
                 extend: {
                     colors: {
-                        slate: {
-                            850: '#151f32',
-                            900: '#0f172a',
-                            950: '#020617',
-                        },
-                        emerald: {
-                            450: '#10b981',
-                            500: '#10b981',
-                            600: '#059669',
-                        }
+                        slate: { 850: '#151f32', 900: '#0f172a', 950: '#020617' },
+                        emerald: { 450: '#10b981', 500: '#10b981', 600: '#059669' },
+                        indigo: { 500: '#6366f1', 900: '#312e81' },
+                        amber: { 400: '#fbbf24', 500: '#f59e0b' },
+                        sky: { 400: '#38bdf8', 500: '#0ea5e9', 900: '#0c4a6e' }
                     },
                     fontFamily: {
-                        mono: ['"JetBrains Mono"', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
-                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'Menlo', 'Monaco', 'monospace'],
+                        sans: ['Pretendard', '-apple-system', 'sans-serif'],
                     }
                 }
             }
@@ -35,56 +30,63 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-        .code-block { counter-reset: line; }
+        .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-300 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-200">
 
     <header class="fixed top-0 w-full z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/60">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-3">
                 <i class="fa-brands fa-apple text-slate-100 text-lg"></i>
                 <span>Mac Server Guide</span>
-                <span class="text-emerald-400 text-xs font-mono ml-2 px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10">v10.5 Stable</span>
+                <span class="text-sky-400 text-xs font-mono ml-2 px-2 py-0.5 rounded-full border border-sky-500/30 bg-sky-500/10">v15.0 M4 Pro Cluster</span>
             </h1>
             <div class="flex items-center gap-3">
-                <span class="text-xs text-slate-500 font-mono hidden sm:inline">System: Ready</span>
+                <span class="text-xs text-slate-500 font-mono hidden sm:inline">Master Node: Online</span>
                 <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-6 pt-28 pb-20 space-y-16">
+    <main class="max-w-6xl mx-auto px-6 pt-28 pb-20 space-y-16">
 
+        <!-- Hero Section -->
         <section class="relative group">
-            <div class="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            <div class="absolute -inset-1 bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
             <div class="relative p-8 bg-slate-900 ring-1 ring-slate-800 rounded-xl">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                    <div>
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Zero-Touch Architecture</span>
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-xs font-bold text-sky-400 px-2 py-1 bg-sky-500/10 rounded border border-sky-500/20">64GB High-RAM Strategy</span>
+                            <span class="text-xs font-bold text-indigo-400 px-2 py-1 bg-indigo-500/10 rounded border border-indigo-500/20">Thunderbolt 5 Ready</span>
                         </div>
-                        <h2 class="text-3xl font-bold text-white mb-2">Mac mini M4 Pro Server</h2>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            완벽한 헤드리스 운영을 위한 하이브리드 AI 서버 가이드.<br>
-                            물리적 제약 없이 24시간 가동되는 <span class="text-white font-semibold">OpenClaw</span> 엔진을 구축합니다.
+                        <h2 class="text-3xl font-bold text-white mb-3">M4 Pro Master Node</h2>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            <strong>64GB 통합 메모리</strong>를 한계까지 활용하여 <span class="text-white">DeepSeek 32B</span> 모델을 
+                            <strong>8-Way Parallel</strong>로 구동합니다.<br>
+                            향후 다른 맥미니가 Thunderbolt로 연결되면 즉시 <strong>AI Grid Cluster</strong>로 확장되는 아키텍처입니다.
                         </p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-slate-950 rounded border border-slate-800">
-                            <span class="text-xs font-mono text-slate-500">USER ISOLATION</span>
-                            <span class="text-xs font-bold text-white">3-Kingdoms</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-slate-950 rounded border border-slate-800">
-                            <span class="text-xs font-mono text-slate-500">AI RUNTIME</span>
-                            <span class="text-xs font-bold text-emerald-400">PM2 Managed Ollama</span>
+                        
+                        <!-- Resource Bar -->
+                        <div class="space-y-2 bg-slate-950/50 p-4 rounded border border-slate-800">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-400">RAM Allocation Strategy (64GB Total)</span>
+                                <span class="text-emerald-400 font-mono">Safe Margin: 12GB</span>
+                            </div>
+                            <div class="h-4 bg-slate-800 rounded-full overflow-hidden flex">
+                                <div class="w-[15%] bg-slate-600 flex items-center justify-center text-[9px] text-white" title="macOS + Apps (10GB)">macOS</div>
+                                <div class="w-[35%] bg-emerald-600 flex items-center justify-center text-[9px] text-white" title="DeepSeek 32B Model (22GB)">AI Model</div>
+                                <div class="w-[30%] bg-sky-600 flex items-center justify-center text-[9px] text-white" title="Context Window & KV Cache (20GB)">KV Cache (Concurrent Users)</div>
+                                <div class="w-[20%] bg-slate-800/50 flex items-center justify-center text-[9px] text-slate-500">Free</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Phase 0: Golden Time -->
         <section id="phase-0" class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="bg-red-500/10 text-red-400 border border-red-500/20 text-xs font-bold px-2 py-1 rounded">PHASE 0</span>
@@ -94,113 +96,164 @@
             <div class="bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r">
                 <p class="text-red-200 text-sm font-semibold flex items-center">
                     <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                    주의: 이 단계를 건너뛰면 재부팅 후 서버 접속이 불가능(Lockout)해집니다.
+                    Lockout 방지: 이 단계 완료 전에는 절대 모니터를 제거하지 마십시오.
                 </p>
             </div>
 
-            <ul class="space-y-3 text-sm text-slate-300">
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-300">
                 <li class="flex gap-3 items-start p-3 bg-slate-900/50 rounded border border-slate-800">
                     <div class="mt-1 w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-check text-emerald-500 text-xs"></i>
+                        <i class="fa-solid fa-power-off text-emerald-500 text-xs"></i>
                     </div>
                     <div>
-                        <strong class="text-white block">원격 접속 허용 [CRITICAL]</strong>
-                        <span class="text-slate-400">설정 > 일반 > 공유 > <span class="text-emerald-400">'원격 로그인(SSH)'</span> 및 <span class="text-emerald-400">'화면 공유(VNC)'</span> 켬.</span>
+                        <strong class="text-white block">자동 로그인 (Auto Login)</strong>
+                        <span class="text-slate-400">설정 > 사용자 및 그룹 > 'alvin' 자동 로그인. <br>재부팅 시 PM2 실행을 위한 필수 조건.</span>
                     </div>
                 </li>
                 <li class="flex gap-3 items-start p-3 bg-slate-900/50 rounded border border-slate-800">
                     <div class="mt-1 w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-check text-emerald-500 text-xs"></i>
+                        <i class="fa-solid fa-display text-emerald-500 text-xs"></i>
                     </div>
                     <div>
-                        <strong class="text-white block">자동 로그인 설정 [CRITICAL]</strong>
-                        <span class="text-slate-400">사용자 및 그룹 > 로그인 옵션 > <span class="text-emerald-400">'alvin' 자동 로그인</span> 선택. (재부팅 시 PM2 자동 실행 필수 조건)</span>
+                        <strong class="text-white block">BetterDisplay (Dummy)</strong>
+                        <span class="text-slate-400">가상 모니터(16:9) 생성 및 'Start at login' 체크.<br>헤드리스 상태에서 GPU 가속 활성화.</span>
                     </div>
                 </li>
-                <li class="flex gap-3 items-start p-3 bg-slate-900/50 rounded border border-slate-800">
+                <li class="flex gap-3 items-start p-3 bg-slate-900/50 rounded border border-slate-800 md:col-span-2">
                     <div class="mt-1 w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-check text-emerald-500 text-xs"></i>
-                    </div>
-                    <div>
-                        <strong class="text-white block">BetterDisplay (Dummy Plug)</strong>
-                        <span class="text-slate-400">가상 모니터(Dummy 16:9) 생성 후 'Start at login' 체크. GPU 가속 유지.</span>
-                    </div>
-                </li>
-                <li class="flex gap-3 items-start p-3 bg-slate-900/50 rounded border border-slate-800">
-                    <div class="mt-1 w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-check text-emerald-500 text-xs"></i>
+                        <i class="fa-solid fa-shield-cat text-emerald-500 text-xs"></i>
                     </div>
                     <div>
                         <strong class="text-white block">자동 업데이트 방지</strong>
-                        <span class="text-slate-400">터미널 명령: <code class="bg-slate-800 px-1">sudo softwareupdate --schedule off</code></span>
+                        <div class="mt-1 bg-slate-950 p-2 rounded border border-slate-800 font-mono text-xs text-emerald-400">
+                            sudo softwareupdate --schedule off
+                        </div>
                     </div>
                 </li>
             </ul>
         </section>
 
+        <!-- Phase 1: Accounts -->
         <section id="phase-1" class="space-y-4">
-            <h2 class="text-xl font-bold text-white">1. 계정 권한 격리 (3-Kingdoms)</h2>
+            <h2 class="text-xl font-bold text-white">1. 계정 및 권한 설정</h2>
             <div class="code-wrapper">
                 <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal (alvin)</span>
+                    <span class="text-xs font-mono text-slate-400">Terminal (Alvin)</span>
                     <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
                         <i class="fa-regular fa-copy"></i> Copy
                     </button>
                 </div>
-                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 3개의 계정 생성 후 권한 격리
-sudo chmod 700 /Users/alvin     # Admin (관리자)
-sudo chmod 700 /Users/fern      # Worker (표준)
-sudo chmod 700 /Users/jennifer  # Brain (표준)</code></pre>
+                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 1. Fern (나의 비서)
+sudo sysadminctl -addUser fern -fullName "Fern Personal" -password "fern1234" -home /Users/fern
+sudo chmod 700 /Users/fern  # 철저한 격리
+
+# 2. Jennifer (팀 게스트룸)
+sudo sysadminctl -addUser jennifer -fullName "Jennifer Team" -password "jen1234" -home /Users/jennifer
+sudo chmod 750 /Users/jennifer # 팀 공유 가능
+
+# 3. 홈/SSH 초기화 (필수)
+sudo mkdir -p /Users/fern/.ssh && sudo chown fern:staff /Users/fern/.ssh && sudo chmod 700 /Users/fern/.ssh
+sudo mkdir -p /Users/jennifer/.ssh && sudo chown jennifer:staff /Users/jennifer/.ssh && sudo chmod 700 /Users/jennifer/.ssh</code></pre>
             </div>
         </section>
 
+        <!-- Phase 2: Multi-Verse VNC -->
         <section id="phase-2" class="space-y-4">
-            <h2 class="text-xl font-bold text-white">2. 서버 기초 환경 (Basecamp)</h2>
+            <h2 class="text-xl font-bold text-white">2. 멀티버스 QA (Local vs Remote)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Fern은 로컬 빌드(7901/7902)를 즉시 검증하고, Jennifer는 배포된 서버를 모니터링합니다.
+                    </p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-900/80 p-3 rounded border border-slate-700">
+                            <h4 class="text-xs font-bold text-emerald-400 mb-1">Fern (Local)</h4>
+                            <ul class="text-[10px] text-slate-400">
+                                <li>• localhost:7901</li>
+                                <li>• localhost:7902</li>
+                                <li>• Naver Shopping</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-900/80 p-3 rounded border border-slate-700">
+                            <h4 class="text-xs font-bold text-indigo-400 mb-1">Jennifer (Remote)</h4>
+                            <ul class="text-[10px] text-slate-400">
+                                <li>• dev.jennifersoft...</li>
+                                <li>• Staging Server</li>
+                                <li>• Production Monitor</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 p-4 rounded border border-slate-800 flex flex-col justify-center items-center text-center">
+                     <p class="text-[10px] text-slate-500 mb-2">Network Topology</p>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="px-2 py-1 bg-emerald-900/30 text-emerald-400 rounded">127.0.0.1</span>
+                        <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                        <span class="px-2 py-1 bg-slate-800 text-white rounded">Fern</span>
+                    </div>
+                    <div class="h-4 border-l border-slate-700 my-1"></div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="px-2 py-1 bg-indigo-900/30 text-indigo-400 rounded">Internet</span>
+                        <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                        <span class="px-2 py-1 bg-slate-800 text-white rounded">Jennifer</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 3: Basecamp Setup (Alvin) -->
+        <section id="phase-3" class="space-y-4">
+            <h2 class="text-xl font-bold text-white">3. 서버 기초 환경 (Basecamp)</h2>
             <div class="code-wrapper">
                 <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal (alvin)</span>
+                    <span class="text-xs font-mono text-emerald-400">Terminal (Alvin)</span>
                     <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
                         <i class="fa-regular fa-copy"></i> Copy
                     </button>
                 </div>
-                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 절전 방지 (서버 모드)
-sudo pmset -a sleep 0
-sudo pmset -a displaysleep 15 
-sudo pmset -a disksleep 0
-sudo pmset -a wmp 1
+                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 1. 절전 방지
+sudo pmset -a sleep 0 && sudo pmset -a displaysleep 15 && sudo pmset -a wmp 1
 
-# Homebrew 설치
+# 2. Homebrew 설치
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"</code></pre>
             </div>
         </section>
 
-        <section id="phase-3" class="space-y-4">
-            <h2 class="text-xl font-bold text-white">3. 외부 접속 (Tailscale)</h2>
+        <!-- Phase 4: Tailscale -->
+        <section id="phase-4" class="space-y-4">
+            <h2 class="text-xl font-bold text-white">4. 외부 접속 (Tailscale)</h2>
             <div class="code-wrapper">
-                <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal (alvin)</span>
-                    <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
-                        <i class="fa-regular fa-copy"></i> Copy
-                    </button>
-                </div>
-                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400">brew install --cask tailscale
+                <pre class="bg-slate-900 p-4 rounded-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400">brew install --cask tailscale
 open /Applications/Tailscale.app
 # 중요: 실행 후 로그인 & 'Start on Login' 체크 필수</code></pre>
             </div>
         </section>
 
-        <section id="phase-4" class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-white">4. 하이브리드 AI (PM2 Persistent)</h2>
-                <span class="text-xs text-emerald-400 font-mono border border-emerald-500/30 px-2 py-1 rounded">Updated v10.5</span>
+        <!-- Phase 5: Alvin's Dev Env -->
+        <section id="phase-5" class="space-y-4">
+            <h2 class="text-xl font-bold text-white">5. Alvin's Env (Night Coder)</h2>
+            <div class="code-wrapper">
+                <pre class="bg-slate-900 p-4 rounded-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400">brew install zellij eza bat fzf zoxide btop
+alias ls="eza --icons"
+alias cat="bat"</code></pre>
             </div>
-            <p class="text-sm text-slate-400">Ollama를 서비스 대신 PM2로 관리하여 환경변수를 영구화합니다.</p>
-            
+        </section>
+
+        <!-- Phase 6: AI Infra (High-Memory Optimization) -->
+        <section id="phase-6" class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white">6. AI 인프라 (64GB Optimized)</h2>
+                <span class="text-xs text-sky-400 font-mono border border-sky-500/30 px-2 py-1 rounded bg-sky-500/10">Tuned for M4 Pro</span>
+            </div>
+            <p class="text-sm text-slate-400">
+                64GB 램의 여유를 활용하여 동시 처리(Parallel) 수를 4에서 8로 늘리고, 모델 로딩 한도를 상향합니다.<br>
+                팀원 다수가 접속해도 병목 현상이 없도록 설정합니다.
+            </p>
             <div class="code-wrapper">
                 <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal (alvin)</span>
+                    <span class="text-xs font-mono text-emerald-400">Terminal (Alvin)</span>
                     <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
                         <i class="fa-regular fa-copy"></i> Copy
                     </button>
@@ -208,129 +261,139 @@ open /Applications/Tailscale.app
                 <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400">brew install ollama
 npm install -g pm2
 
-# 기존 서비스 중지 (충돌 방지)
-brew services stop ollama
-
-# PM2로 Ollama 실행 (외부접속 허용, 병렬처리 4)
+# M4 Pro (64GB) 최적화 설정
+# OLLAMA_NUM_PARALLEL="8": 동시 접속 8명까지 Context Swapping 없이 즉시 응답
+# OLLAMA_MAX_LOADED_MODELS="2": Chat 모델과 Code 모델 동시 메모리 상주 가능
 pm2 start "ollama serve" --name ollama-core \
   --env OLLAMA_HOST="0.0.0.0:11434" \
-  --env OLLAMA_NUM_PARALLEL="4" \
+  --env OLLAMA_ORIGINS="*" \
+  --env OLLAMA_NUM_PARALLEL="8" \
+  --env OLLAMA_MAX_LOADED_MODELS="2" \
   --env OLLAMA_KEEP_ALIVE="24h"
 
-# 2026 모델 다운로드
+# 메인 모델 (DeepSeek-R1 32B)
 ollama pull deepseek-r1:32b
-ollama pull llama3.3</code></pre>
+
+# 보조 모델 (Coding 전용, 선택)
+ollama pull qwen2.5-coder:14b
+
+pm2 save && pm2 startup</code></pre>
             </div>
         </section>
 
-        <section id="phase-5" class="space-y-4">
-            <h2 class="text-xl font-bold text-white">5. Alvin's Env (Night Coder)</h2>
+        <!-- Phase 7: Bot Environment (Fern & Jen) -->
+        <section id="phase-7" class="space-y-4">
+            <h2 class="text-xl font-bold text-white">7. 봇 환경 구성 (Fern & Jennifer)</h2>
             <div class="code-wrapper">
                 <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal (alvin)</span>
+                    <span class="text-xs font-mono text-slate-400">Terminal (Fern / Jennifer 각각 실행)</span>
                     <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
                         <i class="fa-regular fa-copy"></i> Copy
                     </button>
                 </div>
-                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 모던 터미널 도구 설치
-brew install zellij eza bat fzf zoxide btop
-
-# DeepSeek 통합 alias (~/.zshrc)
-alias ls="eza --icons"
-alias cat="bat"
-alias review="ollama run deepseek-r1:32b '다음 코드를 한국어로 리뷰해줘:'"</code></pre>
-            </div>
-        </section>
-
-        <section id="phase-6" class="space-y-4">
-            <h2 class="text-xl font-bold text-white">6. OpenClaw 봇 설치</h2>
-            <div class="bg-indigo-900/20 border border-indigo-500/30 p-3 rounded text-sm text-indigo-200">
-                <i class="fa-solid fa-user-group mr-2"></i>각 계정(<code>fern</code>, <code>jennifer</code>)으로 로그인해서 각각 수행하세요.
-            </div>
-
-            <div class="code-wrapper">
-                <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal (fern / jennifer)</span>
-                    <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
-                        <i class="fa-regular fa-copy"></i> Copy
-                    </button>
-                </div>
-                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># Node.js LTS 설치
+                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 1. Node.js 설치
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-source ~/.zshrc
-nvm install --lts
+source ~/.zshrc && nvm install --lts
 
-# 프로젝트 설정
+# 2. OpenClaw 봇 설치
 mkdir -p ~/openclaw && cd ~/openclaw
 npm init -y
-npm install pm2 playwright axios @anthropic-ai/sdk dotenv
+npm install pm2 playwright axios @anthropic-ai/sdk openai dotenv @slack/bolt
+
+# 3. 브라우저 엔진 설치
 npx playwright install chromium</code></pre>
             </div>
         </section>
 
-        <section id="phase-7" class="space-y-4">
-            <h2 class="text-xl font-bold text-white">7. 보안 설정 (.env)</h2>
-            <div class="code-wrapper">
-                <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal</span>
-                    <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
-                        <i class="fa-regular fa-copy"></i> Copy
-                    </button>
+        <!-- Phase 8: Secrets (.env) -->
+        <section id="phase-8" class="space-y-4">
+            <h2 class="text-xl font-bold text-white">8. 비밀키 주입 (.env)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Fern Config -->
+                <div class="bg-slate-900 border border-slate-800 rounded-lg p-4">
+                    <h3 class="text-emerald-400 font-bold text-sm mb-2"><i class="fa-solid fa-leaf mr-2"></i>Fern (.env)</h3>
+                    <div class="bg-slate-950 p-3 rounded border border-slate-900 font-mono text-xs text-slate-400">
+                        BOT_NAME="Fern"<br>
+                        <br>
+                        # --- Local Brain ---<br>
+                        OLLAMA_HOST="http://localhost:11434"<br>
+                        <br>
+                        # --- Local Products ---<br>
+                        <span class="text-emerald-400">DEV_LOCAL="http://localhost:7901"</span><br>
+                        <span class="text-emerald-400">RC_LOCAL="http://localhost:7902"</span><br>
+                        <br>
+                        # --- Personal ---<br>
+                        <span class="text-rose-400">NAVER_ID="private_id"</span>
+                    </div>
                 </div>
-                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 1. API 키 보안 저장
-cd ~/openclaw
-echo "ANTHROPIC_API_KEY=sk-ant-xxx" > .env
-echo "BOT_NAME=Jennifer" >> .env
 
-# 2. ecosystem.config.js 작성
-# module.exports = {
-#   apps : [{
-#     name: "openclaw-bot",
-#     script: "index.js",
-#     node_args: "-r dotenv/config" // .env 자동 로드
-#   }]
-# }</code></pre>
+                <!-- Jennifer Config -->
+                <div class="bg-slate-900 border border-slate-800 rounded-lg p-4">
+                    <h3 class="text-indigo-400 font-bold text-sm mb-2"><i class="fa-solid fa-globe mr-2"></i>Jennifer (.env)</h3>
+                    <div class="bg-slate-950 p-3 rounded border border-slate-900 font-mono text-xs text-slate-400">
+                        BOT_NAME="Jennifer"<br>
+                        <br>
+                        # --- Local Brain ---<br>
+                        OLLAMA_HOST="http://localhost:11434"<br>
+                        <br>
+                        # --- Remote Products ---<br>
+                        <span class="text-indigo-400">STAGING_URL="https://dev.jennifersoft..."</span><br>
+                        <span class="text-indigo-400">PROD_URL="https://jennifersoft..."</span>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="phase-8" class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-white">8. 무중단 & 로그 관리</h2>
-                <span class="text-xs text-emerald-400 font-mono border border-emerald-500/30 px-2 py-1 rounded">Updated v10.5</span>
-            </div>
-            
+        <!-- Phase 9: Persistence -->
+        <section id="phase-9" class="space-y-4">
+            <h2 class="text-xl font-bold text-white">9. 무중단 실행 (각각 실행)</h2>
             <div class="code-wrapper">
                 <div class="flex justify-between items-center bg-slate-800 px-4 py-2 rounded-t-lg border border-slate-700 border-b-0">
-                    <span class="text-xs font-mono text-slate-400">Terminal (All Users)</span>
+                    <span class="text-xs font-mono text-slate-400">Terminal (Fern & Jen)</span>
                     <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition flex items-center gap-2" onclick="copyCode(this)">
                         <i class="fa-regular fa-copy"></i> Copy
                     </button>
                 </div>
-                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400"># 1. 로그 자동 삭제 (디스크 보호 필수)
+                <pre class="bg-slate-900 p-4 rounded-b-lg border border-slate-700 overflow-x-auto"><code class="language-bash font-mono text-sm text-emerald-400">npm install -g pm2
 pm2 install pm2-logrotate
 pm2 set pm2-logrotate:max_size 10M
-pm2 set pm2-logrotate:retain 5
 
-# 2. 재부팅 시 자동 부활
+cd ~/openclaw
 pm2 start ecosystem.config.js
 pm2 save
-pm2 startup
-# (출력되는 sudo 명령어 복사/실행)</code></pre>
+pm2 startup</code></pre>
             </div>
         </section>
 
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8 border-t border-slate-800">
-            <div class="bg-slate-900/50 p-4 rounded border border-slate-800 hover:border-emerald-500/50 transition">
-                <div class="text-emerald-400 font-bold mb-2 flex items-center"><i class="fa-solid fa-server mr-2"></i>Headless</div>
-                <p class="text-xs text-slate-400">Auto Login + Dummy Plug 조합으로 GPU 가속 상태 유지.</p>
+        <!-- Phase 10: Future Clustering -->
+        <section id="phase-10" class="space-y-4 border-t border-slate-800 pt-8">
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-bold text-sky-400 px-2 py-1 bg-sky-500/10 rounded border border-sky-500/20">FUTURE</span>
+                <h2 class="text-xl font-bold text-white">10. 확장 계획: Thunderbolt Cluster</h2>
             </div>
-            <div class="bg-slate-900/50 p-4 rounded border border-slate-800 hover:border-emerald-500/50 transition">
-                <div class="text-emerald-400 font-bold mb-2 flex items-center"><i class="fa-solid fa-microchip mr-2"></i>AI Engine</div>
-                <p class="text-xs text-slate-400">PM2가 Ollama와 Bot 프로세스를 좀비처럼 되살림.</p>
-            </div>
-            <div class="bg-slate-900/50 p-4 rounded border border-slate-800 hover:border-emerald-500/50 transition">
-                <div class="text-emerald-400 font-bold mb-2 flex items-center"><i class="fa-solid fa-shield-halved mr-2"></i>Security</div>
-                <p class="text-xs text-slate-400">3-Kingdoms 격리 및 .env 환경변수로 권한/키 보호.</p>
+            <p class="text-sm text-slate-400">
+                향후 추가될 Mac mini(또는 동료의 Mac)를 썬더볼트 케이블로 연결하면, 별도 네트워크 장비 없이 
+                <span class="text-white font-bold">40Gbps 내부망(Bridge Network)</span>이 구성됩니다.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div class="bg-slate-900 p-4 rounded border border-slate-800">
+                    <h3 class="text-sky-400 font-bold text-sm mb-2"><i class="fa-solid fa-circle-nodes mr-2"></i>Thunderbolt Bridge</h3>
+                    <ul class="text-xs text-slate-400 space-y-2">
+                        <li>1. Mac끼리 Thunderbolt 케이블 연결</li>
+                        <li>2. 설정 > 네트워크 > 썬더볼트 브리지 > IPv4 수동 설정</li>
+                        <li>3. <strong>Master(Alvin):</strong> 10.0.0.1</li>
+                        <li>4. <strong>Worker(New):</strong> 10.0.0.2</li>
+                        <li class="text-emerald-400 mt-2">* 초저지연 로컬 추론 클러스터 완성</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-900 p-4 rounded border border-slate-800">
+                    <h3 class="text-indigo-400 font-bold text-sm mb-2"><i class="fa-solid fa-server mr-2"></i>Worker Node 활용법</h3>
+                    <ul class="text-xs text-slate-400 space-y-2">
+                        <li>• <strong>Ollama Load Balancing:</strong> Nginx로 10.0.0.1과 10.0.0.2에 요청 분산</li>
+                        <li>• <strong>Model Partition:</strong> Alvin은 Chat 모델(32B), Worker는 Code 모델(14B) 전담</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -341,22 +404,20 @@ pm2 startup
             const wrapper = button.closest('.code-wrapper');
             const codeBlock = wrapper.querySelector('code');
             const textToCopy = codeBlock.innerText;
-
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const originalHtml = button.innerHTML;
                 button.innerHTML = '<i class="fa-solid fa-check"></i>';
                 button.classList.remove('bg-slate-700', 'hover:bg-slate-600');
                 button.classList.add('bg-emerald-600', 'text-white');
-
                 setTimeout(() => {
                     button.innerHTML = originalHtml;
                     button.classList.remove('bg-emerald-600', 'text-white');
                     button.classList.add('bg-slate-700', 'hover:bg-slate-600');
                 }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
             });
         }
     </script>
 </body>
 </html>
+
+
