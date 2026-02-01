@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mac Server Guide v15.6 (Web Ultimate)</title>
+    <title>Mac Server Guide v15.7 (Web Ultimate)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -71,7 +71,7 @@
             <h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-3">
                 <i class="fa-brands fa-apple text-slate-100 text-lg"></i>
                 <span>Mac Server Guide</span>
-                <span class="text-rose-400 text-xs font-mono ml-2 px-2 py-0.5 rounded-full border border-rose-500/30 bg-rose-500/10">v15.6 Web Ultimate</span>
+                <span class="text-rose-400 text-xs font-mono ml-2 px-2 py-0.5 rounded-full border border-rose-500/30 bg-rose-500/10">v15.7 UX Polish</span>
             </h1>
             <div class="flex items-center gap-3">
                 <span class="text-xs text-slate-500 font-mono hidden sm:inline">Claude 4.5 Opus Integrated</span>
@@ -247,7 +247,13 @@ sudo chmod 750 /Users/jennifer</code></pre>
         <section id="phase-3" class="space-y-4 scroll-mt-24">
             <h2 class="text-xl font-bold text-white">3. 공용 인프라 및 베이스캠프 (System Admin)</h2>
             <div class="code-wrapper">
-                <div class="code-body rounded-lg">
+                <div class="code-header">
+                    <span class="text-xs font-mono text-emerald-400">Terminal (Alvin)</span>
+                    <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded transition flex items-center gap-2" onclick="copyCode(this)">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div class="code-body">
 <pre><code class="language-bash font-mono text-sm text-emerald-400"># 절전 방지
 sudo pmset -a sleep 0 && sudo pmset -a displaysleep 15 && sudo pmset -a wmp 1
 
@@ -382,7 +388,13 @@ npx playwright install chromium</code></pre>
                 <div class="space-y-2">
                     <h3 class="text-sm font-bold text-emerald-400"><i class="fa-solid fa-leaf mr-2"></i>Fern.js (Multi-Port)</h3>
                     <div class="code-wrapper">
-                        <div class="code-body rounded-lg h-96 overflow-y-auto">
+                        <div class="code-header">
+                            <span class="text-xs font-mono text-emerald-400">fern.js</span>
+                            <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded transition flex items-center gap-2" onclick="copyCode(this)">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="code-body h-96 overflow-y-auto">
 <pre><code class="language-javascript font-mono text-xs text-slate-300">const { chromium } = require('playwright');
 const axios = require('axios');
 
@@ -417,7 +429,13 @@ runFern();</code></pre>
                         <span class="text-[10px] text-rose-500 bg-rose-950 px-1 rounded">UPDATED</span>
                     </div>
                     <div class="code-wrapper">
-                        <div class="code-body rounded-lg h-96 overflow-y-auto">
+                        <div class="code-header">
+                            <span class="text-xs font-mono text-rose-400">jennifer.js</span>
+                            <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded transition flex items-center gap-2" onclick="copyCode(this)">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="code-body h-96 overflow-y-auto">
 <pre><code class="language-javascript font-mono text-xs text-slate-300">const { chromium } = require('playwright');
 const Anthropic = require('@anthropic-ai/sdk');
 
@@ -477,7 +495,12 @@ runJennifer();</code></pre>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                 <div class="code-wrapper">
-                    <div class="code-header"><span class="text-xs text-emerald-400">/Users/fern/openclaw/.env</span></div>
+                    <div class="code-header">
+                        <span class="text-xs text-emerald-400">/Users/fern/openclaw/.env</span>
+                        <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded transition flex items-center gap-2" onclick="copyCode(this)">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
                     <div class="code-body">
 <pre><code class="language-bash font-mono text-sm text-slate-300">OLLAMA_HOST="http://localhost:11434"
 FERN_PROFILE="/Users/fern/openclaw/shopping_profile"
@@ -487,7 +510,12 @@ SLACK_BOT_TOKEN="xoxb-fern..."</code></pre>
                     </div>
                 </div>
                 <div class="code-wrapper">
-                    <div class="code-header"><span class="text-xs text-rose-400">/Users/jennifer/openclaw/.env</span></div>
+                    <div class="code-header">
+                        <span class="text-xs text-rose-400">/Users/jennifer/openclaw/.env</span>
+                        <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded transition flex items-center gap-2" onclick="copyCode(this)">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
                     <div class="code-body">
 <pre><code class="language-bash font-mono text-sm text-slate-300">ANTHROPIC_API_KEY="sk-ant-..."
 TARGET_URL="https://dev.jennifersoft.com"
@@ -502,7 +530,13 @@ SLACK_BOT_TOKEN="xoxb-jennifer..."</code></pre>
         <section id="phase-10" class="space-y-4 scroll-mt-24">
             <h2 class="text-xl font-bold text-white">10. 실행 및 무중단 설정 (PM2)</h2>
             <div class="code-wrapper">
-                <div class="code-body rounded-lg">
+                <div class="code-header">
+                    <span class="text-xs font-mono text-emerald-400">Terminal</span>
+                    <button class="copy-btn text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded transition flex items-center gap-2" onclick="copyCode(this)">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div class="code-body">
 <pre><code class="language-bash font-mono text-sm text-emerald-400"># 1. Fern 실행 (포트 지정)
 export TARGET_PORT=7901 && node fern.js
 
