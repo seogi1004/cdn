@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JENNIFER SMTP Adapter Guide (Legacy)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-kotlin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml-doc.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #e5e7eb;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background-color: rgba(255, 255, 255, 0.2); }
+        pre { position: relative; border-radius: 0.5rem; margin-top: 1rem; max-height: 600px; overflow-y: auto; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Header -->
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">JENNIFER5 SMTP Adapter (Legacy)</h1>
+            <p class="text-gray-600">Java 17+ 환경에서 TLS v1.0/v1.1 SMTP 서버 지원을 위한 통합 가이드</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white rounded-t-xl shadow-sm border-b border-gray-200">
+            <nav class="flex overflow-x-auto" aria-label="Tabs">
+                <!-- 1. IntelliJ -->
+                <button onclick="switchTab('intellij')" id="tab-intellij" class="tab-btn active px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 focus:outline-none bg-blue-50/50">
+                    <i class="fas fa-tools mr-2"></i>IntelliJ 설치
+                </button>
+                <!-- 2. POM -->
+                <button onclick="switchTab('pom')" id="tab-pom" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fas fa-file-code mr-2"></i>pom.xml
+                </button>
+                <!-- 3. Adapter -->
+                <button onclick="switchTab('adapter')" id="tab-adapter" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fas fa-code mr-2"></i>SmtpAdapter.kt
+                </button>
+                <!-- 4. Guide -->
+                <button onclick="switchTab('guide')" id="tab-guide" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fas fa-book mr-2"></i>TLS 설정 가이드
+                </button>
+            </nav>
+        </div>
+
+        <!-- Content Area -->
+        <div class="bg-white rounded-b-xl shadow-lg p-6 min-h-[600px]">
+
+            <!-- Tab 1: IntelliJ Installation & Build (Active by default) -->
+            <div id="content-intellij" class="tab-content active">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">IntelliJ IDEA 설치 및 빌드 가이드</h2>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full">Recommended IDE</span>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Step 1 -->
+                    <div class="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">1. 다운로드 및 설치</h3>
+                        <p class="text-sm text-gray-600 mb-3">JetBrains 공식 사이트에서 무료 버전인 <strong>Community Edition</strong>을 다운로드합니다.</p>
+                        <a href="https://www.jetbrains.com/idea/download/" target="_blank" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-download mr-2"></i> Download Page
+                        </a>
+                        <p class="text-xs text-gray-500 mt-2">* 운영체제(Windows/macOS/Linux)에 맞는 버전을 선택하세요.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">2. 프로젝트 불러오기 (Import)</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                            <li>IntelliJ 실행 후 <strong>Open</strong> 버튼을 클릭합니다.</li>
+                            <li>소스 코드가 있는 폴더 안의 <code>pom.xml</code> 파일을 선택하고 <strong>Open</strong>을 누릅니다.</li>
+                            <li><strong>Open as Project</strong>를 선택하여 Maven 프로젝트로 엽니다.</li>
+                            <li>필요한 라이브러리가 다운로드될 때까지 기다립니다.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">3. JDK 17 설정 (필수)</h3>
+                        <p class="text-sm text-gray-600 mb-3">프로젝트가 Java 17 환경에서 빌드되도록 설정을 확인합니다.</p>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                            <li>메뉴: <strong>File</strong> &gt; <strong>Project Structure...</strong> (단축키: <code>Ctrl+Alt+Shift+S</code>)</li>
+                            <li><strong>Project Settings</strong> &gt; <strong>Project</strong> &gt; <strong>SDK</strong>를 <strong>17</strong>로 설정합니다.</li>
+                            <li>없다면 <strong>Add SDK</strong> &gt; <strong>Download JDK...</strong>에서 <strong>Amazon Corretto 17</strong>을 다운로드합니다.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Step 4: Build -->
+                    <div class="border rounded-lg p-6 hover:shadow-md transition-shadow border-blue-200 bg-blue-50/30">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-lg font-semibold text-blue-900 mb-3">4. JAR 파일 빌드 (Maven Install)</h3>
+                            <i class="fas fa-cube text-blue-300 text-2xl"></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">어댑터를 Jennifer Server에 배포할 수 있는 JAR 파일로 만듭니다.</p>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                            <li>IntelliJ 우측 사이드바의 <strong>Maven</strong> 탭을 클릭합니다.</li>
+                            <li><strong>Lifecycle</strong>을 펼치고 <strong>install</strong>을 더블 클릭합니다. (또는 터미널에서 <code>mvn install</code> 입력)</li>
+                            <li>빌드가 성공하면(BUILD SUCCESS), 프로젝트 루트의 <strong>dist</strong> 폴더를 확인합니다.</li>
+                        </ol>
+                        <div class="mt-4 p-3 bg-white rounded border border-blue-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span class="text-sm text-gray-700 font-mono">생성 파일: dist/smtp-legacy-adapter-1.0.0.jar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: pom.xml -->
+            <div id="content-pom" class="tab-content">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">Maven Configuration</h2>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">Maven Shade Plugin</span>
+                </div>
+                <p class="text-gray-600 text-sm mb-4">
+                    Java 17 빌드 설정과 <code>javax.mail</code> 의존성이 포함되어 있습니다. Shade Plugin을 통해 외부 라이브러리를 하나의 JAR로 패키징합니다.
+                </p>
+                <div class="relative group">
+                    <button onclick="copyToClipboard('code-pom')" class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                    <pre><code id="code-pom" class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+    &lt;groupId&gt;com.aries&lt;/groupId&gt;
+    &lt;artifactId&gt;smtp-legacy-adapter&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+
+    &lt;properties&gt;
+        &lt;java.version&gt;17&lt;/java.version&gt;
+        &lt;kotlin.version&gt;2.1.20&lt;/kotlin.version&gt;
+        &lt;javax.mail.version&gt;1.6.2&lt;/javax.mail.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.aries&lt;/groupId&gt;
+            &lt;artifactId&gt;extension&lt;/artifactId&gt;
+            &lt;version&gt;1.5.7&lt;/version&gt;
+            &lt;scope&gt;provided&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.sun.mail&lt;/groupId&gt;
+            &lt;artifactId&gt;javax.mail&lt;/artifactId&gt;
+            &lt;version&gt;${javax.mail.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.jetbrains.kotlin&lt;/groupId&gt;
+            &lt;artifactId&gt;kotlin-stdlib-jdk8&lt;/artifactId&gt;
+            &lt;version&gt;${kotlin.version}&lt;/version&gt;
+            &lt;scope&gt;provided&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;sourceDirectory&gt;${project.basedir}/src/main/kotlin&lt;/sourceDirectory&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.jetbrains.kotlin&lt;/groupId&gt;
+                &lt;artifactId&gt;kotlin-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;${kotlin.version}&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;jvmTarget&gt;${java.version}&lt;/jvmTarget&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.11.0&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;source&gt;${java.version}&lt;/source&gt;
+                    &lt;target&gt;${java.version}&lt;/target&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.2.4&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;artifactSet&gt;
+                        &lt;excludes&gt;
+                            &lt;exclude&gt;com.aries:extension:*&lt;/exclude&gt;
+                            &lt;exclude&gt;org.apache.velocity:*&lt;/exclude&gt;
+                            &lt;exclude&gt;org.apache.commons:*&lt;/exclude&gt;
+                            &lt;exclude&gt;org.slf4j:*&lt;/exclude&gt;
+                            &lt;exclude&gt;org.jetbrains.kotlin:*&lt;/exclude&gt;
+                            &lt;exclude&gt;javax.servlet:*&lt;/exclude&gt;
+                        &lt;/excludes&gt;
+                    &lt;/artifactSet&gt;
+                    &lt;outputFile&gt;${plugin.output.directoryName}/${plugin.output.fileName}.${project.packaging}&lt;/outputFile&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;</code></pre>
+                </div>
+            </div>
+
+            <!-- Tab 3: SmtpAdapter.kt -->
+            <div id="content-adapter" class="tab-content">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">Kotlin Source Code</h2>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Java 17 Compatible</span>
+                </div>
+                <p class="text-gray-600 text-sm mb-4">
+                    이 코드는 <code>javax.mail</code>을 사용하여 이메일을 발송하며, 
+                    <strong>Transport 연결 재사용</strong>을 통해 성능을 최적화했습니다.
+                </p>
+                <div class="relative group">
+                    <button onclick="copyToClipboard('code-adapter')" class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                    <pre><code id="code-adapter" class="language-kotlin">package com.aries.adapter.smtp
+
+import com.aries.extension.data.EventData
+import com.aries.extension.handler.EventHandler
+import com.aries.extension.util.LogUtil
+import com.aries.extension.util.PropertyUtil
+import java.util.Properties
+import javax.mail.Authenticator
+import javax.mail.Message
+import javax.mail.PasswordAuthentication
+import javax.mail.Session
+import javax.mail.Transport
+import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeMessage
+import java.time.Instant
+
+/**
+ * SMTP Adapter for Legacy TLS Support (TLSv1.0, TLSv1.1)
+ *
+ * 설정을 통해 TLS 1.0/1.1을 사용하는 구형 SMTP 서버와 통신합니다.
+ */
+class SmtpAdapter : EventHandler {
+
+    companion object {
+        private const val ADAPTER_ID = "smtp_legacy"
+        private const val DEFAULT_PORT = "587"
+        private const val DEFAULT_SSL_TRUST = "*"
+    }
+
+    override fun on(events: Array<EventData>) {
+        val host = getConfig("smtp_host", null)
+        val port = getConfig("smtp_port", DEFAULT_PORT)
+        val username = getConfig("auth_user", null)
+        val password = getConfig("auth_pass", null)
+        val fromAddr = getConfig("from_addr", null)
+        val toAddr = getConfig("to_addr", null)
+        val sslTrust = getConfig("ssl_trust", DEFAULT_SSL_TRUST)
+
+        if (host.isNullOrEmpty() || username.isNullOrEmpty() || password.isNullOrEmpty() || toAddr.isNullOrEmpty()) {
+            LogUtil.error("SMTP Adapter configuration missing.")
+            return
+        }
+
+        val props = Properties().apply {
+            put("mail.transport.protocol", "smtp")
+            put("mail.smtp.host", host)
+            put("mail.smtp.port", port)
+            put("mail.smtp.auth", "true")
+            put("mail.smtp.starttls.enable", "true")
+            // 핵심: TLS v1.0, v1.1 강제 활성화 요청
+            put("mail.smtp.ssl.protocols", "TLSv1 TLSv1.1 TLSv1.2")
+            
+            if (!sslTrust.isNullOrEmpty()) {
+                put("mail.smtp.ssl.trust", sslTrust)
+            }
+        }
+
+        val session = Session.getInstance(props, object : Authenticator() {
+            override fun getPasswordAuthentication(): PasswordAuthentication {
+                return PasswordAuthentication(username, password)
+            }
+        })
+
+        // 최적화: Transport 연결을 한 번만 맺고 재사용
+        var transport: Transport? = null
+        try {
+            transport = session.getTransport("smtp")
+            transport.connect() // Session의 Authenticator 사용
+
+            for (event in events) {
+                try {
+                    val message = createMessage(session, event, fromAddr!!, toAddr)
+                    // static send() 대신 인스턴스 메서드 사용으로 연결 재사용
+                    transport.sendMessage(message, message.allRecipients)
+                    LogUtil.info("SMTP Email sent: ${event.errorType}")
+                } catch (e: Exception) {
+                    LogUtil.error("Error sending individual message: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            LogUtil.error("SMTP Connection Error: ${e.message}")
+        } finally {
+            try {
+                transport?.close()
+            } catch (e: Exception) {
+                // Ignore close error
+            }
+        }
+    }
+
+    private fun createMessage(session: Session, event: EventData, from: String, to: String): Message {
+        val message = MimeMessage(session)
+        message.setFrom(InternetAddress(from))
+        if (to.contains(",")) {
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to))
+        } else {
+            message.setRecipient(Message.RecipientType.TO, InternetAddress(to))
+        }
+        message.subject = "[Jennifer] ${event.eventLevel}: ${event.errorType}"
+        message.setContent(buildHtmlContent(event), "text/html; charset=utf-8")
+        return message
+    }
+
+    private fun buildHtmlContent(event: EventData): String {
+        val time = Instant.ofEpochMilli(event.time).toString()
+        val msg = event.message ?: ""
+        return """
+            <html>
+            <body style="font-family: Arial, sans-serif;">
+                <h2 style="color: #d32f2f;">[${event.eventLevel}] ${event.errorType}</h2>
+                <hr/>
+                <p><strong>Service:</strong> ${event.serviceName}</p>
+                <p><strong>Time:</strong> $time</p>
+                <p><strong>Message:</strong><br/>$msg</p>
+            </body>
+            </html>
+        """.trimIndent()
+    }
+
+    private fun getConfig(key: String?, defaultValue: String?): String? {
+        return try {
+            PropertyUtil.getValue(ADAPTER_ID, key, defaultValue)
+        } catch (e: Exception) {
+            defaultValue
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <!-- Tab 4: Security Config -->
+            <div id="content-guide" class="tab-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">JDK TLS Configuration Guide</h2>
+                    <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Required</span>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-700">
+                                    Java 17+은 기본적으로 TLS 1.0/1.1을 차단합니다. 
+                                    코드를 적용하더라도 아래 JDK 설정을 변경하지 않으면 전송이 실패합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">방법 1: java.security 파일 수정 (권장)</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                            <li>JDK 경로의 <code>conf/security/java.security</code> 파일을 엽니다.</li>
+                            <li><code>jdk.tls.disabledAlgorithms</code> 항목을 찾습니다.</li>
+                            <li>목록에서 <span class="bg-red-100 text-red-800 px-1 rounded">TLSv1</span>, <span class="bg-red-100 text-red-800 px-1 rounded">TLSv1.1</span>을 <strong>삭제</strong>합니다.</li>
+                        </ol>
+                        <div class="mt-4 bg-gray-800 rounded p-4">
+                            <p class="text-gray-400 text-xs mb-1">Before:</p>
+                            <code class="text-green-400 text-xs break-all">jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1, RC4, DES, ...</code>
+                            <p class="text-gray-400 text-xs mt-3 mb-1">After:</p>
+                            <code class="text-blue-400 text-xs break-all">jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, ...</code>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">방법 2: 실행 옵션 추가 (대안)</h3>
+                        <p class="text-sm text-gray-600 mb-3">파일 수정이 어려운 경우, 별도 보안 파일을 만들어 실행 인자로 전달합니다.</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 text-sm">
+                            <li><code>enable_legacy_tls.security</code> 파일 생성</li>
+                            <li>내용 작성: <code>jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA</code></li>
+                            <li>실행 스크립트 수정:</li>
+                        </ul>
+                        <div class="mt-3 bg-gray-900 rounded p-3">
+                            <code class="text-gray-200 text-xs">-Djava.security.properties=/path/to/enable_legacy_tls.security</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="mt-8 text-center text-gray-500 text-sm">
+            <p>&copy; 2026 JenniferSoft. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600', 'bg-blue-50/50');
+                btn.classList.add('text-gray-500', 'hover:text-gray-700');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Add active class to clicked tab
+            const btn = document.getElementById(`tab-${tabId}`);
+            btn.classList.remove('text-gray-500', 'hover:text-gray-700');
+            btn.classList.add('text-blue-600', 'border-b-2', 'border-blue-600', 'bg-blue-50/50');
+            
+            document.getElementById(`content-${tabId}`).classList.add('active');
+        }
+
+        function copyToClipboard(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            const textArea = document.createElement('textarea');
+            textArea.value = code;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            alert('Copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
