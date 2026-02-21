@@ -146,18 +146,74 @@
                 </div>
             </div>
 
-            <!-- Day 5: Wink Hotel -->
+            <!-- Day 5: Wink Hotel + 일정 -->
             <div class="relative pl-8">
-                <div class="timeline-dot !bg-orange-500 !box-shadow-[0_0_0_2px_#fb923c]"></div>
+                <div class="timeline-dot !bg-orange-500" style="box-shadow:0 0 0 2px #fb923c"></div>
                 <div class="flex justify-between items-center mb-1">
-                    <h3 class="font-bold text-gray-900 text-sm">3/5(목) 윙크 호텔 다낭 센터</h3>
-                    <span class="badge bg-orange-100 text-orange-600">Wash & Rest</span>
+                    <h3 class="font-bold text-gray-900 text-sm">3/5(목) 마지막 날 일정</h3>
+                    <span class="badge bg-orange-100 text-orange-600">Last Day</span>
                 </div>
-                <p class="text-[11px] text-gray-500 mb-3">City View Room | 무박/휴식 거점</p>
-                <div class="bg-gray-900 text-white p-4 rounded-2xl">
-                    <p class="text-[11px] leading-relaxed opacity-90">
-                        바나힐 투어 후 샤워 및 공항 출발 전 휴식. <br>
-                        <span class="text-orange-400 font-bold">* 현장 결제 필수 (VND 1,735,020)</span>
+                <p class="text-[11px] text-gray-500 mb-3">윗크 호텔 거점 · 바나힌 + 시내 투어</p>
+
+                <!-- 바나힌 -->
+                <div class="bg-orange-50 p-3 rounded-2xl border border-orange-100 space-y-2 mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono font-bold text-orange-500 w-10">08:00</span>
+                        <span class="text-[11px] text-gray-700 font-bold">바나힌 포인트 출발 (시내에서 약 40분)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono font-bold text-orange-500 w-10">14:30</span>
+                        <span class="text-[11px] text-gray-700">바나힌 관광 종료 후 다낭 복귀</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono font-bold text-orange-500 w-10">15:30</span>
+                        <span class="text-[11px] text-gray-700">윗크 호텔 체크인 · 샤워 & 집 정리</span>
+                    </div>
+                </div>
+
+                <!-- 시내 일정 -->
+                <div class="space-y-2">
+                    <a href="https://www.google.com/maps/place/%ED%95%B4%EC%82%B0%EB%AC%BC+%2F+%ED%85%9C+%ED%95%98%EC%9D%B4%EC%82%B0/@16.0570832,108.245463,17z" target="_blank"
+                       class="flex items-center gap-3 bg-red-50 p-3 rounded-2xl border border-red-100 hover:border-red-300 transition-colors">
+                        <div class="w-9 h-9 shrink-0 bg-red-100 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-shrimp text-red-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[11px] font-bold text-gray-800">해산물 / 텐 하이산</p>
+                            <p class="text-[10px] text-gray-500">16:30~17:45 · 저녁 식사</p>
+                        </div>
+                        <i class="fa-solid fa-map-location-dot text-red-400 text-xs shrink-0"></i>
+                    </a>
+
+                    <a href="https://www.google.com/maps/place/%EB%81%84%EC%96%B4%EC%9D%8C%EC%98%A4/@16.059578,108.2445979,17z" target="_blank"
+                       class="flex items-center gap-3 bg-amber-50 p-3 rounded-2xl border border-amber-100 hover:border-amber-300 transition-colors">
+                        <div class="w-9 h-9 shrink-0 bg-amber-100 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-mug-hot text-amber-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[11px] font-bold text-gray-800">끌어응오 카페</p>
+                            <p class="text-[10px] text-gray-500">17:45~18:15 · 식당에서 도보 5분</p>
+                        </div>
+                        <i class="fa-solid fa-map-location-dot text-amber-400 text-xs shrink-0"></i>
+                    </a>
+
+                    <a href="https://www.google.com/maps/place/%EB%AC%B8%EB%AC%B8%EC%8A%A4%ED%8C%8C(%EC%9D%B4%EB%B0%9C%EA%B4%80%EC%95%A4%EB%84%A4%EC%9D%BC)/@16.0704054,108.2345315,17z" target="_blank"
+                       class="flex items-center gap-3 bg-purple-50 p-3 rounded-2xl border border-purple-100 hover:border-purple-300 transition-colors">
+                        <div class="w-9 h-9 shrink-0 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-spa text-purple-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[11px] font-bold text-gray-800">문문스파 (마사지 & 네일)</p>
+                            <p class="text-[10px] text-gray-500">18:15~19:30 · 약 75분 코스</p>
+                        </div>
+                        <i class="fa-solid fa-map-location-dot text-purple-400 text-xs shrink-0"></i>
+                    </a>
+                </div>
+
+                <div class="mt-3 bg-gray-900 text-white p-3 rounded-2xl">
+                    <p class="text-[11px] leading-relaxed">
+                        <span class="text-orange-400 font-bold">20:30</span> 윗크 호텔 출발 → 공항 새드 23:00 OZ756<br>
+                        <span class="text-gray-400 text-[10px]">* 윗크 호텔 현장 결제 필수 (VND 1,735,020 ≈ 10만원)</span>
                     </p>
                 </div>
             </div>
@@ -170,51 +226,51 @@
 
     <!-- Luxury Benefits: Royal Beachfront -->
     <section class="px-6 mt-6 mb-10">
-        <div class="bg-gradient-blue rounded-[2.5rem] p-7 text-white shadow-2xl relative overflow-hidden">
-            <i class="fa-solid fa-crown absolute -top-4 -right-4 text-white/10 text-9xl"></i>
-            
+        <div class="bg-gray-900 rounded-[2.5rem] p-7 shadow-2xl relative overflow-hidden">
+            <i class="fa-solid fa-crown absolute -top-4 -right-4 text-white/5 text-9xl"></i>
+
             <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                <i class="fa-solid fa-star text-yellow-300"></i> 빌라 숙박객 전용 혜택
+                <i class="fa-solid fa-star text-yellow-400"></i> 빌라 숙박객 전용 혜택
             </h3>
-            
-            <div class="space-y-4">
-                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl border border-white/5">
-                    <div class="w-10 h-10 shrink-0 bg-white/20 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-utensils text-white"></i>
+
+            <div class="space-y-3">
+                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl">
+                    <div class="w-10 h-10 shrink-0 bg-white/10 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-utensils text-emerald-400"></i>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-white">조식 선택 가능</p>
-                        <p class="text-[10px] text-blue-100">레스토랑 뷔페 또는 빌라 내 조식 서비스 선택</p>
+                        <p class="text-[10px] text-gray-400">레스토랑 뷔페 또는 빌라 내 조식 서비스 선택</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl border border-white/5">
-                    <div class="w-10 h-10 shrink-0 bg-white/20 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-wallet text-white"></i>
+                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl">
+                    <div class="w-10 h-10 shrink-0 bg-white/10 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-wallet text-yellow-400"></i>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-white">매일 500,000 VND 크레딧</p>
-                        <p class="text-[10px] text-blue-100">호텔 내 시설(식사, 스파 등)에서 매일 사용 가능</p>
+                        <p class="text-[10px] text-gray-400">호텔 내 시설(식사, 스파 등)에서 매일 사용 가능</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl border border-white/5">
-                    <div class="w-10 h-10 shrink-0 bg-white/20 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-martini-glass-citrus text-white"></i>
+                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl">
+                    <div class="w-10 h-10 shrink-0 bg-white/10 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-martini-glass-citrus text-pink-400"></i>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-white">로얄 라운지 프리빌리지</p>
-                        <p class="text-[10px] text-blue-100">20:00~23:00 와인, 칵테일, 카나페 무제한</p>
+                        <p class="text-[10px] text-gray-400">20:00~23:00 와인, 칵테일, 카나페 무제한</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl border border-white/5">
-                    <div class="w-10 h-10 shrink-0 bg-white/20 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-camera text-white"></i>
+                <div class="flex gap-4 p-3 bg-white/10 rounded-2xl">
+                    <div class="w-10 h-10 shrink-0 bg-white/10 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-camera text-sky-400"></i>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-white">무료 아오자이 대여</p>
-                        <p class="text-[10px] text-blue-100">가족 사진 촬영을 위한 전통 의상 무료 렌탈</p>
+                        <p class="text-[10px] text-gray-400">가족 사진 촬영을 위한 전통 의상 무료 렌탈</p>
                     </div>
                 </div>
             </div>
@@ -256,6 +312,130 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- 다낭 여행 팁 -->
+    <section class="px-6 mb-12">
+        <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-lightbulb text-amber-400"></i> 다낭 여행 꿀팁
+        </h2>
+        <div class="space-y-3">
+
+            <!-- 환전 -->
+            <div class="bg-white rounded-2xl border border-amber-100 p-4 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 shrink-0 bg-amber-100 rounded-xl flex items-center justify-center mt-0.5">
+                        <i class="fa-solid fa-won-sign text-amber-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-gray-800 mb-1">환전은 한 시장 금은방에서</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">공항·호텔 환전은 환율이 나쁩니다. <b>한 시장(Han Market)</b> 주변 금은방(Tiệm Vàng)에서 환전하면 가장 유리해요. 소액 달러($) 지참 후 현지에서 VND로 바꾸는 것도 방법.</p>
+                        <div class="mt-2 bg-amber-50 rounded-xl px-3 py-1.5">
+                            <p class="text-[10px] text-amber-700 font-bold">환율 참고: $100 ≈ 2,530,000 VND · 1만원 ≈ 172,000 VND</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 교통 -->
+            <div class="bg-white rounded-2xl border border-green-100 p-4 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 shrink-0 bg-green-100 rounded-xl flex items-center justify-center mt-0.5">
+                        <i class="fa-solid fa-car text-green-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-gray-800 mb-1">그랩(Grab) 앱 필수 설치</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">다낭 이동은 <b>Grab</b>이 가장 편리하고 저렴합니다. 시내 이동 약 1~2만원 수준. 택시는 흥정 없이 미터기 사용 확인 필수.</p>
+                        <div class="mt-2 bg-green-50 rounded-xl px-3 py-1.5">
+                            <p class="text-[10px] text-green-700 font-bold">다낭↔호이안 그랩: 약 15~20만동 (약 9,000~12,000원)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 물가 -->
+            <div class="bg-white rounded-2xl border border-blue-100 p-4 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 shrink-0 bg-blue-100 rounded-xl flex items-center justify-center mt-0.5">
+                        <i class="fa-solid fa-bowl-food text-blue-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-gray-800 mb-1">현지 물가 가이드</p>
+                        <div class="mt-1 space-y-1">
+                            <div class="flex justify-between">
+                                <p class="text-[10px] text-gray-500">현지 쌀국수/반미</p>
+                                <p class="text-[10px] font-bold text-gray-700">3~5만동 (약 2~3천원)</p>
+                            </div>
+                            <div class="flex justify-between">
+                                <p class="text-[10px] text-gray-500">레스토랑 식사 (1인)</p>
+                                <p class="text-[10px] font-bold text-gray-700">10~25만동 (약 6~15천원)</p>
+                            </div>
+                            <div class="flex justify-between">
+                                <p class="text-[10px] text-gray-500">생맥주 비어호이</p>
+                                <p class="text-[10px] font-bold text-gray-700">1~2만동 (약 600~1천원)</p>
+                            </div>
+                            <div class="flex justify-between">
+                                <p class="text-[10px] text-gray-500">마사지 1시간</p>
+                                <p class="text-[10px] font-bold text-gray-700">15~30만동 (약 9~18천원)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 식수 & 위생 -->
+            <div class="bg-white rounded-2xl border border-sky-100 p-4 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 shrink-0 bg-sky-100 rounded-xl flex items-center justify-center mt-0.5">
+                        <i class="fa-solid fa-droplet text-sky-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-gray-800 mb-1">수돗물 절대 마시지 말 것</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">베트남 수돗물은 음용 불가. 편의점 생수 구입 필수. 식당 얼음은 유명 체인점·호텔급 이상에서만 안심 가능.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 통신 -->
+            <div class="bg-white rounded-2xl border border-purple-100 p-4 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 shrink-0 bg-purple-100 rounded-xl flex items-center justify-center mt-0.5">
+                        <i class="fa-solid fa-signal text-purple-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-gray-800 mb-1">현지 SIM 또는 eSIM 권장</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">공항 도착 후 Viettel·Vietnamobile SIM 구입 (약 1만원, 5GB+). 또는 출국 전 한국에서 eSIM 구매 추천.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 팁 문화 -->
+            <div class="bg-white rounded-2xl border border-rose-100 p-4 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 shrink-0 bg-rose-100 rounded-xl flex items-center justify-center mt-0.5">
+                        <i class="fa-solid fa-hand-holding-heart text-rose-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-gray-800 mb-1">팁 문화 & 흥정</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">팁은 의무는 아니지만 마사지·레스토랑에서 1~2만동 정도 주면 좋아요. 시장에서는 가격의 50~70% 선에서 흥정 가능.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주의사항 -->
+            <div class="bg-white rounded-2xl border border-orange-100 p-4 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 shrink-0 bg-orange-100 rounded-xl flex items-center justify-center mt-0.5">
+                        <i class="fa-solid fa-triangle-exclamation text-orange-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-gray-800 mb-1">주의사항</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">👜 가방·핸드폰은 오토바이 소매치기 주의 — 차도 쪽으로 들지 말 것.<br>☀️ 자외선이 강하므로 선크림 SPF50+ 필수.<br>🚗 무단횡단 시 차량이 먼저 오는 것처럼 보여도 천천히 일정 속도로 걸어서 건너면 됩니다.</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -364,10 +544,42 @@
 
             <div class="space-y-3">
                 <div class="flex items-start gap-3">
-                    <div class="text-[10px] font-mono font-bold text-indigo-400 w-12 shrink-0 pt-0.5">19:30</div>
+                    <div class="text-[10px] font-mono font-bold text-indigo-400 w-12 shrink-0 pt-0.5">14:30</div>
                     <div class="flex-1">
-                        <p class="text-[11px] font-bold text-white">바나힐 투어 종료 → 윙크 호텔 복귀</p>
-                        <p class="text-[10px] text-gray-400">샤워 및 짐 정리</p>
+                        <p class="text-[11px] font-bold text-white">바나힌 투어 종료 → 다낭 복귀</p>
+                        <p class="text-[10px] text-gray-400">시내까지 약 40분 이동</p>
+                    </div>
+                </div>
+                <div class="border-t border-white/10"></div>
+                <div class="flex items-start gap-3">
+                    <div class="text-[10px] font-mono font-bold text-indigo-400 w-12 shrink-0 pt-0.5">15:30</div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-white">윗크 호텔 체크인 · 샤워 & 집 정리</p>
+                        <p class="text-[10px] text-gray-400">시내 일정 전 휴식</p>
+                    </div>
+                </div>
+                <div class="border-t border-white/10"></div>
+                <div class="flex items-start gap-3">
+                    <div class="text-[10px] font-mono font-bold text-red-400 w-12 shrink-0 pt-0.5">16:30</div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-white">텐 하이산 해산물 식사</p>
+                        <p class="text-[10px] text-gray-400">약 1시간 15분 소요</p>
+                    </div>
+                </div>
+                <div class="border-t border-white/10"></div>
+                <div class="flex items-start gap-3">
+                    <div class="text-[10px] font-mono font-bold text-amber-400 w-12 shrink-0 pt-0.5">17:45</div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-white">끌어응오 카페</p>
+                        <p class="text-[10px] text-gray-400">도보 5분 · 30분 휴식</p>
+                    </div>
+                </div>
+                <div class="border-t border-white/10"></div>
+                <div class="flex items-start gap-3">
+                    <div class="text-[10px] font-mono font-bold text-purple-400 w-12 shrink-0 pt-0.5">18:15</div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-white">문문스파 마사지 & 네일</p>
+                        <p class="text-[10px] text-gray-400">약 75분 코스</p>
                     </div>
                 </div>
                 <div class="border-t border-white/10"></div>
@@ -568,6 +780,45 @@
                     <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
                 </a>
 
+                <!-- 텐 하이산 -->
+                <a href="https://www.google.com/maps/place/%ED%95%B4%EC%82%B0%EB%AC%BC+%2F+%ED%85%9C+%ED%95%98%EC%9D%B4%EC%82%B0/@16.0570832,108.245463,17z" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-red-100 shadow-sm hover:border-red-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-red-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-shrimp text-red-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">텐 하이산 (해산물)</p>
+                        <p class="text-[10px] text-gray-500">3/5 저녁 · 미케 해변 인근</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- 끄어응오 카페 -->
+                <a href="https://www.google.com/maps/place/%EB%81%84%EC%96%B4%EC%9D%91%EC%98%A4/@16.059578,108.2445979,17z" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-amber-100 shadow-sm hover:border-amber-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-amber-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-mug-hot text-amber-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">끄어응오 카페</p>
+                        <p class="text-[10px] text-gray-500">3/5 카페 · 식당 도보 5분</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- 문문스파 -->
+                <a href="https://www.google.com/maps/place/%EB%AC%B8%EB%AC%B8%EC%8A%A4%ED%8C%8C(%EC%9D%B4%EB%B0%9C%EA%B4%80%EC%95%A4%EB%84%A4%EC%9D%BC)/@16.0704054,108.2345315,17z" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-purple-100 shadow-sm hover:border-purple-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-purple-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-spa text-purple-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">문문스파 (마사지 &amp; 네일)</p>
+                        <p class="text-[10px] text-gray-500">3/5 마사지 · 차로 10분</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
             </div>
         </div>
     </div><!-- /tab-map -->
@@ -580,8 +831,8 @@
                 <span class="text-[9px] font-bold">일정</span>
             </button>
             <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
-                <i class="fa-solid fa-gift"></i>
-                <span class="text-[9px] font-bold">혜택</span>
+                <i class="fa-solid fa-circle-info"></i>
+                <span class="text-[9px] font-bold">정보</span>
             </button>
             <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
                 <i class="fa-solid fa-plane"></i>
@@ -644,7 +895,10 @@
                 { lat: 16.0666, lng: 108.2247, emoji: '🍜', name: '다낭 티앤킴', desc: '3/2 맛집' },
                 { lat: 16.0674, lng: 108.2245, emoji: '💆', name: 'HYA Spa', desc: '3/2 마사지' },
                 { lat: 16.0680, lng: 108.2105, emoji: '🏨', name: '윙크 호텔', desc: '3/5 휴식' },
-                { lat: 15.8801, lng: 108.3380, emoji: '🏛️', name: '호이안 올드타운', desc: '셔틀 이용' }
+                { lat: 15.8801, lng: 108.3380, emoji: '🏛️', name: '호이안 올드타운', desc: '셔틀 이용' },
+                { lat: 16.0571, lng: 108.2455, emoji: '🦞', name: '텐 하이산 (해산물)', desc: '3/5 저녁 식사' },
+                { lat: 16.0596, lng: 108.2446, emoji: '☕', name: '끄어응오 카페', desc: '3/5 카페' },
+                { lat: 16.0704, lng: 108.2345, emoji: '💆', name: '문문스파', desc: '3/5 마사지 & 네일' }
             ];
 
             places.forEach(p => {
