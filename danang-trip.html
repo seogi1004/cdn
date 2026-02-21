@@ -7,9 +7,11 @@
     <script>tailwind.config = { darkMode: 'class' }</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #1e293b; color-scheme: light; }
         .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .gradient-emerald { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
         .gradient-blue { background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%); }
@@ -361,13 +363,9 @@
                 <i class="fa-solid fa-location-dot text-rose-500"></i> 여행지 지도
             </h2>
 
-            <!-- Google Maps iframe -->
+            <!-- Leaflet Map -->
             <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 mb-5">
-                <iframe
-                    src="https://maps.google.com/maps?q=Da+Nang,+Vietnam&z=13&output=embed"
-                    width="100%" height="280" style="border:0;" allowfullscreen loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
+                <div id="travel-map" style="height: 320px; width: 100%;"></div>
             </div>
 
             <!-- 장소 카드 리스트 -->
@@ -498,6 +496,8 @@
             map: 'text-rose-400'
         };
 
+        let travelMap = null;
+
         function switchTab(tab) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
@@ -508,7 +508,61 @@
             document.getElementById('btn-' + tab).className =
                 'flex flex-col items-center gap-1 transition-colors ' + TAB_ACTIVE_COLORS[tab];
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (tab === 'map' && travelMap) {
+                setTimeout(() => travelMap.invalidateSize(), 100);
+            }
         }
+
+        // Leaflet 지도 초기화
+        function initMap() {
+            if (travelMap) return;
+
+            travelMap = L.map('travel-map', {
+                center: [16.02, 108.22],
+                zoom: 12,
+                zoomControl: false
+            });
+
+            L.control.zoom({ position: 'bottomright' }).addTo(travelMap);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap',
+                maxZoom: 18
+            }).addTo(travelMap);
+
+            const places = [
+                { lat: 16.0544, lng: 108.2022, emoji: '✈️', name: '다낭 국제공항', desc: '입출국' },
+                { lat: 16.0601, lng: 108.2248, emoji: '🏨', name: '노보텔 다낭', desc: '3/1 (일)' },
+                { lat: 16.0266, lng: 108.2625, emoji: '🏖️', name: '로얄 비치프론트 빌라', desc: '3/2~5 메인 숙소' },
+                { lat: 16.0666, lng: 108.2247, emoji: '🍜', name: '다낭 티앤킴', desc: '3/2 맛집' },
+                { lat: 16.0674, lng: 108.2245, emoji: '💆', name: 'HYA Spa', desc: '3/2 마사지' },
+                { lat: 16.0680, lng: 108.2105, emoji: '🏨', name: '윙크 호텔', desc: '3/5 휴식' },
+                { lat: 15.8801, lng: 108.3380, emoji: '🏛️', name: '호이안 올드타운', desc: '셔틀 이용' }
+            ];
+
+            places.forEach(p => {
+                const icon = L.divIcon({
+                    html: `<span style="font-size:24px;filter:drop-shadow(0 2px 2px rgba(0,0,0,0.3))">${p.emoji}</span>`,
+                    className: '',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14]
+                });
+
+                L.marker([p.lat, p.lng], { icon })
+                    .addTo(travelMap)
+                    .bindPopup(`<b>${p.name}</b><br><span style="color:#666;font-size:12px">${p.desc}</span>`);
+            });
+
+            const bounds = L.latLngBounds(places.map(p => [p.lat, p.lng]));
+            travelMap.fitBounds(bounds, { padding: [30, 30] });
+        }
+
+        // 지도 탭 최초 열릴 때 초기화
+        const origSwitch = switchTab;
+        document.getElementById('btn-map').addEventListener('click', () => {
+            setTimeout(initMap, 150);
+        });
     </script>
 
 </body>
