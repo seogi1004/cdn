@@ -12,7 +12,7 @@
         .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .gradient-emerald { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
         .gradient-blue { background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%); }
-        .timeline-dot { position: absolute; left: -17px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #10b981; border: 2px solid white; box-shadow: 0 0 0 2px #10b981; z-index: 10; }
+        .timeline-dot { position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #10b981; border: 2px solid white; box-shadow: 0 0 0 2px #10b981; z-index: 10; }
         .badge { font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.5rem; border-radius: 0.5rem; text-transform: uppercase; }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
@@ -170,7 +170,7 @@
         <div class="bg-gradient-blue rounded-[2.5rem] p-7 text-white shadow-2xl relative overflow-hidden">
             <i class="fa-solid fa-crown absolute -top-4 -right-4 text-white/10 text-9xl"></i>
             
-            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
                 <i class="fa-solid fa-star text-yellow-300"></i> 빌라 숙박객 전용 혜택
             </h3>
             
@@ -276,26 +276,39 @@
 
         <div class="space-y-3">
             <!-- 입국 패스트트랙 (3/1) -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+            <div class="bg-white rounded-2xl border border-blue-100 shadow-sm p-4">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-9 h-9 shrink-0 bg-blue-100 rounded-xl flex items-center justify-center">
                         <i class="fa-solid fa-plane-arrival text-blue-500"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-gray-800">입국 패스트트랙</p>
+                        <p class="text-xs font-bold text-gray-800">입국 패스트트랙 + 픽업</p>
                         <p class="text-[10px] text-gray-500">3월 1일 (일) · 도착 21:45</p>
                     </div>
                     <span class="ml-auto text-[9px] bg-blue-100 text-blue-600 font-bold px-2 py-0.5 rounded-full">입국</span>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div class="bg-gray-50 rounded-xl p-2">
-                        <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">항공편</p>
-                        <p class="text-[11px] font-bold text-gray-700">OZ759</p>
+                    <div class="bg-blue-50 rounded-xl p-2">
+                        <p class="text-[9px] text-blue-400 font-bold uppercase mb-0.5">항공편</p>
+                        <p class="text-[11px] font-bold text-blue-700">OZ755</p>
                     </div>
-                    <div class="bg-gray-50 rounded-xl p-2">
-                        <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">픽업</p>
-                        <p class="text-[11px] font-bold text-gray-700">공항 → 노보텔</p>
+                    <div class="bg-blue-50 rounded-xl p-2">
+                        <p class="text-[9px] text-blue-400 font-bold uppercase mb-0.5">차량</p>
+                        <p class="text-[11px] font-bold text-blue-700">7인승</p>
                     </div>
+                    <div class="bg-blue-50 rounded-xl p-2">
+                        <p class="text-[9px] text-blue-400 font-bold uppercase mb-0.5">픽업 장소</p>
+                        <p class="text-[11px] font-bold text-blue-700">다낭 국제공항</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-2">
+                        <p class="text-[9px] text-blue-400 font-bold uppercase mb-0.5">드랍 장소</p>
+                        <p class="text-[11px] font-bold text-blue-700">노보텔 다낭</p>
+                    </div>
+                </div>
+                <div class="mt-2 flex items-center gap-2 bg-blue-50 rounded-xl px-3 py-2">
+                    <i class="fa-solid fa-users text-blue-400 text-xs"></i>
+                    <p class="text-[10px] text-blue-700 font-bold">홍재석 · 성인 2 / 아동 1</p>
+                    <span class="ml-auto text-[9px] text-blue-400 font-mono">+82 10-2857-3999</span>
                 </div>
             </div>
 
