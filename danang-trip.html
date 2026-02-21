@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다낭 가족 여행 완벽 가이드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', 'Noto Sans KR', sans-serif; 
+            background-color: #f8fafc; 
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -17px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #10b981;
+            z-index: 10;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto pb-24 relative min-h-screen">
+
+    <!-- Header Section -->
+    <header class="gradient-bg pt-12 pb-16 px-6 text-white rounded-b-[3rem] shadow-2xl relative overflow-hidden">
+        <!-- Decoration circles -->
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
+        <div class="absolute top-20 -left-10 w-24 h-24 bg-white/5 rounded-full"></div>
+        
+        <div class="relative z-10">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Vietnam</span>
+            </div>
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Da Nang Trip 🌴</h1>
+            <p class="text-emerald-50 text-sm font-medium opacity-90">2024. 03. 01 — 03. 05 (4박 5일)</p>
+            
+            <div class="flex flex-wrap gap-2 mt-6">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/20 backdrop-blur-md border border-white/10 text-xs font-semibold">
+                    <i class="fa-solid fa-baby text-xs"></i> 24개월 아기 동반
+                </div>
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/20 backdrop-blur-md border border-white/10 text-xs font-semibold">
+                    <i class="fa-solid fa-comment-dots text-xs"></i> 한국어 가능 시터
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Essential Stats -->
+    <section class="px-6 -mt-8 mb-8">
+        <div class="glass-card p-5 rounded-[2rem] shadow-xl flex justify-between items-center border border-gray-100">
+            <div class="text-center flex-1">
+                <span class="block text-[10px] text-gray-400 font-bold mb-1">ARRIVAL</span>
+                <span class="text-sm font-bold text-gray-800">3/1 21:45</span>
+            </div>
+            <div class="h-8 w-px bg-gray-100"></div>
+            <div class="text-center flex-1">
+                <span class="block text-[10px] text-emerald-500 font-bold mb-1">BA NA HILLS</span>
+                <span class="text-sm font-bold text-gray-800">3/5 DAY</span>
+            </div>
+            <div class="h-8 w-px bg-gray-100"></div>
+            <div class="text-center flex-1">
+                <span class="block text-[10px] text-gray-400 font-bold mb-1">DEPART</span>
+                <span class="text-sm font-bold text-gray-800">3/5 23:00</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Itinerary Timeline -->
+    <section class="px-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                <i class="fa-solid fa-route text-sm"></i>
+            </span>
+            상세 일정표
+        </h2>
+
+        <div class="ml-4 border-l-2 border-emerald-100 space-y-8 pb-4">
+            <!-- Day 1 -->
+            <div class="relative pl-8 timeline-item">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="font-bold text-gray-900">Day 1 | 다낭 입국</h3>
+                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 font-bold border border-blue-100">CITY</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-3">노보텔 다낭 체크인</p>
+                <div class="bg-amber-50 border border-amber-100 p-3 rounded-2xl flex items-center gap-3">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-amber-500 shadow-sm">
+                        <i class="fa-solid fa-car-side text-xs"></i>
+                    </div>
+                    <span class="text-[11px] text-amber-800 font-medium">패스트트랙 & 전용 픽업 차량 이용</span>
+                </div>
+            </div>
+
+            <!-- Day 2-4 -->
+            <div class="relative pl-8 timeline-item">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="font-bold text-gray-900">Day 2~4 | 풀빌라 휴양</h3>
+                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 font-bold border border-emerald-100">RELAX</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-3">로얄 비치프론트 빌라스</p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3 p-3 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <i class="fa-solid fa-user-nurse text-emerald-500"></i>
+                        <div>
+                            <p class="text-[11px] font-bold text-gray-800">시터 케어 (13:30 ~ 17:30)</p>
+                            <p class="text-[10px] text-gray-500">매일 4시간 프라이빗 케어</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <i class="fa-solid fa-taxi text-blue-500"></i>
+                        <div>
+                            <p class="text-[11px] font-bold text-gray-800">이동: 그랩 7인승 권장</p>
+                            <p class="text-[10px] text-gray-500">카시트 및 짐 적재 용이</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 5 -->
+            <div class="relative pl-8 timeline-item after:bg-orange-500 before:!bg-orange-500">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="font-bold text-gray-900">Day 5 | 체크아웃 투어</h3>
+                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-orange-50 text-orange-600 font-bold border border-orange-100">TOUR</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-3">윙크 호텔 거점 (짐보관 및 휴식)</p>
+                <div class="bg-gray-900 rounded-2xl p-4 text-white">
+                    <div class="flex items-start gap-3 mb-3">
+                        <span class="text-[10px] font-mono text-gray-400 mt-0.5">10:15</span>
+                        <p class="text-xs font-medium">빌라 체크아웃 & 이동</p>
+                    </div>
+                    <div class="flex items-start gap-3 mb-3">
+                        <span class="text-[10px] font-mono text-emerald-400 mt-0.5">11:00</span>
+                        <p class="text-xs font-medium text-emerald-400">시터 미팅 & 바나힐 출발</p>
+                    </div>
+                    <div class="h-px bg-gray-800 my-3"></div>
+                    <div class="flex items-start gap-3">
+                        <span class="text-[10px] font-mono text-orange-400 mt-0.5">20:30</span>
+                        <p class="text-xs font-bold text-orange-400">공항 전용 샌딩 차량 탑승</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spa Recommendation -->
+    <section class="px-6 mb-8">
+        <div class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-gray-100">
+            <h3 class="text-lg font-bold text-gray-800 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-spa text-blue-500"></i>
+                추천 마사지 & 스파
+            </h3>
+            <p class="text-[10px] text-gray-400 font-medium mb-5 uppercase tracking-wider">Hamy Beach Area Pick-up Available</p>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50">
+                    <div>
+                        <p class="text-sm font-bold text-gray-800">블루 기프트 스파</p>
+                        <p class="text-[10px] text-gray-500 mt-0.5">가족룸 완비 / 평점 1위</p>
+                    </div>
+                    <span class="text-[9px] font-extrabold text-blue-600 bg-blue-100 px-2 py-1 rounded-lg">TOP PICK</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                    <div>
+                        <p class="text-sm font-bold text-gray-800">라루나 스파</p>
+                        <p class="text-[10px] text-gray-500 mt-0.5">프라이빗 & 고요한 분위기</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                    <div>
+                        <p class="text-sm font-bold text-gray-800">레몬 트리 스파</p>
+                        <p class="text-[10px] text-gray-500 mt-0.5">가성비 최고 / 아이 친화적</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white">
+                <div class="flex gap-3">
+                    <i class="fa-solid fa-lightbulb text-yellow-300"></i>
+                    <div>
+                        <p class="text-[11px] font-bold mb-1">시터 동행 꿀팁</p>
+                        <p class="text-[10px] leading-relaxed opacity-90">시터님과 함께 방문하여 마사지 강도나 집중 케어 부위를 실시간으로 통역 받으세요. 훨씬 만족도가 높아집니다!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ba Na Hills Strategy -->
+    <section class="px-6 mb-8">
+        <div class="bg-emerald-900 rounded-[2.5rem] p-7 text-white shadow-xl relative overflow-hidden">
+            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-emerald-800 rounded-full"></div>
+            
+            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-mountain-sun text-emerald-400"></i>
+                바나힐 완벽 공략법
+            </h3>
+            
+            <div class="space-y-6 relative z-10">
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 shrink-0 bg-white/10 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-passport text-emerald-400"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold mb-1">시터용 티켓 구매 팁</p>
+                        <p class="text-[11px] text-emerald-100/70 leading-relaxed">
+                            시터님께 <b>베트남 신분증(ID)</b> 지참을 꼭 요청하세요. 현지인 할인가로 구매 시 비용을 크게 절약할 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 shrink-0 bg-white/10 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold mb-1">그랩 왕복 딜 (50~60만동)</p>
+                        <p class="text-[11px] text-emerald-100/70 leading-relaxed">
+                            운전기사와 미리 왕복 금액을 협의하세요. 결제는 반드시 <b>저녁에 호텔로 복귀 후</b> 한꺼번에 지불하는 것이 안전합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Checklist -->
+    <section class="px-6 mb-12">
+        <div class="bg-amber-100/50 border-2 border-dashed border-amber-200 rounded-[2.5rem] p-6">
+            <h3 class="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-clipboard-check"></i>
+                출발 전 최종 체크
+            </h3>
+            <ul class="space-y-4">
+                <li class="flex items-start gap-3">
+                    <div class="mt-1 w-4 h-4 rounded border-2 border-amber-400 flex items-center justify-center bg-white">
+                        <i class="fa-solid fa-check text-[8px] text-amber-600"></i>
+                    </div>
+                    <p class="text-[11px] text-amber-800 font-medium">시터님께 3/5 바나힐용 <b>ID Card</b> 지참 재확인</p>
+                </li>
+                <li class="flex items-start gap-3">
+                    <div class="mt-1 w-4 h-4 rounded border-2 border-amber-400 flex items-center justify-center bg-white">
+                        <i class="fa-solid fa-check text-[8px] text-amber-600"></i>
+                    </div>
+                    <p class="text-[11px] text-amber-800 font-medium">부모님용 <b>QR 입장권</b> 미리 캡쳐 (데이터 불안정 대비)</p>
+                </li>
+                <li class="flex items-start gap-3">
+                    <div class="mt-1 w-4 h-4 rounded border-2 border-amber-400 flex items-center justify-center bg-white">
+                        <i class="fa-solid fa-check text-[8px] text-amber-600"></i>
+                    </div>
+                    <p class="text-[11px] text-amber-800 font-medium">3/5 윙크 호텔 이동 시 <b>그랩 7인승</b> 예약 확인</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Fixed Bottom Bar -->
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[calc(28rem-3rem)] z-50">
+        <div class="bg-gray-900/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex justify-around items-center border border-white/10">
+            <button class="flex flex-col items-center gap-1 text-emerald-400">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span class="text-[9px] font-bold uppercase">Itinerary</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span class="text-[9px] font-bold uppercase">Maps</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <i class="fa-solid fa-phone-flip"></i>
+                <span class="text-[9px] font-bold uppercase">Emergency</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <i class="fa-solid fa-gear"></i>
+                <span class="text-[9px] font-bold uppercase">Options</span>
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>
