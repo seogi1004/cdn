@@ -14,6 +14,8 @@
         .gradient-blue { background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%); }
         .timeline-dot { position: absolute; left: -17px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #10b981; border: 2px solid white; box-shadow: 0 0 0 2px #10b981; z-index: 10; }
         .badge { font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.5rem; border-radius: 0.5rem; text-transform: uppercase; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
     </style>
 </head>
 <body class="max-w-md mx-auto pb-28 relative min-h-screen">
@@ -37,6 +39,9 @@
             </div>
         </div>
     </header>
+
+    <!-- Tab Panels Wrapper -->
+    <div id="tab-hotels" class="tab-panel active">
 
     <!-- Main Schedule Overview -->
     <section class="px-6 -mt-10 mb-8">
@@ -102,6 +107,42 @@
                 </div>
             </div>
 
+            <!-- Day 2: Activities -->
+            <div class="relative pl-8">
+                <div class="timeline-dot !bg-purple-500" style="box-shadow: 0 0 0 2px #a855f7;"></div>
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="font-bold text-gray-900 text-sm">3/2(월) 둘째 날 일정</h3>
+                    <span class="badge bg-purple-100 text-purple-600">Activity</span>
+                </div>
+                <p class="text-[11px] text-gray-500 mb-3">로얄 비치프론트 빌라 체크인 후</p>
+                <div class="space-y-2">
+                    <!-- 다낭 티앤킴 -->
+                    <a href="https://www.google.com/maps/place/%EB%8B%A4%EB%82%AD+%ED%8B%B0%EC%95%A4%ED%82%B4/@16.0666255,108.2246894,17z" target="_blank"
+                       class="flex items-center gap-3 bg-orange-50 p-3 rounded-2xl border border-orange-100 hover:border-orange-300 transition-colors">
+                        <div class="w-9 h-9 shrink-0 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-bowl-rice text-orange-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[11px] font-bold text-gray-800">다낭 티앤킴 (T&amp;Kim)</p>
+                            <p class="text-[10px] text-gray-500">현지 맛집 · 미게랑이 해변 인근</p>
+                        </div>
+                        <i class="fa-solid fa-map-location-dot text-orange-400 text-xs shrink-0"></i>
+                    </a>
+                    <!-- HYA Spa -->
+                    <a href="https://www.google.com/maps/place/HYA+Spa+Danang/@16.0674174,108.2244821,17z" target="_blank"
+                       class="flex items-center gap-3 bg-pink-50 p-3 rounded-2xl border border-pink-100 hover:border-pink-300 transition-colors">
+                        <div class="w-9 h-9 shrink-0 bg-pink-100 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-spa text-pink-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[11px] font-bold text-gray-800">HYA Spa Danang</p>
+                            <p class="text-[10px] text-gray-500">마사지 &amp; 스파 · 티앤킴 바로 인근</p>
+                        </div>
+                        <i class="fa-solid fa-map-location-dot text-pink-400 text-xs shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
             <!-- Day 5: Wink Hotel -->
             <div class="relative pl-8">
                 <div class="timeline-dot !bg-orange-500 !box-shadow-[0_0_0_2px_#fb923c]"></div>
@@ -120,8 +161,12 @@
         </div>
     </section>
 
+    </div><!-- /tab-hotels -->
+
+    <div id="tab-benefits" class="tab-panel">
+
     <!-- Luxury Benefits: Royal Beachfront -->
-    <section class="px-6 mb-10">
+    <section class="px-6 mt-6 mb-10">
         <div class="bg-gradient-blue rounded-[2.5rem] p-7 text-white shadow-2xl relative overflow-hidden">
             <i class="fa-solid fa-crown absolute -top-4 -right-4 text-white/10 text-9xl"></i>
             
@@ -135,8 +180,8 @@
                         <i class="fa-solid fa-utensils"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-bold">조식 선택 가능</p>
-                        <p class="text-[10px] text-blue-100 opacity-80">레스토랑 뷔페 또는 빌라 내 조식 서비스 선택</p>
+                        <p class="text-xs font-bold text-white">조식 선택 가능</p>
+                        <p class="text-[10px] text-blue-100">레스토랑 뷔페 또는 빌라 내 조식 서비스 선택</p>
                     </div>
                 </div>
 
@@ -145,8 +190,8 @@
                         <i class="fa-solid fa-wallet"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-bold">매일 500,000 VND 크레딧</p>
-                        <p class="text-[10px] text-blue-100 opacity-80">호텔 내 시설(식사, 스파 등)에서 매일 사용 가능</p>
+                        <p class="text-xs font-bold text-white">매일 500,000 VND 크레딧</p>
+                        <p class="text-[10px] text-blue-100">호텔 내 시설(식사, 스파 등)에서 매일 사용 가능</p>
                     </div>
                 </div>
 
@@ -155,8 +200,8 @@
                         <i class="fa-solid fa-martini-glass-citrus"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-bold">로얄 라운지 프리빌리지</p>
-                        <p class="text-[10px] text-blue-100 opacity-80">20:00~23:00 와인, 칵테일, 카나페 무제한</p>
+                        <p class="text-xs font-bold text-white">로얄 라운지 프리빌리지</p>
+                        <p class="text-[10px] text-blue-100">20:00~23:00 와인, 칵테일, 카나페 무제한</p>
                     </div>
                 </div>
 
@@ -165,8 +210,8 @@
                         <i class="fa-solid fa-camera"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-bold">무료 아오자이 대여</p>
-                        <p class="text-[10px] text-blue-100 opacity-80">가족 사진 촬영을 위한 전통 의상 무료 렌탈</p>
+                        <p class="text-xs font-bold text-white">무료 아오자이 대여</p>
+                        <p class="text-[10px] text-blue-100">가족 사진 촬영을 위한 전통 의상 무료 렌탈</p>
                     </div>
                 </div>
             </div>
@@ -211,23 +256,132 @@
         </div>
     </section>
 
+    </div><!-- /tab-benefits -->
+
+    <div id="tab-transfer" class="tab-panel">
+
+    <!-- Fast Track & Transfer -->
+    <section class="px-6 mt-6 mb-12">
+        <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-jet-fighter-up text-indigo-500"></i> 패스트트랙 &amp; 공항 이동
+        </h2>
+        <!-- 예약번호 -->
+        <div class="flex items-center gap-2 mb-4 bg-indigo-50 rounded-2xl px-4 py-2 border border-indigo-100">
+            <i class="fa-solid fa-barcode text-indigo-400 text-xs"></i>
+            <p class="text-[10px] text-indigo-700 font-mono font-bold">EXP-20260221-00008711</p>
+            <span class="ml-auto text-[9px] bg-indigo-100 text-indigo-600 font-bold px-2 py-0.5 rounded-full">1건</span>
+        </div>
+        <!-- 상품명 -->
+        <p class="text-[10px] text-gray-400 font-bold uppercase mb-3 px-1">다낭 국제공항 입국 &amp; 출국 VIP 패스트트랙 · 7인승 픽업차량</p>
+
+        <div class="space-y-3">
+            <!-- 입국 패스트트랙 (3/1) -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-9 h-9 shrink-0 bg-blue-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-plane-arrival text-blue-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-800">입국 패스트트랙</p>
+                        <p class="text-[10px] text-gray-500">3월 1일 (일) · 도착 21:45</p>
+                    </div>
+                    <span class="ml-auto text-[9px] bg-blue-100 text-blue-600 font-bold px-2 py-0.5 rounded-full">입국</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-gray-50 rounded-xl p-2">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">항공편</p>
+                        <p class="text-[11px] font-bold text-gray-700">OZ759</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-2">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">픽업</p>
+                        <p class="text-[11px] font-bold text-gray-700">공항 → 노보텔</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 출국 패스트트랙 + 샌딩 (3/5) -->
+            <div class="bg-white rounded-2xl border border-indigo-100 shadow-sm p-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-9 h-9 shrink-0 bg-indigo-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-plane-departure text-indigo-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-800">출국 패스트트랙 + 샌딩</p>
+                        <p class="text-[10px] text-gray-500">3월 5일 (목) · 출발 23:00</p>
+                    </div>
+                    <span class="ml-auto text-[9px] bg-indigo-100 text-indigo-600 font-bold px-2 py-0.5 rounded-full">출국</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-indigo-50 rounded-xl p-2">
+                        <p class="text-[9px] text-indigo-400 font-bold uppercase mb-0.5">항공편</p>
+                        <p class="text-[11px] font-bold text-indigo-700">OZ756</p>
+                    </div>
+                    <div class="bg-indigo-50 rounded-xl p-2">
+                        <p class="text-[9px] text-indigo-400 font-bold uppercase mb-0.5">차량</p>
+                        <p class="text-[11px] font-bold text-indigo-700">7인승</p>
+                    </div>
+                    <div class="bg-indigo-50 rounded-xl p-2">
+                        <p class="text-[9px] text-indigo-400 font-bold uppercase mb-0.5">픽업 장소</p>
+                        <p class="text-[11px] font-bold text-indigo-700">윙크 호텔 다낭</p>
+                    </div>
+                    <div class="bg-indigo-50 rounded-xl p-2">
+                        <p class="text-[9px] text-indigo-400 font-bold uppercase mb-0.5">드랍 장소</p>
+                        <p class="text-[11px] font-bold text-indigo-700">다낭 국제공항</p>
+                    </div>
+                </div>
+                <div class="mt-2 flex items-center gap-2 bg-indigo-50 rounded-xl px-3 py-2">
+                    <i class="fa-solid fa-users text-indigo-400 text-xs"></i>
+                    <p class="text-[10px] text-indigo-700 font-bold">홍재석 · 성인 2 / 아동 1</p>
+                    <span class="ml-auto text-[9px] text-indigo-400 font-mono">+82 10-2857-3999</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div><!-- /tab-transfer -->
+
     <!-- Navigation Bar -->
     <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[calc(28rem-3rem)] z-50">
         <div class="bg-gray-900/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex justify-around items-center border border-white/10">
-            <button class="flex flex-col items-center gap-1 text-emerald-400">
+            <button id="btn-hotels" onclick="switchTab('hotels')" class="flex flex-col items-center gap-1 text-emerald-400 transition-colors">
                 <i class="fa-solid fa-hotel"></i>
                 <span class="text-[9px] font-bold uppercase">Hotels</span>
             </button>
-            <button class="flex flex-col items-center gap-1 text-gray-400">
+            <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
                 <i class="fa-solid fa-gift"></i>
                 <span class="text-[9px] font-bold uppercase">Benefits</span>
             </button>
-            <button class="flex flex-col items-center gap-1 text-gray-400">
-                <i class="fa-solid fa-map"></i>
-                <span class="text-[9px] font-bold uppercase">Location</span>
+            <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
+                <i class="fa-solid fa-plane"></i>
+                <span class="text-[9px] font-bold uppercase">Transfer</span>
             </button>
         </div>
     </nav>
+
+    <script>
+        const TAB_ACTIVE_COLORS = {
+            hotels: 'text-emerald-400',
+            benefits: 'text-blue-400',
+            transfer: 'text-indigo-400'
+        };
+
+        function switchTab(tab) {
+            // 모든 패널 숨기기
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            // 선택된 패널 표시
+            document.getElementById('tab-' + tab).classList.add('active');
+            // 모든 버튼 회색으로 초기화
+            ['hotels', 'benefits', 'transfer'].forEach(t => {
+                document.getElementById('btn-' + t).className =
+                    'flex flex-col items-center gap-1 text-gray-400 transition-colors';
+            });
+            // 선택된 버튼 활성 색상
+            document.getElementById('btn-' + tab).className =
+                'flex flex-col items-center gap-1 transition-colors ' + TAB_ACTIVE_COLORS[tab];
+            // 상단으로 스크롤
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
 
 </body>
 </html>
