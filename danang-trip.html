@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>다낭 가족 여행 통합 가이드</title>
+    <script>tailwind.config = { darkMode: 'class' }</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -230,7 +231,7 @@
                         <i class="fa-solid fa-id-card text-[10px] text-emerald-600"></i>
                     </div>
                     <div>
-                        <p class="text-[11px] font-bold">신분증 & 신용카드 지참</p>
+                        <p class="text-[11px] font-bold text-gray-800">신분증 & 신용카드 지참</p>
                         <p class="text-[10px] text-gray-500 leading-relaxed">체크인 시 대표 투숙객(JAESEOK HONG)의 여권과 결제에 사용한 신용카드를 반드시 제시해야 합니다.</p>
                     </div>
                 </div>
@@ -239,7 +240,7 @@
                         <i class="fa-solid fa-money-bill-wave text-[10px] text-amber-600"></i>
                     </div>
                     <div>
-                        <p class="text-[11px] font-bold">윙크 호텔 현장 결제</p>
+                        <p class="text-[11px] font-bold text-gray-800">윙크 호텔 현장 결제</p>
                         <p class="text-[10px] text-gray-500 leading-relaxed">마지막 날 윙크 호텔은 아고다 선결제가 아닌 <b>숙박시설 직접 결제</b> 건입니다. (약 174만동)</p>
                     </div>
                 </div>
@@ -248,7 +249,7 @@
                         <i class="fa-solid fa-child text-[10px] text-blue-600"></i>
                     </div>
                     <div>
-                        <p class="text-[11px] font-bold">아동 조식 정책</p>
+                        <p class="text-[11px] font-bold text-gray-800">아동 조식 정책</p>
                         <p class="text-[10px] text-gray-500 leading-relaxed">바우처상 조식 포함이나, 아동의 경우 호텔 정책에 따라 현장에서 추가 요금을 요구할 수 있으니 체크인 시 확인하세요.</p>
                     </div>
                 </div>
@@ -353,20 +354,138 @@
 
     </div><!-- /tab-transfer -->
 
+    <!-- 지도 탭 -->
+    <div id="tab-map" class="tab-panel">
+        <div class="px-6 mt-6 mb-12">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-rose-500"></i> 여행지 지도
+            </h2>
+
+            <!-- Google Maps iframe -->
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 mb-5">
+                <iframe
+                    src="https://maps.google.com/maps?q=Da+Nang,+Vietnam&z=13&output=embed"
+                    width="100%" height="280" style="border:0;" allowfullscreen loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+            <!-- 장소 카드 리스트 -->
+            <div class="space-y-2">
+
+                <!-- 다낭 국제공항 -->
+                <a href="https://maps.google.com/maps?q=Da+Nang+International+Airport" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm hover:border-gray-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-sky-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-plane text-sky-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">다낭 국제공항</p>
+                        <p class="text-[10px] text-gray-500">Da Nang International Airport</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- 노보텔 다낭 -->
+                <a href="https://maps.google.com/maps?q=Novotel+Da+Nang+Premier+Han+River" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-blue-100 shadow-sm hover:border-blue-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-blue-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-hotel text-blue-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">노보텔 다낭 프리미어</p>
+                        <p class="text-[10px] text-gray-500">3/1 (일) · Han River View</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- 로얄 비치프론트 빌라 -->
+                <a href="https://maps.google.com/maps?q=Royal+Beachfront+Villa+Da+Nang" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-emerald-100 shadow-sm hover:border-emerald-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-umbrella-beach text-emerald-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">로얄 비치프론트 빌라</p>
+                        <p class="text-[10px] text-gray-500">3/2~5 · Private Pool Villa</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- 다낭 티앤킴 -->
+                <a href="https://www.google.com/maps/place/%EB%8B%A4%EB%82%AD+%ED%8B%B0%EC%95%A4%ED%82%B4/@16.0666255,108.2246894,17z" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-orange-100 shadow-sm hover:border-orange-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-orange-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-bowl-rice text-orange-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">다낭 티앤킴 (T&amp;Kim)</p>
+                        <p class="text-[10px] text-gray-500">3/2 · 현지 맛집</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- HYA Spa -->
+                <a href="https://www.google.com/maps/place/HYA+Spa+Danang/@16.0674174,108.2244821,17z" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-pink-100 shadow-sm hover:border-pink-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-pink-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-spa text-pink-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">HYA Spa Danang</p>
+                        <p class="text-[10px] text-gray-500">3/2 · 마사지 &amp; 스파</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- 윙크 호텔 -->
+                <a href="https://maps.google.com/maps?q=Wink+Hotel+Da+Nang+Centre" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-amber-100 shadow-sm hover:border-amber-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-amber-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-hotel text-amber-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">윙크 호텔 다낭 센터</p>
+                        <p class="text-[10px] text-gray-500">3/5 · 휴식 거점</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+                <!-- 호이안 올드타운 -->
+                <a href="https://maps.google.com/maps?q=Hoi+An+Ancient+Town" target="_blank"
+                   class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-yellow-100 shadow-sm hover:border-yellow-300 transition-colors">
+                    <div class="w-9 h-9 shrink-0 bg-yellow-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-torii-gate text-yellow-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-gray-800">호이안 올드타운</p>
+                        <p class="text-[10px] text-gray-500">Hoi An Ancient Town · 셔틀 이용</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-300 text-xs shrink-0"></i>
+                </a>
+
+            </div>
+        </div>
+    </div><!-- /tab-map -->
+
     <!-- Navigation Bar -->
     <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[calc(28rem-3rem)] z-50">
         <div class="bg-gray-900/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex justify-around items-center border border-white/10">
             <button id="btn-hotels" onclick="switchTab('hotels')" class="flex flex-col items-center gap-1 text-emerald-400 transition-colors">
-                <i class="fa-solid fa-hotel"></i>
-                <span class="text-[9px] font-bold uppercase">Hotels</span>
+                <i class="fa-solid fa-calendar-days"></i>
+                <span class="text-[9px] font-bold">일정</span>
             </button>
             <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
                 <i class="fa-solid fa-gift"></i>
-                <span class="text-[9px] font-bold uppercase">Benefits</span>
+                <span class="text-[9px] font-bold">혜택</span>
             </button>
             <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
                 <i class="fa-solid fa-plane"></i>
-                <span class="text-[9px] font-bold uppercase">Transfer</span>
+                <span class="text-[9px] font-bold">공항</span>
+            </button>
+            <button id="btn-map" onclick="switchTab('map')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span class="text-[9px] font-bold">지도</span>
             </button>
         </div>
     </nav>
@@ -375,23 +494,19 @@
         const TAB_ACTIVE_COLORS = {
             hotels: 'text-emerald-400',
             benefits: 'text-blue-400',
-            transfer: 'text-indigo-400'
+            transfer: 'text-indigo-400',
+            map: 'text-rose-400'
         };
 
         function switchTab(tab) {
-            // 모든 패널 숨기기
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            // 선택된 패널 표시
             document.getElementById('tab-' + tab).classList.add('active');
-            // 모든 버튼 회색으로 초기화
-            ['hotels', 'benefits', 'transfer'].forEach(t => {
+            ['hotels', 'benefits', 'transfer', 'map'].forEach(t => {
                 document.getElementById('btn-' + t).className =
                     'flex flex-col items-center gap-1 text-gray-400 transition-colors';
             });
-            // 선택된 버튼 활성 색상
             document.getElementById('btn-' + tab).className =
                 'flex flex-col items-center gap-1 transition-colors ' + TAB_ACTIVE_COLORS[tab];
-            // 상단으로 스크롤
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
