@@ -24,6 +24,20 @@
         .safe-top {
             padding-top: max(3rem, calc(3rem + env(safe-area-inset-top)));
         }
+
+        /* 헤더 그라디언트를 노치 위까지 확장 */
+        .safe-top::before {
+            content: '';
+            position: absolute;
+            top: calc(-1 * env(safe-area-inset-top, 0px));
+            left: -50vw;
+            right: -50vw;
+            height: env(safe-area-inset-top, 0px);
+            background: #059669; /* gradient-emerald 시작 색 */
+            pointer-events: none;
+            z-index: 0;
+        }
+
         #bottomNav {
             padding-bottom: env(safe-area-inset-bottom, 0px);
         }
