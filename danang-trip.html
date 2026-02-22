@@ -909,26 +909,28 @@
     </div><!-- /tab-map -->
 
     <!-- Navigation Bar -->
-    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[calc(28rem-3rem)] z-50">
-        <div class="bg-gray-900/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex justify-around items-center border border-white/10">
-            <button id="btn-hotels" onclick="switchTab('hotels')" class="flex flex-col items-center gap-1 text-emerald-400 transition-colors">
-                <i class="fa-solid fa-calendar-days"></i>
-                <span class="text-[9px] font-bold">일정</span>
-            </button>
-            <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
-                <i class="fa-solid fa-circle-info"></i>
-                <span class="text-[9px] font-bold">정보</span>
-            </button>
-            <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
-                <i class="fa-solid fa-plane"></i>
-                <span class="text-[9px] font-bold">공항</span>
-            </button>
-            <button id="btn-map" onclick="switchTab('map')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span class="text-[9px] font-bold">지도</span>
-            </button>
-        </div>
-    </nav>
+    <!-- Navigation Bar -->
+<nav id="bottomNav"
+     class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[calc(28rem-3rem)] z-50 transition-all duration-500">
+    <div class="bg-gray-900/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex justify-around items-center border border-white/10">
+        <button id="btn-hotels" onclick="switchTab('hotels')" class="flex flex-col items-center gap-1 text-emerald-400 transition-colors">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span class="text-[9px] font-bold">일정</span>
+        </button>
+        <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
+            <i class="fa-solid fa-circle-info"></i>
+            <span class="text-[9px] font-bold">정보</span>
+        </button>
+        <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
+            <i class="fa-solid fa-plane"></i>
+            <span class="text-[9px] font-bold">공항</span>
+        </button>
+        <button id="btn-map" onclick="switchTab('map')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span class="text-[9px] font-bold">지도</span>
+        </button>
+    </div>
+</nav>
 
     <script>
         const TAB_ACTIVE_COLORS = {
