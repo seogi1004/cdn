@@ -32,27 +32,15 @@
         }
 
     #bottomNav {
-    transition:
-        transform 0.5s cubic-bezier(.34,1.56,.64,1),
-        opacity 0.5s ease;
-    will-change: transform, opacity;
-    opacity: 1;
+    transition: opacity 0.3s ease;
+    will-change: opacity;
+    opacity: 0.92;
     z-index: 9999;
-}
-
-#bottomNav.hide {
-    transform: translate(-50%, 120%);
-    pointer-events: none;
-    opacity: 0;
-}
-
-#bottomNav.show {
-    transform: translate(-50%, 0);
-    opacity: 1;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 #bottomNav.scrolling {
-    opacity: 0.45;
+    opacity: 0.35;
 }
 
 
@@ -632,6 +620,297 @@
 
     </div><!-- /tab-benefits -->
 
+    <!-- ══════════════════════════════════════════ -->
+    <!--  준비물 탭                                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-checklist" class="tab-panel">
+
+    <section class="px-6 mt-6 mb-12">
+        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-check text-violet-500"></i> 사전 준비 &amp; 준비물
+        </h2>
+
+        <!-- ─── 0. 출국 전 사전 준비 사항 ─── -->
+        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-violet-100 mb-5">
+            <h3 class="text-sm font-bold text-violet-700 mb-4 flex items-center gap-2">
+                <span class="w-7 h-7 bg-violet-100 rounded-xl flex items-center justify-center text-base">📌</span>
+                0. 출국 전 사전 준비 사항
+            </h3>
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-bana">
+                    <label for="chk-bana" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        🎡 <strong>바나힐 티켓 사전 예약</strong> — 아기 무료 여부 확인 (100cm 미만 무료)
+                    </label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-fx">
+                    <label for="chk-fx" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        💱 <strong>환전 준비</strong> — 토스카드 외화 결제 세팅 + 한 시장 환전용 <strong>$100 신권</strong> 준비
+                    </label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-ins">
+                    <label for="chk-ins" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        🛡️ <strong>가족 여행자 보험 가입</strong> — 영유아 포함 필수 (실손 + 배상책임)
+                    </label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-ped">
+                    <label for="chk-ped" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        🏥 <strong>출국 2~3일 전 소아과 방문</strong> — 아기용 여행 비상약 처방 (해열제·지사제·항히스타민 등)
+                    </label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-app">
+                    <label for="chk-app" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        📱 <strong>필수 앱 설치 &amp; 카드 등록</strong> — Grab, 배달K, 토스, 파파고
+                    </label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-hotel">
+                    <label for="chk-hotel" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        🛏️ <strong>숙소 특별 요청 재확인</strong> — 할리우드 베드 세팅, 침대 가드, 아기 침대
+                    </label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-voucher">
+                    <label for="chk-voucher" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        🎫 <strong>공항 패스트트랙 &amp; 픽업/샌딩 바우처</strong> 캡처 및 프린트
+                    </label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-sim">
+                    <label for="chk-sim" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
+                        📶 <strong>유심 / eSIM 사전 구매 &amp; 세팅</strong> — 출국 전 한국에서 구매 권장
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ─── 1. 아기 전용 필수품 ─── -->
+        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-blue-100 mb-5">
+            <h3 class="text-sm font-bold text-blue-700 mb-4 flex items-center gap-2">
+                <span class="w-7 h-7 bg-blue-100 rounded-xl flex items-center justify-center text-base">👶</span>
+                1. 23개월 아기 전용 필수품
+            </h3>
+
+            <!-- 이동/수면 -->
+            <p class="text-[9px] font-bold text-gray-400 uppercase mb-2 px-1">🧳 이동 &amp; 수면</p>
+            <ul class="space-y-2 mb-4">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-carrier">
+                    <label for="chk-carrier" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>아기띠 또는 유아 캐리어</strong> — 기내·관광지 이동 필수</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-stroller">
+                    <label for="chk-stroller" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>경량 유모차</strong> — 호이안·다낭 시내 이동용</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-bedrail">
+                    <label for="chk-bedrail" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>휴대용 침대 가드</strong> (접이식) — 빌라 침대 낙상 방지</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-blanket">
+                    <label for="chk-blanket" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>얇은 아기 담요</strong> — 기내 냉방 대비</label>
+                </li>
+            </ul>
+
+            <!-- 기내/놀이 -->
+            <p class="text-[9px] font-bold text-gray-400 uppercase mb-2 px-1">✈️ 기내 &amp; 놀이</p>
+            <ul class="space-y-2 mb-4">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-tablet">
+                    <label for="chk-tablet" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>태블릿 + 이어폰</strong> — 영상/앱 콘텐츠 다운로드 완료 후 탑승</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-toys">
+                    <label for="chk-toys" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>소형 장난감 2~3개</strong> — 스티커북, 미니 피규어 등 새 장난감 추천</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-candy">
+                    <label for="chk-candy" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>귀 뚫기용 간식</strong> — 이착륙 시 귀압 완화, 사탕·젤리 등</label>
+                </li>
+            </ul>
+
+            <!-- 식사/간식 -->
+            <p class="text-[9px] font-bold text-gray-400 uppercase mb-2 px-1">🍼 식사 &amp; 간식</p>
+            <ul class="space-y-2 mb-4">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-milk">
+                    <label for="chk-milk" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🥛 <strong>멸균우유 (상온보관)</strong> — 현지 유제품 부적합 대비, 4박5일분</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-snack">
+                    <label for="chk-snack" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>아기 간식</strong> — 쌀과자, 퓨레파우치, 치즈 등 익숙한 것 위주</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-bowl">
+                    <label for="chk-bowl" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>아기 식판 &amp; 숟가락 세트</strong> (실리콘, 소형)</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-waterbot">
+                    <label for="chk-waterbot" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>아기용 빨대 물병</strong> — 현지 생수 담아 사용</label>
+                </li>
+            </ul>
+
+            <!-- 위생/수영 -->
+            <p class="text-[9px] font-bold text-gray-400 uppercase mb-2 px-1">🚿 위생 &amp; 수영</p>
+            <ul class="space-y-2">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-showerfilter">
+                    <label for="chk-showerfilter" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🚿 <strong>샤워기 필터</strong> — 베트남 수질 대비, 아기 피부 보호 (필수!)</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-wdiaper">
+                    <label for="chk-wdiaper" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🩱 <strong>방수 수영 기저귀</strong> — 풀·해변 사용용 (소량 현지 조달 가능)</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-sunscreen">
+                    <label for="chk-sunscreen" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>유아용 선크림 SPF50+</strong> — 열대 자외선 강렬, 충분히 챙길 것</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-wipes">
+                    <label for="chk-wipes" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>물티슈 &amp; 위생 비닐봉지</strong> — 기저귀 교환·식사 위생</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue-500 shrink-0" id="chk-hat">
+                    <label for="chk-hat" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer"><strong>아기 챙 넓은 모자 &amp; 래시가드</strong></label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ─── 2. 비상 상비약 ─── -->
+        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-red-100 mb-5">
+            <h3 class="text-sm font-bold text-red-700 mb-4 flex items-center gap-2">
+                <span class="w-7 h-7 bg-red-100 rounded-xl flex items-center justify-center text-base">💊</span>
+                2. 비상 상비약
+            </h3>
+            <div class="mb-2 bg-red-50 rounded-2xl px-3 py-2">
+                <p class="text-[10px] text-red-600 font-bold">💡 아기약은 소아과 처방전 받아 출국 전 준비 완료 — 현지 약국(Nhà thuốc)은 성인약 구비됨</p>
+            </div>
+            <ul class="space-y-3 mt-3">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-thermometer">
+                    <label for="chk-thermometer" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🌡️ <strong>체온계</strong> — 필수 (귀 체온계 추천)</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-fever">
+                    <label for="chk-fever" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🤒 <strong>아기 해열제</strong> — 처방 시럽 + 좌약 2종 (체온 38.5° 이상 대비)</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-diarrhea-b">
+                    <label for="chk-diarrhea-b" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">💊 <strong>아기 지사제 &amp; 정장제</strong> — 음식 적응 실패 대비</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-anti">
+                    <label for="chk-anti" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🩹 <strong>항히스타민제 (아기용)</strong> — 벌레물림·알레르기 대비</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-tylenol">
+                    <label for="chk-tylenol" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">💊 <strong>성인 해열·진통제</strong> — 타이레놀 소포장</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-diarrhea-a">
+                    <label for="chk-diarrhea-a" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">💊 <strong>성인 지사제</strong> — 장염·현지 음식 부적응 대비</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-bandaid">
+                    <label for="chk-bandaid" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🩹 <strong>밴드 &amp; 소독약</strong> — 아이 상처 대비</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-red-500 shrink-0" id="chk-mosquito">
+                    <label for="chk-mosquito" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🦟 <strong>유아용 모기 퇴치제</strong> — 야외 저녁 시 필수</label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ─── 3. 서류 및 결제 수단 ─── -->
+        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-emerald-100 mb-5">
+            <h3 class="text-sm font-bold text-emerald-700 mb-4 flex items-center gap-2">
+                <span class="w-7 h-7 bg-emerald-100 rounded-xl flex items-center justify-center text-base">📄</span>
+                3. 서류 &amp; 결제 수단
+            </h3>
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 shrink-0" id="chk-passport">
+                    <label for="chk-passport" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🛂 <strong>여권 유효기간 6개월 이상</strong> 확인 — 성인 2 + 아기 1 (JAESEOK HONG)</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 shrink-0" id="chk-eticket">
+                    <label for="chk-eticket" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">✈️ <strong>e-티켓 &amp; 숙소 바우처</strong> — 출력 또는 오프라인 저장</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 shrink-0" id="chk-toss">
+                    <label for="chk-toss" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">💳 <strong>토스카드 (외화 결제)</strong> — 환율 우대, 현지 카드 결제 주력</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 shrink-0" id="chk-100">
+                    <label for="chk-100" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">💵 <strong>$100 달러 신권</strong> — 한 시장 금은방 환전용</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 shrink-0" id="chk-fasttrack">
+                    <label for="chk-fasttrack" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🎫 <strong>패스트트랙 바우처</strong> — EXP-20260221-00008711</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 shrink-0" id="chk-inscard">
+                    <label for="chk-inscard" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🛡️ <strong>여행자 보험 증권 &amp; 연락처</strong> — 분실·부상 대비</label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ─── 4. 의류 및 일반 준비물 ─── -->
+        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-amber-100 mb-5">
+            <h3 class="text-sm font-bold text-amber-700 mb-4 flex items-center gap-2">
+                <span class="w-7 h-7 bg-amber-100 rounded-xl flex items-center justify-center text-base">👕</span>
+                4. 의류 &amp; 일반 준비물
+            </h3>
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-tshirt">
+                    <label for="chk-tshirt" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">👕 <strong>반팔 + 얇은 긴팔 1~2장</strong> — 낮 덥고 아침/저녁·실내 냉방 대비</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-swim">
+                    <label for="chk-swim" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🩱 <strong>수영복</strong> — 빌라 풀 &amp; 해변용 (성인 + 아기)</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-sandal">
+                    <label for="chk-sandal" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">👟 <strong>편한 샌들 &amp; 운동화</strong> — 아기 아쿠아슈즈 포함</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-sunglass">
+                    <label for="chk-sunglass" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🕶️ <strong>선글라스 &amp; 모자</strong> — 성인·아기 모두</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-wallet">
+                    <label for="chk-wallet" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">👜 <strong>동전지갑 (소형 파우치)</strong> — VND 동전·소액 보관용</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-bag">
+                    <label for="chk-bag" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🎒 <strong>소형 데이팩</strong> — 외출 시 아기 짐·물병 수납용</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-charger">
+                    <label for="chk-charger" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">🔌 <strong>멀티 충전기 &amp; 보조배터리</strong> — 베트남 220V 대부분 호환</label>
+                </li>
+                <li class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-500 shrink-0" id="chk-camera">
+                    <label for="chk-camera" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">📷 <strong>카메라 / 방수 케이스</strong> — 풀·해변 촬영 대비</label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 안내 배너 -->
+        <div class="bg-violet-50 rounded-2xl border border-violet-100 px-4 py-3">
+            <p class="text-[10px] text-violet-700 leading-relaxed">
+                💜 체크리스트는 <strong>클릭하면 체크 표시</strong>가 됩니다. 노션·메모 앱으로 옮기려면 복사 후 붙여넣기 하세요.
+            </p>
+        </div>
+    </section>
+
+    </div><!-- /tab-checklist -->
+
     <div id="tab-transfer" class="tab-panel">
 
     <!-- Fast Track & Transfer -->
@@ -1028,26 +1307,31 @@
     </div><!-- /tab-map -->
 
     <!-- Navigation Bar -->
-    <!-- Navigation Bar -->
 <nav id="bottomNav"
-     class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[calc(28rem-3rem)] z-50 transition-all duration-500">
-    <div class="bg-gray-900/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex justify-around items-center border border-white/10">
-        <button id="btn-hotels" onclick="switchTab('hotels')" class="flex flex-col items-center gap-1 text-emerald-400 transition-colors">
-            <i class="fa-solid fa-calendar-days"></i>
-            <span class="text-[9px] font-bold">일정</span>
-        </button>
-        <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
-            <i class="fa-solid fa-circle-info"></i>
-            <span class="text-[9px] font-bold">정보</span>
-        </button>
-        <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
-            <i class="fa-solid fa-plane"></i>
-            <span class="text-[9px] font-bold">공항</span>
-        </button>
-        <button id="btn-map" onclick="switchTab('map')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors">
-            <i class="fa-solid fa-map-location-dot"></i>
-            <span class="text-[9px] font-bold">지도</span>
-        </button>
+     class="fixed bottom-0 left-0 right-0 z-50">
+    <div class="max-w-md mx-auto px-4 pb-[env(safe-area-inset-bottom,12px)] pt-2">
+        <div class="bg-gray-900/75 backdrop-blur-xl rounded-2xl px-2 py-3 shadow-2xl flex justify-around items-center border border-white/10">
+            <button id="btn-hotels" onclick="switchTab('hotels')" class="flex flex-col items-center gap-1 text-emerald-400 transition-colors px-3">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span class="text-[9px] font-bold">일정</span>
+            </button>
+            <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
+                <i class="fa-solid fa-circle-info"></i>
+                <span class="text-[9px] font-bold">정보</span>
+            </button>
+            <button id="btn-checklist" onclick="switchTab('checklist')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <span class="text-[9px] font-bold">준비물</span>
+            </button>
+            <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
+                <i class="fa-solid fa-plane"></i>
+                <span class="text-[9px] font-bold">공항</span>
+            </button>
+            <button id="btn-map" onclick="switchTab('map')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span class="text-[9px] font-bold">지도</span>
+            </button>
+        </div>
     </div>
 </nav>
 
@@ -1055,6 +1339,7 @@
         const TAB_ACTIVE_COLORS = {
             hotels: 'text-emerald-400',
             benefits: 'text-blue-400',
+            checklist: 'text-violet-400',
             transfer: 'text-indigo-400',
             map: 'text-rose-400'
         };
@@ -1064,12 +1349,12 @@
         function switchTab(tab) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
-            ['hotels', 'benefits', 'transfer', 'map'].forEach(t => {
+            ['hotels', 'benefits', 'checklist', 'transfer', 'map'].forEach(t => {
                 document.getElementById('btn-' + t).className =
-                    'flex flex-col items-center gap-1 text-gray-400 transition-colors';
+                    'flex flex-col items-center gap-1 text-gray-400 transition-colors px-3';
             });
             document.getElementById('btn-' + tab).className =
-                'flex flex-col items-center gap-1 transition-colors ' + TAB_ACTIVE_COLORS[tab];
+                'flex flex-col items-center gap-1 transition-colors px-3 ' + TAB_ACTIVE_COLORS[tab];
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (tab === 'map' && travelMap) {
@@ -1097,7 +1382,7 @@
             const places = [
                 { lat: 16.0544, lng: 108.2022, emoji: '✈️', name: '다낭 국제공항', desc: '입출국' },
                 { lat: 16.0601, lng: 108.2248, emoji: '🏨', name: '노보텔 다낭', desc: '3/1 (일)' },
-                { lat: 16.0266, lng: 108.2625, emoji: '🏖️', name: '로얄 비치프론트 빌라', desc: '3/2~5 메인 숙소' },
+                { lat: 15.9209, lng: 108.3256, emoji: '🏖️', name: '윈덤 호이안 로얄 비치프론트 빌라', desc: '3/2~5 메인 숙소' },
                 { lat: 16.0666, lng: 108.2247, emoji: '🍜', name: '다낭 티앤킴', desc: '3/2 맛집' },
                 { lat: 16.0674, lng: 108.2245, emoji: '💆', name: 'HYA Spa', desc: '3/2 마사지' },
                 { lat: 16.0680, lng: 108.2105, emoji: '🏨', name: '윙크 호텔', desc: '3/5 휴식' },
@@ -1132,65 +1417,28 @@
         });
         
      /**
- * 하단 네비게이션 고급 UX 제어
- * 1. 스크롤 속도 기반 복귀 시간 가변
- * 2. 스크롤 비율에 따른 점진적 투명도
- * 3. 페이지 최하단 도달 시 항상 표시
+ * 하단 네비게이션 UX — 스크롤 중 투명도 낮춤, 멈추면 복원
  */
-
 (function () {
     const nav = document.getElementById('bottomNav');
-
-    let lastScroll = window.pageYOffset;
-    let lastTime = performance.now();
     let scrollTimeout = null;
     let ticking = false;
 
-    function isBottom() {
-        return window.innerHeight + window.scrollY >= document.body.offsetHeight - 2;
-    }
-
-    function update() {
-        const currentScroll = window.pageYOffset;
-        const now = performance.now();
-        const deltaY = currentScroll - lastScroll;
-        const deltaTime = now - lastTime;
-        const velocity = Math.abs(deltaY / deltaTime);
-
-        if (isBottom()) {
-            // 최하단: 항상 완전 표시
-            nav.classList.remove('hide', 'scrolling');
-            nav.classList.add('show');
-            if (scrollTimeout) clearTimeout(scrollTimeout);
-        } else {
-            // 스크롤 중: 반투명 + 히드
-            nav.classList.add('hide', 'scrolling');
-            nav.classList.remove('show');
-
-            if (scrollTimeout) clearTimeout(scrollTimeout);
-
-            // 속도 기반 복귀 시간 계산
-            const dynamicDelay = Math.min(400, 100 + velocity * 600);
-
-            scrollTimeout = setTimeout(() => {
-                nav.classList.remove('hide', 'scrolling');
-                nav.classList.add('show');
-            }, dynamicDelay);
-        }
-
-        lastScroll = currentScroll;
-        lastTime = now;
+    function onScroll() {
+        nav.classList.add('scrolling');
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            nav.classList.remove('scrolling');
+        }, 600);
         ticking = false;
     }
 
     window.addEventListener('scroll', () => {
         if (!ticking) {
-            requestAnimationFrame(update);
+            requestAnimationFrame(onScroll);
             ticking = true;
         }
     }, { passive: true });
-
-    nav.classList.add('show');
 })();
     </script>
 
