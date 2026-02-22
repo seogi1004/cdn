@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenClaw M4 Max Deployment Guide v3.3</title>
+  <title>OpenClaw M4 Max Deployment Guide v3.4</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -113,7 +113,7 @@
         <div>
           <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Infrastructure Status</p>
           <div class="flex items-center">
-            <p class="text-sm font-semibold text-red-400">v3.3 Security Verified</p>
+            <p class="text-sm font-semibold text-red-400">v3.4 Security Verified</p>
             <span class="badge badge-required">필수</span>
           </div>
         </div>
@@ -141,7 +141,7 @@
           Isolation Policy <span class="badge badge-required">필수</span>
         </h3>
         <p class="text-xl font-bold text-emerald-400">Zero-Trust Account</p>
-        <p class="text-slate-400 text-sm">fstab Persistence & v3.3 Syntax</p>
+        <p class="text-slate-400 text-sm">fstab Persistence & v3.4 Syntax</p>
       </div>
     </section>
 
@@ -300,25 +300,27 @@ su - fern</code></pre>
           <pre><code># 1) 루프백은 검사 제외 (권장)
 set skip on lo0
 
-# 2) VPN 인터페이스(utun0)에서 10.0.0.0/24 대역만 허용
-pass in quick on utun0 from 10.0.0.0/24 to any
-pass out quick on utun0 from any to 10.0.0.0/24
+# 2) [필수] Fern: 로컬호스트 Ollama(11434) 외 차단
+block drop out quick proto tcp from any to 127.0.0.1 port != 11434 user fern
 
-# 3) Fern 유저만 내부망(192.168.0.0/24) 접근 차단 (en0 기준)
-block drop out quick on en0 from any to 192.168.0.0/24 user fern</code></pre>
+# 3) [필수] Fern: VPN 터널 + 사설IP 전면 차단 (소스코드 유출 방지)
+block drop out quick on utun0 user fern
+block drop out quick from any to 10.0.0.0/8 user fern
+block drop out quick from any to 172.16.0.0/12 user fern
+block drop out quick from any to 192.168.0.0/16 user fern</code></pre>
         </div>
       </div>
 
       <div class="glass p-8 border-l-4 border-emerald-400 rounded-2xl shadow-xl shadow-emerald-900/10">
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
-          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세 v3.3) <span class="badge badge-required">필수</span>
+          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세 v3.4) <span class="badge badge-required">필수</span>
         </h2>
         <div class="bg-red-950/20 p-5 rounded-2xl mb-6 border border-red-900/30">
           <p class="text-sm text-red-300 font-bold mb-2 flex items-center">
-            💡 Anchor 방식 적용 가이드 <span class="badge badge-required">필수</span>
+            💡 v3.4 소스코드 보호 Anchor 정책 <span class="badge badge-required">필수</span>
           </p>
           <p class="text-xs text-slate-400 leading-relaxed">
-            v3.3에서는 PF 파서의 엄격한 규칙을 적용하여 <strong>port 식별자가 IP 뒤에, user 식별자가 맨 뒤에</strong> 위치하도록 수정되었습니다.
+            v3.4에서는 <strong>VPN 터널 및 RFC 1918 사설 IP 전면 차단</strong>을 추가하여 사내 소스코드 유출을 원천 봉쇄합니다.
           </p>
         </div>
 
@@ -326,19 +328,23 @@ block drop out quick on en0 from any to 192.168.0.0/24 user fern</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern <<'EOF'
-# VPN(utun0) 대역 허용
-pass in quick on utun0 from 10.0.0.0/24 to any
-pass out quick on utun0 from any to 10.0.0.0/24
-
-# Fern 유저: Ollama(11434)를 제외한 모든 로컬호스트(127.0.0.1) 접근 차단 (순서 주의)
+# [필수] 로컬호스트: Ollama(11434)만 허용
 block drop out quick proto tcp from any to 127.0.0.1 port != 11434 user fern
 
-# 내부망 탐색(mDNS/5353) 및 IPv6 차단 (Fern 유저 한정)
+# [필수] VPN 터널 원천 차단 (사내 소스코드 유출 방지)
+block drop out quick on utun0 user fern
+block drop out quick on utun1 user fern
+block drop out quick on utun2 user fern
+block drop out quick on utun3 user fern
+
+# [필수] RFC 1918 사설 IP 대역 전면 차단
+block drop out quick from any to 10.0.0.0/8 user fern
+block drop out quick from any to 172.16.0.0/12 user fern
+block drop out quick from any to 192.168.0.0/16 user fern
+
+# [선택] mDNS/IPv6 차단
 block drop out quick proto udp from any to any port 5353 user fern
 block drop out quick inet6 all user fern
-
-# 사내 내부망(192.168.0.x) 접근 차단 (Fern 유저 한정, en0 기준)
-block drop out quick on en0 from any to 192.168.0.0/24 user fern
 EOF
 
 # 2. pf.conf 적용 및 문법 검증
@@ -361,7 +367,7 @@ fi</code></pre>
     <div id="sandbox" class="tab-content space-y-8">
       <div class="glass p-8 rounded-2xl border-l-4 border-emerald-500 shadow-lg">
         <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-emerald-400">
-          💾 1. APFS Quota & fstab 영구 마운트 (v3.3) <span class="badge badge-stability">안정성</span>
+          💾 1. APFS Quota & fstab 영구 마운트 (v3.4) <span class="badge badge-stability">안정성</span>
         </h2>
         <p class="text-sm text-slate-400 mb-4">재부팅 시 샌드박스 볼륨이 기본 경로(/Volumes)로 자동 마운트되어 샌드박싱이 무력화되는 것을 방지합니다.</p>
         <div class="code-block">
@@ -419,10 +425,10 @@ sudo chmod +a "user:fern deny list,search,add_file,add_subdirectory,file_inherit
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (Verified V3.3)</h2>
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (Verified V3.4)</h2>
               <span class="badge badge-stability">안정성</span>
             </div>
-            <p class="text-slate-400 text-sm mt-1">PF Syntax 교정 + fstab 영구 마운트 + ulimit 강제 종속 통합 버전</p>
+            <p class="text-slate-400 text-sm mt-1">VPN/사설망 차단 강화 + fstab 영구 마운트 + ulimit 강제 종속 통합 버전</p>
           </div>
         </div>
 
@@ -431,7 +437,7 @@ sudo chmod +a "user:fern deny list,search,add_file,add_subdirectory,file_inherit
           <pre><code class="text-sm">#!/bin/bash
 set -euo pipefail
 
-# OpenClaw M4 Max Security Master Script (Verified & Refined V3.3)
+# OpenClaw M4 Max Security Master Script (Verified & Refined V3.4)
 ALVIN_HOME="/Users/alvin"
 FERN_HOME="/Users/fern"
 SANDBOX_MP="/Users/fern/sandbox"
@@ -471,13 +477,20 @@ sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 ||
 echo ">>> [5/9] PF 방화벽 정책 반영 (Syntax 교정 및 안전 검증)..."
 sudo mkdir -p /etc/pf.anchors
 sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
-pass in quick on utun0 from 10.0.0.0/24 to any
-pass out quick on utun0 from any to 10.0.0.0/24
-# v3.3 규칙: port는 IP 뒤에, user는 맨 뒤에 위치해야 함
+# [필수] 로컬호스트: Ollama(11434)만 허용
 block drop out quick proto tcp from any to 127.0.0.1 port != 11434 user fern
+# [필수] VPN 터널 원천 차단 (사내 소스코드 유출 방지)
+block drop out quick on utun0 user fern
+block drop out quick on utun1 user fern
+block drop out quick on utun2 user fern
+block drop out quick on utun3 user fern
+# [필수] RFC 1918 사설 IP 전면 차단
+block drop out quick from any to 10.0.0.0/8 user fern
+block drop out quick from any to 172.16.0.0/12 user fern
+block drop out quick from any to 192.168.0.0/16 user fern
+# [선택] mDNS/IPv6 차단
 block drop out quick proto udp from any to any port 5353 user fern
 block drop out quick inet6 all user fern
-block drop out quick on en0 from any to 192.168.0.0/24 user fern
 EOF
 
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
@@ -506,7 +519,7 @@ echo ">>> [8/9] ulimit 제한 설정..."
 sudo -u fern bash -lc "grep -q '^ulimit -u 256' '${FERN_HOME}/.zshrc' 2>/dev/null || echo 'ulimit -u 256' >> '${FERN_HOME}/.zshrc'"
 
 echo ">>> [9/9] 보안 검증 결과 출력..."
-echo ">>> [DONE] V3.3 보안 마스터 배포 완료"</code></pre>
+echo ">>> [DONE] V3.4 보안 마스터 배포 완료"</code></pre>
         </div>
       </div>
     </div>
@@ -600,7 +613,7 @@ sudo -u fern pm2 logs fern-bot</code></pre>
                         <p class="font-bold text-slate-100 flex items-center">
                           PF Syntax 무결성 <span class="badge badge-required">필수</span>
                         </p>
-                        <p class="text-xs text-slate-400">v3.3 규칙에 따라 port 식별자 위치가 올바른가?</p>
+                        <p class="text-xs text-slate-400">v3.4 규칙에 따라 port 식별자 위치가 올바른가?</p>
                     </div>
                 </div>
                 <div class="check-item">
@@ -659,7 +672,7 @@ sudo rm -rf /Users/jennifer</code></pre>
 
     <!-- Footer -->
     <footer class="mt-20 py-12 border-t border-slate-800/50 text-center text-slate-500 text-sm">
-      <p>© 2026 Alvin's AI Infrastructure | Security Protocol v3.3 (Verified)</p>
+      <p>© 2026 Alvin's AI Infrastructure | Security Protocol v3.4 (Verified)</p>
     </footer>
   </div>
 
