@@ -40,7 +40,13 @@
     </style>
 </head>
 <body class="pb-28 relative min-h-screen bg-[#f8fafc]">
-    <header class="relative overflow-hidden">
+   <!-- Safe Area Top Background -->
+<div
+  class="fixed top-0 left-0 right-0 z-[-1] gradient-emerald"
+  style="height: env(safe-area-inset-top);">
+</div>
+    
+     <header class="relative overflow-hidden">
 
   <!-- Safe Area + Gradient Background -->
   <div class="absolute inset-0 gradient-emerald -z-10"></div>
