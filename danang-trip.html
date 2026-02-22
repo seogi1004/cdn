@@ -46,7 +46,6 @@
     .nav-pill {
         border-radius: 9999px;
         overflow: hidden;
-        /* 더 진한 블러 + 투명 배경 */
         background: rgba(17, 17, 25, 0.72);
         -webkit-backdrop-filter: blur(28px) saturate(180%);
         backdrop-filter: blur(28px) saturate(180%);
@@ -55,30 +54,44 @@
     }
     .nav-btn {
         display: flex; flex-direction: column; align-items: center;
-        gap: 2px;
-        padding: 7px 14px;
+        gap: 3px;
+        padding: 6px 12px;
         border-radius: 9999px;
-        font-size: 15px;
-        transition: transform 0.15s ease, background 0.22s ease, color 0.22s ease;
         cursor: pointer;
         background: none;
         border: none;
         outline: none;
+        transition: transform 0.18s ease, color 0.25s ease;
+        -webkit-tap-highlight-color: transparent;
     }
-    .nav-btn.active-tab {
-        background: rgba(255,255,255,0.11);
-    }
-    .nav-dot {
-        width: 3px; height: 3px;
+    .nav-btn .nav-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
-        margin-top: 2px;
+        font-size: 15px;
         background: transparent;
-        transition: background 0.22s, transform 0.22s;
-        transform: scale(0);
+        transition:
+            background 0.28s cubic-bezier(0.34,1.18,0.64,1),
+            transform  0.28s cubic-bezier(0.34,1.18,0.64,1),
+            box-shadow 0.28s ease;
     }
-    .nav-btn.active-tab .nav-dot {
-        background: currentColor;
-        transform: scale(1);
+    .nav-btn .nav-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        transition: opacity 0.25s ease, color 0.25s ease;
+        opacity: 0.5;
+    }
+    .nav-btn.active-tab .nav-icon {
+        background: rgba(255,255,255,0.15);
+        transform: scale(1.12);
+        box-shadow: 0 0 12px currentColor;
+    }
+    .nav-btn.active-tab .nav-label {
+        opacity: 1;
     }
 
 
@@ -1349,29 +1362,24 @@
     <div class="max-w-md mx-auto px-5" style="padding-bottom:max(14px,env(safe-area-inset-bottom))">
         <div class="nav-pill flex justify-around items-center px-2 py-2.5">
             <button id="btn-hotels" onclick="switchTab('hotels')" class="nav-btn active-tab text-emerald-400">
-                <i class="fa-solid fa-calendar-days"></i>
-                <span class="text-[9px] font-bold">일정</span>
-                <div class="nav-dot"></div>
+                <div class="nav-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                <span class="nav-label">일정</span>
             </button>
-            <button id="btn-benefits" onclick="switchTab('benefits')" class="nav-btn text-gray-400">
-                <i class="fa-solid fa-circle-info"></i>
-                <span class="text-[9px] font-bold">정보</span>
-                <div class="nav-dot"></div>
+            <button id="btn-benefits" onclick="switchTab('benefits')" class="nav-btn text-gray-500">
+                <div class="nav-icon"><i class="fa-solid fa-circle-info"></i></div>
+                <span class="nav-label">정보</span>
             </button>
-            <button id="btn-checklist" onclick="switchTab('checklist')" class="nav-btn text-gray-400">
-                <i class="fa-solid fa-clipboard-check"></i>
-                <span class="text-[9px] font-bold">준비물</span>
-                <div class="nav-dot"></div>
+            <button id="btn-checklist" onclick="switchTab('checklist')" class="nav-btn text-gray-500">
+                <div class="nav-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                <span class="nav-label">준비물</span>
             </button>
-            <button id="btn-transfer" onclick="switchTab('transfer')" class="nav-btn text-gray-400">
-                <i class="fa-solid fa-plane"></i>
-                <span class="text-[9px] font-bold">공항</span>
-                <div class="nav-dot"></div>
+            <button id="btn-transfer" onclick="switchTab('transfer')" class="nav-btn text-gray-500">
+                <div class="nav-icon"><i class="fa-solid fa-plane"></i></div>
+                <span class="nav-label">공항</span>
             </button>
-            <button id="btn-map" onclick="switchTab('map')" class="nav-btn text-gray-400">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span class="text-[9px] font-bold">지도</span>
-                <div class="nav-dot"></div>
+            <button id="btn-map" onclick="switchTab('map')" class="nav-btn text-gray-500">
+                <div class="nav-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                <span class="nav-label">지도</span>
             </button>
         </div>
     </div>
