@@ -40,12 +40,22 @@
 #bottomNav.show {
     transform: translate(-50%, 0);
 }
-
+#safeTop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top);
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    z-index: 9999;
+    pointer-events: none;
+}
 
     </style>
 </head>
 <body class="pb-28 relative min-h-screen bg-[#f8fcfc]">
-    
+    <!-- SAFE AREA TOP FIX -->
+<div id="safeTop"></div>
      <header class="relative overflow-hidden">
 
   <!-- Safe Area + Gradient Background -->
