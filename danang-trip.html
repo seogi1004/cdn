@@ -28,44 +28,33 @@
         }
 
     /* ── Bottom Nav ── */
-    #bottomNav { will-change: transform; z-index: 9999; }
-
-    .nav-pill {
-        border-radius: 1.25rem;
-        overflow: hidden;
-        transition: border-radius 0.42s cubic-bezier(0.4,0,0.2,1);
+    #bottomNav {
+        will-change: transform, opacity;
+        z-index: 9999;
+        /* 나타날 때: spring 바운스 */
+        transition: transform 0.48s cubic-bezier(0.34,1.22,0.64,1),
+                    opacity 0.38s ease;
     }
-    .nav-content {
-        max-height: 90px;
-        overflow: hidden;
-        transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1),
-                    opacity 0.3s ease,
-                    padding 0.38s cubic-bezier(0.4,0,0.2,1);
-        opacity: 1;
-    }
-    .nav-handle {
-        display: none;
-        text-align: center;
-        padding: 10px 0 8px;
-        cursor: pointer;
-    }
-    #bottomNav.nav-collapsed .nav-pill  { border-radius: 9999px; }
-    #bottomNav.nav-collapsed .nav-handle { display: block; }
-    #bottomNav.nav-collapsed .nav-content {
-        max-height: 0;
+    #bottomNav.nav-hidden {
+        transform: translateY(calc(100% + 20px));
         opacity: 0;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
+        pointer-events: none;
+        /* 사라질 때: 빠른 ease-in */
+        transition: transform 0.30s cubic-bezier(0.4,0,1,1),
+                    opacity 0.22s ease-in;
     }
-
+    .nav-pill {
+        border-radius: 9999px;
+        overflow: hidden;
+    }
     .nav-btn {
         display: flex; flex-direction: column; align-items: center;
         gap: 2px;
         padding: 6px 12px;
-        border-radius: 0.85rem;
+        border-radius: 9999px;
         transition: transform 0.15s ease, background 0.25s ease;
     }
-    .nav-btn.active-tab { background: rgba(255,255,255,0.12); }
+    .nav-btn.active-tab { background: rgba(255,255,255,0.13); }
     .nav-dot {
         width: 4px; height: 4px;
         border-radius: 50%;
@@ -1345,41 +1334,32 @@
     <!-- Navigation Bar -->
 <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-50">
     <div class="max-w-md mx-auto px-4" style="padding-bottom:max(12px,env(safe-area-inset-bottom))">
-        <div class="nav-pill bg-gray-900/80 backdrop-blur-xl shadow-2xl border border-white/10">
-
-            <!-- 접힌 상태 핸들 -->
-            <div class="nav-handle">
-                <div class="w-10 h-1 bg-white/40 rounded-full mx-auto"></div>
-            </div>
-
-            <!-- 버튼 영역 -->
-            <div class="nav-content flex justify-around items-center px-2 py-3">
-                <button id="btn-hotels" onclick="switchTab('hotels')" class="nav-btn active-tab text-emerald-400">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <span class="text-[9px] font-bold">일정</span>
-                    <div class="nav-dot"></div>
-                </button>
-                <button id="btn-benefits" onclick="switchTab('benefits')" class="nav-btn text-gray-400">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span class="text-[9px] font-bold">정보</span>
-                    <div class="nav-dot"></div>
-                </button>
-                <button id="btn-checklist" onclick="switchTab('checklist')" class="nav-btn text-gray-400">
-                    <i class="fa-solid fa-clipboard-check"></i>
-                    <span class="text-[9px] font-bold">준비물</span>
-                    <div class="nav-dot"></div>
-                </button>
-                <button id="btn-transfer" onclick="switchTab('transfer')" class="nav-btn text-gray-400">
-                    <i class="fa-solid fa-plane"></i>
-                    <span class="text-[9px] font-bold">공항</span>
-                    <div class="nav-dot"></div>
-                </button>
-                <button id="btn-map" onclick="switchTab('map')" class="nav-btn text-gray-400">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <span class="text-[9px] font-bold">지도</span>
-                    <div class="nav-dot"></div>
-                </button>
-            </div>
+        <div class="nav-pill bg-gray-900/90 backdrop-blur-xl shadow-2xl border border-white/10 flex justify-around items-center px-3 py-3">
+            <button id="btn-hotels" onclick="switchTab('hotels')" class="nav-btn active-tab text-emerald-400">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span class="text-[9px] font-bold">일정</span>
+                <div class="nav-dot"></div>
+            </button>
+            <button id="btn-benefits" onclick="switchTab('benefits')" class="nav-btn text-gray-400">
+                <i class="fa-solid fa-circle-info"></i>
+                <span class="text-[9px] font-bold">정보</span>
+                <div class="nav-dot"></div>
+            </button>
+            <button id="btn-checklist" onclick="switchTab('checklist')" class="nav-btn text-gray-400">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <span class="text-[9px] font-bold">준비물</span>
+                <div class="nav-dot"></div>
+            </button>
+            <button id="btn-transfer" onclick="switchTab('transfer')" class="nav-btn text-gray-400">
+                <i class="fa-solid fa-plane"></i>
+                <span class="text-[9px] font-bold">공항</span>
+                <div class="nav-dot"></div>
+            </button>
+            <button id="btn-map" onclick="switchTab('map')" class="nav-btn text-gray-400">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span class="text-[9px] font-bold">지도</span>
+                <div class="nav-dot"></div>
+            </button>
         </div>
     </div>
 </nav>
@@ -1475,39 +1455,33 @@
     })();
 
     /* ── 하단 네비게이션 UX ──
-     * ① 아래 스크롤 → nav collapse (접힌 pill)
-     * ② 위 스크롤   → nav expand
-     * ③ collapsed 상태 tap → expand
-     * ④ 버튼 tap 시 scale 피드백
+     * 스크롤 중 → translateY 슬라이드 아웃 + 페이드
+     * 스크롤 멈춤 → spring 이징으로 슬라이드 복귀
+     * 버튼 tap → scale 피드백
      */
     (function () {
         const nav = document.getElementById('bottomNav');
-        let lastY = window.scrollY;
-        let ticking = false;
-        let collapsed = false;
+        let hideTimer = null;
+        let ticking  = false;
+        let hidden   = false;
 
-        function collapse() {
-            if (collapsed) return;
-            collapsed = true;
-            nav.classList.add('nav-collapsed');
+        function hide() {
+            if (hidden) return;
+            hidden = true;
+            nav.classList.add('nav-hidden');
         }
-        function expand() {
-            if (!collapsed) return;
-            collapsed = false;
-            nav.classList.remove('nav-collapsed');
+        function show() {
+            if (!hidden) return;
+            hidden = false;
+            nav.classList.remove('nav-hidden');
         }
-
-        // collapsed 상태에서 tap → expand
-        nav.addEventListener('click', () => { if (collapsed) expand(); });
 
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
-                    const y = window.scrollY;
-                    const dy = y - lastY;
-                    if (dy > 8 && y > 80)  collapse();
-                    else if (dy < -5)       expand();
-                    lastY = y;
+                    hide();
+                    clearTimeout(hideTimer);
+                    hideTimer = setTimeout(show, 700);
                     ticking = false;
                 });
                 ticking = true;
