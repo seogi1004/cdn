@@ -30,18 +30,25 @@
 
     #bottomNav {
     transition:
-        transform 0.55s cubic-bezier(.34,1.56,.64,1),
-        opacity 0.25s linear;
+        transform 0.5s cubic-bezier(.34,1.56,.64,1),
+        opacity 0.5s ease;
     will-change: transform, opacity;
+    opacity: 1;
 }
 
 #bottomNav.hide {
     transform: translate(-50%, 120%);
     pointer-events: none;
+    opacity: 0;
 }
 
 #bottomNav.show {
     transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+#bottomNav.scrolling {
+    opacity: 0.45;
 }
 
 
@@ -1046,29 +1053,25 @@
         const deltaTime = now - lastTime;
         const velocity = Math.abs(deltaY / deltaTime);
 
-        const scrollRatio = Math.min(currentScroll / 200, 1);
-        nav.style.opacity = 1 - scrollRatio * 0.7;
-
-        if (!isBottom()) {
-            nav.classList.add('hide');
-            nav.classList.remove('show');
-        }
-
-        if (scrollTimeout) clearTimeout(scrollTimeout);
-
-        // 속도 기반 복귀 시간 계산
-        const dynamicDelay = Math.min(400, 100 + velocity * 600);
-
-        scrollTimeout = setTimeout(() => {
-            nav.style.opacity = 1;
-            nav.classList.remove('hide');
-            nav.classList.add('show');
-        }, dynamicDelay);
-
         if (isBottom()) {
-            nav.style.opacity = 1;
-            nav.classList.remove('hide');
+            // 최하단: 항상 완전 표시
+            nav.classList.remove('hide', 'scrolling');
             nav.classList.add('show');
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+        } else {
+            // 스크롤 중: 반투명 + 히드
+            nav.classList.add('hide', 'scrolling');
+            nav.classList.remove('show');
+
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+
+            // 속도 기반 복귀 시간 계산
+            const dynamicDelay = Math.min(400, 100 + velocity * 600);
+
+            scrollTimeout = setTimeout(() => {
+                nav.classList.remove('hide', 'scrolling');
+                nav.classList.add('show');
+            }, dynamicDelay);
         }
 
         lastScroll = currentScroll;
