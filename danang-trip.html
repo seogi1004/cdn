@@ -1009,6 +1009,65 @@
         document.getElementById('btn-map').addEventListener('click', () => {
             setTimeout(initMap, 150);
         });
+        
+        /**
+ * 하단 네비게이션을 스크롤 방향과 속도에 따라
+ * 네이티브 앱처럼 자연스럽게 숨김/표시 처리한다.
+ * - 빠른 플릭 제스처 대응
+ * - 스프링 느낌 cubic-bezier 적용
+ * - requestAnimationFrame 기반 최적화
+ */
+(function () {
+    const nav = document.getElementById('bottomNav');
+    let lastScroll = window.pageYOffset;
+    let lastTime = performance.now();
+    let ticking = false;
+
+    const SCROLL_THRESHOLD = 6;
+    const VELOCITY_THRESHOLD = 0.5;
+
+    function update() {
+        const currentScroll = window.pageYOffset;
+        const now = performance.now();
+        const deltaY = currentScroll - lastScroll;
+        const deltaTime = now - lastTime;
+        const velocity = deltaY / deltaTime;
+
+        if (Math.abs(deltaY) < SCROLL_THRESHOLD) {
+            ticking = false;
+            return;
+        }
+
+        if (velocity > VELOCITY_THRESHOLD && currentScroll > 80) {
+            nav.classList.add('hide');
+            nav.classList.remove('show');
+        } else if (velocity < -VELOCITY_THRESHOLD) {
+            nav.classList.remove('hide');
+            nav.classList.add('show');
+        } else {
+            if (deltaY > 0 && currentScroll > 80) {
+                nav.classList.add('hide');
+                nav.classList.remove('show');
+            } else {
+                nav.classList.remove('hide');
+                nav.classList.add('show');
+            }
+        }
+
+        lastScroll = currentScroll;
+        lastTime = now;
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(update);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    nav.classList.add('show');
+})()
     </script>
 
 </body>
