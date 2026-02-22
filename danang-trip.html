@@ -12,7 +12,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        html { background-color: #059669; }
+        html { background-color: #f8fafc; }
         body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #1e293b; color-scheme: light; }
         .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .gradient-emerald { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
@@ -27,18 +27,6 @@
             padding-top: max(3rem, calc(3rem + env(safe-area-inset-top)));
         }
 
-        /* 노치 영역 배경 커버 */
-        .notch-cover {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: env(safe-area-inset-top, 0px);
-            background: #059669;
-            z-index: 9999;
-            pointer-events: none;
-        }
-
         #bottomNav {
             padding-bottom: env(safe-area-inset-bottom, 0px);
         }
@@ -49,6 +37,7 @@
         opacity 0.5s ease;
     will-change: transform, opacity;
     opacity: 1;
+    z-index: 9999;
 }
 
 #bottomNav.hide {
@@ -71,11 +60,8 @@
 </head>
 <body class="max-w-md mx-auto pb-28 relative min-h-screen">
 
-    <!-- Notch Area Cover -->
-    <div class="notch-cover"></div>
-
     <!-- Hero Header -->
-    <header class="gradient-emerald safe-top pb-20 px-6 text-white rounded-b-[3.5rem] shadow-2xl relative overflow-hidden">
+    <header class="gradient-emerald safe-top pb-20 px-6 text-white rounded-[2rem] shadow-2xl relative overflow-hidden mx-2 mt-2">
         <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
         <div class="relative z-10">
             <h1 class="text-3xl font-extrabold mb-1 tracking-tight">Da Nang & Hoi An</h1>
