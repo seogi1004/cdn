@@ -27,21 +27,57 @@
             padding-top: max(3rem, calc(3rem + env(safe-area-inset-top)));
         }
 
-        #bottomNav {
-            padding-bottom: env(safe-area-inset-bottom, 0px);
-        }
+    /* ── Bottom Nav ── */
+    #bottomNav { will-change: transform; z-index: 9999; }
 
-    #bottomNav {
-    transition: opacity 0.3s ease;
-    will-change: opacity;
-    opacity: 0.92;
-    z-index: 9999;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-}
+    .nav-pill {
+        border-radius: 1.25rem;
+        overflow: hidden;
+        transition: border-radius 0.42s cubic-bezier(0.4,0,0.2,1);
+    }
+    .nav-content {
+        max-height: 90px;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1),
+                    opacity 0.3s ease,
+                    padding 0.38s cubic-bezier(0.4,0,0.2,1);
+        opacity: 1;
+    }
+    .nav-handle {
+        display: none;
+        text-align: center;
+        padding: 10px 0 8px;
+        cursor: pointer;
+    }
+    #bottomNav.nav-collapsed .nav-pill  { border-radius: 9999px; }
+    #bottomNav.nav-collapsed .nav-handle { display: block; }
+    #bottomNav.nav-collapsed .nav-content {
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
 
-#bottomNav.scrolling {
-    opacity: 0.35;
-}
+    .nav-btn {
+        display: flex; flex-direction: column; align-items: center;
+        gap: 2px;
+        padding: 6px 12px;
+        border-radius: 0.85rem;
+        transition: transform 0.15s ease, background 0.25s ease;
+    }
+    .nav-btn.active-tab { background: rgba(255,255,255,0.12); }
+    .nav-dot {
+        width: 4px; height: 4px;
+        border-radius: 50%;
+        margin-top: 1px;
+        background: transparent;
+        transition: background 0.25s, transform 0.25s;
+        transform: scale(0);
+    }
+    .nav-btn.active-tab .nav-dot {
+        background: currentColor;
+        transform: scale(1);
+    }
 
 
     </style>
@@ -664,7 +700,7 @@
                 <li class="flex items-start gap-3">
                     <input type="checkbox" class="mt-0.5 w-4 h-4 accent-violet-500 shrink-0" id="chk-app">
                     <label for="chk-app" class="text-[11px] text-gray-700 leading-relaxed cursor-pointer">
-                        📱 <strong>필수 앱 설치 &amp; 카드 등록</strong> — Grab, 배달K, 토스, 파파고
+                        📱 <strong>필수 앱 설치 &amp; 카드 등록</strong> — Grab, 배달K, 토스
                     </label>
                 </li>
                 <li class="flex items-start gap-3">
@@ -1307,30 +1343,43 @@
     </div><!-- /tab-map -->
 
     <!-- Navigation Bar -->
-<nav id="bottomNav"
-     class="fixed bottom-0 left-0 right-0 z-50">
-    <div class="max-w-md mx-auto px-4 pb-[env(safe-area-inset-bottom,12px)] pt-2">
-        <div class="bg-gray-900/75 backdrop-blur-xl rounded-2xl px-2 py-3 shadow-2xl flex justify-around items-center border border-white/10">
-            <button id="btn-hotels" onclick="switchTab('hotels')" class="flex flex-col items-center gap-1 text-emerald-400 transition-colors px-3">
-                <i class="fa-solid fa-calendar-days"></i>
-                <span class="text-[9px] font-bold">일정</span>
-            </button>
-            <button id="btn-benefits" onclick="switchTab('benefits')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
-                <i class="fa-solid fa-circle-info"></i>
-                <span class="text-[9px] font-bold">정보</span>
-            </button>
-            <button id="btn-checklist" onclick="switchTab('checklist')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
-                <i class="fa-solid fa-clipboard-check"></i>
-                <span class="text-[9px] font-bold">준비물</span>
-            </button>
-            <button id="btn-transfer" onclick="switchTab('transfer')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
-                <i class="fa-solid fa-plane"></i>
-                <span class="text-[9px] font-bold">공항</span>
-            </button>
-            <button id="btn-map" onclick="switchTab('map')" class="flex flex-col items-center gap-1 text-gray-400 transition-colors px-3">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span class="text-[9px] font-bold">지도</span>
-            </button>
+<nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-50">
+    <div class="max-w-md mx-auto px-4" style="padding-bottom:max(12px,env(safe-area-inset-bottom))">
+        <div class="nav-pill bg-gray-900/80 backdrop-blur-xl shadow-2xl border border-white/10">
+
+            <!-- 접힌 상태 핸들 -->
+            <div class="nav-handle">
+                <div class="w-10 h-1 bg-white/40 rounded-full mx-auto"></div>
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="nav-content flex justify-around items-center px-2 py-3">
+                <button id="btn-hotels" onclick="switchTab('hotels')" class="nav-btn active-tab text-emerald-400">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span class="text-[9px] font-bold">일정</span>
+                    <div class="nav-dot"></div>
+                </button>
+                <button id="btn-benefits" onclick="switchTab('benefits')" class="nav-btn text-gray-400">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span class="text-[9px] font-bold">정보</span>
+                    <div class="nav-dot"></div>
+                </button>
+                <button id="btn-checklist" onclick="switchTab('checklist')" class="nav-btn text-gray-400">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    <span class="text-[9px] font-bold">준비물</span>
+                    <div class="nav-dot"></div>
+                </button>
+                <button id="btn-transfer" onclick="switchTab('transfer')" class="nav-btn text-gray-400">
+                    <i class="fa-solid fa-plane"></i>
+                    <span class="text-[9px] font-bold">공항</span>
+                    <div class="nav-dot"></div>
+                </button>
+                <button id="btn-map" onclick="switchTab('map')" class="nav-btn text-gray-400">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span class="text-[9px] font-bold">지도</span>
+                    <div class="nav-dot"></div>
+                </button>
+            </div>
         </div>
     </div>
 </nav>
@@ -1350,11 +1399,10 @@
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
             ['hotels', 'benefits', 'checklist', 'transfer', 'map'].forEach(t => {
-                document.getElementById('btn-' + t).className =
-                    'flex flex-col items-center gap-1 text-gray-400 transition-colors px-3';
+                document.getElementById('btn-' + t).className = 'nav-btn text-gray-400';
             });
             document.getElementById('btn-' + tab).className =
-                'flex flex-col items-center gap-1 transition-colors px-3 ' + TAB_ACTIVE_COLORS[tab];
+                'nav-btn active-tab ' + TAB_ACTIVE_COLORS[tab];
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (tab === 'map' && travelMap) {
@@ -1416,30 +1464,66 @@
             setTimeout(initMap, 150);
         });
         
-     /**
- * 하단 네비게이션 UX — 스크롤 중 투명도 낮춤, 멈추면 복원
- */
-(function () {
-    const nav = document.getElementById('bottomNav');
-    let scrollTimeout = null;
-    let ticking = false;
+    /* ── 체크박스 상태 LocalStorage 저장/복원 ── */
+    (function initCheckboxes() {
+        document.querySelectorAll('input[type="checkbox"][id]').forEach(cb => {
+            if (localStorage.getItem('chk_' + cb.id) === 'true') cb.checked = true;
+            cb.addEventListener('change', function () {
+                localStorage.setItem('chk_' + this.id, this.checked);
+            });
+        });
+    })();
 
-    function onScroll() {
-        nav.classList.add('scrolling');
-        if (scrollTimeout) clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            nav.classList.remove('scrolling');
-        }, 600);
-        ticking = false;
-    }
+    /* ── 하단 네비게이션 UX ──
+     * ① 아래 스크롤 → nav collapse (접힌 pill)
+     * ② 위 스크롤   → nav expand
+     * ③ collapsed 상태 tap → expand
+     * ④ 버튼 tap 시 scale 피드백
+     */
+    (function () {
+        const nav = document.getElementById('bottomNav');
+        let lastY = window.scrollY;
+        let ticking = false;
+        let collapsed = false;
 
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(onScroll);
-            ticking = true;
+        function collapse() {
+            if (collapsed) return;
+            collapsed = true;
+            nav.classList.add('nav-collapsed');
         }
-    }, { passive: true });
-})();
+        function expand() {
+            if (!collapsed) return;
+            collapsed = false;
+            nav.classList.remove('nav-collapsed');
+        }
+
+        // collapsed 상태에서 tap → expand
+        nav.addEventListener('click', () => { if (collapsed) expand(); });
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const y = window.scrollY;
+                    const dy = y - lastY;
+                    if (dy > 8 && y > 80)  collapse();
+                    else if (dy < -5)       expand();
+                    lastY = y;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // 버튼 tap scale 피드백
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                btn.style.transform = 'scale(0.82)';
+            }, { passive: true });
+            btn.addEventListener('touchend', () => {
+                setTimeout(() => { btn.style.transform = ''; }, 160);
+            }, { passive: true });
+        });
+    })();
     </script>
 
 </body>
