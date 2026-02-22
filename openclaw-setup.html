@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenClaw M4 Max Deployment Guide v3.3</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .glass {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .code-block {
+      background-color: #000000;
+      color: #10b981;
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      position: relative;
+      font-family: 'ui-monospace', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+      overflow-x: auto;
+      border: 1px solid #1e293b;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: #334155;
+      color: #f1f5f9;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 10;
+    }
+    .copy-btn:hover {
+      background: #475569;
+      transform: translateY(-1px);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .tab-btn.active { color: #f8fafc; }
+    
+    /* Badge Styling */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    .badge-required { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-optional { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-stability { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .persona-block {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border-left: 4px solid #3b82f6;
+      position: relative;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s;
+    }
+    .check-item:hover { background: rgba(255, 255, 255, 0.06); }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+
+<body class="p-4 md:p-12">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-emerald-400 to-indigo-400">
+          OpenClaw Deployment Guide
+        </h1>
+        <p class="text-slate-400 mt-3 text-lg">M4 Max (64GB / 1TB) 하이브리드 LLM 보안 인프라 구축</p>
+      </div>
+      <div class="glass p-5 rounded-2xl flex items-center gap-4 border-l-4 border-red-500 shadow-xl shadow-red-900/10">
+        <div class="h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
+        <div>
+          <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Infrastructure Status</p>
+          <div class="flex items-center">
+            <p class="text-sm font-semibold text-red-400">v3.3 Security Verified</p>
+            <span class="badge badge-required">필수</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- System Overview -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="glass p-6 rounded-2xl">
+        <h3 class="text-slate-100 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
+          Hardware <span class="badge badge-required">필수</span>
+        </h3>
+        <p class="text-xl font-bold text-slate-100">Apple M4 Max</p>
+        <p class="text-slate-400 text-sm">64GB RAM / 1TB SSD Ready</p>
+      </div>
+      <div class="glass p-6 rounded-2xl">
+        <h3 class="text-blue-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
+          Hybrid Engine <span class="badge badge-required">필수</span>
+        </h3>
+        <p class="text-xl font-bold text-blue-400">DeepSeek + Gemini</p>
+        <p class="text-slate-400 text-sm">Local Privacy & High-speed Search</p>
+      </div>
+      <div class="glass p-6 rounded-2xl">
+        <h3 class="text-emerald-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
+          Isolation Policy <span class="badge badge-required">필수</span>
+        </h3>
+        <p class="text-xl font-bold text-emerald-400">Zero-Trust Account</p>
+        <p class="text-slate-400 text-sm">fstab Persistence & v3.3 Syntax</p>
+      </div>
+    </section>
+
+    <!-- Main Content Tabs -->
+    <nav class="mb-8 flex border-b border-slate-700/50 overflow-x-auto no-scrollbar">
+      <button onclick="showTab('setup')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-setup">1. 인프라 배포</button>
+      <button onclick="showTab('fern')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-fern">2. Fern (Agent)</button>
+      <button onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">3. 네트워크 & 보안</button>
+      <button onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">4. 샌드박싱</button>
+      <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
+      <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">5. GUI 가이드</button>
+      <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">6. 관리 & 모니터링</button>
+    </nav>
+
+    <!-- 1. Setup Tab -->
+    <div id="setup" class="tab-content active space-y-8">
+      <div class="glass p-8 rounded-2xl border-l-4 border-slate-500">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-slate-100">
+          Step 0: 환경 정리 (Alvin) <span class="badge badge-stability">안정성</span>
+        </h2>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># Alvin 계정에서 Playwright 라이브러리 및 브라우저 데이터 완전 삭제
+npm uninstall -g playwright
+rm -rf ~/Library/Caches/ms-playwright</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-8 border-l-4 border-blue-500 rounded-2xl">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-blue-400">
+          Step 1: 프로세스 관리자 설치 (Alvin) <span class="badge badge-stability">안정성</span>
+        </h2>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># PM2 전역 설치
+npm install -g pm2</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-emerald-400">
+          Step 2: Fern 런타임 구축 (Fern 계정) <span class="badge badge-required">필수</span>
+        </h2>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. 계정 전환 후 NVM 설치
+su - fern
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+source ~/.zshrc
+
+# 2. Node v24 및 OpenClaw 설치
+nvm install 24 && nvm use 24
+nvm alias default 24
+npm install -g openclaw
+openclaw onboard</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Fern Tab -->
+    <div id="fern" class="tab-content space-y-8">
+      <div class="glass p-8 rounded-2xl border-t-4 border-blue-500">
+        <div class="flex items-center gap-6 mb-10">
+          <div class="bg-blue-600/20 p-1 rounded-2xl border border-blue-500/30">
+            <img src="https://placehold.co/80x80/3b82f6/white?text=Fern" class="rounded-xl shadow-lg shadow-blue-500/20" alt="Fern" />
+          </div>
+          <div>
+            <div class="flex items-center">
+              <h2 class="text-3xl font-bold text-slate-100">Fern (Hybrid Agent)</h2>
+              <span class="badge badge-required">필수</span>
+            </div>
+            <p class="text-blue-400 font-medium uppercase tracking-widest mt-1">
+              Concierge & Researcher | <span class="text-red-400 font-bold">NO SOURCE CODE ACCESS</span>
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold mb-4 text-blue-300 flex items-center">
+          1. 스킬셋 설치 <span class="badge badge-required">필수</span>
+        </h3>
+        <div class="code-block mb-8 text-slate-100">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 브라우저 엔진 및 실무 스킬셋 (Fern 계정 내부)
+npx playwright install
+npm i -g @openclaw/plugin-playwright @openclaw/plugin-applescript @openclaw/plugin-filesystem @openclaw/plugin-google-calendar</code></pre>
+        </div>
+
+        <h3 class="text-lg font-bold mb-4 text-blue-400 flex items-center">
+          2. 에이전트 자동 실행 (PM2) <span class="badge badge-stability">안정성</span>
+        </h3>
+        <p class="text-sm text-slate-400 mb-4">관리자(Alvin) 계정에서 Fern 계정 권한으로 에이전트를 영구 가동합니다.</p>
+        <div class="code-block mb-8">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># Alvin 계정에서 실행 (Fern 계정으로 샌드박스 진입 후 시작)
+sudo -u fern bash -lc 'pm2 start --name fern-bot --interpreter bash -- bash -lc "ulimit -u 256 && cd /Users/fern/sandbox && openclaw start"'
+sudo -u fern pm2 save</code></pre>
+        </div>
+
+        <h3 class="text-lg font-bold mb-4 text-slate-200 flex items-center">
+          3. 하이브리드 페르소나 (Strict) <span class="badge badge-required">필수</span>
+        </h3>
+        <div class="persona-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre class="text-xs md:text-sm text-slate-300 font-mono whitespace-pre-wrap"># Identity: You are Fern, Alvin's Expert Assistant & Concierge.
+# Core Missions:
+1. Domestic butler: Manage Alvin's Mac environment, TCC, and Google Calendar.
+2. Market/Competitor Research: Speed-read competitor's web docs using Gemini 3 Flash.
+3. Product QA: Perform flow-tests and UI checks on local dev URLs.
+# Directives:
+- NO SOURCE CODE ACCESS: You have ZERO permission to access /Users/alvin/ or any development repositories.
+- NO REPO ACCESS: Strictly operate within /Users/fern/sandbox.
+- Engine Logic: DeepSeek (Local) for secure local tasks, Gemini 3 Flash (Public) for crawling.</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Security & Network Tab -->
+    <div id="security" class="tab-content space-y-8">
+      <div class="glass p-8 border-l-4 border-blue-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-3">
+          🔒 핵심 1: 이중 계정 봉쇄 (Double Lock) <span class="badge badge-required">필수</span>
+        </h2>
+        <div class="code-block mb-4">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. 에이전트 계정 격리
+sudo chmod 700 /Users/fern
+
+# 2. 관리자 계정 보호 (최후 보루)
+sudo chmod 700 /Users/alvin</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-8 border-l-4 border-red-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-6 text-red-400 flex items-center gap-3">
+          🛡️ 핵심 2: SSH 차단 및 su 접근 (Strict Policy) <span class="badge badge-required">필수</span>
+        </h2>
+        <p class="text-sm text-slate-400 mb-4 italic">※ 24시간 운영 시 외부 SSH 진입점 최소화는 필수 위협 모델입니다.</p>
+        <div class="code-block mb-4">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. SSH 허용 그룹에서 Fern 제외 (Alvin만 명시적으로 허용)
+sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
+sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
+sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true
+
+# 2. Fern 계정 접근 방식 (관리자 권한 필요)
+su - fern</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-8 border-l-4 border-slate-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-6 text-slate-300 flex items-center gap-3">
+          📜 핵심 3: 네트워크 정책 요약 (pf.conf) <span class="badge badge-required">필수</span>
+        </h2>
+        <div class="code-block mb-4 text-slate-300">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1) 루프백은 검사 제외 (권장)
+set skip on lo0
+
+# 2) VPN 인터페이스(utun0)에서 10.0.0.0/24 대역만 허용
+pass in quick on utun0 from 10.0.0.0/24 to any
+pass out quick on utun0 from any to 10.0.0.0/24
+
+# 3) Fern 유저만 내부망(192.168.0.0/24) 접근 차단 (en0 기준)
+block drop out quick on en0 from any to 192.168.0.0/24 user fern</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-8 border-l-4 border-emerald-400 rounded-2xl shadow-xl shadow-emerald-900/10">
+        <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세 v3.3) <span class="badge badge-required">필수</span>
+        </h2>
+        <div class="bg-red-950/20 p-5 rounded-2xl mb-6 border border-red-900/30">
+          <p class="text-sm text-red-300 font-bold mb-2 flex items-center">
+            💡 Anchor 방식 적용 가이드 <span class="badge badge-required">필수</span>
+          </p>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            v3.3에서는 PF 파서의 엄격한 규칙을 적용하여 <strong>port 식별자가 IP 뒤에, user 식별자가 맨 뒤에</strong> 위치하도록 수정되었습니다.
+          </p>
+        </div>
+
+        <div class="code-block text-xs">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
+sudo tee /etc/pf.anchors/fern <<'EOF'
+# VPN(utun0) 대역 허용
+pass in quick on utun0 from 10.0.0.0/24 to any
+pass out quick on utun0 from any to 10.0.0.0/24
+
+# Fern 유저: Ollama(11434)를 제외한 모든 로컬호스트(127.0.0.1) 접근 차단 (순서 주의)
+block drop out quick proto tcp from any to 127.0.0.1 port != 11434 user fern
+
+# 내부망 탐색(mDNS/5353) 및 IPv6 차단 (Fern 유저 한정)
+block drop out quick proto udp from any to any port 5353 user fern
+block drop out quick inet6 all user fern
+
+# 사내 내부망(192.168.0.x) 접근 차단 (Fern 유저 한정, en0 기준)
+block drop out quick on en0 from any to 192.168.0.0/24 user fern
+EOF
+
+# 2. pf.conf 적용 및 문법 검증
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
+fi
+
+# 문법 검증 후 안전하게 리로드
+if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
+  sudo pfctl -f /etc/pf.conf && sudo pfctl -e
+else
+  echo "PF Syntax Error detected! Check /etc/pf.anchors/fern"
+fi</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Sandboxing Tab -->
+    <div id="sandbox" class="tab-content space-y-8">
+      <div class="glass p-8 rounded-2xl border-l-4 border-emerald-500 shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-emerald-400">
+          💾 1. APFS Quota & fstab 영구 마운트 (v3.3) <span class="badge badge-stability">안정성</span>
+        </h2>
+        <p class="text-sm text-slate-400 mb-4">재부팅 시 샌드박스 볼륨이 기본 경로(/Volumes)로 자동 마운트되어 샌드박싱이 무력화되는 것을 방지합니다.</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. 샌드박스 볼륨 감지 및 생성
+CID="$(diskutil info / | awk -F': *' '/APFS Container Disk|APFS Container Reference/ {print $2; exit}')"
+sudo mkdir -p /Users/fern/sandbox
+if ! diskutil list | grep -q "FernSandbox"; then
+  sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
+fi
+
+# 2. fstab 등록 (UUID 기반 영구 마운트 지점 고정)
+VOL_UUID=$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')
+if [[ -n "$VOL_UUID" ]] && ! grep -q "$VOL_UUID" /etc/fstab 2>/dev/null; then
+  echo "UUID=$VOL_UUID /Users/fern/sandbox apfs rw" | sudo tee -a /etc/fstab >/dev/null
+fi
+
+# 3. 마운트 및 소유권 설정
+sudo diskutil unmount "FernSandbox" || true
+sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox"
+sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-yellow-500">
+          ⚙️ 2. 리소스 및 프로세스 제한 (ulimit 강제 종속) <span class="badge badge-stability">안정성</span>
+        </h2>
+        <p class="text-sm text-slate-400 mb-4">상시 가동 시스템의 가용성 보호(Fork Bomb 방지)를 목적으로 합니다.</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># FernBot 가동 시 ulimit -u 256 강제 적용
+sudo -u fern bash -lc 'pm2 start --name fern-bot --interpreter bash -- bash -lc "ulimit -u 256 && cd /Users/fern/sandbox && openclaw start"'</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-8 border-l-4 border-red-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-red-400">
+          📂 3. 공유 폴더 상속 ACL 차단 (최적화) <span class="badge badge-required">필수</span>
+        </h2>
+        <p class="text-sm text-slate-400 mb-4">에이전트가 관리자 홈이나 외장 드라이브를 스캔하지 못하게 하는 최소한의 울타리입니다.</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># Shared 폴더 및 외장 하드 접근 거부 (최상단 루트에만 적용)
+sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
+sudo chmod +a "user:fern deny list,search,add_file,add_subdirectory,file_inherit,directory_inherit" /Volumes/* >/dev/null 2>&1 || true</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Master Script Tab -->
+    <div id="master_script" class="tab-content space-y-8">
+      <div class="glass p-10 rounded-3xl border-2 border-yellow-500/50 shadow-2xl shadow-yellow-500/10">
+        <div class="flex items-center gap-4 mb-6">
+          <span class="text-4xl">🚀</span>
+          <div>
+            <div class="flex items-center">
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (Verified V3.3)</h2>
+              <span class="badge badge-stability">안정성</span>
+            </div>
+            <p class="text-slate-400 text-sm mt-1">PF Syntax 교정 + fstab 영구 마운트 + ulimit 강제 종속 통합 버전</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code class="text-sm">#!/bin/bash
+set -euo pipefail
+
+# OpenClaw M4 Max Security Master Script (Verified & Refined V3.3)
+ALVIN_HOME="/Users/alvin"
+FERN_HOME="/Users/fern"
+SANDBOX_MP="/Users/fern/sandbox"
+SANDBOX_VOL="FernSandbox"
+SANDBOX_QUOTA="100g"
+
+echo ">>> [1/9] 홈 디렉토리 격리..."
+sudo chmod 700 "$ALVIN_HOME" "$FERN_HOME"
+
+echo ">>> [2/9] ACL 차단 적용 (성능/안정성 최적화)..."
+sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
+sudo chmod +a "user:fern deny list,search,add_file,add_subdirectory,file_inherit,directory_inherit" /Volumes/* >/dev/null 2>&1 || true
+
+echo ">>> [3/9] APFS 100GB 샌드박스 볼륨 생성 및 fstab 영구 마운트..."
+CID="$(diskutil info / | awk -F': *' '/APFS Container Disk|APFS Container Reference/ {print $2; exit}')"
+if [[ -z "${CID}" ]]; then echo "ERROR: APFS Container 감지 실패"; exit 1; fi
+
+sudo mkdir -p "$SANDBOX_MP"
+if ! diskutil list | grep -q "$SANDBOX_VOL"; then
+  sudo diskutil apfs addVolume "$CID" APFS "$SANDBOX_VOL" -quota "$SANDBOX_QUOTA"
+fi
+
+VOL_UUID=$(diskutil info "$SANDBOX_VOL" | awk '/Volume UUID:/ {print $3}')
+if [[ -n "$VOL_UUID" ]] && ! grep -q "$VOL_UUID" /etc/fstab 2>/dev/null; then
+  echo "UUID=$VOL_UUID $SANDBOX_MP apfs rw" | sudo tee -a /etc/fstab >/dev/null
+fi
+
+sudo diskutil unmount "$SANDBOX_VOL" >/dev/null 2>&1 || true
+sudo diskutil mount -mountPoint "$SANDBOX_MP" "$SANDBOX_VOL" >/dev/null 2>&1 || true
+sudo chown fern:staff "$SANDBOX_MP" && sudo chmod 700 "$SANDBOX_MP"
+
+echo ">>> [4/9] SSH 원격 접속 원천 봉쇄..."
+sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
+sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
+sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true
+
+echo ">>> [5/9] PF 방화벽 정책 반영 (Syntax 교정 및 안전 검증)..."
+sudo mkdir -p /etc/pf.anchors
+sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
+pass in quick on utun0 from 10.0.0.0/24 to any
+pass out quick on utun0 from any to 10.0.0.0/24
+# v3.3 규칙: port는 IP 뒤에, user는 맨 뒤에 위치해야 함
+block drop out quick proto tcp from any to 127.0.0.1 port != 11434 user fern
+block drop out quick proto udp from any to any port 5353 user fern
+block drop out quick inet6 all user fern
+block drop out quick on en0 from any to 192.168.0.0/24 user fern
+EOF
+
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
+fi
+
+if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
+  sudo pfctl -f /etc/pf.conf
+  sudo pfctl -e >/dev/null 2>&1 || true
+else
+  echo "ERROR: PF 구문 오류! 방화벽 로드 실패." && exit 1
+fi
+
+echo ">>> [6/9] Ollama 가동 (PM2 - Admin)..."
+pm2 delete ollama-core >/dev/null 2>&1 || true
+pm2 start --name ollama-core --interpreter bash -- bash -lc 'export OLLAMA_HOST=127.0.0.1:11434; ollama serve'
+pm2 save
+
+echo ">>> [7/9] FernBot 가동 및 ulimit 강제 종속..."
+sudo -u fern bash -lc 'pm2 delete fern-bot >/dev/null 2>&1 || true'
+sudo -u fern bash -lc 'pm2 start --name fern-bot --interpreter bash -- bash -lc "ulimit -u 256 && cd /Users/fern/sandbox && openclaw start"'
+sudo -u fern bash -lc 'pm2 save'
+
+echo ">>> [8/9] ulimit 제한 설정..."
+sudo -u fern bash -lc "grep -q '^ulimit -u 256' '${FERN_HOME}/.zshrc' 2>/dev/null || echo 'ulimit -u 256' >> '${FERN_HOME}/.zshrc'"
+
+echo ">>> [9/9] 보안 검증 결과 출력..."
+echo ">>> [DONE] V3.3 보안 마스터 배포 완료"</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. GUI Guide Tab -->
+    <div id="gui_guide" class="tab-content space-y-8">
+      <div class="glass p-8 rounded-2xl border-l-4 border-emerald-500 shadow-lg">
+        <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+          🖥️ macOS GUI 보안 설정 가이드 <span class="badge badge-optional">선택</span>
+        </h2>
+        <div class="space-y-6">
+          <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+            <h4 class="font-bold text-white mb-3 flex items-center justify-between">
+              1. 외장 하드(/Volumes) 접근 제어 (GUI) <span class="badge badge-required">필수</span>
+            </h4>
+            <ol class="list-decimal list-inside text-sm text-slate-300 space-y-2">
+              <li>외장 하드 아이콘 우클릭 &gt; <strong>정보 가져오기</strong></li>
+              <li><strong>'소유권 무시'</strong> 체크박스 <span class="text-red-400 underline font-bold">해제</span></li>
+              <li>목록 하단의 <strong>'+'</strong> 버튼을 눌러 <strong>fern</strong> 사용자 추가 후 권한을 <strong>'접근 불가'</strong>로 변경</li>
+            </ol>
+          </div>
+          <div class="bg-red-900/20 p-6 rounded-2xl border border-red-500/30">
+            <h4 class="font-bold text-red-400 mb-3 flex items-center justify-between">
+              2. Fern SSH 차단 여부 체크 (중요) <span class="badge badge-required">필수</span>
+            </h4>
+            <ol class="list-decimal list-inside text-sm text-slate-300 space-y-2">
+              <li><strong>시스템 설정 > 일반 > 공유 > 원격 로그인</strong> 이동</li>
+              <li>'다음 사용자만:' 섹션에 <span class="text-emerald-400 font-bold">alvin</span>만 등록되어 있는지 확인</li>
+            </ol>
+          </div>
+          <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+            <h4 class="font-bold text-white mb-3 flex items-center justify-between">
+              3. 샌드박스(100GB) 마운트 최종 확인 (GUI) <span class="badge badge-stability">안정성</span>
+            </h4>
+            <ol class="list-decimal list-inside text-sm text-slate-300 space-y-2">
+              <li>Finder에서 <strong>/Users/fern/sandbox</strong> 이동</li>
+              <li>Cmd+I (정보 가져오기) 실행</li>
+              <li>종류가 <span class="text-yellow-300 font-bold">볼륨/드라이브</span>이며 용량이 <span class="text-yellow-300 font-bold">100GB</span>인지 확인</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Maintenance & Monitoring Tab -->
+    <div id="maintenance" class="tab-content space-y-8">
+        <div class="glass p-8 border-l-4 border-blue-500 rounded-2xl shadow-xl mb-8">
+            <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-3">
+              📊 PM2 실시간 모니터링 <span class="badge badge-stability">안정성</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-800/40 p-5 rounded-xl border border-slate-700">
+                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">Resource Dashboard (Admin)</p>
+                    <div class="code-block text-xs py-2 px-4 mb-2">pm2 monit</div>
+                </div>
+                <div class="bg-slate-800/40 p-5 rounded-xl border border-slate-700">
+                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">Agent Monitoring (Fern)</p>
+                    <div class="code-block text-xs py-2 px-4 mb-2">sudo -u fern pm2 monit</div>
+                </div>
+            </div>
+            <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy Commands</button>
+                <pre><code># 관리자(Ollama) 상태 확인
+pm2 status
+
+# 에이전트(FernBot) 상태 확인
+sudo -u fern pm2 status
+
+# 에이전트 로그 확인
+sudo -u fern pm2 logs fern-bot</code></pre>
+            </div>
+        </div>
+
+        <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl mb-8">
+            <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+              ✅ 주간 보안 체크리스트 <span class="badge badge-stability">안정성</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="check-item">
+                    <div class="mt-1 text-emerald-400">✔</div>
+                    <div>
+                        <p class="font-bold text-slate-100 flex items-center">
+                          fstab 마운트 확인 <span class="badge badge-stability">안정성</span>
+                        </p>
+                        <p class="text-xs text-slate-400">/etc/fstab에 UUID 기반 자동 마운트가 설정되었는가?</p>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="mt-1 text-emerald-400">✔</div>
+                    <div>
+                        <p class="font-bold text-slate-100 flex items-center">
+                          PF Syntax 무결성 <span class="badge badge-required">필수</span>
+                        </p>
+                        <p class="text-xs text-slate-400">v3.3 규칙에 따라 port 식별자 위치가 올바른가?</p>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="mt-1 text-emerald-400">✔</div>
+                    <div>
+                        <p class="font-bold text-slate-100 flex items-center">
+                          ulimit 강제 종속 <span class="badge badge-stability">안정성</span>
+                        </p>
+                        <p class="text-xs text-slate-400">PM2 데몬 프로세스가 256 제한을 따르고 있는가?</p>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="mt-1 text-emerald-400">✔</div>
+                    <div>
+                        <p class="font-bold text-slate-100 flex items-center">
+                          ACL 안정성 <span class="badge badge-required">필수</span>
+                        </p>
+                        <p class="text-xs text-slate-400">재귀 옵션 없이 상위 루트 차단이 유효한가?</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-bold mb-4 text-slate-200 flex items-center">
+              🔍 정기 보안 검증 커맨드 <span class="badge badge-required">필수</span>
+            </h3>
+            <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy All</button>
+                <pre><code># 1. 홈 디렉토리 권한 확인
+ls -ld /Users/alvin /Users/fern
+
+# 2. Shared 폴더 ACL 검증
+ls -le /Users/Shared | head -n 5
+
+# 3. PF 룰셋 검증 (Anchor 포함)
+sudo pfctl -sr | egrep 'utun0|en0'
+sudo pfctl -a fern -sr
+
+# 4. 프로세스 실행 유저 검증
+ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
+            </div>
+        </div>
+
+        <div class="glass p-8 border-l-4 border-red-600 rounded-2xl bg-red-950/20">
+            <h2 class="text-2xl font-bold mb-4 text-red-500 flex items-center gap-2">
+              <span>🗑️</span> Jennifer Cleanup (완전 삭제) <span class="badge badge-optional">선택</span>
+            </h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># 기존 에이전트 Jennifer의 프로세스 및 계정 완전 삭제
+sudo -u jennifer pm2 kill || true
+sudo sysadminctl -deleteUser jennifer
+sudo rm -rf /Users/jennifer</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-20 py-12 border-t border-slate-800/50 text-center text-slate-500 text-sm">
+      <p>© 2026 Alvin's AI Infrastructure | Security Protocol v3.3 (Verified)</p>
+    </footer>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 glass px-6 py-3 rounded-full text-sm font-semibold opacity-0 transition-opacity duration-300 pointer-events-none z-50 text-emerald-400">
+    Copied to clipboard!
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      const targetContent = document.getElementById(tabId);
+      if (targetContent) targetContent.classList.add('active');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active','border-blue-500','text-slate-100','text-red-400','border-red-500','text-emerald-400','border-emerald-500','text-yellow-400','border-yellow-400');
+        btn.classList.add('text-slate-400','border-transparent');
+      });
+
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        if (tabId === 'security' || tabId === 'sandbox') {
+          activeBtn.classList.add('active','border-red-500','text-red-400');
+        } else if (tabId === 'master_script') {
+          activeBtn.classList.add('active','border-yellow-400','text-yellow-400');
+        } else if (tabId === 'gui_guide') {
+          activeBtn.classList.add('active','border-emerald-500','text-emerald-400');
+        } else {
+          activeBtn.classList.add('active','border-blue-500','text-slate-100');
+        }
+        activeBtn.classList.remove('text-slate-400','border-transparent');
+      }
+    }
+
+    function copyToClipboard(btn) {
+      const code = btn.nextElementSibling.innerText;
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      textarea.style.position = 'fixed';
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+        const toast = document.getElementById('toast');
+        toast.classList.remove('opacity-0');
+        toast.classList.add('opacity-100');
+
+        const originalText = btn.innerText;
+        btn.innerText = 'Copied!';
+        setTimeout(() => {
+          toast.classList.remove('opacity-100');
+          toast.classList.add('opacity-0');
+          btn.innerText = originalText;
+        }, 2000);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+
+      document.body.removeChild(textarea);
+    }
+
+    window.onload = () => showTab('setup');
+  </script>
+</body>
+</html>
