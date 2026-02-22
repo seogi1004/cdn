@@ -13,10 +13,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        
-        html {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-}
+
         
       body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #1e293b; color-scheme: light; }
         .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
@@ -55,12 +52,12 @@
 
     </style>
 </head>
-<body class="pb-28 relative min-h-screen bg-[#f8fcfc]">
+<body class="pb-28 relative min-h-screen">
     <!-- SAFE AREA TOP FIX -->
 <div id="safeTop"></div>
     <header class="relative gradient-emerald overflow-hidden">
-
-  <div class="pt-[calc(env(safe-area-inset-top)+3rem)] pb-24 px-6 text-white max-w-md mx-auto relative z-10">
+      <div class="bg-[#f8fafc] min-h-screen">
+        <div class="pt-[calc(env(safe-area-inset-top)+3rem)] pb-24 px-6 text-white max-w-md mx-auto relative z-10">
 
     
     <h1 class="text-3xl font-extrabold tracking-tight mb-1">
@@ -933,7 +930,7 @@
             </div>
         </div>
     </div><!-- /tab-map -->
-
+</div>
     <!-- Navigation Bar -->
     <!-- Navigation Bar -->
 <nav id="bottomNav"
