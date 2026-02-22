@@ -39,35 +39,40 @@
 
     </style>
 </head>
-<body class="pb-28 relative min-h-screen bg-white">
-  <header
-  class="gradient-emerald
-         pt-[calc(env(safe-area-inset-top)+3rem)]
-         pb-20 text-white
-         rounded-b-[3.5rem]
-         shadow-2xl relative overflow-hidden">
+<body class="pb-28 relative min-h-screen bg-[#f8fafc]">
+    <header class="relative overflow-hidden">
 
-  <div class="max-w-md mx-auto px-6">
-      <!-- 기존 헤더 내용 그대로 -->
-        <div class="bg-[#f8fafc] rounded-t-[3rem] -mt-10 pt-10">
-        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
-        <div class="relative z-10">
-            <h1 class="text-3xl font-extrabold mb-1 tracking-tight">Da Nang & Hoi An</h1>
-            <p class="text-emerald-50 text-sm font-medium opacity-90 italic">Family Vacation 2026</p>
-            
-            <div class="grid grid-cols-2 gap-3 mt-6">
-                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10">
-                    <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Trip Period</p>
-                    <p class="text-xs font-bold">03. 01 — 03. 06</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10">
-                    <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Guests</p>
-                    <p class="text-xs font-bold">성인 2 / 아동 1 (JAESEOK HONG)</p>
-                </div>
-            </div>
-        </div>
-        </div>
-    </header>
+  <!-- Safe Area + Gradient Background -->
+  <div class="absolute inset-0 gradient-emerald -z-10"></div>
+
+  <!-- 헤더 컨텐츠 -->
+  <div class="pt-[calc(env(safe-area-inset-top)+3rem)] pb-24 px-6 text-white max-w-md mx-auto">
+
+    <h1 class="text-3xl font-extrabold tracking-tight mb-1">
+      Da Nang & Hoi An
+    </h1>
+
+    <p class="text-emerald-50 text-sm font-medium opacity-90 italic">
+      Family Vacation 2026
+    </p>
+
+    <div class="grid grid-cols-2 gap-3 mt-6">
+      <div class="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20">
+        <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Trip Period</p>
+        <p class="text-xs font-bold">03. 01 — 03. 06</p>
+      </div>
+
+      <div class="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20">
+        <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Guests</p>
+        <p class="text-xs font-bold">성인 2 / 아동 1 (JAESEOK HONG)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 둥근 하단 쉐입 -->
+  <div class="absolute bottom-0 left-0 right-0 h-16 bg-[#f8fafc] rounded-t-[3rem]"></div>
+
+</header>
 
     <!-- Tab Panels Wrapper -->
     <div id="tab-hotels" class="tab-panel active">
