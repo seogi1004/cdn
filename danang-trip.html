@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>다낭 가족 여행 통합 가이드</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config = { darkMode: 'class' }</script>
@@ -19,7 +19,15 @@
         .badge { font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.5rem; border-radius: 0.5rem; text-transform: uppercase; }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
-      
+
+        /* ── iPhone Safe Area (노치 / 다이나믹 아일랜드) ── */
+        .safe-top {
+            padding-top: max(3rem, calc(3rem + env(safe-area-inset-top)));
+        }
+        #bottomNav {
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
     #bottomNav {
     transition:
         transform 0.55s cubic-bezier(.34,1.56,.64,1),
@@ -42,7 +50,7 @@
 <body class="max-w-md mx-auto pb-28 relative min-h-screen">
 
     <!-- Hero Header -->
-    <header class="gradient-emerald pt-12 pb-20 px-6 text-white rounded-b-[3.5rem] shadow-2xl relative overflow-hidden">
+    <header class="gradient-emerald safe-top pb-20 px-6 text-white rounded-b-[3.5rem] shadow-2xl relative overflow-hidden">
         <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
         <div class="relative z-10">
             <h1 class="text-3xl font-extrabold mb-1 tracking-tight">Da Nang & Hoi An</h1>
