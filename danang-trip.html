@@ -1012,48 +1012,55 @@
             setTimeout(initMap, 150);
         });
         
-        /**
- * 하단 네비게이션을 스크롤 방향과 속도에 따라
- * 네이티브 앱처럼 자연스럽게 숨김/표시 처리한다.
- * - 빠른 플릭 제스처 대응
- * - 스프링 느낌 cubic-bezier 적용
- * - requestAnimationFrame 기반 최적화
+     /**
+ * 하단 네비게이션 고급 UX 제어
+ * 1. 스크롤 속도 기반 복귀 시간 가변
+ * 2. 스크롤 비율에 따른 점진적 투명도
+ * 3. 페이지 최하단 도달 시 항상 표시
  */
+
 (function () {
     const nav = document.getElementById('bottomNav');
+
     let lastScroll = window.pageYOffset;
     let lastTime = performance.now();
+    let scrollTimeout = null;
     let ticking = false;
 
-    const SCROLL_THRESHOLD = 6;
-    const VELOCITY_THRESHOLD = 0.5;
+    function isBottom() {
+        return window.innerHeight + window.scrollY >= document.body.offsetHeight - 2;
+    }
 
     function update() {
         const currentScroll = window.pageYOffset;
         const now = performance.now();
         const deltaY = currentScroll - lastScroll;
         const deltaTime = now - lastTime;
-        const velocity = deltaY / deltaTime;
+        const velocity = Math.abs(deltaY / deltaTime);
 
-        if (Math.abs(deltaY) < SCROLL_THRESHOLD) {
-            ticking = false;
-            return;
-        }
+        const scrollRatio = Math.min(currentScroll / 200, 1);
+        nav.style.opacity = 1 - scrollRatio * 0.7;
 
-        if (velocity > VELOCITY_THRESHOLD && currentScroll > 80) {
+        if (!isBottom()) {
             nav.classList.add('hide');
             nav.classList.remove('show');
-        } else if (velocity < -VELOCITY_THRESHOLD) {
+        }
+
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+
+        // 속도 기반 복귀 시간 계산
+        const dynamicDelay = Math.min(400, 100 + velocity * 600);
+
+        scrollTimeout = setTimeout(() => {
+            nav.style.opacity = 1;
             nav.classList.remove('hide');
             nav.classList.add('show');
-        } else {
-            if (deltaY > 0 && currentScroll > 80) {
-                nav.classList.add('hide');
-                nav.classList.remove('show');
-            } else {
-                nav.classList.remove('hide');
-                nav.classList.add('show');
-            }
+        }, dynamicDelay);
+
+        if (isBottom()) {
+            nav.style.opacity = 1;
+            nav.classList.remove('hide');
+            nav.classList.add('show');
         }
 
         lastScroll = currentScroll;
@@ -1069,7 +1076,7 @@
     }, { passive: true });
 
     nav.classList.add('show');
-})()
+})();
     </script>
 
 </body>
