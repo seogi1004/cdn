@@ -32,35 +32,48 @@
         will-change: transform, opacity;
         z-index: 9999;
         /* 나타날 때: spring 바운스 */
-        transition: transform 0.48s cubic-bezier(0.34,1.22,0.64,1),
-                    opacity 0.38s ease;
+        transition: transform 0.44s cubic-bezier(0.34,1.18,0.64,1),
+                    opacity 0.32s ease;
     }
     #bottomNav.nav-hidden {
-        transform: translateY(calc(100% + 20px));
+        transform: translateY(calc(100% + 16px));
         opacity: 0;
         pointer-events: none;
         /* 사라질 때: 빠른 ease-in */
-        transition: transform 0.30s cubic-bezier(0.4,0,1,1),
-                    opacity 0.22s ease-in;
+        transition: transform 0.26s cubic-bezier(0.4,0,1,1),
+                    opacity 0.18s ease-in;
     }
     .nav-pill {
         border-radius: 9999px;
         overflow: hidden;
+        /* 더 진한 블러 + 투명 배경 */
+        background: rgba(17, 17, 25, 0.72);
+        -webkit-backdrop-filter: blur(28px) saturate(180%);
+        backdrop-filter: blur(28px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.06) inset;
     }
     .nav-btn {
         display: flex; flex-direction: column; align-items: center;
         gap: 2px;
-        padding: 6px 12px;
+        padding: 7px 14px;
         border-radius: 9999px;
-        transition: transform 0.15s ease, background 0.25s ease;
+        font-size: 15px;
+        transition: transform 0.15s ease, background 0.22s ease, color 0.22s ease;
+        cursor: pointer;
+        background: none;
+        border: none;
+        outline: none;
     }
-    .nav-btn.active-tab { background: rgba(255,255,255,0.13); }
+    .nav-btn.active-tab {
+        background: rgba(255,255,255,0.11);
+    }
     .nav-dot {
-        width: 4px; height: 4px;
+        width: 3px; height: 3px;
         border-radius: 50%;
-        margin-top: 1px;
+        margin-top: 2px;
         background: transparent;
-        transition: background 0.25s, transform 0.25s;
+        transition: background 0.22s, transform 0.22s;
         transform: scale(0);
     }
     .nav-btn.active-tab .nav-dot {
@@ -1333,8 +1346,8 @@
 
     <!-- Navigation Bar -->
 <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-50">
-    <div class="max-w-md mx-auto px-4" style="padding-bottom:max(12px,env(safe-area-inset-bottom))">
-        <div class="nav-pill bg-gray-900/90 backdrop-blur-xl shadow-2xl border border-white/10 flex justify-around items-center px-3 py-3">
+    <div class="max-w-md mx-auto px-5" style="padding-bottom:max(14px,env(safe-area-inset-bottom))">
+        <div class="nav-pill flex justify-around items-center px-2 py-2.5">
             <button id="btn-hotels" onclick="switchTab('hotels')" class="nav-btn active-tab text-emerald-400">
                 <i class="fa-solid fa-calendar-days"></i>
                 <span class="text-[9px] font-bold">일정</span>
@@ -1462,8 +1475,8 @@
     (function () {
         const nav = document.getElementById('bottomNav');
         let hideTimer = null;
-        let ticking  = false;
-        let hidden   = false;
+        let scrollTimer = null;
+        let hidden = false;
 
         function hide() {
             if (hidden) return;
@@ -1477,24 +1490,20 @@
         }
 
         window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    hide();
-                    clearTimeout(hideTimer);
-                    hideTimer = setTimeout(show, 700);
-                    ticking = false;
-                });
-                ticking = true;
-            }
+            hide();
+            // 기존 타이머 초기화
+            clearTimeout(scrollTimer);
+            // 스크롤이 멈춘 후 500ms 뒤에 메뉴 표시
+            scrollTimer = setTimeout(show, 500);
         }, { passive: true });
 
         // 버튼 tap scale 피드백
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.addEventListener('touchstart', () => {
-                btn.style.transform = 'scale(0.82)';
+                btn.style.transform = 'scale(0.84)';
             }, { passive: true });
             btn.addEventListener('touchend', () => {
-                setTimeout(() => { btn.style.transform = ''; }, 160);
+                setTimeout(() => { btn.style.transform = ''; }, 140);
             }, { passive: true });
         });
     })();
