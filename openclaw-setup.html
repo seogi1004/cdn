@@ -265,11 +265,28 @@ openclaw onboard</code></pre>
         <h3 class="text-lg font-bold mb-4 text-blue-300 flex items-center">
           1. 스킬셋 설치 <span class="badge badge-required">필수</span>
         </h3>
+        <!-- Step A: npm login -->
+        <p class="text-sm text-slate-400 mb-3">
+          <span class="text-yellow-400 font-bold">①</span>
+          <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">@openclaw</code> 패키지는 <strong>private npm registry</strong>에 호스팅되어 있습니다.
+          먼저 npm 계정으로 로그인하세요.
+        </p>
+        <div class="code-block mb-4 text-slate-100">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># @openclaw private registry 인증 (최초 1회)
+npm login</code></pre>
+        </div>
+
+        <!-- Step B: install -->
+        <p class="text-sm text-slate-400 mb-3">
+          <span class="text-yellow-400 font-bold">②</span> 로그인 후 브라우저 엔진 및 플러그인을 설치합니다.
+        </p>
         <div class="code-block mb-8 text-slate-100">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 브라우저 엔진 및 실무 스킬셋 (Fern 계정 내부)
+npm install -g @playwright/test
 npx playwright install
-npm i -g @openclaw/plugin-playwright @openclaw/plugin-applescript @openclaw/plugin-filesystem @openclaw/plugin-google-calendar</code></pre>
+npm i -g @openclaw/plugin-playwright @openclaw/plugin-applescript @openclaw/plugin-filesystem</code></pre>
         </div>
 
         <h3 class="text-lg font-bold mb-4 text-blue-400 flex items-center">
