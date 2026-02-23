@@ -194,6 +194,14 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 touch ~/.zshrc  # 파일이 없을 경우 생성 (NVM installer가 이미 만들었으면 무시됨)
 source ~/.zshrc
 
+# ★ .zprofile에 nvm 초기화 추가 (필수!)
+# sudo -H -u fern zsh -lc 는 .zshrc를 소스하지 않으므로
+# .zprofile에 등록해야 관리자 계정에서 pm2 원격 제어가 가능함
+cat >> ~/.zprofile << 'EOF'
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+EOF
+
 # 2. Node v24, PM2 및 OpenClaw 설치
 nvm install 24 && nvm use 24
 nvm alias default 24
@@ -1102,12 +1110,6 @@ pkill -f 'ollama serve' 2>/dev/null || true</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Fern 계정에서 실행
 su - fern
-
-# 플러그인 목록 확인 후 개별 제거
-openclaw plugins list
-openclaw plugins uninstall @openclaw/plugin-playwright
-openclaw plugins uninstall @openclaw/plugin-applescript
-openclaw plugins uninstall @openclaw/plugin-filesystem
 
 # OpenClaw 본체 제거
 npm uninstall -g openclaw
