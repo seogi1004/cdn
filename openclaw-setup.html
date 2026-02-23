@@ -301,8 +301,8 @@ openclaw plugins list   # 빌트인 도구 목록 확인</code></pre>
         <div class="code-block mb-8">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Alvin 계정에서 실행 (Fern 계정으로 샌드박스 진입 후 시작)
-sudo -H -u fern zsh -lc 'pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
-sudo -H -u fern zsh -lc 'pm2 save'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 save'</code></pre>
         </div>
 
         <h3 class="text-lg font-bold mb-4 text-slate-200 flex items-center">
@@ -465,7 +465,7 @@ sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox<
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># FernBot 가동 시 ulimit -u 512 강제 적용
-sudo -H -u fern zsh -lc 'pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'</code></pre>
         </div>
       </div>
 
@@ -578,9 +578,9 @@ pm2 start --name ollama-core --interpreter bash -- bash -lc 'export OLLAMA_HOST=
 pm2 save
 
 echo ">>> [7/9] FernBot 가동 및 ulimit 강제 종속..."
-sudo -H -u fern zsh -lc 'pm2 delete fern-bot >/dev/null 2>&1 || true'
-sudo -H -u fern zsh -lc 'pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
-sudo -H -u fern zsh -lc 'pm2 save'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 delete fern-bot >/dev/null 2>&1 || true'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 save'
 
 echo ">>> [8/9] ulimit 제한 설정..."
 sudo -H -u fern zsh -lc "grep -q '^ulimit -u 512' '${FERN_HOME}/.zshrc' 2>/dev/null || echo 'ulimit -u 512' >> '${FERN_HOME}/.zshrc'"
@@ -795,10 +795,10 @@ sleep 3 && curl -s http://127.0.0.1:11434/api/tags > /dev/null \
   && echo "✅ Ollama 준비 완료"
 
 # 3. FernBot 기동
-sudo -H -u fern zsh -lc 'pm2 restart fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 restart fern-bot'
 
 # 4. 전체 상태 확인
-pm2 status && sudo -H -u fern zsh -lc 'pm2 status'</code></pre>
+pm2 status && sudo -H -u fern zsh -lc 'cd ~ && pm2 status'</code></pre>
               </div>
             </div>
             <div>
@@ -806,14 +806,14 @@ pm2 status && sudo -H -u fern zsh -lc 'pm2 status'</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># 1. FernBot 먼저 중지
-sudo -H -u fern zsh -lc 'pm2 stop fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 stop fern-bot'
 
 # 2. Ollama 중지
 pm2 stop ollama-core
 
 # ── 완전 종료 (PM2 데몬까지 내릴 때) ──
 # Fern 데몬 종료
-sudo -H -u fern zsh -lc 'pm2 kill'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 kill'
 
 # Admin PM2 데몬 종료
 pm2 kill</code></pre>
@@ -838,16 +838,16 @@ pm2 kill</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># FernBot 프로세스 상태 (Alvin 계정에서)
-sudo -H -u fern zsh -lc 'pm2 status'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 status'
 
 # 실시간 로그 스트림 (Ctrl+C로 종료)
-sudo -H -u fern zsh -lc 'pm2 logs fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 logs fern-bot'
 
 # 최근 100줄만 보기
-sudo -H -u fern zsh -lc 'pm2 logs fern-bot --lines 100'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 logs fern-bot --lines 100'
 
 # 에러 로그만 보기
-sudo -H -u fern zsh -lc 'pm2 logs fern-bot --err'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 logs fern-bot --err'</code></pre>
               </div>
             </div>
 
@@ -860,12 +860,12 @@ sudo -H -u fern zsh -lc 'pm2 logs fern-bot --err'</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># [권장] 재시작 (PM2에 이미 등록된 경우)
-sudo -H -u fern zsh -lc 'pm2 restart fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 restart fern-bot'
 
 # 최초 등록 (PM2 목록에 없는 경우)
-sudo -H -u fern zsh -lc 'pm2 delete fern-bot > /dev/null 2>&1 || true'
-sudo -H -u fern zsh -lc 'pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
-sudo -H -u fern zsh -lc 'pm2 save'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 delete fern-bot > /dev/null 2>&1 || true'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 save'</code></pre>
               </div>
             </div>
 
@@ -877,10 +877,10 @@ sudo -H -u fern zsh -lc 'pm2 save'</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># 프로세스 중지 (등록은 유지)
-sudo -H -u fern zsh -lc 'pm2 stop fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 stop fern-bot'
 
 # PM2에서 완전 제거 (재등록 필요)
-sudo -H -u fern zsh -lc 'pm2 delete fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 delete fern-bot'
 
 # 비상용: Fern 계정 프로세스 강제 종료
 sudo pkill -u fern -f openclaw</code></pre>
@@ -902,7 +902,7 @@ sudo -u fern ls -la /Users/fern/.openclaw/
 sudo nano /Users/fern/.openclaw/config.json
 
 # 편집 완료 후 재시작
-sudo -H -u fern zsh -lc 'pm2 restart fern-bot'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 restart fern-bot'</code></pre>
               </div>
             </div>
 
@@ -925,10 +925,10 @@ npm update -g openclaw
 
 # Alvin 계정으로 돌아와서 재시작
 exit
-sudo -H -u fern zsh -lc 'pm2 restart fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 restart fern-bot'
 
 # 업데이트 후 로그로 정상 가동 확인
-sudo -H -u fern zsh -lc 'pm2 logs fern-bot --lines 30'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 logs fern-bot --lines 30'</code></pre>
               </div>
             </div>
 
@@ -941,7 +941,7 @@ sudo -H -u fern zsh -lc 'pm2 logs fern-bot --lines 30'</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># FernBot 중지 후 Fern 계정 진입
-sudo -H -u fern zsh -lc 'pm2 stop fern-bot'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 stop fern-bot'
 su - fern
 
 # 기존 설정 백업
@@ -952,7 +952,7 @@ openclaw onboard
 
 # 완료 후 Alvin 계정으로 돌아와 재시작
 exit
-sudo -H -u fern zsh -lc 'pm2 restart fern-bot'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 restart fern-bot'</code></pre>
               </div>
             </div>
 
@@ -971,7 +971,7 @@ sudo -H -u fern zsh -lc 'pm2 restart fern-bot'</code></pre>
                 </div>
                 <div class="bg-slate-800/40 p-5 rounded-xl border border-slate-700">
                     <p class="text-xs font-bold text-slate-500 uppercase mb-2">Agent Monitoring (Fern)</p>
-                    <div class="code-block text-xs py-2 px-4 mb-2">sudo -H -u fern zsh -lc 'pm2 monit'</div>
+                    <div class="code-block text-xs py-2 px-4 mb-2">sudo -H -u fern zsh -lc 'cd ~ && pm2 monit'</div>
                 </div>
             </div>
             <div class="code-block text-xs">
@@ -980,10 +980,10 @@ sudo -H -u fern zsh -lc 'pm2 restart fern-bot'</code></pre>
 pm2 status
 
 # 에이전트(FernBot) 상태 확인
-sudo -H -u fern zsh -lc 'pm2 status'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 status'
 
 # 에이전트 로그 확인
-sudo -H -u fern zsh -lc 'pm2 logs fern-bot'</code></pre>
+sudo -H -u fern zsh -lc 'cd ~ && pm2 logs fern-bot'</code></pre>
             </div>
         </div>
 
@@ -1075,8 +1075,8 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. FernBot 중지 및 PM2 등록 해제 (Fern)
-sudo -H -u fern zsh -lc 'pm2 delete fern-bot 2>/dev/null || true'
-sudo -H -u fern zsh -lc 'pm2 kill'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 delete fern-bot 2>/dev/null || true'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 kill'
 
 # 2. Alvin PM2에서 Ollama 제거
 pm2 delete ollama-core 2>/dev/null || true
@@ -1084,7 +1084,7 @@ pm2 kill
 
 # 3. 부팅 자동시작 스크립트 제거 (최초 pm2 startup을 실행한 경우)
 pm2 unstartup launchd 2>/dev/null || true
-sudo -H -u fern zsh -lc 'pm2 unstartup launchd 2>/dev/null || true'
+sudo -H -u fern zsh -lc 'cd ~ && pm2 unstartup launchd 2>/dev/null || true'
 
 # 4. 잔류 프로세스 강제 종료
 sudo pkill -u fern -f openclaw 2>/dev/null || true
