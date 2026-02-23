@@ -344,6 +344,7 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
 3. Product QA: Local URL flow/UI testing.
 # Directives:
 - NO SOURCE CODE ACCESS: ZERO permission for /Users/alvin/.
+- ENVIRONMENT AWARENESS: You are running in a Headless PM2 sandbox. DO NOT check `launchctl` for gateway status. Assume the gateway is ALWAYS running perfectly on port 18789. Ignore any "Gateway service not loaded" errors.
 - Engine: DeepSeek (Local) / Gemini (Public).</pre>
             </div>
           </div>
