@@ -153,7 +153,7 @@
       <button onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">4. 샌드박싱</button>
       <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
       <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">5. GUI 가이드</button>
-      <button onclick="showTab('remote')" class="px-6 py-4 font-semibold text-indigo-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-remote">6. 리모트 연결 (Telegram)</button>
+
       <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">7. 관리</button>
       <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">8. 초기화</button>
     </nav>
@@ -402,12 +402,12 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern << 'EOF'
-# 1) lo0 예외 (11434/18789, no state)
+# 1) lo0 예외 (11434: Ollama / 18792: API Gateway, no state)
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
 
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18792 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 18792 to any user fern no state
 
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
@@ -519,12 +519,12 @@ sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 ||
 echo ">>> [5/9] PF 방화벽 정책 반영..."
 sudo mkdir -p /etc/pf.anchors
 sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
-# 1) lo0 예외 (11434/18789, no state)
+# 1) lo0 예외 (11434: Ollama / 18792: API Gateway, no state)
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
 
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18792 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 18792 to any user fern no state
 
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
@@ -612,61 +612,7 @@ echo ">>> [DONE] V3.4 보안 마스터 배포 완료"</code></pre>
       </div>
     </div>
 
-    <!-- 6. Remote Connection Tab -->
-    <div id="remote" class="tab-content space-y-8">
-      <div class="glass p-8 rounded-2xl border-l-4 border-indigo-500 shadow-lg">
-        <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
-          📱 텔레그램(Telegram) 및 외부 앱 연동 <span class="badge badge-required">필수</span>
-        </h2>
-        <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-          OpenClaw Gateway는 에이전트와 외부 인터페이스를 잇는 <strong>다리(Bridge)</strong> 역할을 합니다. 
-          게이트웨이가 정상 가동(running) 중이어야 텔레그램이나 전용 앱에서 Fern과 대화할 수 있습니다.
-        </p>
 
-        <div class="space-y-6">
-          <!-- Step 1: Access Info -->
-          <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-            <h3 class="font-bold text-white mb-3 flex items-center gap-2">
-              <span class="text-indigo-400">①</span> 게이트웨이 접속 정보 확인
-            </h3>
-            <p class="text-xs text-slate-400 mb-4">텔레그램 봇에 등록할 URL과 인증 토큰을 확인합니다.</p>
-            <div class="code-block text-xs">
-              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Fern 계정에서 실행
-openclaw status</code></pre>
-            </div>
-            <ul class="mt-4 text-xs text-slate-500 space-y-1 list-disc list-inside">
-              <li><strong>Gateway URL:</strong> 보통 <code class="bg-black/30 px-1 rounded text-indigo-300">https://gateway.openclaw.ai</code> 또는 본인의 공인 IP</li>
-              <li><strong>Access Token:</strong> <code class="bg-black/30 px-1 rounded text-indigo-300">openclaw status</code> 결과 하단에 출력되는 긴 문자열</li>
-            </ul>
-          </div>
-
-          <!-- Step 2: Telegram Bot -->
-          <div class="bg-indigo-950/20 p-6 rounded-2xl border border-indigo-500/30">
-            <h3 class="font-bold text-indigo-300 mb-3 flex items-center gap-2">
-              <span>②</span> 텔레그램 봇 연동 (Official)
-            </h3>
-            <ol class="list-decimal list-inside text-sm text-slate-300 space-y-3">
-              <li>텔레그램에서 <strong class="text-white">@OpenClawBot</strong> 검색 및 시작</li>
-              <li><code class="bg-black/40 px-1.5 py-0.5 rounded text-indigo-300">/connect</code> 명령어 입력</li>
-              <li>프롬프트에 따라 확인한 <strong class="text-white">Gateway URL</strong> 입력</li>
-              <li>이어지는 프롬프트에 <strong class="text-white">Access Token</strong> 입력</li>
-              <li>연결 성공 메시지 확인 후 대화 시작!</li>
-            </ol>
-          </div>
-
-          <!-- Troubleshooting -->
-          <div class="bg-red-900/10 p-6 rounded-2xl border border-red-500/20">
-            <h4 class="font-bold text-red-400 mb-2 text-sm">⚠️ 연결이 안 되나요?</h4>
-            <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
-              <li>게이트웨이 서비스가 <code class="text-emerald-400">running</code> 상태인지 확인 (<code class="bg-black/30 px-1 rounded">openclaw status</code>)</li>
-              <li>서버의 방화벽이 게이트웨이 포트를 허용하는지 확인</li>
-              <li>Access Token이 정확히 복사되었는지 확인</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- 7. Maintenance & Monitoring Tab -->
     <div id="maintenance" class="tab-content space-y-8">
