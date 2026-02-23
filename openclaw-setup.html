@@ -153,8 +153,9 @@
       <button onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">4. 샌드박싱</button>
       <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
       <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">5. GUI 가이드</button>
-      <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">6. 관리</button>
-      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">7. 초기화</button>
+      <button onclick="showTab('remote')" class="px-6 py-4 font-semibold text-indigo-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-remote">6. 리모트 연결 (Telegram)</button>
+      <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">7. 관리</button>
+      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">8. 초기화</button>
     </nav>
 
     <!-- 1. Setup Tab -->
@@ -207,7 +208,12 @@ nvm install 24 && nvm use 24
 nvm alias default 24
 npm install -g pm2          # ← Fern 계정에 PM2를 반드시 별도 설치!
 npm install -g openclaw
-openclaw onboard</code></pre>
+openclaw onboard
+
+# ★ 게이트웨이 서비스 설치 및 시작 (필수)
+# status가 unreachable일 경우 반드시 실행
+openclaw gateway install
+openclaw status             # Gateway: running 확인</code></pre>
         </div>
       </div>
     </div>
@@ -266,8 +272,12 @@ openclaw onboard</code></pre>
           <div class="check-item">
             <div class="mt-1 text-emerald-400 text-lg font-bold">⑤</div>
             <div>
-              <p class="font-bold text-slate-100">설정 완료 및 첫 실행</p>
-              <p class="text-xs text-slate-400">온보딩이 완료되면 <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway</code> 명령으로 에이전트가 대기 모드로 진입합니다. 이후 PM2로 상시 가동합니다.</p>
+              <p class="font-bold text-slate-100">Gateway 설치 및 상태 확인</p>
+              <p class="text-xs text-slate-400">
+                <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway install</code> 명령어로 서비스를 등록합니다. 
+                이후 <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>를 실행하여 Gateway가 <span class="text-emerald-400 font-bold">running</span> 상태인지 확인합니다. 
+                (unreachable 시 다시 install 실행)
+              </p>
             </div>
           </div>
         </div>
@@ -668,10 +678,90 @@ echo ">>> [DONE] V3.4 보안 마스터 배포 완료"</code></pre>
       </div>
     </div>
 
+    <!-- 6. Remote Connection Tab -->
+    <div id="remote" class="tab-content space-y-8">
+      <div class="glass p-8 rounded-2xl border-l-4 border-indigo-500 shadow-lg">
+        <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
+          📱 텔레그램(Telegram) 및 외부 앱 연동 <span class="badge badge-required">필수</span>
+        </h2>
+        <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+          OpenClaw Gateway는 에이전트와 외부 인터페이스를 잇는 <strong>다리(Bridge)</strong> 역할을 합니다. 
+          게이트웨이가 정상 가동(running) 중이어야 텔레그램이나 전용 앱에서 Fern과 대화할 수 있습니다.
+        </p>
+
+        <div class="space-y-6">
+          <!-- Step 1: Access Info -->
+          <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+            <h3 class="font-bold text-white mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">①</span> 게이트웨이 접속 정보 확인
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">텔레그램 봇에 등록할 URL과 인증 토큰을 확인합니다.</p>
+            <div class="code-block text-xs">
+              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># Fern 계정에서 실행
+openclaw status</code></pre>
+            </div>
+            <ul class="mt-4 text-xs text-slate-500 space-y-1 list-disc list-inside">
+              <li><strong>Gateway URL:</strong> 보통 <code class="bg-black/30 px-1 rounded text-indigo-300">https://gateway.openclaw.ai</code> 또는 본인의 공인 IP</li>
+              <li><strong>Access Token:</strong> <code class="bg-black/30 px-1 rounded text-indigo-300">openclaw status</code> 결과 하단에 출력되는 긴 문자열</li>
+            </ul>
+          </div>
+
+          <!-- Step 2: Telegram Bot -->
+          <div class="bg-indigo-950/20 p-6 rounded-2xl border border-indigo-500/30">
+            <h3 class="font-bold text-indigo-300 mb-3 flex items-center gap-2">
+              <span>②</span> 텔레그램 봇 연동 (Official)
+            </h3>
+            <ol class="list-decimal list-inside text-sm text-slate-300 space-y-3">
+              <li>텔레그램에서 <strong class="text-white">@OpenClawBot</strong> 검색 및 시작</li>
+              <li><code class="bg-black/40 px-1.5 py-0.5 rounded text-indigo-300">/connect</code> 명령어 입력</li>
+              <li>프롬프트에 따라 확인한 <strong class="text-white">Gateway URL</strong> 입력</li>
+              <li>이어지는 프롬프트에 <strong class="text-white">Access Token</strong> 입력</li>
+              <li>연결 성공 메시지 확인 후 대화 시작!</li>
+            </ol>
+          </div>
+
+          <!-- Troubleshooting -->
+          <div class="bg-red-900/10 p-6 rounded-2xl border border-red-500/20">
+            <h4 class="font-bold text-red-400 mb-2 text-sm">⚠️ 연결이 안 되나요?</h4>
+            <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
+              <li>게이트웨이 서비스가 <code class="text-emerald-400">running</code> 상태인지 확인 (<code class="bg-black/30 px-1 rounded">openclaw status</code>)</li>
+              <li>서버의 방화벽이 게이트웨이 포트를 허용하는지 확인</li>
+              <li>Access Token이 정확히 복사되었는지 확인</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 7. Maintenance & Monitoring Tab -->
     <div id="maintenance" class="tab-content space-y-8">
 
-        <!-- 빠른 복구 배너 -->
+        <!-- 빠른 복구 배너: Gateway Unreachable -->
+        <div class="glass p-6 rounded-2xl border-2 border-emerald-500/60 bg-emerald-950/20 shadow-xl shadow-emerald-900/20">
+          <div class="flex items-start gap-4">
+            <span class="text-3xl mt-1">🦅</span>
+            <div class="flex-1">
+              <h2 class="text-xl font-bold text-emerald-400 mb-2">Gateway Unreachable / Not Loaded 문제 해결</h2>
+              <p class="text-sm text-slate-400 mb-4">
+                <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>에서 게이트웨이가 unreachable 상태라면, 서비스가 등록되지 않았거나 중단된 상태입니다.
+              </p>
+              <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># ① 게이트웨이 서비스 설치 및 등록 (중복 실행 가능)
+openclaw gateway install
+
+# ② 게이트웨이 시작
+openclaw gateway start
+
+# ③ 상태 재확인 (Gateway: running 확인)
+openclaw status</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 빠른 복구 배너: Ollama -->
         <div class="glass p-6 rounded-2xl border-2 border-orange-500/60 bg-orange-950/20 shadow-xl shadow-orange-900/20">
           <div class="flex items-start gap-4">
             <span class="text-3xl mt-1">🚨</span>
@@ -735,36 +825,52 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
               <h3 class="font-bold text-purple-300 mb-3 flex items-center gap-2">
                 <span>②</span> PM2로 시작 (권장 — 재부팅 후에도 자동 복구)
               </h3>
+              <p class="text-xs text-slate-500 mb-3">
+                <strong class="text-yellow-400">중요:</strong> <code class="text-emerald-400">OLLAMA_HOST=0.0.0.0:11434</code> 설정을 넣어야 
+                OpenClaw 게이트웨이가 로컬 호스트를 통해 모델에 접근할 수 있습니다.
+              </p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># [케이스 A] 이미 PM2에 등록되어 있는 경우 → 재시작
 pm2 restart ollama-core
 
-# [케이스 B] PM2 목록에 없는 경우 → 최초 등록
+# [케이스 B] PM2 목록에 없는 경우 → 최초 등록 (모든 IP 허용)
 pm2 delete ollama-core > /dev/null 2>&1 || true
 pm2 start --name ollama-core --interpreter bash -- bash -lc \
-  'export OLLAMA_HOST=127.0.0.1:11434; ollama serve'
-pm2 save
-
-# 부팅 시 자동 시작 등록 (최초 1회만)
-pm2 startup   # 출력된 sudo 명령어를 그대로 복사해서 실행</code></pre>
+  'export OLLAMA_HOST=0.0.0.0:11434; ollama serve'
+pm2 save</code></pre>
               </div>
             </div>
 
-            <!-- 임시 수동 시작 -->
+            <!-- openclaw.json 설정 예시 -->
             <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-              <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2">
-                <span class="text-slate-400">③</span> 임시 수동 시작 (테스트용)
+              <h3 class="font-bold text-white mb-3 flex items-center gap-2">
+                <span class="text-purple-400">③</span> OpenClaw 로컬 모델 바인딩 (openclaw.json)
               </h3>
-              <p class="text-xs text-slate-500 mb-3">터미널을 닫으면 함께 종료됩니다. 디버깅 목적으로만 사용하세요.</p>
+              <p class="text-xs text-slate-400 mb-4">
+                Ollama 연동이 안 된다면 <code class="bg-black/30 px-1 rounded">~/.openclaw/openclaw.json</code>의 프로필 설정을 확인하세요.
+              </p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code># 백그라운드 데몬으로 올라마 실행
-OLLAMA_HOST=127.0.0.1:11434 ollama serve &
-
-# 또는 포그라운드로 실행 (로그를 직접 보고 싶을 때)
-OLLAMA_HOST=127.0.0.1:11434 ollama serve</code></pre>
+                <pre><code class="text-blue-300">{
+  "profiles": {
+    "local-bot": {
+      "model": "ollama/deepseek-r1:14b",
+      "identity": "fern",
+      "options": {
+        "temperature": 0.7
+      }
+    }
+  },
+  "models": {
+    "ollama": {
+      "provider": "ollama",
+      "baseUrl": "http://127.0.0.1:11434"
+    }
+  }
+}</code></pre>
               </div>
+              <p class="text-[10px] text-red-400 mt-2">※ baseUrl이 http://127.0.0.1:11434 인지, 모델명 앞에 'ollama/'가 붙었는지 꼭 확인하세요!</p>
             </div>
 
             <!-- 모델 확인 및 Pull -->
@@ -1330,6 +1436,8 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
           activeBtn.classList.add('active','border-yellow-400','text-yellow-400');
         } else if (tabId === 'gui_guide') {
           activeBtn.classList.add('active','border-emerald-500','text-emerald-400');
+        } else if (tabId === 'remote') {
+          activeBtn.classList.add('active','border-indigo-500','text-indigo-400');
         } else {
           activeBtn.classList.add('active','border-blue-500','text-slate-100');
         }
