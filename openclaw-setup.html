@@ -438,7 +438,7 @@ fi</code></pre>
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 샌드박스 볼륨 감지 및 생성
-CID="$(diskutil info / | awk -F': *' '/APFS Container Disk|APFS Container Reference/ {print $2; exit}')"
+CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
 sudo mkdir -p /Users/fern/sandbox
 if ! diskutil list | grep -q "FernSandbox"; then
   sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
@@ -517,7 +517,7 @@ sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,write
 sudo chmod +a "user:fern deny list,search,add_file,add_subdirectory,file_inherit,directory_inherit" /Volumes/* >/dev/null 2>&1 || true
 
 echo ">>> [3/9] APFS 100GB 샌드박스 볼륨 생성 및 fstab 영구 마운트..."
-CID="$(diskutil info / | awk -F': *' '/APFS Container Disk|APFS Container Reference/ {print $2; exit}')"
+CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
 if [[ -z "${CID}" ]]; then echo "ERROR: APFS Container 감지 실패"; exit 1; fi
 
 sudo mkdir -p "$SANDBOX_MP"
