@@ -193,9 +193,10 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 touch ~/.zshrc  # 파일이 없을 경우 생성 (NVM installer가 이미 만들었으면 무시됨)
 source ~/.zshrc
 
-# 2. Node v24 및 OpenClaw 설치
+# 2. Node v24, PM2 및 OpenClaw 설치
 nvm install 24 && nvm use 24
 nvm alias default 24
+npm install -g pm2          # ← Fern 계정에 PM2를 반드시 별도 설치!
 npm install -g openclaw
 openclaw onboard</code></pre>
         </div>
