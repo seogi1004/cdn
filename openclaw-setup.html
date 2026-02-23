@@ -252,8 +252,8 @@ openclaw onboard</code></pre>
           <div class="check-item">
             <div class="mt-1 text-emerald-400 text-lg font-bold">③</div>
             <div>
-              <p class="font-bold text-slate-100">Persona / System Prompt 설정</p>
-              <p class="text-xs text-slate-400">에이전트의 역할과 행동 지침을 정의하는 시스템 프롬프트를 입력합니다. 이후 "3. 하이브리드 페르소나" 섹션의 내용을 붙여넣기 하세요.</p>
+              <p class="font-bold text-slate-100">Persona / Identity 설정</p>
+              <p class="text-xs text-slate-400">에이전트의 역할과 행동 지침을 정의합니다. v3.4부터는 <code class="text-emerald-400 bg-black/40 px-1 rounded">identity</code> 블록을 사용하며, 이후 "3. 하이브리드 페르소나" 섹션 내용을 참고하세요.</p>
             </div>
           </div>
           <div class="check-item">
@@ -267,7 +267,7 @@ openclaw onboard</code></pre>
             <div class="mt-1 text-emerald-400 text-lg font-bold">⑤</div>
             <div>
               <p class="font-bold text-slate-100">설정 완료 및 첫 실행</p>
-              <p class="text-xs text-slate-400">온보딩이 완료되면 <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw start</code> 명령으로 에이전트가 대기 모드로 진입합니다. 이후 PM2로 상시 가동합니다.</p>
+              <p class="text-xs text-slate-400">온보딩이 완료되면 <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway</code> 명령으로 에이전트가 대기 모드로 진입합니다. 이후 PM2로 상시 가동합니다.</p>
             </div>
           </div>
         </div>
@@ -309,7 +309,7 @@ openclaw plugins list   # 빌트인 도구 목록 확인</code></pre>
         <div class="code-block mb-8">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Alvin 계정에서 실행 (Fern 계정으로 샌드박스 진입 후 시작)
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw gateway"'
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
         </div>
 
@@ -325,8 +325,10 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
 3. Product QA: Perform flow-tests and UI checks on local dev URLs.
 # Directives:
 - NO SOURCE CODE ACCESS: You have ZERO permission to access /Users/alvin/ or any development repositories.
-- NO REPO ACCESS: Strictly operate within /Users/fern/sandbox.
-- Engine Logic: DeepSeek (Local) for secure local tasks, Gemini 2.5 Flash (Public) for crawling.</pre>
+- Engine Logic: DeepSeek (Local) for secure local tasks, Gemini 2.5 Flash (Public) for crawling.
+# Config Notice (v3.4):
+- Use "identity" block in openclaw.json instead of "personality".
+- "browsing" key is no longer used under model defaults.</pre>
         </div>
       </div>
     </div>
@@ -473,7 +475,7 @@ sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox<
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># FernBot 가동 시 ulimit -u 512 강제 적용
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'</code></pre>
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw gateway"'</code></pre>
         </div>
       </div>
 
@@ -587,7 +589,7 @@ pm2 save
 
 echo ">>> [7/9] FernBot 가동 및 ulimit 강제 종속..."
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 delete fern-bot >/dev/null 2>&1 || true'
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw gateway"'
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'
 
 echo ">>> [8/9] ulimit 제한 설정..."
@@ -872,7 +874,7 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 restart fern-bot'
 
 # 최초 등록 (PM2 목록에 없는 경우)
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 delete fern-bot > /dev/null 2>&1 || true'
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw gateway"'
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
               </div>
             </div>
@@ -901,6 +903,16 @@ sudo pkill -u fern -f openclaw</code></pre>
                 <span class="text-slate-400">④</span> 설정 변경 (openclaw.json 수정 후 재시작)
               </h3>
               <p class="text-xs text-slate-500 mb-3">API 키 교체, 시스템 프롬프트 수정, 모델 변경 등은 설정 파일을 직접 편집한 뒤 재시작합니다.</p>
+              
+              <div class="bg-red-900/10 p-4 rounded-lg border border-red-500/20 mb-4">
+                <p class="text-xs text-red-400 font-bold mb-2">⚠️ v3.4 설정 유의사항 (Invalid Config 해결)</p>
+                <ul class="text-[10px] text-slate-400 list-disc list-inside space-y-1">
+                  <li><code class="text-red-300">personality</code> 대신 <code class="text-emerald-400">identity</code> 키를 사용하세요.</li>
+                  <li>Ollama 프로필에서 <code class="text-red-300">baseUrl, api, apiKey</code>는 더 이상 사용되지 않습니다.</li>
+                  <li>모델 설정에서 <code class="text-red-300">browsing</code> 키는 인식되지 않습니다.</li>
+                </ul>
+              </div>
+
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># 설정 파일 위치 확인
