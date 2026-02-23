@@ -154,6 +154,7 @@
       <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
       <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">5. GUI 가이드</button>
       <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">6. 관리 & 모니터링</button>
+      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">7. 롤백 &amp; 제거</button>
     </nav>
 
     <!-- 1. Setup Tab -->
@@ -267,20 +268,24 @@ openclaw onboard</code></pre>
           1. 스킬셋 설치 <span class="badge badge-required">필수</span>
         </h3>
         <p class="text-sm text-slate-400 mb-3">
-          OpenClaw CLI가 플러그인을 직접 관리합니다. <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">openclaw plugins install</code> 명령어로 설치하세요.
+          OpenClaw CLI가 플러그인을 직접 관리합니다. 단, <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">openclaw plugins install</code>이 내부적으로 npm을 사용하므로 <strong class="text-yellow-300">npm 로그인이 먼저 필요</strong>합니다.
         </p>
+
+        <!-- Step A: npm login -->
+        <p class="text-xs text-slate-500 mb-2"><span class="text-yellow-400 font-bold">① npm 인증</span> — Fern 계정은 브라우저를 열 수 없으므로 legacy 모드 사용 (최초 1회 / 토큰 만료 시 재실행)</p>
+        <div class="code-block mb-4 text-slate-100">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code>npm login --auth-type=legacy</code></pre>
+        </div>
+
+        <!-- Step B: 플러그인 설치 -->
+        <p class="text-xs text-slate-500 mb-2"><span class="text-yellow-400 font-bold">② 플러그인 설치</span> — 로그인 후 브라우저 엔진 및 실무 스킬셋을 설치합니다.</p>
         <div class="code-block mb-4 text-slate-100">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 현재 설치된 플러그인 목록 확인
-openclaw plugins list</code></pre>
-        </div>
+openclaw plugins list
 
-        <p class="text-sm text-slate-400 mb-3">
-          브라우저 자동화 및 실무 스킬셋 플러그인을 설치합니다.
-        </p>
-        <div class="code-block mb-4 text-slate-100">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 브라우저 엔진 설치 (Playwright)
+# 브라우저 엔진 설치 (Playwright)
 npm install -g @playwright/test
 npx playwright install
 
@@ -290,6 +295,7 @@ openclaw plugins install @openclaw/plugin-applescript
 openclaw plugins install @openclaw/plugin-filesystem</code></pre>
         </div>
         <p class="text-xs text-slate-500 mb-8">설치 후 Gateway를 재시작하면 플러그인이 활성화됩니다. (<code class="bg-black/30 px-1 rounded">pm2 restart fern-bot</code>)</p>
+
 
         <h3 class="text-lg font-bold mb-4 text-blue-400 flex items-center">
           2. 에이전트 자동 실행 (PM2) <span class="badge badge-stability">안정성</span>
@@ -1047,18 +1053,213 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
             </div>
         </div>
 
-        <div class="glass p-8 border-l-4 border-red-600 rounded-2xl bg-red-950/20">
-            <h2 class="text-2xl font-bold mb-4 text-red-500 flex items-center gap-2">
-              <span>🗑️</span> Jennifer Cleanup (완전 삭제) <span class="badge badge-optional">선택</span>
-            </h2>
-            <div class="code-block">
-                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code># 기존 에이전트 Jennifer의 프로세스 및 계정 완전 삭제
-sudo -u jennifer pm2 kill || true
-sudo sysadminctl -deleteUser jennifer
-sudo rm -rf /Users/jennifer</code></pre>
-            </div>
+    </div>
+
+    <!-- 7. Rollback Tab -->
+    <div id="rollback" class="tab-content space-y-8">
+
+      <!-- 경고 배너 -->
+      <div class="glass p-6 rounded-2xl border-2 border-red-500/70 bg-red-950/20 shadow-xl shadow-red-900/20">
+        <div class="flex items-start gap-4">
+          <span class="text-4xl mt-1">⚠️</span>
+          <div>
+            <h2 class="text-xl font-bold text-red-400 mb-1">OpenClaw 전체 스택 롤백 가이드</h2>
+            <p class="text-sm text-slate-400">아래 절차는 <strong class="text-red-300">되돌릴 수 없는 삭제</strong>를 포함합니다. 단계를 순서대로 실행하세요. 부분 제거가 필요하면 해당 섹션만 선택 실행하세요.</p>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 1: FernBot 중지 -->
+      <div class="glass p-8 border-l-4 border-orange-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-2 text-orange-400 flex items-center gap-3">
+          Step 1 — FernBot &amp; PM2 완전 종료
+        </h2>
+        <p class="text-sm text-slate-400 mb-4">모든 프로세스를 내리고 PM2 데몬을 제거합니다.</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. FernBot 중지 및 PM2 등록 해제 (Fern)
+sudo -u fern zsh -lc 'pm2 delete fern-bot 2>/dev/null || true'
+sudo -u fern zsh -lc 'pm2 kill'
+
+# 2. Alvin PM2에서 Ollama 제거
+pm2 delete ollama-core 2>/dev/null || true
+pm2 kill
+
+# 3. 부팅 자동시작 스크립트 제거 (최초 pm2 startup을 실행한 경우)
+pm2 unstartup launchd 2>/dev/null || true
+sudo -u fern zsh -lc 'pm2 unstartup launchd 2>/dev/null || true'
+
+# 4. 잔류 프로세스 강제 종료
+sudo pkill -u fern -f openclaw 2>/dev/null || true
+pkill -f 'ollama serve' 2>/dev/null || true</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 2: OpenClaw 제거 -->
+      <div class="glass p-8 border-l-4 border-red-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-2 text-red-400 flex items-center gap-3">
+          Step 2 — OpenClaw &amp; 플러그인 제거 <span class="badge badge-required">필수</span>
+        </h2>
+        <p class="text-sm text-slate-400 mb-4">Fern 계정에서 openclaw, 플러그인, pm2, 설정 파일을 제거합니다.</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># Fern 계정에서 실행
+su - fern
+
+# 플러그인 목록 확인 후 개별 제거
+openclaw plugins list
+openclaw plugins uninstall @openclaw/plugin-playwright
+openclaw plugins uninstall @openclaw/plugin-applescript
+openclaw plugins uninstall @openclaw/plugin-filesystem
+
+# OpenClaw 본체 제거
+npm uninstall -g openclaw
+
+# PM2 제거 (Fern 계정)
+npm uninstall -g pm2
+
+# OpenClaw 설정 파일 삭제 (영구 삭제)
+rm -rf ~/.openclaw
+
+# Playwright 브라우저 바이너리 삭제
+npx playwright uninstall --all 2>/dev/null || true
+npm uninstall -g @playwright/test
+
+# Alvin 계정으로 복귀
+exit</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 3: Fern 계정 삭제 -->
+      <div class="glass p-8 border-l-4 border-red-600 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-2 text-red-500 flex items-center gap-3">
+          Step 3 — Fern 계정 &amp; 홈 디렉터리 삭제
+        </h2>
+        <p class="text-sm text-slate-400 mb-4">계정 삭제 전 FernSandbox 볼륨을 먼저 언마운트합니다.</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. 샌드박스 볼륨 언마운트
+sudo diskutil unmount /Users/fern/sandbox 2>/dev/null || true
+
+# 2. fern 계정 및 홈 디렉터리 삭제
+sudo sysadminctl -deleteUser fern
+sudo rm -rf /Users/fern
+
+# 3. 삭제 확인
+dscl . list /Users | grep fern   # 아무것도 출력되지 않으면 정상</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 4: APFS 볼륨 & fstab 정리 -->
+      <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-2 text-yellow-400 flex items-center gap-3">
+          Step 4 — FernSandbox APFS 볼륨 &amp; fstab 제거
+        </h2>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. 볼륨이 남아 있다면 강제 언마운트 후 삭제
+diskutil list | grep FernSandbox   # 디스크 식별자 확인 (예: disk3s5)
+sudo diskutil apfs deleteVolume FernSandbox
+
+# 2. fstab에서 FernSandbox UUID 항목 제거
+# 아래 명령으로 해당 줄만 삭제 (UUID는 실제 값으로 치환)
+VOL_UUID=$(diskutil info FernSandbox 2>/dev/null | awk '/Volume UUID:/ {print $3}')
+[[ -n "$VOL_UUID" ]] && sudo sed -i '' "/UUID=$VOL_UUID/d" /etc/fstab
+
+# 3. fstab 결과 확인
+cat /etc/fstab</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 5: PF 방화벽 롤백 -->
+      <div class="glass p-8 border-l-4 border-purple-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-2 text-purple-400 flex items-center gap-3">
+          Step 5 — PF 방화벽 &amp; Anchor 제거
+        </h2>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 1. pf.conf에서 fern anchor 라인 제거
+sudo sed -i '' '/anchor.*fern/d' /etc/pf.conf
+sudo sed -i '' '/load anchor.*fern/d' /etc/pf.conf
+
+# 2. Anchor 파일 삭제
+sudo rm -f /etc/pf.anchors/fern
+
+# 3. PF 규칙 리로드 (기본 상태로)
+sudo pfctl -f /etc/pf.conf
+
+# 4. 확인 (fern 관련 룰이 없으면 정상)
+sudo pfctl -sr | grep fern   # 아무것도 출력되지 않으면 정상</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 6: SSH 그룹 정리 -->
+      <div class="glass p-8 border-l-4 border-slate-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-2 text-slate-300 flex items-center gap-3">
+          Step 6 — SSH 그룹 &amp; 홈 디렉터리 권한 복원 <span class="badge badge-optional">선택</span>
+        </h2>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># SSH 그룹에서 fern 항목이 남아있다면 정리 (이미 계정 삭제로 자동 제거됨)
+sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh 2>/dev/null || true
+
+# Alvin 홈 디렉터리 권한 원복 (필요 시)
+# sudo chmod 755 /Users/alvin
+
+# /Users/Shared ACL 초기화 (fern deny 항목 제거)
+sudo chmod -a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared 2>/dev/null || true</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 7: Ollama 제거 (선택) -->
+      <div class="glass p-8 border-l-4 border-slate-600 rounded-2xl bg-slate-900/30">
+        <h2 class="text-2xl font-bold mb-2 text-slate-400 flex items-center gap-3">
+          Step 7 — Ollama 제거 <span class="badge badge-optional">선택</span>
+        </h2>
+        <p class="text-sm text-slate-500 mb-4">Ollama를 다른 용도로 계속 사용한다면 이 단계는 건너뛰세요.</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># Ollama 바이너리 및 모델 데이터 완전 삭제
+sudo rm -rf /usr/local/bin/ollama
+sudo rm -rf ~/.ollama
+
+# 모델 캐시 삭제 (~/Library/Application Support/ollama)
+rm -rf ~/Library/Application\ Support/ollama
+
+# 확인
+which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
+        </div>
+      </div>
+
+      <!-- 최종 확인 체크리스트 -->
+      <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+          ✅ 롤백 완료 확인 체크리스트
+        </h2>
+        <div class="space-y-3">
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div><p class="font-bold text-slate-100">프로세스 잔류 없음</p><p class="text-xs text-slate-400"><code class="bg-black/30 px-1 rounded">ps aux | grep -E 'openclaw|fern|ollama'</code> 출력 없음</p></div>
+          </div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div><p class="font-bold text-slate-100">fern 계정 삭제 확인</p><p class="text-xs text-slate-400"><code class="bg-black/30 px-1 rounded">dscl . list /Users | grep fern</code> 출력 없음</p></div>
+          </div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div><p class="font-bold text-slate-100">APFS 볼륨 삭제 확인</p><p class="text-xs text-slate-400"><code class="bg-black/30 px-1 rounded">diskutil list | grep FernSandbox</code> 출력 없음</p></div>
+          </div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div><p class="font-bold text-slate-100">PF Anchor 제거 확인</p><p class="text-xs text-slate-400"><code class="bg-black/30 px-1 rounded">sudo pfctl -sr | grep fern</code> 출력 없음</p></div>
+          </div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div><p class="font-bold text-slate-100">fstab 정리 확인</p><p class="text-xs text-slate-400"><code class="bg-black/30 px-1 rounded">cat /etc/fstab</code> — FernSandbox UUID 항목 없음</p></div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Footer -->
@@ -1085,7 +1286,7 @@ sudo rm -rf /Users/jennifer</code></pre>
 
       const activeBtn = document.getElementById('btn-' + tabId);
       if (activeBtn) {
-        if (tabId === 'security' || tabId === 'sandbox') {
+        if (tabId === 'security' || tabId === 'sandbox' || tabId === 'rollback') {
           activeBtn.classList.add('active','border-red-500','text-red-400');
         } else if (tabId === 'master_script') {
           activeBtn.classList.add('active','border-yellow-400','text-yellow-400');
