@@ -154,7 +154,7 @@
       <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
       <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">5. GUI 가이드</button>
       <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">6. 관리 & 모니터링</button>
-      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">7. 롤백 &amp; 제거</button>
+      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">7. 초기화</button>
     </nav>
 
     <!-- 1. Setup Tab -->
@@ -302,7 +302,7 @@ openclaw plugins list   # 빌트인 도구 목록 확인</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Alvin 계정에서 실행 (Fern 계정으로 샌드박스 진입 후 시작)
 sudo -u fern zsh -lc 'pm2 start --name fern-bot --interpreter zsh -- zsh -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw start"'
-sudo -u fern pm2 save</code></pre>
+sudo -u fern zsh -lc 'pm2 save'</code></pre>
         </div>
 
         <h3 class="text-lg font-bold mb-4 text-slate-200 flex items-center">
@@ -798,7 +798,7 @@ sleep 3 && curl -s http://127.0.0.1:11434/api/tags > /dev/null \
 sudo -u fern zsh -lc 'pm2 restart fern-bot'
 
 # 4. 전체 상태 확인
-pm2 status && sudo -u fern pm2 status</code></pre>
+pm2 status && sudo -u fern zsh -lc 'pm2 status'</code></pre>
               </div>
             </div>
             <div>
@@ -838,16 +838,16 @@ pm2 kill</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># FernBot 프로세스 상태 (Alvin 계정에서)
-sudo -u fern pm2 status
+sudo -u fern zsh -lc 'pm2 status'
 
 # 실시간 로그 스트림 (Ctrl+C로 종료)
-sudo -u fern pm2 logs fern-bot
+sudo -u fern zsh -lc 'pm2 logs fern-bot'
 
 # 최근 100줄만 보기
-sudo -u fern pm2 logs fern-bot --lines 100
+sudo -u fern zsh -lc 'pm2 logs fern-bot --lines 100'
 
 # 에러 로그만 보기
-sudo -u fern pm2 logs fern-bot --err</code></pre>
+sudo -u fern zsh -lc 'pm2 logs fern-bot --err'</code></pre>
               </div>
             </div>
 
@@ -928,7 +928,7 @@ exit
 sudo -u fern zsh -lc 'pm2 restart fern-bot'
 
 # 업데이트 후 로그로 정상 가동 확인
-sudo -u fern pm2 logs fern-bot --lines 30</code></pre>
+sudo -u fern zsh -lc 'pm2 logs fern-bot --lines 30'</code></pre>
               </div>
             </div>
 
@@ -971,7 +971,7 @@ sudo -u fern zsh -lc 'pm2 restart fern-bot'</code></pre>
                 </div>
                 <div class="bg-slate-800/40 p-5 rounded-xl border border-slate-700">
                     <p class="text-xs font-bold text-slate-500 uppercase mb-2">Agent Monitoring (Fern)</p>
-                    <div class="code-block text-xs py-2 px-4 mb-2">sudo -u fern pm2 monit</div>
+                    <div class="code-block text-xs py-2 px-4 mb-2">sudo -u fern zsh -lc 'pm2 monit'</div>
                 </div>
             </div>
             <div class="code-block text-xs">
@@ -980,10 +980,10 @@ sudo -u fern zsh -lc 'pm2 restart fern-bot'</code></pre>
 pm2 status
 
 # 에이전트(FernBot) 상태 확인
-sudo -u fern pm2 status
+sudo -u fern zsh -lc 'pm2 status'
 
 # 에이전트 로그 확인
-sudo -u fern pm2 logs fern-bot</code></pre>
+sudo -u fern zsh -lc 'pm2 logs fern-bot'</code></pre>
             </div>
         </div>
 
@@ -1052,7 +1052,7 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
 
     </div>
 
-    <!-- 7. Rollback Tab -->
+    <!-- 7. Reset Tab -->
     <div id="rollback" class="tab-content space-y-8">
 
       <!-- 경고 배너 -->
@@ -1060,7 +1060,7 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
         <div class="flex items-start gap-4">
           <span class="text-4xl mt-1">⚠️</span>
           <div>
-            <h2 class="text-xl font-bold text-red-400 mb-1">OpenClaw 전체 스택 롤백 가이드</h2>
+            <h2 class="text-xl font-bold text-red-400 mb-1">OpenClaw 전체 스택 초기화 가이드</h2>
             <p class="text-sm text-slate-400">아래 절차는 <strong class="text-red-300">되돌릴 수 없는 삭제</strong>를 포함합니다. 단계를 순서대로 실행하세요. 부분 제거가 필요하면 해당 섹션만 선택 실행하세요.</p>
           </div>
         </div>
@@ -1231,7 +1231,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       <!-- 최종 확인 체크리스트 -->
       <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-lg">
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
-          ✅ 롤백 완료 확인 체크리스트
+          ✅ 초기화 완료 확인 체크리스트
         </h2>
         <div class="space-y-3">
           <div class="check-item">
