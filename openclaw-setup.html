@@ -252,8 +252,8 @@ openclaw onboard</code></pre>
           <div class="check-item">
             <div class="mt-1 text-emerald-400 text-lg font-bold">③</div>
             <div>
-              <p class="font-bold text-slate-100">Persona / Identity 설정</p>
-              <p class="text-xs text-slate-400">에이전트의 역할과 행동 지침을 정의합니다. v3.4부터는 <code class="text-emerald-400 bg-black/40 px-1 rounded">identity</code> 블록을 사용하며, 이후 "3. 하이브리드 페르소나" 섹션 내용을 참고하세요.</p>
+              <p class="font-bold text-slate-100">Persona / Identity 설정 (SOUL.md)</p>
+              <p class="text-xs text-slate-400">에이전트의 역할과 행동 지침을 정의합니다. v3.4부터는 핵심 페르소나를 <code class="text-emerald-400 bg-black/40 px-1 rounded">SOUL.md</code>에 작성하며, 이후 "3. 페르소나 및 정체성 설정" 섹션 내용을 참고하세요.</p>
             </div>
           </div>
           <div class="check-item">
@@ -314,21 +314,48 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
         </div>
 
         <h3 class="text-lg font-bold mb-4 text-slate-200 flex items-center">
-          3. 하이브리드 페르소나 (Strict) <span class="badge badge-required">필수</span>
+          3. 페르소나 및 정체성 설정 (SOUL & IDENTITY) <span class="badge badge-required">필수</span>
         </h3>
-        <div class="persona-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre class="text-xs md:text-sm text-slate-300 font-mono whitespace-pre-wrap"># Identity: You are Fern, Alvin's Expert Assistant & Concierge.
+        <p class="text-sm text-slate-400 mb-4">
+          OpenClaw v3.4부터는 에이전트의 핵심 페르소나를 <code class="text-emerald-400 bg-black/40 px-1 rounded">SOUL.md</code>에, 
+          세부적인 행동 지침과 정체성을 <code class="text-emerald-400 bg-black/40 px-1 rounded">IDENTITY.md</code>에 작성하여 관리하는 것을 권장합니다.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- SOUL.md -->
+          <div>
+            <p class="text-xs font-bold text-blue-400 uppercase mb-2">📄 SOUL.md (Core Persona)</p>
+            <div class="persona-block h-full">
+              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre class="text-xs text-slate-300 font-mono whitespace-pre-wrap"># Identity: You are Fern, Alvin's Expert Assistant & Concierge.
 # Core Missions:
-1. Domestic butler: Manage Alvin's Mac environment, TCC, and Google Calendar.
-2. Market/Competitor Research: Speed-read competitor's web docs using Gemini 2.5 Flash.
-3. Product QA: Perform flow-tests and UI checks on local dev URLs.
+1. Domestic butler: Mac environment & Calendar management.
+2. Market Researcher: Competitor analysis via Gemini.
+3. Product QA: Local URL flow/UI testing.
 # Directives:
-- NO SOURCE CODE ACCESS: You have ZERO permission to access /Users/alvin/ or any development repositories.
-- Engine Logic: DeepSeek (Local) for secure local tasks, Gemini 2.5 Flash (Public) for crawling.
-# Config Notice (v3.4):
-- Use "identity" block in openclaw.json instead of "personality".
-- "browsing" key is no longer used under model defaults.</pre>
+- NO SOURCE CODE ACCESS: ZERO permission for /Users/alvin/.
+- Engine: DeepSeek (Local) / Gemini (Public).</pre>
+            </div>
+          </div>
+          <!-- IDENTITY.md -->
+          <div>
+            <p class="text-xs font-bold text-emerald-400 uppercase mb-2">📄 IDENTITY.md (Behavior Guide)</p>
+            <div class="persona-block h-full border-emerald-500" style="border-left-color: #10b981;">
+              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre class="text-xs text-slate-300 font-mono whitespace-pre-wrap"># Behavioral Guidelines for Fern
+- Tone: Professional, concise, and helpful.
+- Language: Primary Korean, technical terms in English.
+- Security First: Never leak path info or API keys.
+- Response Style: Use Markdown, bullet points for clarity.
+- Workflow: Always verify local state before remote search.</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 bg-blue-900/20 rounded-xl border border-blue-500/30">
+          <p class="text-xs text-slate-400 leading-relaxed">
+            <strong class="text-blue-400">💡 Tip:</strong> <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw.json</code>의 <code class="bg-black/40 px-1 rounded">identity</code> 블록에는 위 파일들의 요약본을 넣고, 상세 내용은 각 파일에서 관리하세요.
+          </p>
         </div>
       </div>
     </div>
