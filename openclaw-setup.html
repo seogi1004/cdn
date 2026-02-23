@@ -267,34 +267,31 @@ openclaw onboard</code></pre>
         <h3 class="text-lg font-bold mb-4 text-blue-300 flex items-center">
           1. 스킬셋 설치 <span class="badge badge-required">필수</span>
         </h3>
-        <p class="text-sm text-slate-400 mb-3">
-          OpenClaw CLI가 플러그인을 직접 관리합니다. 단, <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">openclaw plugins install</code>이 내부적으로 npm을 사용하므로 <strong class="text-yellow-300">npm 로그인이 먼저 필요</strong>합니다.
+        <p class="text-sm text-slate-400 mb-4">
+          OpenClaw의 <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">browser</code>, <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">exec</code>(AppleScript), <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">web_fetch</code> 등은 <strong class="text-emerald-300">모두 빌트인 도구</strong>입니다. 별도 플러그인 설치 없이 <strong>Playwright 바이너리만 설치</strong>하면 <code class="text-blue-300 bg-black/40 px-1 rounded">browser</code> 도구가 AI 스냅샷 모드로 자동 활성화됩니다.
         </p>
 
-        <!-- Step A: npm login -->
-        <p class="text-xs text-slate-500 mb-2"><span class="text-yellow-400 font-bold">① npm 인증</span> — Fern 계정은 브라우저를 열 수 없으므로 legacy 모드 사용 (최초 1회 / 토큰 만료 시 재실행)</p>
-        <div class="code-block mb-4 text-slate-100">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code>npm login --auth-type=legacy</code></pre>
+        <div class="bg-blue-950/20 p-4 rounded-xl border border-blue-800/30 mb-4">
+          <p class="text-xs text-blue-300 font-bold mb-1">📌 빌트인 도구 목록 (플러그인 설치 불필요)</p>
+          <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
+            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">browser</code> — Playwright 기반 브라우저 자동화 (스크린샷, 클릭, 탐색 등)</li>
+            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">exec</code> — 터미널 명령 실행 (AppleScript: <code class="bg-black/30 px-1 rounded">osascript</code> 포함)</li>
+            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">web_fetch</code> / <code class="text-emerald-400 bg-black/30 px-1 rounded">web_search</code> — 웹 크롤링 및 검색</li>
+            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">apply_patch</code> / <code class="text-emerald-400 bg-black/30 px-1 rounded">process</code> — 파일 편집 및 프로세스 관리</li>
+          </ul>
         </div>
 
-        <!-- Step B: 플러그인 설치 -->
-        <p class="text-xs text-slate-500 mb-2"><span class="text-yellow-400 font-bold">② 플러그인 설치</span> — 로그인 후 브라우저 엔진 및 실무 스킬셋을 설치합니다.</p>
+        <p class="text-xs text-slate-500 mb-2"><span class="text-yellow-400 font-bold">① Playwright 바이너리 설치</span> — <code class="bg-black/30 px-1 rounded">browser</code> 도구의 AI 스냅샷 모드 활성화에 필요 (최초 1회)</p>
         <div class="code-block mb-4 text-slate-100">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 현재 설치된 플러그인 목록 확인
-openclaw plugins list
-
-# 브라우저 엔진 설치 (Playwright)
+          <pre><code># @playwright/test 전역 설치 후 브라우저 바이너리 다운로드
 npm install -g @playwright/test
 npx playwright install
 
-# 실무 스킬셋 플러그인 설치
-openclaw plugins install @openclaw/plugin-playwright
-openclaw plugins install @openclaw/plugin-applescript
-openclaw plugins install @openclaw/plugin-filesystem</code></pre>
+# 설치 확인
+openclaw plugins list   # 빌트인 도구 목록 확인</code></pre>
         </div>
-        <p class="text-xs text-slate-500 mb-8">설치 후 Gateway를 재시작하면 플러그인이 활성화됩니다. (<code class="bg-black/30 px-1 rounded">pm2 restart fern-bot</code>)</p>
+        <p class="text-xs text-slate-500 mb-8">추가 스킬이 필요하면 <code class="bg-black/30 px-1 rounded">npm i -g clawhub</code> 설치 후 <code class="bg-black/30 px-1 rounded">clawhub search</code>로 커뮤니티 스킬을 탐색하세요.</p>
 
 
         <h3 class="text-lg font-bold mb-4 text-blue-400 flex items-center">
