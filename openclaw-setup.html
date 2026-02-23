@@ -392,12 +392,9 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
           🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세 v3.4) <span class="badge badge-required">필수</span>
         </h2>
-        <div class="bg-red-950/20 p-5 rounded-2xl mb-6 border border-red-900/30">
-          <p class="text-sm text-red-300 font-bold mb-2 flex items-center">
-            💡 v3.4 소스코드 보호 Anchor 정책 <span class="badge badge-required">필수</span>
-          </p>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            v3.4에서는 <strong>VPN 터널 및 RFC 1918 사설 IP 전면 차단</strong>을 추가하여 사내 소스코드 유출을 원천 봉쇄합니다.
+        <div class="bg-red-950/20 p-4 rounded-2xl mb-6 border border-red-900/30">
+          <p class="text-sm text-red-300 font-bold flex items-center">
+            💡 v3.4 Anchor 요약: VPN + RFC1918 전면 차단 <span class="badge badge-required">필수</span>
           </p>
         </div>
 
@@ -405,33 +402,34 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern << 'EOF'
-# [필수] 로컬호스트: Ollama(11434) 및 게이트웨이(18789) 허용, 나머지 차단
-pass out quick proto tcp from any to 127.0.0.1 port 11434 user fern
-pass out quick proto tcp from any to 127.0.0.1 port 18789 user fern
+# 1) lo0 예외 (11434/18789, no state)
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
+
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
+
+# 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
 
-# [필수] VPN 터널 원천 차단 (tcp/udp 명시)
+# 3) VPN 및 사설 IP 차단
 block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
-
-# [필수] RFC 1918 사설 IP 대역 차단
 block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 user fern
 block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 user fern
 block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 user fern
 
-# [선택] mDNS 차단
+# 4) mDNS 및 IPv6 내부망 차단
 block drop out quick proto udp from any to any port 5353 user fern
-
-# [선택] IPv6 내부망 차단
 block drop out quick inet6 proto { tcp, udp } from any to fe80::/10 user fern
 block drop out quick inet6 proto { tcp, udp } from any to fc00::/7 user fern
 EOF
 
-# 2. 문법 검증 후 안전하게 리로드
+# 문법 검증 및 리로드
 if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
   sudo pfctl -f /etc/pf.conf && sudo pfctl -e
-  echo '✅ 완벽합니다! PF 방화벽이 성공적으로 적용되었습니다.'
+  echo '✅ PF 방화벽 적용 완료 (활성화됨)'
 else
-  echo '🚨 문법 에러가 여전히 존재합니다. 로그를 확인하세요.'
+  echo '🚨 문법 에러가 있습니다. 로그를 확인하세요.'
 fi</code></pre>
         </div>
       </div>
@@ -518,23 +516,29 @@ sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
 sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
 sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true
 
-echo ">>> [5/9] PF 방화벽 정책 반영 (Syntax 교정 및 안전 검증)..."
+echo ">>> [5/9] PF 방화벽 정책 반영..."
 sudo mkdir -p /etc/pf.anchors
 sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
-# [필수] 로컬호스트: Ollama(11434)만 허용
-block drop out quick proto tcp from any to 127.0.0.1 port != 11434 user fern
-# [필수] VPN 터널 원천 차단 (사내 소스코드 유출 방지)
-block drop out quick on utun0 user fern
-block drop out quick on utun1 user fern
-block drop out quick on utun2 user fern
-block drop out quick on utun3 user fern
-# [필수] RFC 1918 사설 IP 전면 차단
-block drop out quick from any to 10.0.0.0/8 user fern
-block drop out quick from any to 172.16.0.0/12 user fern
-block drop out quick from any to 192.168.0.0/16 user fern
-# [선택] mDNS/IPv6 차단
+# 1) lo0 예외 (11434/18789, no state)
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
+
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
+
+# 2) 나머지 로컬호스트 차단
+block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
+
+# 3) VPN 및 사설 IP 차단
+block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
+block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 user fern
+block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 user fern
+block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 user fern
+
+# 4) mDNS 및 IPv6 내부망 차단
 block drop out quick proto udp from any to any port 5353 user fern
-block drop out quick inet6 all user fern
+block drop out quick inet6 proto { tcp, udp } from any to fe80::/10 user fern
+block drop out quick inet6 proto { tcp, udp } from any to fc00::/7 user fern
 EOF
 
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
@@ -543,10 +547,10 @@ if ! grep -q 'anchor "fern"' /etc/pf.conf; then
 fi
 
 if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
-  sudo pfctl -f /etc/pf.conf
-  sudo pfctl -e >/dev/null 2>&1 || true
+  sudo pfctl -f /etc/pf.conf && sudo pfctl -e
+  echo '✅ PF 방화벽 적용 완료 (활성화됨)'
 else
-  echo "ERROR: PF 구문 오류! 방화벽 로드 실패." && exit 1
+  echo '🚨 문법 에러가 있습니다. 로그를 확인하세요.'
 fi
 
 echo ">>> [6/9] Ollama 가동 (PM2 - Admin)..."
