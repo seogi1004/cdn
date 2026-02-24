@@ -438,6 +438,51 @@ openclaw skills install 1password</code></pre>
 
     <!-- 3. Security & Network Tab -->
     <div id="security" class="tab-content space-y-8">
+      <!-- 🌐 네트워크 허용/차단 요약 (추가됨) -->
+      <div class="glass p-8 border-l-4 border-indigo-500 rounded-2xl shadow-xl shadow-indigo-900/10">
+        <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
+          🌐 네트워크 허용/차단 요약 (v3.4 Optimized)
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 허용 리스트 -->
+          <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-900/30">
+            <h3 class="text-emerald-400 font-bold mb-3 flex items-center gap-2">🟢 허용 (Allow)</h3>
+            <ul class="space-y-2 text-sm text-slate-300">
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <div><strong>로컬 서비스 (lo0):</strong> 11434(Ollama), 18789(API Gateway), 9222(Chrome CDP)</div>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <div><strong>도메인 해석 (DNS):</strong> 사설망 대역이라도 53번 포트(TCP/UDP)는 허용</div>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <div><strong>외부 인터넷:</strong> 위 차단 목록에 해당하지 않는 공인 IP 대역 전면 허용</div>
+              </li>
+            </ul>
+          </div>
+          <!-- 차단 리스트 -->
+          <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
+            <h3 class="text-red-400 font-bold mb-3 flex items-center gap-2">🔴 차단 (Block)</h3>
+            <ul class="space-y-2 text-sm text-slate-300">
+              <li class="flex items-start gap-2">
+                <span class="text-red-500 font-bold">•</span>
+                <div><strong>내부망 스캐닝:</strong> RFC1918(10.x, 172.x, 192.x) 전 대역 차단 (53포트 제외)</div>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-500 font-bold">•</span>
+                <div><strong>가상 터널 (VPN):</strong> utun0~4, ipsec0 등 모든 가상 인터페이스 차단</div>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-500 font-bold">•</span>
+                <div><strong>기타:</strong> mDNS(5353), IPv6 링크 로컬 대역, lo0의 비허가 포트</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="glass p-8 border-l-4 border-blue-500 rounded-2xl shadow-lg">
         <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-3">
           🔒 핵심 1: 이중 계정 봉쇄 (Double Lock) <span class="badge badge-required">필수</span>
