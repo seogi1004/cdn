@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenClaw Setup v2 - LaunchDaemons 전환 (macOS)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: rgba(16, 23, 42, 0.86);
+      --panel-border: rgba(148, 163, 184, 0.2);
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --accent-3: #f97316;
+    }
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 45%),
+                  radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.12), transparent 40%),
+                  linear-gradient(180deg, #0b1020 0%, #05070f 100%);
+      color: #e2e8f0;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(10px);
+    }
+    .code-block {
+      background: #02050d;
+      color: #a7f3d0;
+      padding: 1.25rem;
+      border-radius: 1rem;
+      position: relative;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      overflow-x: auto;
+      border: 1px solid rgba(14, 116, 144, 0.35);
+    }
+    .copy-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: rgba(30, 41, 59, 0.9);
+      color: #e2e8f0;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      transition: all 0.2s;
+      z-index: 5;
+    }
+    .copy-btn:hover {
+      background: rgba(51, 65, 85, 0.95);
+      transform: translateY(-1px);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .tab-btn.active { color: #e2e8f0; border-bottom-color: #38bdf8; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(15, 23, 42, 0.8);
+      color: #e2e8f0;
+    }
+    .badge.blue { border-color: rgba(56, 189, 248, 0.5); color: #38bdf8; }
+    .badge.green { border-color: rgba(34, 197, 94, 0.5); color: #22c55e; }
+    .badge.orange { border-color: rgba(249, 115, 22, 0.5); color: #f97316; }
+  </style>
+</head>
+<body class="p-4 md:p-10">
+  <div class="max-w-6xl mx-auto space-y-10">
+    <header class="space-y-6">
+      <div class="flex flex-wrap items-center gap-4">
+        <span class="badge blue">LaunchDaemons</span>
+        <span class="badge green">Zero Trust</span>
+        <span class="badge orange">pm2 제거 완료</span>
+      </div>
+      <div class="glass rounded-3xl p-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-emerald-400 to-orange-300">
+          OpenClaw Setup v2 (macOS)
+        </h1>
+        <p class="text-slate-400 mt-3 text-lg">pm2 제거 + launchd 기반 OS Native 서비스 전환 가이드</p>
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass rounded-2xl p-4">
+            <p class="text-xs uppercase tracking-widest text-slate-400">목표</p>
+            <p class="text-lg font-semibold text-slate-100">권한 경계 명확화</p>
+            <p class="text-sm text-slate-400">alvin/fern 완전 격리 + drop privileges</p>
+          </div>
+          <div class="glass rounded-2xl p-4">
+            <p class="text-xs uppercase tracking-widest text-slate-400">운영</p>
+            <p class="text-lg font-semibold text-slate-100">부팅 즉시 자동 기동</p>
+            <p class="text-sm text-slate-400">RunAtLoad + KeepAlive</p>
+          </div>
+          <div class="glass rounded-2xl p-4">
+            <p class="text-xs uppercase tracking-widest text-slate-400">보안</p>
+            <p class="text-lg font-semibold text-slate-100">PF v4.5-ULTIMATE 유지</p>
+            <p class="text-sm text-slate-400">방화벽/ACL/샌드박스 구조 유지</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="mb-8 flex border-b border-slate-700/50 overflow-x-auto">
+      <button onclick="showTab('setup')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-setup">1. 인프라 배포</button>
+      <button onclick="showTab('fern')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-fern">2. Fern (Agent)</button>
+      <button onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">3. 네트워크 & 보안</button>
+      <button onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">4. 샌드박싱</button>
+      <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 v2 마스터 스크립트</button>
+      <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">5. GUI 가이드</button>
+      <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">6. 운영/점검</button>
+      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">7. 롤백</button>
+    </nav>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">Before → After (아키텍처)</h2>
+        <div class="mt-4 space-y-4 text-sm text-slate-300">
+          <div class="rounded-xl bg-slate-900/50 border border-slate-700 p-4">
+            <p class="font-semibold text-slate-100">Before (pm2)</p>
+            <p class="mt-2 text-slate-400">root → alvin(pm2) → ollama / sudo -u fern → pm2 → openclaw gateway</p>
+          </div>
+          <div class="rounded-xl bg-slate-900/50 border border-slate-700 p-4">
+            <p class="font-semibold text-slate-100">After (launchd)</p>
+            <p class="mt-2 text-slate-400">LaunchDaemons → com.alvin.ollama(UserName=alvin) / com.fern.openclaw(UserName=fern)</p>
+          </div>
+        </div>
+      </div>
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">보안 영향 분석</h2>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full text-sm text-slate-300 border border-slate-700/60">
+            <thead class="bg-slate-900/60 text-slate-200">
+              <tr>
+                <th class="text-left p-3 border-b border-slate-700/60">항목</th>
+                <th class="text-left p-3 border-b border-slate-700/60">pm2 (기존)</th>
+                <th class="text-left p-3 border-b border-slate-700/60">LaunchDaemons (변경)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-800">
+                <td class="p-3">권한 경계</td>
+                <td class="p-3">sudo 우회 혼재</td>
+                <td class="p-3">OS 레벨 drop privileges</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-3">자동 재시작</td>
+                <td class="p-3">pm2 의존</td>
+                <td class="p-3">launchd native</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-3">로그인 영향</td>
+                <td class="p-3">GUI 로그인 필요 가능</td>
+                <td class="p-3">부팅 즉시 자동</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-3">샌드박스 호환</td>
+                <td class="p-3">충돌 가능성</td>
+                <td class="p-3">독립 세션 보장</td>
+              </tr>
+              <tr>
+                <td class="p-3">감사 추적</td>
+                <td class="p-3">불명확</td>
+                <td class="p-3">Console.app 기반 명확</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div id="setup" class="tab-content active space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">Step 0: pm2 제거 (alvin + fern)</h2>
+        <p class="text-sm text-slate-400">pm2는 완전 제거합니다. 이후 모든 서비스는 launchd가 관리합니다.</p>
+        <div class="code-block mt-4">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># alvin
+pm2 kill || true
+pm2 unstartup || true
+npm uninstall -g pm2
+rm -rf ~/.pm2 ~/.config/pm2
+
+# fern
+sudo -H -u fern zsh -lc 'pm2 kill || true'
+sudo -H -u fern zsh -lc 'pm2 unstartup || true'
+sudo -H -u fern zsh -lc 'npm uninstall -g pm2'
+sudo rm -rf /Users/fern/.pm2 /Users/fern/.config/pm2</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">Step 1: 시스템 기초 정리</h2>
+        <div class="code-block mt-4">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># Home 권한 최소화 (Zero Trust)
+sudo chmod 700 /Users/alvin /Users/fern</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div id="fern" class="tab-content space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">Fern 런타임 준비</h2>
+        <p class="text-sm text-slate-400">Node 24 + OpenClaw 설치 및 초기 onboarding</p>
+        <div class="code-block mt-4">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code>su - fern
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+echo 'export NVM_DIR="$HOME/.nvm"\n[ -s "$NVM_DIR/nvm.sh" ] && \\. "$NVM_DIR/nvm.sh"' >> ~/.zprofile
+source ~/.zprofile && nvm install 24 && nvm alias default 24
+npm install -g openclaw
+openclaw onboard</code></pre>
+        </div>
+      </div>
+
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">OpenClaw 샌드박스 경로</h2>
+        <p class="text-sm text-slate-400">샌드박스는 반드시 `/Users/fern/sandbox`로 맞춥니다.</p>
+      </div>
+    </div>
+
+    <div id="security" class="tab-content space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">PF 방화벽 유지</h2>
+        <p class="text-sm text-slate-400">v4.5-ULTIMATE 정책은 그대로 유지합니다. (IPv4/IPv6 완전 통제)</p>
+      </div>
+
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">SSH 통제</h2>
+        <p class="text-sm text-slate-400">`fern` 사용자는 SSH 차단, `alvin`만 허용</p>
+      </div>
+    </div>
+
+    <div id="sandbox" class="tab-content space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">APFS 샌드박스</h2>
+        <p class="text-sm text-slate-400">100GB 샌드박스 볼륨 + fstab 영구 마운트</p>
+      </div>
+    </div>
+
+    <div id="master_script" class="tab-content space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-2xl font-bold text-slate-100">v2 마스터 스크립트 (LaunchDaemons)</h2>
+        <p class="text-sm text-slate-400">환경 변수/로그/포트 커스터마이징 포함</p>
+
+        <div class="glass p-5 rounded-2xl mt-4">
+          <h3 class="text-lg font-semibold text-slate-100">커스터마이징 가이드</h3>
+          <ul class="mt-3 text-sm text-slate-300 space-y-2">
+            <li><span class="text-slate-100 font-semibold">OLLAMA_HOST</span> — 기본 `127.0.0.1:11434`. 외부 노출이 필요하면 `0.0.0.0:11434`</li>
+            <li><span class="text-slate-100 font-semibold">OLLAMA_ENV_EXTRA</span> — 추가 환경변수 XML 블록을 직접 삽입
+              <div class="code-block mt-2">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># 예시
+OLLAMA_ENV_EXTRA="<key>OLLAMA_MAX_VRAM</key><string>48000000000</string><key>OLLAMA_NUM_PARALLEL</key><string>1</string>"</code></pre>
+              </div>
+            </li>
+            <li><span class="text-slate-100 font-semibold">OPENCLAW_GATEWAY_PORT</span> — 기본 `18789`</li>
+            <li><span class="text-slate-100 font-semibold">OPENCLAW_WORKDIR</span> — 기본 `/Users/fern/sandbox`</li>
+            <li><span class="text-slate-100 font-semibold">LOG_DIR</span> — 기본 `/var/log/openclaw`</li>
+          </ul>
+        </div>
+
+        <div class="code-block mt-6">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code class="text-sm">#!/bin/bash
+set -euo pipefail
+
+# OpenClaw Security Master Script v2 (pm2 → launchd)
+ALVIN_HOME="/Users/alvin"
+FERN_HOME="/Users/fern"
+SANDBOX_MP="/Users/fern/sandbox"
+SANDBOX_VOL="FernSandbox"
+SANDBOX_QUOTA="100g"
+LOG_DIR="/var/log/openclaw"
+
+# === 커스터마이징 ===
+OLLAMA_HOST="127.0.0.1:11434"
+OLLAMA_ENV_EXTRA=""
+OPENCLAW_GATEWAY_PORT="18789"
+OPENCLAW_WORKDIR="/Users/fern/sandbox"
+OPENCLAW_ULIMIT="512"
+
+OLLAMA_PLIST="/Library/LaunchDaemons/com.alvin.ollama.plist"
+OPENCLAW_PLIST="/Library/LaunchDaemons/com.fern.openclaw.plist"
+
+
+echo ">>> [1/10] 홈 디렉토리 격리..."
+sudo chmod 700 "$ALVIN_HOME" "$FERN_HOME"
+
+echo ">>> [2/10] ACL 차단 적용..."
+sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
+sudo chmod +a "user:fern deny list,search,add_file,add_subdirectory,file_inherit,directory_inherit" /Volumes/* >/dev/null 2>&1 || true
+
+echo ">>> [3/10] APFS 100GB 샌드박스 볼륨 생성 및 fstab 영구 마운트..."
+CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
+if [[ -z "${CID}" ]]; then echo "ERROR: APFS Container 감지 실패"; exit 1; fi
+
+sudo mkdir -p "$SANDBOX_MP"
+if ! diskutil list | grep -q "$SANDBOX_VOL"; then
+  sudo diskutil apfs addVolume "$CID" APFS "$SANDBOX_VOL" -quota "$SANDBOX_QUOTA"
+fi
+
+VOL_UUID=$(diskutil info "$SANDBOX_VOL" | awk '/Volume UUID:/ {print $3}')
+if [[ -n "$VOL_UUID" ]] && ! grep -q "$VOL_UUID" /etc/fstab 2>/dev/null; then
+  echo "UUID=$VOL_UUID $SANDBOX_MP apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
+fi
+
+sudo diskutil unmount "$SANDBOX_VOL" >/dev/null 2>&1 || true
+if ! sudo diskutil mount -mountPoint "$SANDBOX_MP" "$SANDBOX_VOL"; then
+  echo "ERROR: FernSandbox 마운트 실패" && exit 1
+fi
+sudo chown fern:staff "$SANDBOX_MP" && sudo chmod 700 "$SANDBOX_MP"
+
+echo ">>> [4/10] SSH 원격 접속 원천 봉쇄..."
+sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
+sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
+sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true
+
+echo ">>> [5/10] PF 방화벽 강화 (v4.5-ULTIMATE)..."
+sudo mkdir -p /etc/pf.anchors
+sudo tee /etc/pf.anchors/fern >/dev/null <<'PFEOF'
+# ==========================================
+# Fern PF Anchor - v4.5-ULTIMATE
+# ==========================================
+pass quick on lo0 user fern keep state
+block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, ipsec0 } user fern
+block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+block drop out quick inet6 from any to any user fern
+pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+pass out quick inet proto udp from any to any port 443 user fern keep state
+block drop out quick inet from any to any user fern
+PFEOF
+
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
+fi
+
+if sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf; then
+  sudo pfctl -E
+  echo "✅ PF 방화벽 격리 앵커 적용 완료"
+else
+  echo "🚨 PF 문법 오류"; exit 1
+fi
+
+echo ">>> [6/10] PM2 및 ecosystem 완전 제거..."
+# Alvin
+pm2 kill >/dev/null 2>&1 || true
+pm2 unstartup >/dev/null 2>&1 || true
+npm uninstall -g pm2 >/dev/null 2>&1 || true
+rm -rf "$ALVIN_HOME/.pm2" "$ALVIN_HOME/.config/pm2" >/dev/null 2>&1 || true
+
+# Fern
+sudo -H -u fern env -C "$FERN_HOME" zsh -lc 'pm2 kill >/dev/null 2>&1 || true'
+sudo -H -u fern env -C "$FERN_HOME" zsh -lc 'pm2 unstartup >/dev/null 2>&1 || true'
+sudo -H -u fern env -C "$FERN_HOME" zsh -lc 'npm uninstall -g pm2 >/dev/null 2>&1 || true'
+sudo rm -rf "$FERN_HOME/.pm2" "$FERN_HOME/.config/pm2" >/dev/null 2>&1 || true
+
+
+echo ">>> [7/10] LaunchDaemon plist 생성..."
+sudo mkdir -p "$LOG_DIR"
+sudo chown root:wheel "$LOG_DIR"
+sudo chmod 755 "$LOG_DIR"
+
+sudo tee "$OLLAMA_PLIST" >/dev/null <<PLIST1
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.alvin.ollama</string>
+  <key>UserName</key>
+  <string>alvin</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>OLLAMA_HOST</key>
+    <string>${OLLAMA_HOST}</string>
+    ${OLLAMA_ENV_EXTRA}
+  </dict>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>ollama serve</string>
+  </array>
+  <key>StandardOutPath</key>
+  <string>${LOG_DIR}/ollama.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>${LOG_DIR}/ollama.err.log</string>
+</dict>
+</plist>
+PLIST1
+
+sudo tee "$OPENCLAW_PLIST" >/dev/null <<PLIST2
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.fern.openclaw</string>
+  <key>UserName</key>
+  <string>fern</string>
+  <key>GroupName</key>
+  <string>staff</string>
+  <key>WorkingDirectory</key>
+  <string>${OPENCLAW_WORKDIR}</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>ulimit -u ${OPENCLAW_ULIMIT} &amp;&amp; cd ${OPENCLAW_WORKDIR} &amp;&amp; OPENCLAW_GATEWAY_PORT=${OPENCLAW_GATEWAY_PORT} openclaw gateway</string>
+  </array>
+  <key>StandardOutPath</key>
+  <string>${LOG_DIR}/openclaw.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>${LOG_DIR}/openclaw.err.log</string>
+</dict>
+</plist>
+PLIST2
+
+sudo chown root:wheel "$OLLAMA_PLIST" "$OPENCLAW_PLIST"
+sudo chmod 644 "$OLLAMA_PLIST" "$OPENCLAW_PLIST"
+
+
+echo ">>> [8/10] plist 문법 검증 (plutil -lint)..."
+plutil -lint "$OLLAMA_PLIST"
+plutil -lint "$OPENCLAW_PLIST"
+
+
+echo ">>> [9/10] launchd 등록 및 재기동..."
+sudo launchctl bootout system "$OLLAMA_PLIST" >/dev/null 2>&1 || true
+sudo launchctl bootout system "$OPENCLAW_PLIST" >/dev/null 2>&1 || true
+
+sudo launchctl bootstrap system "$OLLAMA_PLIST"
+sudo launchctl bootstrap system "$OPENCLAW_PLIST"
+
+sudo launchctl enable system/com.alvin.ollama
+sudo launchctl enable system/com.fern.openclaw
+
+
+echo ">>> [10/10] 상태 확인..."
+sudo launchctl print system/com.alvin.ollama | head -n 20
+sudo launchctl print system/com.fern.openclaw | head -n 20
+
+echo ">>> [DONE] OpenClaw v2 전환 완료"</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div id="gui_guide" class="tab-content space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">GUI 점검</h2>
+        <ul class="mt-3 text-sm text-slate-300 space-y-2">
+          <li>원격 로그인 사용자: alvin만 허용</li>
+          <li>/Users/fern/sandbox 마운트 확인</li>
+          <li>외장 스토리지 권한에서 fern 접근 불가 확인</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="maintenance" class="tab-content space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">운영/점검 (launchd)</h2>
+        <div class="code-block mt-4">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 상태 확인
+sudo launchctl print system/com.alvin.ollama | head -n 30
+sudo launchctl print system/com.fern.openclaw | head -n 30
+
+# 재시작
+sudo launchctl kickstart -k system/com.alvin.ollama
+sudo launchctl kickstart -k system/com.fern.openclaw
+
+# 로그 확인
+sudo tail -n 100 /var/log/openclaw/ollama.out.log
+sudo tail -n 100 /var/log/openclaw/openclaw.out.log</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div id="rollback" class="tab-content space-y-6">
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">롤백 (pm2 복구는 별도)</h2>
+        <div class="code-block mt-4">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
+sudo launchctl bootout system /Library/LaunchDaemons/com.fern.openclaw.plist
+sudo rm -f /Library/LaunchDaemons/com.alvin.ollama.plist
+sudo rm -f /Library/LaunchDaemons/com.fern.openclaw.plist</code></pre>
+        </div>
+      </div>
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">성공 기준</h2>
+        <ul class="mt-3 text-sm text-slate-300 space-y-2">
+          <li>재부팅 후 GUI 로그인 없이 Ollama/OpenClaw 자동 기동</li>
+          <li>pm2 서비스 완전 제거 확인</li>
+          <li>Playwright 기반 Chrome 샌드박스 정상 동작</li>
+          <li>PF v4.5-ULTIMATE 정책 유지</li>
+        </ul>
+      </div>
+      <div class="glass p-6 rounded-2xl">
+        <h2 class="text-xl font-bold text-slate-100">리스크 대응</h2>
+        <ul class="mt-3 text-sm text-slate-300 space-y-2">
+          <li>plist 문법 오류: `plutil -lint`로 검증</li>
+          <li>권한 꼬임: plist `root:wheel` + `644` 고정</li>
+          <li>환경 변수 누락: `EnvironmentVariables` 또는 `zsh -lc` 활용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach((el) => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach((el) => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.getElementById('btn-' + tabId).classList.add('active');
+    }
+
+    function copyToClipboard(btn) {
+      const code = btn.parentElement.querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const original = btn.innerText;
+        btn.innerText = 'Copied';
+        setTimeout(() => (btn.innerText = original), 1200);
+      });
+    }
+
+    showTab('setup');
+  </script>
+</body>
+</html>
