@@ -263,10 +263,10 @@ pm2 unstartup >/dev/null 2>&1 || true
 npm uninstall -g pm2
 rm -rf ~/.pm2 ~/.config/pm2
 
-# Fern
-sudo -H -u fern zsh -lc 'pm2 kill >/dev/null 2>&1 || true'
-sudo -H -u fern zsh -lc 'pm2 unstartup >/dev/null 2>&1 || true'
-sudo -H -u fern zsh -lc 'npm uninstall -g pm2'
+# Fern: cwd 강제 고정 + pm2 제거
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 kill >/dev/null 2>&1 || true'
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 unstartup >/dev/null 2>&1 || true'
+sudo -H -u fern env -C /Users/fern zsh -lc 'npm uninstall -g pm2'
 sudo rm -rf /Users/fern/.pm2 /Users/fern/.config/pm2</code></pre>
         </div>
       </div>
