@@ -831,33 +831,33 @@ sudo -H -u fern pm2 kill >/dev/null 2>&1 || true
 # [A] Ollama 데몬 (alvin)
 # ---------------------------------------------------------
 sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null << EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key><string>com.alvin.ollama</string>
-  <key>UserName</key><string>alvin</string>
-  <key>RunAtLoad</key><true/>
-  <key>KeepAlive</key><true/>
-  <key>ThrottleInterval</key><integer>10</integer>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+  &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;com.alvin.ollama&lt;/string&gt;
+  &lt;key&gt;UserName&lt;/key&gt;&lt;string&gt;alvin&lt;/string&gt;
+  &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
+  &lt;key&gt;KeepAlive&lt;/key&gt;&lt;true/&gt;
+  &lt;key&gt;ThrottleInterval&lt;/key&gt;&lt;integer&gt;10&lt;/integer&gt;
 
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>OLLAMA_HOST</key><string>127.0.0.1:11434</string>
-    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
+  &lt;key&gt;EnvironmentVariables&lt;/key&gt;
+  &lt;dict&gt;
+    &lt;key&gt;OLLAMA_HOST&lt;/key&gt;&lt;string&gt;127.0.0.1:11434&lt;/string&gt;
+    &lt;key&gt;PATH&lt;/key&gt;&lt;string&gt;/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&lt;/string&gt;
+  &lt;/dict&gt;
 
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/zsh</string>
-    <string>-lc</string>
-    <string>${OLLAMA_BIN} serve</string>
-  </array>
+  &lt;key&gt;ProgramArguments&lt;/key&gt;
+  &lt;array&gt;
+    &lt;string&gt;/bin/zsh&lt;/string&gt;
+    &lt;string&gt;-lc&lt;/string&gt;
+    &lt;string&gt;${OLLAMA_BIN} serve&lt;/string&gt;
+  &lt;/array&gt;
 
-  <key>StandardOutPath</key><string>/var/log/openclaw/ollama.log</string>
-  <key>StandardErrorPath</key><string>/var/log/openclaw/ollama.err</string>
-</dict>
-</plist>
+  &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.log&lt;/string&gt;
+  &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.err&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
 EOF
 
 # ---------------------------------------------------------
@@ -879,31 +879,31 @@ sudo chown root:wheel /usr/local/bin/run-fern-bot.sh
 sudo chmod 755 /usr/local/bin/run-fern-bot.sh
 
 sudo tee /Library/LaunchDaemons/com.openclaw.fern.plist >/dev/null << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key><string>com.openclaw.fern</string>
-  <key>UserName</key><string>fern</string>
-  <key>GroupName</key><string>staff</string>
-  <key>RunAtLoad</key><true/>
-  <key>KeepAlive</key><true/>
-  <key>ThrottleInterval</key><integer>10</integer>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+  &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;com.openclaw.fern&lt;/string&gt;
+  &lt;key&gt;UserName&lt;/key&gt;&lt;string&gt;fern&lt;/string&gt;
+  &lt;key&gt;GroupName&lt;/key&gt;&lt;string&gt;staff&lt;/string&gt;
+  &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
+  &lt;key&gt;KeepAlive&lt;/key&gt;&lt;true/&gt;
+  &lt;key&gt;ThrottleInterval&lt;/key&gt;&lt;integer&gt;10&lt;/integer&gt;
 
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
+  &lt;key&gt;EnvironmentVariables&lt;/key&gt;
+  &lt;dict&gt;
+    &lt;key&gt;PATH&lt;/key&gt;&lt;string&gt;/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&lt;/string&gt;
+  &lt;/dict&gt;
 
-  <key>ProgramArguments</key>
-  <array>
-    <string>/usr/local/bin/run-fern-bot.sh</string>
-  </array>
+  &lt;key&gt;ProgramArguments&lt;/key&gt;
+  &lt;array&gt;
+    &lt;string&gt;/usr/local/bin/run-fern-bot.sh&lt;/string&gt;
+  &lt;/array&gt;
 
-  <key>StandardOutPath</key><string>/var/log/openclaw/fern-bot.log</string>
-  <key>StandardErrorPath</key><string>/var/log/openclaw/fern-bot.err</string>
-</dict>
-</plist>
+  &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/fern-bot.log&lt;/string&gt;
+  &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/fern-bot.err&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
 EOF
 
 # 데몬 권한 필수 설정
