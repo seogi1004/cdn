@@ -709,10 +709,10 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v5.2-FINAL)</h2>
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v5.4-MASTER)</h2>
               <span class="badge badge-stability">안정성</span>
             </div>
-            <p class="text-slate-400 text-sm mt-1">Zero Trust + Launchd 네이티브 격리 + exec 치환 완성판</p>
+            <p class="text-slate-400 text-sm mt-1">Idempotent APFS + Zero Trust PF + Launchd 네이티브 멱등 배포</p>
           </div>
         </div>
 
@@ -758,64 +758,94 @@ sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist</code></pr
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
-# OpenClaw M4 Max Security Master Script v5.2-FINAL (Zero Trust & Launchd Perfected)
+# OpenClaw M4 Max Security Master Script v5.4-MASTER (Idempotent APFS + Zero Trust PF + Launchd)
 set -euo pipefail
+
+echo ">>> [0/5] 안전한 작업 디렉토리로 이동..."
+cd / || true
 
 echo ">>> [1/5] 홈 디렉토리 및 ACL 격리..."
 sudo chmod 700 /Users/alvin /Users/fern
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
 
-echo ">>> [2/5] APFS 샌드박스 볼륨(100G) 생성 및 영구 마운트..."
+echo ">>> [2/5] APFS 샌드박스 볼륨(100G) 멱등 생성 + 영구 마운트..."
 CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
-sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g || true
-VOL_UUID=$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')
 
-# /etc/fstab 중복 추가 방지 (멱등성)
-if ! grep -q "$VOL_UUID" /etc/fstab 2>/dev/null; then
-  echo "UUID=$VOL_UUID /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab
+# FernSandbox 존재 여부 확인 (존재하면 생성 스킵)
+if diskutil info "FernSandbox" >/dev/null 2>&1; then
+  echo "FernSandbox already exists. Skipping addVolume."
+else
+  echo "Creating FernSandbox (quota 100g) in container: $CID"
+  sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
 fi
 
+# UUID 조회 (이름으로 조회)
+VOL_UUID="$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')"
+if [[ -z "${VOL_UUID:-}" ]]; then
+  echo "[ERROR] Failed to resolve FernSandbox Volume UUID" >&2
+  exit 1
+fi
+
+# /etc/fstab 중복 추가 방지 (UUID 기준)
+if ! sudo grep -q "UUID=${VOL_UUID} " /etc/fstab 2>/dev/null; then
+  echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
+else
+  echo "fstab already contains FernSandbox UUID entry. Skipping."
+fi
+
+# 마운트 포인트 준비
 sudo mkdir -p /Users/fern/sandbox
-sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
-sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox
+sudo chown fern:staff /Users/fern/sandbox
+sudo chmod 700 /Users/fern/sandbox
+
+# 마운트 (이미 마운트되어 있으면 스킵)
+if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
+  echo "FernSandbox already mounted at /Users/fern/sandbox. Skipping mount."
+else
+  sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
+fi
 
 echo ">>> [3/5] SSH 접근 통제 (Alvin만 허용)..."
 sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
 sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
 sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true
 
-echo ">>> [4/5] PF 방화벽 강화 (v5.2-ULTIMATE: utun 명시적 차단 및 웹 전용)..."
+echo ">>> [4/5] PF 방화벽 강화 (v5.2-ULTIMATE 유지)..."
 sudo tee /etc/pf.anchors/fern << 'EOF'
 pass quick on lo0 user fern keep state
-# macOS pf 엔진 버그 방지를 위해 utun0~9 명시적 차단
+# utun0~9 명시 차단 + ipsec0 차단
 block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
+# RFC1918 내부망 차단
 block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+# IPv6 전면 차단
 block drop out quick inet6 from any to any user fern
+# 웹 전용 egress (HTTP/HTTPS + QUIC)
 pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
 pass out quick inet proto udp from any to any port 443 user fern keep state
+# 나머지 IPv4 egress 차단
 block drop out quick inet from any to any user fern
 EOF
 
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
-  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf
-  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
 fi
 sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
 sudo pfctl -E || true
 
-echo ">>> [5/5] 서비스 가동 (Launchd 네이티브 격리 및 exec 프로세스 치환)..."
+echo ">>> [5/5] 서비스 가동 (Launchd 네이티브 + 멱등 배포)..."
 
-# 바이너리 절대 경로 물리적 검증 (M4 Homebrew 기준)
-if [ -x "/opt/homebrew/bin/ollama" ]; then
-  OLLAMA_BIN="/opt/homebrew/bin/ollama"
-else
-  echo "[ERROR] Ollama 바이너리를 찾을 수 없습니다. (/opt/homebrew/bin/ollama)" >&2; exit 1
+# 바이너리 절대 경로 검증 (M4 Homebrew 기준)
+OLLAMA_BIN="/opt/homebrew/bin/ollama"
+OPENCLAW_BIN="/opt/homebrew/bin/openclaw"
+
+if [[ ! -x "$OLLAMA_BIN" ]]; then
+  echo "[ERROR] Ollama 바이너리를 찾을 수 없습니다. ($OLLAMA_BIN)" >&2
+  exit 1
 fi
-
-if [ -x "/opt/homebrew/bin/openclaw" ]; then
-  OPENCLAW_BIN="/opt/homebrew/bin/openclaw"
-else
-  echo "[ERROR] OpenClaw 바이너리를 찾을 수 없습니다. (/opt/homebrew/bin/openclaw)" >&2; exit 1
+if [[ ! -x "$OPENCLAW_BIN" ]]; then
+  echo "[ERROR] OpenClaw 바이너리를 찾을 수 없습니다. ($OPENCLAW_BIN)" >&2
+  exit 1
 fi
 
 # 중앙 로그 디렉토리 준비
@@ -823,12 +853,8 @@ sudo mkdir -p /var/log/openclaw
 sudo chown root:wheel /var/log/openclaw
 sudo chmod 755 /var/log/openclaw
 
-# 기존 PM2 잔재 확실히 날리기
-pm2 kill >/dev/null 2>&1 || true
-sudo -H -u fern pm2 kill >/dev/null 2>&1 || true
-
 # ---------------------------------------------------------
-# [A] Ollama 데몬 (alvin)
+# [A] Ollama Daemon (alvin)
 # ---------------------------------------------------------
 sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null << EOF
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -861,23 +887,23 @@ sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null << EOF
 EOF
 
 # ---------------------------------------------------------
-# [B] OpenClaw 봇 데몬 (fern) - 래퍼 스크립트 분리 및 exec 치환
+# [B] Fern bot wrapper (root-owned, exec)
 # ---------------------------------------------------------
 sudo tee /usr/local/bin/run-fern-bot.sh >/dev/null << EOF
 #!/bin/zsh
 if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
-  # exec를 사용하여 프로세스 완벽 치환 (좀비 방지)
   cd /Users/fern/sandbox && ulimit -u 512 && exec ${OPENCLAW_BIN} gateway
 else
   echo "[ERROR] Sandbox volume is not mounted. Aborting." >&2
   exit 78
 fi
 EOF
-
-# 래퍼 스크립트를 root 권한으로 잠금 (해커 위변조 방지)
 sudo chown root:wheel /usr/local/bin/run-fern-bot.sh
 sudo chmod 755 /usr/local/bin/run-fern-bot.sh
 
+# ---------------------------------------------------------
+# [C] OpenClaw Daemon (fern)
+# ---------------------------------------------------------
 sudo tee /Library/LaunchDaemons/com.openclaw.fern.plist >/dev/null << 'EOF'
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
@@ -906,18 +932,18 @@ sudo tee /Library/LaunchDaemons/com.openclaw.fern.plist >/dev/null << 'EOF'
 &lt;/plist&gt;
 EOF
 
-# 데몬 권한 필수 설정
+# plist 권한
 sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 
-# 데몬 로드/재로드 (최신 시스템 표준 문법)
+# 데몬 로드/재로드 (label 기준)
 sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 
 sudo launchctl bootout system/com.openclaw.fern 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist
 
-echo "✅ 모든 보안 세팅 및 Launchd (v5.2-FINAL 완결판) 배포 완료!"</code></pre>
+echo "✅ v5.4-MASTER 배포 완료 (APFS 멱등 + Zero Trust + launchd 완벽 적용)"</code></pre>
         </div>
       </div>
     </div>
@@ -1222,10 +1248,10 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
           </div>
         </div>
 
-        <!-- ✅ v5.2-FINAL 최종 체크리스트 -->
+        <!-- ✅ v5.4-MASTER 최종 체크리스트 -->
         <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl mb-8">
           <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
-            ✅ v5.2-FINAL 최종 체크리스트 <span class="badge badge-required">필수</span>
+            ✅ v5.4-MASTER 최종 체크리스트 <span class="badge badge-required">필수</span>
           </h2>
 
           <div class="space-y-6 text-sm text-slate-300">
