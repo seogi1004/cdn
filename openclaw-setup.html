@@ -273,7 +273,7 @@ openclaw plugins list</code></pre>
             <p class="text-xs text-slate-400 mb-3">관리자(Alvin) 계정에서 Fern 계정 권한으로 에이전트를 영구 가동합니다.</p>
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && OPENCLAW_GATEWAY_PORT=18792 openclaw gateway"'
+              <pre><code>sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && OPENCLAW_GATEWAY_PORT=18789 openclaw gateway"'
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
             </div>
           </div>
@@ -497,12 +497,12 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern << 'EOF'
-# 1) lo0 예외 (11434: Ollama / 18792: API Gateway, no state)
+# 1) lo0 예외 (11434: Ollama / 18789: API Gateway, no state)
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
 
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18792 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 18792 to any user fern no state
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
 
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
@@ -614,12 +614,12 @@ sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 ||
 echo ">>> [5/9] PF 방화벽 정책 반영..."
 sudo mkdir -p /etc/pf.anchors
 sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
-# 1) lo0 예외 (11434: Ollama / 18792: API Gateway, no state)
+# 1) lo0 예외 (11434: Ollama / 18789: API Gateway, no state)
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
 
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18792 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 18792 to any user fern no state
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
 
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
@@ -655,7 +655,7 @@ pm2 save
 
 echo ">>> [7/9] FernBot 가동 및 ulimit 강제 종속..."
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 delete fern-bot >/dev/null 2>&1 || true'
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && OPENCLAW_GATEWAY_PORT=18792 openclaw gateway"'
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && OPENCLAW_GATEWAY_PORT=18789 openclaw gateway"'
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'
 
 echo ">>> [8/9] ulimit 제한 설정..."
@@ -865,7 +865,7 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 restart fern-bot'
 
 # 최초 등록 (PM2 목록에 없는 경우)
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 delete fern-bot > /dev/null 2>&1 || true'
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && OPENCLAW_GATEWAY_PORT=18792 openclaw gateway"'
+sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && OPENCLAW_GATEWAY_PORT=18789 openclaw gateway"'
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
               </div>
             </div>
