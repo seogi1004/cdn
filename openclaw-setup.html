@@ -554,8 +554,8 @@ else
 fi
 
 echo ">>> [6/9] Ollama 가동 (PM2 - Admin)..."
-pm2 delete ollama-core >/dev/null 2>&1 || true
-pm2 start --name ollama-core --interpreter bash -- bash -lc 'export OLLAMA_HOST=127.0.0.1:11434; ollama serve'
+pm2 delete ollama >/dev/null 2>&1 || true
+pm2 start --name ollama --interpreter bash -- bash -lc 'export OLLAMA_HOST=127.0.0.1:11434; ollama serve'
 pm2 save
 
 echo ">>> [7/9] FernBot 가동 및 ulimit 강제 종속..."
@@ -636,7 +636,8 @@ openclaw status</code></pre>
               <p class="text-xs text-slate-400 mb-3">FernBot이 Ollama에 연결하지 못하면 로컬 추론이 불가합니다.</p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>pm2 restart ollama-core
+                <pre><code># 관리자(Alvin) 계정에서 실행
+pm2 restart ollama
 pm2 status
 curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
               </div>
@@ -646,20 +647,18 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
 
         <!-- 🦙 Ollama 서버 관리 -->
         <div class="glass p-8 border-l-4 border-purple-500 rounded-2xl shadow-xl">
-          <h2 class="text-2xl font-bold mb-6 text-purple-400 flex items-center gap-3">
+          <h2 class="text-2xl font-bold mb-4 text-purple-400 flex items-center gap-3">
             🦙 Ollama 서버 관리 <span class="badge badge-required">필수</span>
           </h2>
+          <p class="text-xs text-slate-500 mb-6">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다.</p>
           <div class="space-y-6">
 
             <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
               <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-purple-400">①</span> 상태 확인</h3>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code># PM2 상태 및 포트 리스닝 확인
-pm2 status
+                <pre><code>pm2 status
 lsof -i :11434
-
-# 로드된 모델 목록 + API 응답 테스트
 curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
               </div>
             </div>
@@ -669,11 +668,11 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># [케이스 A] 이미 등록된 경우 → 재시작
-pm2 restart ollama-core
+pm2 restart ollama
 
 # [케이스 B] 최초 등록
-pm2 delete ollama-core > /dev/null 2>&1 || true
-pm2 start --name ollama-core --interpreter bash -- bash -lc \
+pm2 delete ollama > /dev/null 2>&1 || true
+pm2 start --name ollama --interpreter bash -- bash -lc \
   'export OLLAMA_HOST=127.0.0.1:11434; ollama serve'
 pm2 save</code></pre>
               </div>
@@ -722,10 +721,10 @@ ollama run deepseek-r1:14b "안녕, 간단히 자기 소개해봐"</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># [권장] 중지 (등록 유지)
-pm2 stop ollama-core
+pm2 stop ollama
 
 # 완전 제거 (재등록 필요)
-pm2 delete ollama-core
+pm2 delete ollama
 
 # [비상용] 강제 종료
 pkill -f 'ollama serve'</code></pre>
@@ -737,9 +736,10 @@ pkill -f 'ollama serve'</code></pre>
 
         <!-- 🦅 OpenClaw (FernBot) 관리 -->
         <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl">
-          <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+          <h2 class="text-2xl font-bold mb-4 text-emerald-400 flex items-center gap-3">
             🦅 OpenClaw (FernBot) 관리 <span class="badge badge-required">필수</span>
           </h2>
+          <p class="text-xs text-slate-500 mb-6">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다. Fern 계정 격리를 위해 <code class="bg-black/30 px-1 rounded">sudo -H -u fern</code>를 사용합니다.</p>
           <div class="space-y-6">
 
             <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
@@ -839,7 +839,7 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 restart fern-bot'</code></pre>
               <p class="text-xs font-bold text-emerald-400 uppercase mb-2">🟢 전체 시작</p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>pm2 restart ollama-core
+                <pre><code>pm2 restart ollama
 sleep 3 && curl -s http://127.0.0.1:11434/api/tags > /dev/null \
   && echo "✅ Ollama 준비 완료"
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 restart fern-bot'
@@ -851,7 +851,7 @@ pm2 status && sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 status'</code></pr
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code>sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 stop fern-bot'
-pm2 stop ollama-core
+pm2 stop ollama
 
 # 완전 종료 (PM2 데몬까지 내릴 때)
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 kill'
@@ -946,7 +946,7 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 delete fern-bot 2>/dev/null || t
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 kill'
 
 # 2. Alvin PM2에서 Ollama 제거
-pm2 delete ollama-core 2>/dev/null || true
+pm2 delete ollama 2>/dev/null || true
 pm2 kill
 
 # 3. 부팅 자동시작 스크립트 제거 (최초 pm2 startup을 실행한 경우)
