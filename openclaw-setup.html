@@ -724,15 +724,13 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
 pm2 restart ollama
 
 # [케이스 B] 최초 등록
-pm2 delete ollama 2>/dev/null || true
-
-OLLAMA_HOST=0.0.0.0:11434 \
+pm2 delete ollama > /dev/null 2>&1 || true
+OLLAMA_HOST=127.0.0.1:11434 \
 OLLAMA_MAX_VRAM=48000000000 \
 OLLAMA_MAX_LOADED_MODELS=1 \
 OLLAMA_NUM_PARALLEL=1 \
 OLLAMA_KEEP_ALIVE=24h \
 pm2 start ollama --name ollama -- serve
-# 성공하면 아래 실행
 pm2 save</code></pre>
               </div>
             </div>
