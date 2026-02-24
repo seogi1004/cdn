@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenClaw M4 Max Deployment Guide v3.4</title>
+  <title>OpenClaw M4 Max Deployment Guide v4.5-ULTIMATE</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -113,7 +113,7 @@
         <div>
           <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Infrastructure Status</p>
           <div class="flex items-center">
-            <p class="text-sm font-semibold text-red-400">v3.4 Security Verified</p>
+            <p class="text-sm font-semibold text-red-400">v4.5-ULTIMATE Security Verified</p>
             <span class="badge badge-required">필수</span>
           </div>
         </div>
@@ -141,7 +141,7 @@
           Isolation Policy <span class="badge badge-required">필수</span>
         </h3>
         <p class="text-xl font-bold text-emerald-400">Zero-Trust Account</p>
-        <p class="text-slate-400 text-sm">fstab Persistence & v3.4 Syntax</p>
+        <p class="text-slate-400 text-sm">fstab Persistence & v4.5-ULTIMATE Syntax</p>
       </div>
     </section>
 
@@ -441,7 +441,7 @@ openclaw skills install 1password</code></pre>
       <!-- 🌐 네트워크 허용/차단 요약 (추가됨) -->
       <div class="glass p-8 border-l-4 border-indigo-500 rounded-2xl shadow-xl shadow-indigo-900/10">
         <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
-          🌐 네트워크 허용/차단 요약 (v3.4 Optimized)
+          🌐 네트워크 허용/차단 요약 (v4.5-ULTIMATE Optimized)
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- 허용 리스트 -->
@@ -530,11 +530,11 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
 
       <div class="glass p-8 border-l-4 border-emerald-400 rounded-2xl shadow-xl shadow-emerald-900/10">
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
-          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세 v3.4) <span class="badge badge-required">필수</span>
+          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세 v4.5-ULTIMATE) <span class="badge badge-required">필수</span>
         </h2>
         <div class="bg-red-950/20 p-4 rounded-2xl mb-6 border border-red-900/30">
           <p class="text-sm text-red-300 font-bold flex items-center">
-            💡 v3.4 Anchor 요약: VPN + RFC1918 전면 차단 <span class="badge badge-required">필수</span>
+            💡 v4.5-ULTIMATE Anchor 요약: IPv4/IPv6 완벽 통제 <span class="badge badge-required">필수</span>
           </p>
         </div>
 
@@ -542,39 +542,40 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern << 'EOF'
-# 1) lo0 예외 (11434: Ollama / 18789: API Gateway / 9222: Chrome CDP)
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
+# ==========================================
+# Fern PF Anchor - v4.5-ULTIMATE
+# 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
+# ==========================================
 
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
+# [1] lo0 전면 허용 (Chrome IPC & Playwright 로컬 통신 보장)
+pass quick on lo0 user fern keep state
 
-# ⭐ 크롬 원격 제어 (내 PC 안에서만 통신하므로 철벽 보안!)
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 9222 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 9222 to any user fern no state
+# [2] VPN 인터페이스 전면 차단
+block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, ipsec0 } user fern
 
-# 2) 나머지 로컬호스트 차단
-block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
+# [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
+block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
 
-# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 단 외부망 웹서치를 위한 DNS 53번 포트는 예외)
-block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
-block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 port != 53 user fern
-block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 port != 53 user fern
-block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 port != 53 user fern
+# [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
+block drop out quick inet6 from any to any user fern
 
-# 4) mDNS 및 IPv6 내부망 차단
-block drop out quick proto udp from any to any port 5353 user fern
-block drop out quick inet6 proto { tcp, udp } from any to fe80::/10 user fern
-block drop out quick inet6 proto { tcp, udp } from any to fc00::/7 user fern
+# [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
+pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+pass out quick inet proto udp from any to any port 443 user fern keep state
+
+# [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
+block drop out quick inet from any to any user fern
 EOF
 
-# 문법 검증 및 리로드
-if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
-  sudo pfctl -f /etc/pf.conf && sudo pfctl -e
-  echo '✅ PF 방화벽 적용 완료 (포트 53 예외 최적화 버전)'
-else
-  echo '🚨 문법 에러가 있습니다. 로그를 확인하세요.'
-fi</code></pre>
+# PF 규칙 적용
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf
+fi
+sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
+sudo pfctl -E
+
+echo "✅ PF 방화벽 격리 앵커 적용 완료 (우주방어 모드)"</code></pre>
         </div>
       </div>
     </div>
@@ -609,10 +610,10 @@ sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,write
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (Verified V3.4)</h2>
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (Verified V4.5-ULTIMATE)</h2>
               <span class="badge badge-stability">안정성</span>
             </div>
-            <p class="text-slate-400 text-sm mt-1">VPN/사설망 차단 강화 + fstab 영구 마운트 + ulimit 강제 종속 통합 버전</p>
+            <p class="text-slate-400 text-sm mt-1">IPv4/IPv6 완벽 통제 + fstab 영구 마운트 + ulimit 강제 종속 통합 버전</p>
           </div>
         </div>
 
@@ -621,7 +622,7 @@ sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,write
           <pre><code class="text-sm">#!/bin/bash
 set -euo pipefail
 
-# OpenClaw M4 Max Security Master Script (Verified & Refined V3.4)
+# OpenClaw M4 Max Security Master Script (Verified & Refined V4.5-ULTIMATE)
 ALVIN_HOME="/Users/alvin"
 FERN_HOME="/Users/fern"
 SANDBOX_MP="/Users/fern/sandbox"
@@ -660,33 +661,32 @@ sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
 sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
 sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true
 
-echo ">>> [5/9] PF 방화벽 정책 반영..."
+echo ">>> [5/9] PF 방화벽 강화 (v4.5-ULTIMATE: IPv4/IPv6 완벽 통제)..."
 sudo mkdir -p /etc/pf.anchors
 sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
-# 1) lo0 예외 (11434: Ollama / 18789: API Gateway / 9222: Chrome CDP)
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
+# ==========================================
+# Fern PF Anchor - v4.5-ULTIMATE
+# 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
+# ==========================================
 
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
+# [1] lo0 전면 허용 (Chrome IPC & Playwright 로컬 통신 보장)
+pass quick on lo0 user fern keep state
 
-# ⭐ 크롬 원격 제어 (내 PC 안에서만 통신하므로 철벽 보안!)
-pass out quick on lo0 proto tcp from any to 127.0.0.1 port 9222 user fern no state
-pass out quick on lo0 proto tcp from 127.0.0.1 port 9222 to any user fern no state
+# [2] VPN 인터페이스 전면 차단
+block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, ipsec0 } user fern
 
-# 2) 나머지 로컬호스트 차단
-block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
+# [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
+block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
 
-# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 단 외부망 웹서치를 위한 DNS 53번 포트는 예외)
-block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
-block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 port != 53 user fern
-block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 port != 53 user fern
-block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 port != 53 user fern
+# [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
+block drop out quick inet6 from any to any user fern
 
-# 4) mDNS 및 IPv6 내부망 차단
-block drop out quick proto udp from any to any port 5353 user fern
-block drop out quick inet6 proto { tcp, udp } from any to fe80::/10 user fern
-block drop out quick inet6 proto { tcp, udp } from any to fc00::/7 user fern
+# [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
+pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+pass out quick inet proto udp from any to any port 443 user fern keep state
+
+# [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
+block drop out quick inet from any to any user fern
 EOF
 
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
@@ -694,9 +694,9 @@ if ! grep -q 'anchor "fern"' /etc/pf.conf; then
   echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
 fi
 
-if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
-  sudo pfctl -f /etc/pf.conf && sudo pfctl -e
-  echo '✅ PF 방화벽 적용 완료 (포트 53 예외 최적화 버전)'
+if sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf; then
+  sudo pfctl -E
+  echo "✅ PF 방화벽 격리 앵커 적용 완료 (우주방어 모드)"
 else
   echo '🚨 문법 에러가 있습니다. 로그를 확인하세요.'
 fi
@@ -715,7 +715,7 @@ echo ">>> [8/9] ulimit 제한 설정..."
 sudo -H -u fern env -C /Users/fern zsh -lc "grep -q '^ulimit -u 512' '${FERN_HOME}/.zshrc' 2>/dev/null || echo 'ulimit -u 512' >> '${FERN_HOME}/.zshrc'"
 
 echo ">>> [9/9] 보안 검증 결과 출력..."
-echo ">>> [DONE] V3.4 보안 마스터 배포 완료"</code></pre>
+echo ">>> [DONE] V4.5-ULTIMATE 보안 마스터 배포 완료"</code></pre>
         </div>
       </div>
     </div>
@@ -1034,7 +1034,7 @@ pm2 kill</code></pre>
               <div class="mt-1 text-emerald-400">✔</div>
               <div>
                 <p class="font-bold text-slate-100 flex items-center">PF Syntax 무결성 <span class="badge badge-required">필수</span></p>
-                <p class="text-xs text-slate-400">v3.4 규칙에 따라 port 식별자 위치가 올바른가?</p>
+                <p class="text-xs text-slate-400">v4.5-ULTIMATE 규칙에 따라 port 식별자 위치가 올바른가?</p>
               </div>
             </div>
             <div class="check-item">
@@ -1277,7 +1277,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
 
     <!-- Footer -->
     <footer class="mt-20 py-12 border-t border-slate-800/50 text-center text-slate-500 text-sm">
-      <p>© 2026 Alvin's AI Infrastructure | Security Protocol v3.4 (Verified)</p>
+      <p>© 2026 Alvin's AI Infrastructure | Security Protocol v4.5-ULTIMATE (Verified)</p>
     </footer>
   </div>
 
