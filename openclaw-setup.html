@@ -511,18 +511,11 @@ pass out quick on lo0 proto tcp from 127.0.0.1 port 9222 to any user fern no sta
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
 
-# ==========================================================
-# ⭐ 외부망 웹서치를 위한 DNS(도메인 해석) 예외 허용
-# ==========================================================
-pass out quick proto { tcp, udp } from any to 10.0.0.0/8 port 53 user fern
-pass out quick proto { tcp, udp } from any to 172.16.0.0/12 port 53 user fern
-pass out quick proto { tcp, udp } from any to 192.168.0.0/16 port 53 user fern
-
-# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 외부 인터넷망만 허용)
+# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 단 외부망 웹서치를 위한 DNS 53번 포트는 예외)
 block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
-block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 user fern
-block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 user fern
-block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 user fern
+block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 port != 53 user fern
+block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 port != 53 user fern
+block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 port != 53 user fern
 
 # 4) mDNS 및 IPv6 내부망 차단
 block drop out quick proto udp from any to any port 5353 user fern
@@ -533,7 +526,7 @@ EOF
 # 문법 검증 및 리로드
 if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
   sudo pfctl -f /etc/pf.conf && sudo pfctl -e
-  echo '✅ PF 방화벽 적용 완료 (활성화됨)'
+  echo '✅ PF 방화벽 적용 완료 (포트 53 예외 최적화 버전)'
 else
   echo '🚨 문법 에러가 있습니다. 로그를 확인하세요.'
 fi</code></pre>
@@ -639,18 +632,11 @@ pass out quick on lo0 proto tcp from 127.0.0.1 port 9222 to any user fern no sta
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
 
-# ==========================================================
-# ⭐ 외부망 웹서치를 위한 DNS(도메인 해석) 예외 허용
-# ==========================================================
-pass out quick proto { tcp, udp } from any to 10.0.0.0/8 port 53 user fern
-pass out quick proto { tcp, udp } from any to 172.16.0.0/12 port 53 user fern
-pass out quick proto { tcp, udp } from any to 192.168.0.0/16 port 53 user fern
-
-# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 외부 인터넷망만 허용)
+# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 단 외부망 웹서치를 위한 DNS 53번 포트는 예외)
 block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
-block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 user fern
-block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 user fern
-block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 user fern
+block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 port != 53 user fern
+block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 port != 53 user fern
+block drop out quick proto { tcp, udp } from any to 192.168.0.0/16 port != 53 user fern
 
 # 4) mDNS 및 IPv6 내부망 차단
 block drop out quick proto udp from any to any port 5353 user fern
@@ -665,7 +651,7 @@ fi
 
 if sudo pfctl -n -f /etc/pf.conf >/dev/null 2>&1; then
   sudo pfctl -f /etc/pf.conf && sudo pfctl -e
-  echo '✅ PF 방화벽 적용 완료 (활성화됨)'
+  echo '✅ PF 방화벽 적용 완료 (포트 53 예외 최적화 버전)'
 else
   echo '🚨 문법 에러가 있습니다. 로그를 확인하세요.'
 fi
