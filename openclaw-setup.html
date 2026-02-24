@@ -497,17 +497,28 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern << 'EOF'
-# 1) lo0 예외 (11434: Ollama / 18789: API Gateway, no state)
+# 1) lo0 예외 (11434: Ollama / 18789: API Gateway / 9222: Chrome CDP)
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
 
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
 
+# ⭐ 크롬 원격 제어 (내 PC 안에서만 통신하므로 철벽 보안!)
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 9222 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 9222 to any user fern no state
+
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
 
-# 3) VPN 및 사설 IP 차단
+# ==========================================================
+# ⭐ 외부망 웹서치를 위한 DNS(도메인 해석) 예외 허용
+# ==========================================================
+pass out quick proto { tcp, udp } from any to 10.0.0.0/8 port 53 user fern
+pass out quick proto { tcp, udp } from any to 172.16.0.0/12 port 53 user fern
+pass out quick proto { tcp, udp } from any to 192.168.0.0/16 port 53 user fern
+
+# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 외부 인터넷망만 허용)
 block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
 block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 user fern
 block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 user fern
@@ -614,17 +625,28 @@ sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 ||
 echo ">>> [5/9] PF 방화벽 정책 반영..."
 sudo mkdir -p /etc/pf.anchors
 sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
-# 1) lo0 예외 (11434: Ollama / 18789: API Gateway, no state)
+# 1) lo0 예외 (11434: Ollama / 18789: API Gateway / 9222: Chrome CDP)
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 11434 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 11434 to any user fern no state
 
 pass out quick on lo0 proto tcp from any to 127.0.0.1 port 18789 user fern no state
 pass out quick on lo0 proto tcp from 127.0.0.1 port 18789 to any user fern no state
 
+# ⭐ 크롬 원격 제어 (내 PC 안에서만 통신하므로 철벽 보안!)
+pass out quick on lo0 proto tcp from any to 127.0.0.1 port 9222 user fern no state
+pass out quick on lo0 proto tcp from 127.0.0.1 port 9222 to any user fern no state
+
 # 2) 나머지 로컬호스트 차단
 block drop out quick proto { tcp, udp } from any to 127.0.0.1 user fern
 
-# 3) VPN 및 사설 IP 차단
+# ==========================================================
+# ⭐ 외부망 웹서치를 위한 DNS(도메인 해석) 예외 허용
+# ==========================================================
+pass out quick proto { tcp, udp } from any to 10.0.0.0/8 port 53 user fern
+pass out quick proto { tcp, udp } from any to 172.16.0.0/12 port 53 user fern
+pass out quick proto { tcp, udp } from any to 192.168.0.0/16 port 53 user fern
+
+# 3) VPN 및 사설 IP 차단 (내부망 스캐닝 원천 차단, 외부 인터넷망만 허용)
 block drop out quick on { utun0, utun1, utun2, utun3, utun4, ipsec0 } proto { tcp, udp } user fern
 block drop out quick proto { tcp, udp } from any to 10.0.0.0/8 user fern
 block drop out quick proto { tcp, udp } from any to 172.16.0.0/12 user fern
