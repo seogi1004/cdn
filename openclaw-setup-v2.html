@@ -215,12 +215,55 @@ openclaw onboard      # 가이드에 따라 API Key 및 샌드박스(/Users/fern
       <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-red-400">
         Step 3: 네트워크 & 보안 (PF v4.5-ULTIMATE 유지) <span class="badge badge-required">필수</span>
       </h2>
-      <div class="code-block">
+      <p class="text-sm text-slate-400 mb-4">기존 v4.5-ULTIMATE 정책을 그대로 유지하며, fern 계정의 모든 외부 통신 경로를 통제합니다.</p>
+      <div class="code-block mb-6">
         <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
         <pre><code># Fern SSH 차단
 sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
 sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
 sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true</code></pre>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+        <pre><code># PF 방화벽 v4.5-ULTIMATE (Fern 전용 앵커)
+sudo mkdir -p /etc/pf.anchors
+sudo tee /etc/pf.anchors/fern >/dev/null <<'EOF'
+# ==========================================
+# Fern PF Anchor - v4.5-ULTIMATE
+# 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
+# ==========================================
+
+# [1] lo0 전면 허용 (Chrome IPC & Playwright 로컬 통신 보장)
+pass quick on lo0 user fern keep state
+
+# [2] VPN 인터페이스 전면 차단
+block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, ipsec0 } user fern
+
+# [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
+block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+
+# [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
+block drop out quick inet6 from any to any user fern
+
+# [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
+pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+pass out quick inet proto udp from any to any port 443 user fern keep state
+
+# [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
+block drop out quick inet from any to any user fern
+EOF
+
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
+fi
+
+if sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf; then
+  sudo pfctl -E
+  echo "✅ PF 방화벽 격리 앵커 적용 완료"
+else
+  echo "🚨 문법 에러가 있습니다. 로그를 확인하세요."
+fi</code></pre>
       </div>
     </section>
 
@@ -228,12 +271,37 @@ sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 ||
       <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-red-400">
         Step 4: 샌드박싱 (APFS + ACL) <span class="badge badge-required">필수</span>
       </h2>
+      <p class="text-sm text-slate-400 mb-4">APFS 전용 볼륨 생성 + fstab 영구 마운트 + ACL 격리를 적용합니다.</p>
+      <div class="code-block mb-6">
+        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+        <pre><code># APFS 100GB 샌드박스 볼륨 생성 및 fstab 영구 마운트
+SANDBOX_MP="/Users/fern/sandbox"
+SANDBOX_VOL="FernSandbox"
+SANDBOX_QUOTA="100g"
+
+CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
+if [[ -z "${CID}" ]]; then echo "ERROR: APFS Container 감지 실패"; exit 1; fi
+
+sudo mkdir -p "$SANDBOX_MP"
+if ! diskutil list | grep -q "$SANDBOX_VOL"; then
+  sudo diskutil apfs addVolume "$CID" APFS "$SANDBOX_VOL" -quota "$SANDBOX_QUOTA"
+fi
+
+VOL_UUID=$(diskutil info "$SANDBOX_VOL" | awk '/Volume UUID:/ {print $3}')
+if [[ -n "$VOL_UUID" ]] && ! grep -q "$VOL_UUID" /etc/fstab 2>/dev/null; then
+  echo "UUID=$VOL_UUID $SANDBOX_MP apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
+fi
+
+sudo diskutil unmount "$SANDBOX_VOL" >/dev/null 2>&1 || true
+if ! sudo diskutil mount -mountPoint "$SANDBOX_MP" "$SANDBOX_VOL"; then
+  echo "ERROR: FernSandbox 마운트 실패! 볼륨 상태를 확인하세요." && exit 1
+fi
+sudo chown fern:staff "$SANDBOX_MP" && sudo chmod 700 "$SANDBOX_MP"</code></pre>
+      </div>
       <div class="code-block">
         <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-        <pre><code># APFS 샌드박스 및 ACL
+        <pre><code># ACL 격리 (fern 접근 제한)
 sudo chmod 700 /Users/alvin /Users/fern
-sudo mkdir -p /Users/fern/sandbox
-sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Volumes/*</code></pre>
       </div>
