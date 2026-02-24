@@ -206,119 +206,87 @@ openclaw gateway install && openclaw status</code></pre>
     </div>
 
     <!-- 2. Fern Tab -->
-    <div id="fern" class="tab-content space-y-8">
-      <div class="glass p-8 rounded-2xl border-t-4 border-blue-500">
-        <div class="flex items-center gap-6 mb-10">
-          <div class="bg-blue-600/20 p-1 rounded-2xl border border-blue-500/30">
-            <img src="https://placehold.co/80x80/3b82f6/white?text=Fern" class="rounded-xl shadow-lg shadow-blue-500/20" alt="Fern" />
-          </div>
-          <div>
-            <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-slate-100">Fern (Hybrid Agent)</h2>
-              <span class="badge badge-required">필수</span>
-            </div>
-            <p class="text-blue-400 font-medium uppercase tracking-widest mt-1">
-              Concierge & Researcher | <span class="text-red-400 font-bold">NO SOURCE CODE ACCESS</span>
-            </p>
-          </div>
+    <div id="fern" class="tab-content space-y-6">
+
+      <!-- Header -->
+      <div class="glass p-6 rounded-2xl border-t-4 border-blue-500 flex items-center gap-5">
+        <div class="bg-blue-600/20 p-1 rounded-2xl border border-blue-500/30 shrink-0">
+          <img src="https://placehold.co/64x64/3b82f6/white?text=Fern" class="rounded-xl shadow-lg shadow-blue-500/20" alt="Fern" />
         </div>
-
-        <h3 class="text-lg font-bold mb-4 text-emerald-300 flex items-center">
-          0. OpenClaw 온보딩 <span class="badge badge-required">필수</span>
-        </h3>
-        <p class="text-sm text-slate-400 mb-4">처음 설치 시 <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">openclaw onboard</code>를 실행하면 아래 순서로 초기 설정이 진행됩니다.</p>
-        <div class="space-y-3 mb-8">
-          <div class="check-item">
-            <div class="mt-1 text-emerald-400 text-lg font-bold">①</div>
-            <div>
-              <p class="font-bold text-slate-100">API Key 입력</p>
-              <p class="text-xs text-slate-400">사용할 LLM 공급자(Gemini, OpenAI 등)의 API 키를 프롬프트에 입력합니다. 키는 <code class="text-emerald-400 bg-black/40 px-1 rounded">~/.openclaw/openclaw.json</code>에 암호화되어 저장됩니다.</p>
-            </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-2xl font-bold text-slate-100">Fern (Hybrid Agent)</h2>
+            <span class="badge badge-required">필수</span>
           </div>
-          <div class="check-item">
-            <div class="mt-1 text-emerald-400 text-lg font-bold">②</div>
-            <div>
-              <p class="font-bold text-slate-100">Local Model 연결 (Ollama)</p>
-              <p class="text-xs text-slate-400">로컬 Ollama 서버(<code class="text-emerald-400 bg-black/40 px-1 rounded">127.0.0.1:11434</code>)가 감지되면 자동으로 DeepSeek 모델과 연결합니다. Ollama가 먼저 실행 중이어야 합니다.</p>
-            </div>
-          </div>
-          <div class="check-item">
-            <div class="mt-1 text-emerald-400 text-lg font-bold">③</div>
-            <div>
-              <p class="font-bold text-slate-100">Persona / Identity 설정 (SOUL.md)</p>
-              <p class="text-xs text-slate-400">에이전트의 역할과 행동 지침을 정의합니다. v3.4부터는 핵심 페르소나를 <code class="text-emerald-400 bg-black/40 px-1 rounded">SOUL.md</code>에 작성하며, 이후 "3. 페르소나 및 정체성 설정" 섹션 내용을 참고하세요.</p>
-            </div>
-          </div>
-          <div class="check-item">
-            <div class="mt-1 text-emerald-400 text-lg font-bold">④</div>
-            <div>
-              <p class="font-bold text-slate-100">Workspace(샌드박스) 경로 지정</p>
-              <p class="text-xs text-slate-400">에이전트가 파일을 읽고 쓸 기본 작업 디렉터리를 지정합니다. <code class="text-emerald-400 bg-black/40 px-1 rounded">/Users/fern/sandbox</code>를 입력합니다.</p>
-            </div>
-          </div>
-          <div class="check-item">
-            <div class="mt-1 text-emerald-400 text-lg font-bold">⑤</div>
-            <div>
-              <p class="font-bold text-slate-100">Gateway 설치 및 상태 확인</p>
-              <p class="text-xs text-slate-400">
-                <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway install</code> 명령어로 서비스를 등록합니다. 
-                이후 <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>를 실행하여 Gateway가 <span class="text-emerald-400 font-bold">running</span> 상태인지 확인합니다. 
-                (unreachable 시 다시 install 실행)
-              </p>
-            </div>
-          </div>
+          <p class="text-blue-400 text-sm font-medium uppercase tracking-widest mt-1">
+            Concierge &amp; Researcher | <span class="text-red-400 font-bold">NO SOURCE CODE ACCESS</span>
+          </p>
+          <p class="text-xs text-slate-500 mt-1">Local: Qwen &nbsp;|&nbsp; External: Gemini 2.5 Flash (via sessions_spawn) &nbsp;|&nbsp; Sandbox: /Users/fern/sandbox</p>
         </div>
+      </div>
 
-        <h3 class="text-lg font-bold mb-4 text-blue-300 flex items-center">
-          1. 스킬셋 설치 <span class="badge badge-required">필수</span>
-        </h3>
-        <p class="text-sm text-slate-400 mb-4">
-          OpenClaw의 <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">browser</code>, <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">exec</code>(AppleScript), <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">web_fetch</code> 등은 <strong class="text-emerald-300">모두 빌트인 도구</strong>입니다. 별도 플러그인 설치 없이 <strong>Playwright 바이너리만 설치</strong>하면 <code class="text-blue-300 bg-black/40 px-1 rounded">browser</code> 도구가 AI 스냅샷 모드로 자동 활성화됩니다.
-        </p>
+      <!-- 서브탭 -->
+      <div class="glass rounded-2xl overflow-hidden">
+        <nav class="flex border-b border-slate-700/60">
+          <button onclick="showFernTab('fern-setup')" id="fbtn-fern-setup"
+            class="fern-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">
+            🛠️ 기본 설치 &amp; 페르소나
+          </button>
+          <button onclick="showFernTab('fern-skills')" id="fbtn-fern-skills"
+            class="fern-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">
+            🧩 스킬 &amp; 훅
+          </button>
+        </nav>
 
-        <div class="bg-blue-950/20 p-4 rounded-xl border border-blue-800/30 mb-4">
-          <p class="text-xs text-blue-300 font-bold mb-1">📌 빌트인 도구 목록 (플러그인 설치 불필요)</p>
-          <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
-            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">browser</code> — Playwright 기반 브라우저 자동화 (스크린샷, 클릭, 탐색 등)</li>
-            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">exec</code> — 터미널 명령 실행 (AppleScript: <code class="bg-black/30 px-1 rounded">osascript</code> 포함)</li>
-            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">web_fetch</code> / <code class="text-emerald-400 bg-black/30 px-1 rounded">web_search</code> — 웹 크롤링 및 검색</li>
-            <li><code class="text-emerald-400 bg-black/30 px-1 rounded">apply_patch</code> / <code class="text-emerald-400 bg-black/30 px-1 rounded">process</code> — 파일 편집 및 프로세스 관리</li>
-          </ul>
-        </div>
+        <!-- Sub-tab 1: 기본 설치 & 페르소나 -->
+        <div id="fern-setup" class="fern-tab-content p-6 space-y-5">
 
-        <p class="text-xs text-slate-500 mb-2"><span class="text-yellow-400 font-bold">① Playwright 바이너리 설치</span> — <code class="bg-black/30 px-1 rounded">browser</code> 도구의 AI 스냅샷 모드 활성화에 필요 (최초 1회)</p>
-        <div class="code-block mb-4 text-slate-100">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># @playwright/test 전역 설치 후 브라우저 바이너리 다운로드
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
+              <span class="text-yellow-400">①</span> Playwright 바이너리 설치
+              <span class="badge badge-stability">안정성</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">browser</code> 도구 AI 스냅샷 모드 활성화에 필요합니다. <strong class="text-slate-300">Fern 계정</strong>에서 실행하세요.</p>
+            <div class="bg-blue-950/20 p-3 rounded-lg border border-blue-800/30 mb-3">
+              <p class="text-xs text-blue-300 font-bold mb-1">📌 빌트인 도구 (플러그인 설치 불필요)</p>
+              <ul class="text-xs text-slate-400 space-y-0.5 list-disc list-inside">
+                <li><code class="text-emerald-400">browser</code> — Playwright 기반 브라우저 자동화</li>
+                <li><code class="text-emerald-400">exec</code> — 터미널 명령 실행 (AppleScript 포함)</li>
+                <li><code class="text-emerald-400">web_fetch</code> / <code class="text-emerald-400">sessions_spawn</code> — 웹 크롤링 / Gemini 서브에이전트</li>
+                <li><code class="text-emerald-400">apply_patch</code> / <code class="text-emerald-400">process</code> — 파일 편집 / 프로세스 관리</li>
+              </ul>
+            </div>
+            <div class="code-block text-xs">
+              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># Fern 계정에서 실행
 npm install -g @playwright/test
 npx playwright install
+openclaw plugins list</code></pre>
+            </div>
+          </div>
 
-# 설치 확인
-openclaw plugins list   # 빌트인 도구 목록 확인</code></pre>
-        </div>
-        <p class="text-xs text-slate-500 mb-8">추가 스킬이 필요하면 <code class="bg-black/30 px-1 rounded">npm i -g clawhub</code> 설치 후 <code class="bg-black/30 px-1 rounded">clawhub search</code>로 커뮤니티 스킬을 탐색하세요.</p>
-
-
-        <h3 class="text-lg font-bold mb-4 text-blue-400 flex items-center">
-          2. 에이전트 자동 실행 (PM2) <span class="badge badge-stability">안정성</span>
-        </h3>
-        <p class="text-sm text-slate-400 mb-4">관리자(Alvin) 계정에서 Fern 계정 권한으로 에이전트를 영구 가동합니다.</p>
-        <div class="code-block mb-8">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># Alvin 계정에서 실행 (Fern 계정으로 샌드박스 진입 후 시작)
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw gateway"'
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
+              <span class="text-yellow-400">②</span> PM2 에이전트 기동
+              <span class="badge badge-stability">안정성</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-3">관리자(Alvin) 계정에서 Fern 계정 권한으로 에이전트를 영구 가동합니다.</p>
+            <div class="code-block text-xs">
+              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && openclaw gateway"'
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
-        </div>
+            </div>
+          </div>
 
-        <h3 class="text-lg font-bold mb-4 text-slate-200 flex items-center">
-          3. 페르소나 및 정체성 설정 (SOUL & IDENTITY) <span class="badge badge-required">필수</span>
-        </h3>
-        <p class="text-sm text-slate-400 mb-4">에이전트의 핵심 정체성(SOUL)과 행동 지침(IDENTITY)을 샌드박스 루트에 생성합니다.</p>
-
-        <div class="code-block mb-6">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code>BASE_DIR="/Users/fern/sandbox"
-
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-slate-100 mb-2 flex items-center gap-2">
+              <span class="text-yellow-400">③</span> 페르소나 설정 (SOUL &amp; IDENTITY)
+              <span class="badge badge-required">필수</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 SOUL.md와 IDENTITY.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
+            <div class="code-block text-xs">
+              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>BASE_DIR="/Users/fern/sandbox"
 mkdir -p "$BASE_DIR"
 
 cat > "$BASE_DIR/SOUL.md" << 'EOF'
@@ -375,15 +343,84 @@ cat > "$BASE_DIR/IDENTITY.md" << 'EOF'
 EOF
 
 echo "✅ SOUL.md and IDENTITY.md successfully created in $BASE_DIR"</code></pre>
+            </div>
+          </div>
+
         </div>
 
-        <div class="mt-6 p-4 bg-blue-900/20 rounded-xl border border-blue-500/30">
-          <p class="text-xs text-slate-400 leading-relaxed">
-            <strong class="text-blue-400">💡 Tip:</strong> <code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw.json</code>의 <code class="bg-black/40 px-1 rounded">identity</code> 블록에는 위 파일들의 요약본을 넣고, 상세 내용은 각 파일에서 관리하세요.
-          </p>
+        <!-- Sub-tab 2: 스킬 & 훅 -->
+        <div id="fern-skills" class="fern-tab-content p-6 space-y-6" style="display:none">
+
+          <div>
+            <h3 class="text-base font-bold text-slate-100 mb-3">🧩 활성 스킬</h3>
+            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+              <div class="bg-blue-600/20 p-2.5 rounded-lg border border-blue-500/30 text-2xl shrink-0">🔐</div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <p class="font-bold text-slate-100">1Password</p>
+                  <span class="badge badge-required">활성</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-3">macOS 키체인 연동으로 비밀번호, API 키, 세션을 안전하게 조회합니다. Fern이 명령 실행 전 <code class="bg-black/30 px-1 rounded">op</code> CLI를 통해 인증합니다.</p>
+                <div class="code-block text-xs">
+                  <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                  <pre><code># 1. 1Password CLI 설치 확인
+op --version
+
+# 2. Fern 계정에서 세션 인증
+op signin
+
+# 3. 스킬 활성화 (Fern sandbox에서 실행)
+openclaw skills install 1password</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-base font-bold text-slate-100 mb-3">🪝 활성 훅 (Hooks)</h3>
+            <p class="text-xs text-slate-500 mb-3">Gateway 시작 시 자동 실행되는 초기화 시퀀스입니다.</p>
+            <div class="space-y-3">
+
+              <div class="check-item">
+                <div class="mt-1 text-emerald-400 text-lg font-bold">①</div>
+                <div>
+                  <p class="font-bold text-slate-100">API Key 주입</p>
+                  <p class="text-xs text-slate-400">Gemini API 키를 <code class="text-emerald-400 bg-black/40 px-1 rounded">~/.openclaw/openclaw.json</code>에서 읽어 세션에 주입합니다.</p>
+                </div>
+              </div>
+
+              <div class="check-item">
+                <div class="mt-1 text-emerald-400 text-lg font-bold">③</div>
+                <div>
+                  <p class="font-bold text-slate-100">Persona / Identity 로드 (SOUL.md)</p>
+                  <p class="text-xs text-slate-400">시작 시 <code class="text-emerald-400 bg-black/40 px-1 rounded">SOUL.md</code>와 <code class="text-emerald-400 bg-black/40 px-1 rounded">IDENTITY.md</code>를 sandbox에서 읽어 시스템 컨텍스트로 적용합니다.</p>
+                </div>
+              </div>
+
+              <div class="check-item">
+                <div class="mt-1 text-emerald-400 text-lg font-bold">④</div>
+                <div>
+                  <p class="font-bold text-slate-100">Workspace 경로 설정</p>
+                  <p class="text-xs text-slate-400">에이전트의 기본 작업 디렉터리를 <code class="text-emerald-400 bg-black/40 px-1 rounded">/Users/fern/sandbox</code>로 설정합니다.</p>
+                </div>
+              </div>
+
+              <div class="check-item">
+                <div class="mt-1 text-emerald-400 text-lg font-bold">⑤</div>
+                <div>
+                  <p class="font-bold text-slate-100">Gateway 자동 등록</p>
+                  <p class="text-xs text-slate-400"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway install</code> 훅이 실행되어 Gateway가 <span class="text-emerald-400 font-bold">running</span> 상태로 유지됩니다.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
+
     </div>
+
 
     <!-- 3. Security & Network Tab -->
     <div id="security" class="tab-content space-y-8">
@@ -1260,7 +1297,28 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       document.body.removeChild(textarea);
     }
 
-    window.onload = () => { showTab('setup'); showMaintTab('maint-ollama'); };
+    function showFernTab(tabId) {
+      document.querySelectorAll('.fern-tab-content').forEach(el => el.style.display = 'none');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+
+      document.querySelectorAll('.fern-tab-btn').forEach(btn => {
+        btn.classList.remove('border-blue-500','text-blue-300','border-emerald-500','text-emerald-300');
+        btn.classList.add('text-slate-400','border-transparent');
+      });
+
+      const activeBtn = document.getElementById('fbtn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400','border-transparent');
+        if (tabId === 'fern-setup') {
+          activeBtn.classList.add('border-blue-500','text-blue-300');
+        } else {
+          activeBtn.classList.add('border-emerald-500','text-emerald-300');
+        }
+      }
+    }
+
+    window.onload = () => { showTab('setup'); showMaintTab('maint-ollama'); showFernTab('fern-setup'); };
   </script>
 </body>
 </html>
