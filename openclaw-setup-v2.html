@@ -170,7 +170,7 @@
             </div>
             <div class="rounded-xl bg-slate-900/50 border border-slate-700 p-4">
               <p class="font-semibold text-slate-100">After (launchd)</p>
-              <p class="mt-2 text-slate-400">LaunchDaemons → com.alvin.ollama(UserName=alvin) / com.fern.openclaw(UserName=fern)</p>
+              <p class="mt-2 text-slate-400">LaunchDaemons → com.alvin.ollama(UserName=alvin) / com.openclaw.fern(UserName=fern)</p>
             </div>
           </div>
         </div>
@@ -355,14 +355,14 @@ openclaw plugins list</code></pre>
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">②</span> PM2 에이전트 기동
+              <span class="text-yellow-400">②</span> LaunchDaemons 에이전트 기동
               <span class="badge badge-stability">안정성</span>
             </h3>
-            <p class="text-xs text-slate-400 mb-3">관리자(Alvin) 계정에서 Fern 계정 권한으로 에이전트를 영구 가동합니다.</p>
+            <p class="text-xs text-slate-400 mb-3">LaunchDaemons 등록 후 launchctl로 즉시 기동합니다. (plist는 마스터 스크립트에서 생성)</p>
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 start zsh --name fern-bot -- -lc "ulimit -u 512 && cd /Users/fern/sandbox && OPENCLAW_GATEWAY_PORT=18789 openclaw gateway"'
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
+              <pre><code>sudo launchctl kickstart -k system/com.openclaw.fern
+sudo launchctl print system/com.openclaw.fern | head -n 30</code></pre>
             </div>
           </div>
 
@@ -399,7 +399,7 @@ You are the primary point of contact for Alvin. Your role is:
 You are the "Senior Architect" residing on the Mac Mini. Gemini must spawn you for:
 - **Strategic Planning**: Detailed task decomposition and step-by-step automation logic.
 - **Code Generation**: Writing robust Playwright/Node.js scripts for QA and demo server interaction.
-- **Local Operations**: Managing PM2, file systems in `~/sandbox`, and security-sensitive configurations.
+- **Local Operations**: Managing launchd services, file systems in `~/sandbox`, and security-sensitive configurations.
 - **Final Review**: Critiquing Gemini's web findings against local business logic.
 
 # Core Missions
@@ -435,7 +435,7 @@ When Gemini spawns a session for the web or for Qwen, use:
   Constraints: [security, language, scope]
 
 ## Execution Excellence
-- Verify local state (files, pm2 status) before proposing changes.
+- Verify local state (files, launchctl status) before proposing changes.
 - Summarize and structure output — avoid raw tool JSON or verbose model self-reflections.
 - If model results are ambiguous, explicitly note the uncertainty to Alvin.
 
@@ -709,10 +709,10 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (Verified V4.5-ULTIMATE)</h2>
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v5.2-FINAL)</h2>
               <span class="badge badge-stability">안정성</span>
             </div>
-            <p class="text-slate-400 text-sm mt-1">IPv4/IPv6 완벽 통제 + fstab 영구 마운트 + ulimit 강제 종속 통합 버전</p>
+            <p class="text-slate-400 text-sm mt-1">Zero Trust + Launchd 네이티브 격리 + exec 치환 완성판</p>
           </div>
         </div>
 
@@ -723,113 +723,201 @@ ls -le /Users/Shared | head -n 5</code></pre>
             <div class="code-block mt-3 text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist
-/Library/LaunchDaemons/com.fern.openclaw.plist</code></pre>
+/Library/LaunchDaemons/com.openclaw.fern.plist</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
             <h3 class="text-lg font-semibold text-slate-100 mb-2">권한/검증/로드</h3>
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.fern.openclaw.plist
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.fern.openclaw.plist
+              <pre><code>sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
+sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 plutil -lint /Library/LaunchDaemons/com.alvin.ollama.plist
-plutil -lint /Library/LaunchDaemons/com.fern.openclaw.plist
+plutil -lint /Library/LaunchDaemons/com.openclaw.fern.plist
 sudo launchctl load -w /Library/LaunchDaemons/com.alvin.ollama.plist
-sudo launchctl load -w /Library/LaunchDaemons/com.fern.openclaw.plist</code></pre>
+sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist</code></pre>
             </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5 mb-8">
+          <h3 class="text-lg font-semibold text-slate-100 mb-2">생성 파일 목록</h3>
+          <p class="text-sm text-slate-400 mb-3">마스터 스크립트가 생성하는 파일들입니다. 변경 시 반드시 root 권한 유지.</p>
+          <div class="code-block text-xs">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist
+/Library/LaunchDaemons/com.openclaw.fern.plist
+/usr/local/bin/run-fern-bot.sh
+/var/log/openclaw/ollama.log
+/var/log/openclaw/ollama.err
+/var/log/openclaw/fern-bot.log
+/var/log/openclaw/fern-bot.err</code></pre>
           </div>
         </div>
 
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
+# OpenClaw M4 Max Security Master Script v5.2-FINAL (Zero Trust & Launchd Perfected)
 set -euo pipefail
 
-echo ">>> [5/5] 서비스 가동 (LaunchDaemons 전환 - 무인 자동화 및 격리)..."
+echo ">>> [1/5] 홈 디렉토리 및 ACL 격리..."
+sudo chmod 700 /Users/alvin /Users/fern
+sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
 
-# 1. 기존 pm2 프로세스 정리 (안전장치)
+echo ">>> [2/5] APFS 샌드박스 볼륨(100G) 생성 및 영구 마운트..."
+CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
+sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g || true
+VOL_UUID=$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')
+
+# /etc/fstab 중복 추가 방지 (멱등성)
+if ! grep -q "$VOL_UUID" /etc/fstab 2>/dev/null; then
+  echo "UUID=$VOL_UUID /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab
+fi
+
+sudo mkdir -p /Users/fern/sandbox
+sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
+sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox
+
+echo ">>> [3/5] SSH 접근 통제 (Alvin만 허용)..."
+sudo dseditgroup -o create com.apple.access_ssh >/dev/null 2>&1 || true
+sudo dseditgroup -o edit -a alvin -t user com.apple.access_ssh
+sudo dseditgroup -o edit -d fern -t user com.apple.access_ssh >/dev/null 2>&1 || true
+
+echo ">>> [4/5] PF 방화벽 강화 (v5.2-ULTIMATE: utun 명시적 차단 및 웹 전용)..."
+sudo tee /etc/pf.anchors/fern << 'EOF'
+pass quick on lo0 user fern keep state
+# macOS pf 엔진 버그 방지를 위해 utun0~9 명시적 차단
+block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
+block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+block drop out quick inet6 from any to any user fern
+pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+pass out quick inet proto udp from any to any port 443 user fern keep state
+block drop out quick inet from any to any user fern
+EOF
+
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf
+fi
+sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
+sudo pfctl -E || true
+
+echo ">>> [5/5] 서비스 가동 (Launchd 네이티브 격리 및 exec 프로세스 치환)..."
+
+# 바이너리 절대 경로 물리적 검증 (M4 Homebrew 기준)
+if [ -x "/opt/homebrew/bin/ollama" ]; then
+  OLLAMA_BIN="/opt/homebrew/bin/ollama"
+else
+  echo "[ERROR] Ollama 바이너리를 찾을 수 없습니다. (/opt/homebrew/bin/ollama)" >&2; exit 1
+fi
+
+if [ -x "/opt/homebrew/bin/openclaw" ]; then
+  OPENCLAW_BIN="/opt/homebrew/bin/openclaw"
+else
+  echo "[ERROR] OpenClaw 바이너리를 찾을 수 없습니다. (/opt/homebrew/bin/openclaw)" >&2; exit 1
+fi
+
+# 중앙 로그 디렉토리 준비
+sudo mkdir -p /var/log/openclaw
+sudo chown root:wheel /var/log/openclaw
+sudo chmod 755 /var/log/openclaw
+
+# 기존 PM2 잔재 확실히 날리기
 pm2 kill >/dev/null 2>&1 || true
 sudo -H -u fern pm2 kill >/dev/null 2>&1 || true
 
-# 2. alvin 계정용 Ollama 데몬 생성
-sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist << 'EOF' >/dev/null
+# ---------------------------------------------------------
+# [A] Ollama 데몬 (alvin)
+# ---------------------------------------------------------
+sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>
-    <string>com.alvin.ollama</string>
-    <key>UserName</key>
-    <string>alvin</string>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <true/>
-    <key>EnvironmentVariables</key>
-    <dict>
-        <key>OLLAMA_HOST</key>
-        <string>127.0.0.1:11434</string>
-    </dict>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/bin/zsh</string>
-        <string>-lc</string>
-        <string>ollama serve</string>
-    </array>
-    <key>StandardOutPath</key>
-    <string>/tmp/ollama-out.log</string>
-    <key>StandardErrorPath</key>
-    <string>/tmp/ollama-err.log</string>
+  <key>Label</key><string>com.alvin.ollama</string>
+  <key>UserName</key><string>alvin</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>OLLAMA_HOST</key><string>127.0.0.1:11434</string>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>${OLLAMA_BIN} serve</string>
+  </array>
+
+  <key>StandardOutPath</key><string>/var/log/openclaw/ollama.log</string>
+  <key>StandardErrorPath</key><string>/var/log/openclaw/ollama.err</string>
 </dict>
 </plist>
 EOF
 
-# 3. fern 계정용 OpenClaw Gateway 데몬 생성
-sudo tee /Library/LaunchDaemons/com.fern.openclaw.plist << 'EOF' >/dev/null
+# ---------------------------------------------------------
+# [B] OpenClaw 봇 데몬 (fern) - 래퍼 스크립트 분리 및 exec 치환
+# ---------------------------------------------------------
+sudo tee /usr/local/bin/run-fern-bot.sh >/dev/null << EOF
+#!/bin/zsh
+if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
+  # exec를 사용하여 프로세스 완벽 치환 (좀비 방지)
+  cd /Users/fern/sandbox && ulimit -u 512 && exec ${OPENCLAW_BIN} gateway
+else
+  echo "[ERROR] Sandbox volume is not mounted. Aborting." >&2
+  exit 78
+fi
+EOF
+
+# 래퍼 스크립트를 root 권한으로 잠금 (해커 위변조 방지)
+sudo chown root:wheel /usr/local/bin/run-fern-bot.sh
+sudo chmod 755 /usr/local/bin/run-fern-bot.sh
+
+sudo tee /Library/LaunchDaemons/com.openclaw.fern.plist >/dev/null << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>
-    <string>com.fern.openclaw</string>
-    <key>UserName</key>
-    <string>fern</string>
-    <key>GroupName</key>
-    <string>staff</string>
-    <key>WorkingDirectory</key>
-    <string>/Users/fern/sandbox</string>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <true/>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/bin/zsh</string>
-        <string>-lc</string>
-        <string>ulimit -u 512 && openclaw gateway</string>
-    </array>
-    <key>StandardOutPath</key>
-    <string>/Users/fern/sandbox/bot-out.log</string>
-    <key>StandardErrorPath</key>
-    <string>/Users/fern/sandbox/bot-err.log</string>
+  <key>Label</key><string>com.openclaw.fern</string>
+  <key>UserName</key><string>fern</string>
+  <key>GroupName</key><string>staff</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/run-fern-bot.sh</string>
+  </array>
+
+  <key>StandardOutPath</key><string>/var/log/openclaw/fern-bot.log</string>
+  <key>StandardErrorPath</key><string>/var/log/openclaw/fern-bot.err</string>
 </dict>
 </plist>
 EOF
 
-# 4. 권한 부여 및 데몬 등록 (root 권한 필수)
-echo ">>> plist 파일 권한 설정 및 launchctl 로드 중..."
-sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.fern.openclaw.plist
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.fern.openclaw.plist
+# 데몬 권한 필수 설정
+sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
+sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 
-# 이전에 로드된 캐시가 있다면 언로드
-sudo launchctl unload /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null 2>&1 || true
-sudo launchctl unload /Library/LaunchDaemons/com.fern.openclaw.plist >/dev/null 2>&1 || true
+# 데몬 로드/재로드 (최신 시스템 표준 문법)
+sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 
-# 데몬 로드 (시스템 부팅 시 즉시 실행 + 현재 즉시 실행)
-sudo launchctl load -w /Library/LaunchDaemons/com.alvin.ollama.plist
-sudo launchctl load -w /Library/LaunchDaemons/com.fern.openclaw.plist
+sudo launchctl bootout system/com.openclaw.fern 2>/dev/null || true
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist
 
-echo "✅ v3.4(v2) 보안 배포 및 LaunchDaemons 등록 완료!"</code></pre>
+echo "✅ 모든 보안 세팅 및 Launchd (v5.2-FINAL 완결판) 배포 완료!"</code></pre>
         </div>
       </div>
     </div>
@@ -888,8 +976,8 @@ echo "✅ v3.4(v2) 보안 배포 및 LaunchDaemons 등록 완료!"</code></pre>
               <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>에서 unreachable이면 서비스가 중단 상태입니다.</p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>sudo launchctl print system/com.fern.openclaw | head -n 30
-sudo launchctl kickstart -k system/com.fern.openclaw
+                <pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
+sudo launchctl kickstart -k system/com.openclaw.fern
 openclaw status</code></pre>
               </div>
             </div>
@@ -977,9 +1065,9 @@ pkill -f 'ollama serve'</code></pre>
               <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-emerald-400">①</span> 상태 확인 및 로그</h3>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>sudo launchctl print system/com.fern.openclaw | head -n 30
-sudo tail -n 100 /Users/fern/sandbox/bot-out.log
-sudo tail -n 100 /Users/fern/sandbox/bot-err.log</code></pre>
+                <pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
+sudo tail -n 100 /var/log/openclaw/fern-bot.log
+sudo tail -n 100 /var/log/openclaw/fern-bot.err</code></pre>
               </div>
             </div>
 
@@ -988,7 +1076,7 @@ sudo tail -n 100 /Users/fern/sandbox/bot-err.log</code></pre>
               <p class="text-xs text-slate-500 mb-3">설정 변경 후 또는 에이전트가 응답없을 때 사용합니다. <strong class="text-yellow-400">Ollama가 먼저 기동된 상태여야 합니다.</strong></p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>sudo launchctl kickstart -k system/com.fern.openclaw</code></pre>
+                <pre><code>sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
               </div>
             </div>
 
@@ -997,7 +1085,7 @@ sudo tail -n 100 /Users/fern/sandbox/bot-err.log</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code># 서비스 언로드
-sudo launchctl bootout system /Library/LaunchDaemons/com.fern.openclaw.plist
+sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
 
 # [비상용] 강제 종료
 sudo pkill -u fern -f openclaw</code></pre>
@@ -1017,7 +1105,7 @@ sudo pkill -u fern -f openclaw</code></pre>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code>sudo nano /Users/fern/.openclaw/openclaw.json
-sudo launchctl kickstart -k system/com.fern.openclaw</code></pre>
+sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
               </div>
             </div>
 
@@ -1028,7 +1116,7 @@ sudo launchctl kickstart -k system/com.fern.openclaw</code></pre>
                 <pre><code>su - fern
 nvm use 24 && npm update -g openclaw
 exit
-sudo launchctl kickstart -k system/com.fern.openclaw</code></pre>
+sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
               </div>
             </div>
 
@@ -1037,12 +1125,12 @@ sudo launchctl kickstart -k system/com.fern.openclaw</code></pre>
               <p class="text-xs text-slate-500 mb-3">설정을 처음부터 다시 하고 싶을 때 사용합니다. 기존 설정 파일을 백업 후 진행하세요.</p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.fern.openclaw.plist
+                <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
 su - fern
 cp -r ~/.openclaw ~/.openclaw.bak.$(date +%Y%m%d)
 openclaw onboard
 exit
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.fern.openclaw.plist</code></pre>
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</code></pre>
               </div>
             </div>
           </div>
@@ -1063,16 +1151,16 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.fern.openclaw.plist</
                 <pre><code>sudo launchctl kickstart -k system/com.alvin.ollama
 sleep 3 && curl -s http://127.0.0.1:11434/api/tags > /dev/null \
   && echo "✅ Ollama 준비 완료"
-sudo launchctl kickstart -k system/com.fern.openclaw
+sudo launchctl kickstart -k system/com.openclaw.fern
 sudo launchctl print system/com.alvin.ollama | head -n 5
-sudo launchctl print system/com.fern.openclaw | head -n 5</code></pre>
+sudo launchctl print system/com.openclaw.fern | head -n 5</code></pre>
               </div>
             </div>
             <div>
               <p class="text-xs font-bold text-red-400 uppercase mb-2">🔴 전체 종료</p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.fern.openclaw.plist
+                <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
 sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
               </div>
             </div>
@@ -1134,6 +1222,84 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
           </div>
         </div>
 
+        <!-- ✅ v5.2-FINAL 최종 체크리스트 -->
+        <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl mb-8">
+          <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+            ✅ v5.2-FINAL 최종 체크리스트 <span class="badge badge-required">필수</span>
+          </h2>
+
+          <div class="space-y-6 text-sm text-slate-300">
+            <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+              <p class="font-semibold text-slate-100 mb-3">1) PF 적용 확인</p>
+              <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># pf가 켜져 있는지
+sudo pfctl -s info | head
+
+# fern 앵커 룰이 실제로 로드됐는지
+sudo pfctl -a fern -sr</code></pre>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+              <p class="font-semibold text-slate-100 mb-3">2) fern 내부망 차단 확인</p>
+              <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># 실패해야 정상
+sudo -u fern curl -m 2 http://10.0.0.1 || echo "OK: private blocked"
+
+# 성공해야 정상
+sudo -u fern curl -I https://example.com</code></pre>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+              <p class="font-semibold text-slate-100 mb-3">3) launchd 등록/상태 확인</p>
+              <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code>sudo launchctl print system/com.alvin.ollama | head -n 40
+sudo launchctl print system/com.openclaw.fern | head -n 40</code></pre>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+              <p class="font-semibold text-slate-100 mb-3">4) 로그 확인</p>
+              <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># ollama
+sudo tail -n 50 /var/log/openclaw/ollama.log
+sudo tail -n 50 /var/log/openclaw/ollama.err
+
+# fern bot
+sudo tail -n 50 /var/log/openclaw/fern-bot.log
+sudo tail -n 50 /var/log/openclaw/fern-bot.err</code></pre>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+              <p class="font-semibold text-slate-100 mb-3">5) 재부팅 검증 (가장 중요)</p>
+              <div class="code-block text-xs">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># 재부팅 후 자동 기동 확인
+sudo launchctl print system/com.alvin.ollama | grep -E "state|pid"
+sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
+
+# 그리고 fern에서 크롬 제어/로그인 자동화 재시도</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-emerald-950/20 border border-emerald-700/40 rounded-2xl p-5 mt-6">
+            <h3 class="text-lg font-semibold text-emerald-300 mb-2">🎯 최종 판정</h3>
+            <ul class="text-sm text-slate-300 space-y-1 list-disc list-inside">
+              <li>보안 목표(소스코드 보호 + 내부망 차단): 달성</li>
+              <li>자동화(Playwright/Chrome): 달성</li>
+              <li>운영(launchd, 재부팅 자동 기동): 설계 완료</li>
+              <li>팀 규모(20명): utun 0~9 하드코딩으로 충분히 운영 가능</li>
+            </ul>
+          </div>
+        </div>
+
     </div>
 
     <!-- 7. Reset Tab -->
@@ -1153,24 +1319,16 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
       <!-- Step 1: FernBot 중지 -->
       <div class="glass p-8 border-l-4 border-orange-500 rounded-2xl shadow-lg">
         <h2 class="text-2xl font-bold mb-2 text-orange-400 flex items-center gap-3">
-          Step 1 — FernBot &amp; PM2 완전 종료
+          Step 1 — LaunchDaemons 중지 &amp; 언로드
         </h2>
-        <p class="text-sm text-slate-400 mb-4">모든 프로세스를 내리고 PM2 데몬을 제거합니다.</p>
+        <p class="text-sm text-slate-400 mb-4">launchd 데몬을 중지하고 시스템에서 언로드합니다.</p>
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 1. FernBot 중지 및 PM2 등록 해제 (Fern)
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 delete fern-bot 2>/dev/null || true'
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 kill'
+          <pre><code># 데몬 언로드
+sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
+sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
 
-# 2. Alvin PM2에서 Ollama 제거
-pm2 delete ollama 2>/dev/null || true
-pm2 kill
-
-# 3. 부팅 자동시작 스크립트 제거 (최초 pm2 startup을 실행한 경우)
-pm2 unstartup launchd 2>/dev/null || true
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 unstartup launchd 2>/dev/null || true'
-
-# 4. 잔류 프로세스 강제 종료
+# 잔류 프로세스 강제 종료
 sudo pkill -u fern -f openclaw 2>/dev/null || true
 pkill -f 'ollama serve' 2>/dev/null || true</code></pre>
         </div>
@@ -1181,7 +1339,7 @@ pkill -f 'ollama serve' 2>/dev/null || true</code></pre>
         <h2 class="text-2xl font-bold mb-2 text-red-400 flex items-center gap-3">
           Step 2 — OpenClaw &amp; 플러그인 제거 <span class="badge badge-required">필수</span>
         </h2>
-        <p class="text-sm text-slate-400 mb-4">Fern 계정에서 openclaw, 플러그인, pm2, 설정 파일을 제거합니다.</p>
+        <p class="text-sm text-slate-400 mb-4">Fern 계정에서 openclaw, 플러그인, 설정 파일을 제거합니다.</p>
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Fern 계정에서 실행
@@ -1189,9 +1347,6 @@ su - fern
 
 # OpenClaw 본체 제거
 npm uninstall -g openclaw
-
-# PM2 제거 (Fern 계정)
-npm uninstall -g pm2
 
 # OpenClaw 설정 파일 삭제 (영구 삭제)
 rm -rf ~/.openclaw
