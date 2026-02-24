@@ -317,20 +317,64 @@ sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 save'</code></pre>
 
         <div class="code-block mb-6">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 샌드박스 경로에서 실행 (/Users/fern/sandbox)
-cat << 'EOF' > SOUL.md
-# Identity: You are Fern, Alvin's Expert Assistant & Concierge.
-# Primary Role: APM Product Developer & Research Partner.
-# Missions: Butler(Mac/Calendar), APM Research, Product QA.
-# Rules: NO SOURCE CODE ACCESS (/Users/alvin/), Headless Mode Awareness.
+          <pre><code>BASE_DIR="/Users/fern/sandbox"
+
+mkdir -p "$BASE_DIR"
+
+cat > "$BASE_DIR/SOUL.md" << 'EOF'
+# Identity
+You are Fern, Alvin's Expert Assistant & Technical Research Partner.
+
+# Primary Role
+APM Product Developer, Competitive Research Analyst, QA Strategist.
+
+# Core Missions
+- Butler: macOS, Calendar, local automation.
+- APM Research: competitor analysis, market research.
+- Product QA: feature validation, scenario testing.
+
+# Model Policy
+- Use local model (Qwen) for reasoning and internal tasks.
+- Do NOT call web_search tool.
+- For external data, latest news, competitor updates, or web-based QA,
+  spawn google/gemini-2.5-flash via sessions_spawn.
+- Never output raw tool JSON.
+- Always wait for tool execution result before responding.
+- Summarize and structure Gemini results before responding.
+- Avoid unnecessary subagent spawn.
+
+# Security Rules
+- Never access or reference /Users/alvin/.
+- Never expose API keys, system paths, or internal configs.
+- Operate in headless mode awareness.
 EOF
 
-cat << 'EOF' > IDENTITY.md
+cat > "$BASE_DIR/IDENTITY.md" << 'EOF'
 # Behavioral Guidelines
-- Tone: Professional, Korean (Tech: English), Concise.
-- Security: Never leak path or API info.
-- Style: Markdown, verify local state first.
-EOF</code></pre>
+
+## Tone
+- Professional Korean.
+- Technical terms in English.
+- Concise but structured.
+
+## Output Style
+- Markdown formatting.
+- Clear sections.
+- No unnecessary verbosity.
+- Cite sources when using web data.
+
+## Reasoning Policy
+- Verify local state first.
+- Use Gemini only when external or real-time data is required.
+- Do not assume web facts without verification.
+
+## Security
+- Never leak file paths or API keys.
+- No access to restricted directories.
+- Do not expose internal model routing logic.
+EOF
+
+echo "✅ SOUL.md and IDENTITY.md successfully created in $BASE_DIR"</code></pre>
         </div>
 
         <div class="mt-6 p-4 bg-blue-900/20 rounded-xl border border-blue-500/30">
@@ -615,9 +659,9 @@ echo ">>> [DONE] V3.4 보안 마스터 배포 완료"</code></pre>
 
 
     <!-- 7. Maintenance & Monitoring Tab -->
-    <div id="maintenance" class="tab-content space-y-8">
+    <div id="maintenance" class="tab-content space-y-6">
 
-        <!-- ⚡ 빠른 복구 -->
+        <!-- ⚡ 빠른 복구 (공통) -->
         <div class="glass p-6 rounded-2xl border-2 border-yellow-500/50 bg-yellow-950/10 shadow-xl">
           <h2 class="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">⚡ 빠른 복구</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -645,13 +689,22 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
           </div>
         </div>
 
-        <!-- 🦙 Ollama 서버 관리 -->
-        <div class="glass p-8 border-l-4 border-purple-500 rounded-2xl shadow-xl">
-          <h2 class="text-2xl font-bold mb-4 text-purple-400 flex items-center gap-3">
-            🦙 Ollama 서버 관리 <span class="badge badge-required">필수</span>
-          </h2>
-          <p class="text-xs text-slate-500 mb-6">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다.</p>
-          <div class="space-y-6">
+        <!-- 서브탭 네비게이션 -->
+        <div class="glass rounded-2xl overflow-hidden">
+          <nav class="flex border-b border-slate-700/60">
+            <button onclick="showMaintTab('maint-ollama')" id="mbtn-maint-ollama"
+              class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">
+              🦙 Ollama 서버
+            </button>
+            <button onclick="showMaintTab('maint-fernbot')" id="mbtn-maint-fernbot"
+              class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">
+              🦅 FernBot (OpenClaw)
+            </button>
+          </nav>
+
+          <!-- 🦙 Ollama 서브탭 -->
+          <div id="maint-ollama" class="maint-tab-content p-6 space-y-5">
+            <p class="text-xs text-slate-500">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다.</p>
 
             <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
               <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-purple-400">①</span> 상태 확인</h3>
@@ -679,7 +732,7 @@ pm2 save</code></pre>
             </div>
 
             <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-              <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-purple-400">③</span> OpenClaw 로컬 모델 바인딩 (openclaw.json)</h3>
+              <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-purple-400">③</span> 로컴 모델 바인딩 (openclaw.json)</h3>
               <p class="text-xs text-slate-400 mb-4">Ollama 연동이 안 된다면 <code class="bg-black/30 px-1 rounded">~/.openclaw/openclaw.json</code>의 프로필 설정을 확인하세요.</p>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
@@ -730,17 +783,11 @@ pm2 delete ollama
 pkill -f 'ollama serve'</code></pre>
               </div>
             </div>
-
           </div>
-        </div>
 
-        <!-- 🦅 OpenClaw (FernBot) 관리 -->
-        <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl">
-          <h2 class="text-2xl font-bold mb-4 text-emerald-400 flex items-center gap-3">
-            🦅 OpenClaw (FernBot) 관리 <span class="badge badge-required">필수</span>
-          </h2>
-          <p class="text-xs text-slate-500 mb-6">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다. Fern 계정 격리를 위해 <code class="bg-black/30 px-1 rounded">sudo -H -u fern</code>를 사용합니다.</p>
-          <div class="space-y-6">
+          <!-- 🦅 FernBot 서브탭 -->
+          <div id="maint-fernbot" class="maint-tab-content p-6 space-y-5" style="display:none">
+            <p class="text-xs text-slate-500">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다. Fern 계정 격리를 위해 <code class="bg-black/30 px-1 rounded">sudo -H -u fern</code>를 사용합니다.</p>
 
             <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
               <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-emerald-400">①</span> 상태 확인 및 로그</h3>
@@ -824,11 +871,11 @@ exit
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 restart fern-bot'</code></pre>
               </div>
             </div>
-
           </div>
+
         </div>
 
-        <!-- ⚡ 전체 스택 시작 / 종료 -->
+        <!-- ⚡ 전체 스택 시작 / 종료 (공통) -->
         <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-xl">
           <h2 class="text-2xl font-bold mb-2 text-yellow-400 flex items-center gap-3">
             ⚡ 전체 스택 시작 / 종료 <span class="badge badge-stability">안정성</span>
@@ -853,7 +900,7 @@ pm2 status && sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 status'</code></pr
                 <pre><code>sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 stop fern-bot'
 pm2 stop ollama
 
-# 완전 종료 (PM2 데몬까지 내릴 때)
+# 완전 종료 (PM2 데스제만드’ 내릴 때)
 sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 kill'
 pm2 kill</code></pre>
               </div>
@@ -861,7 +908,7 @@ pm2 kill</code></pre>
           </div>
         </div>
 
-        <!-- ✅ 주간 보안 체크리스트 -->
+        <!-- ✅ 주간 보안 체크리스트 (공통) -->
         <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl mb-8">
           <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
             ✅ 주간 보안 체크리스트 <span class="badge badge-stability">안정성</span>
@@ -885,7 +932,7 @@ pm2 kill</code></pre>
               <div class="mt-1 text-emerald-400">✔</div>
               <div>
                 <p class="font-bold text-slate-100 flex items-center">ulimit 강제 종속 <span class="badge badge-stability">안정성</span></p>
-                <p class="text-xs text-slate-400">PM2 데몬 프로세스가 512 제한을 따르고 있는가?</p>
+                <p class="text-xs text-slate-400">PM2 데스 프로세스가 512 제한을 따르고 있는가?</p>
               </div>
             </div>
             <div class="check-item">
@@ -917,7 +964,6 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
         </div>
 
     </div>
-
 
     <!-- 7. Reset Tab -->
     <div id="rollback" class="tab-content space-y-8">
@@ -1159,6 +1205,28 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       }
     }
 
+    function showMaintTab(tabId) {
+      document.querySelectorAll('.maint-tab-content').forEach(el => el.style.display = 'none');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+
+      document.querySelectorAll('.maint-tab-btn').forEach(btn => {
+        btn.classList.remove('border-purple-500','text-purple-300','border-emerald-500','text-emerald-300');
+        btn.classList.add('text-slate-400','border-transparent');
+      });
+
+      const activeBtn = document.getElementById('mbtn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400','border-transparent');
+        if (tabId === 'maint-ollama') {
+          activeBtn.classList.add('border-purple-500','text-purple-300');
+        } else {
+          activeBtn.classList.add('border-emerald-500','text-emerald-300');
+        }
+      }
+    }
+
+
     function copyToClipboard(btn) {
       const code = btn.nextElementSibling.innerText;
       const textarea = document.createElement('textarea');
@@ -1187,7 +1255,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       document.body.removeChild(textarea);
     }
 
-    window.onload = () => showTab('setup');
+    window.onload = () => { showTab('setup'); showMaintTab('maint-ollama'); };
   </script>
 </body>
 </html>
