@@ -1148,17 +1148,17 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
         <div class="code-block text-xs">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy All</button>
           <pre><code># 1. 홈 디렉토리 권한 확인
-  ls -ld /Users/alvin /Users/fern
+ls -ld /Users/alvin /Users/fern
 
-  # 2. Shared 폴더 ACL 검증
-  ls -le /Users/Shared | head -n 5
+# 2. Shared 폴더 ACL 검증
+ls -le /Users/Shared | head -n 5
 
-  # 3. PF 룰셋 검증 (Anchor 포함)
-  sudo pfctl -sr | egrep 'utun0|en0'
-  sudo pfctl -a fern -sr
+# 3. PF 룰셋 검증 (Anchor 포함)
+sudo pfctl -sr | egrep 'utun0|en0'
+sudo pfctl -a fern -sr
 
-  # 4. 프로세스 실행 유저 검증
-  ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
+# 4. 프로세스 실행 유저 검증
+ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
         </div>
       </div>
 
@@ -1185,10 +1185,10 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># pf가 켜져 있는지
-  sudo pfctl -s info | head
+sudo pfctl -s info | head
 
-  # fern 앵커 룰이 실제로 로드됐는지
-  sudo pfctl -a fern -sr</code></pre>
+# fern 앵커 룰이 실제로 로드됐는지
+sudo pfctl -a fern -sr</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
@@ -1196,10 +1196,10 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># 실패해야 정상
-  sudo -u fern curl -m 2 http://10.0.0.1 || echo "OK: private blocked"
+sudo -u fern curl -m 2 http://10.0.0.1 || echo "OK: private blocked"
 
-  # 성공해야 정상
-  sudo -u fern curl -I https://example.com</code></pre>
+# 성공해야 정상
+sudo -u fern curl -I https://example.com</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
@@ -1207,7 +1207,7 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code>sudo launchctl print system/com.alvin.ollama | head -n 40
-  sudo launchctl print system/com.openclaw.fern | head -n 40</code></pre>
+sudo launchctl print system/com.openclaw.fern | head -n 40</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
@@ -1215,12 +1215,12 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># ollama
-  sudo tail -n 50 /var/log/openclaw/ollama.log
-  sudo tail -n 50 /var/log/openclaw/ollama.err
+sudo tail -n 50 /var/log/openclaw/ollama.log
+sudo tail -n 50 /var/log/openclaw/ollama.err
 
-  # fern bot
-  sudo tail -n 50 /var/log/openclaw/fern-bot.log
-  sudo tail -n 50 /var/log/openclaw/fern-bot.err</code></pre>
+# fern bot
+sudo tail -n 50 /var/log/openclaw/fern-bot.log
+sudo tail -n 50 /var/log/openclaw/fern-bot.err</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
@@ -1228,10 +1228,10 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># 재부팅 후 자동 기동 확인
-  sudo launchctl print system/com.alvin.ollama | grep -E "state|pid"
-  sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
+sudo launchctl print system/com.alvin.ollama | grep -E "state|pid"
+sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
 
-  # 그리고 fern에서 크롬 제어/로그인 자동화 재시도</code></pre>
+# 그리고 fern에서 크롬 제어/로그인 자동화 재시도</code></pre>
             </div>
           </div>
           <div class="bg-emerald-950/20 border border-emerald-700/40 rounded-2xl p-5">
