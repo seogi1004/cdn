@@ -274,34 +274,6 @@
         </div>
       </div>
 
-      <div class="glass p-8 rounded-[2rem] border-l-4 border-emerald-500/50">
-        <h2 class="text-xl font-bold text-emerald-300 mb-6 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-          진행 가이드 (요약)
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-300">
-          <div class="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-6">
-            <p class="font-bold text-slate-100 mb-3 flex items-center gap-2">
-              <span class="text-emerald-400">✓</span> 이미 적용됨 (건너뛰기)
-            </p>
-            <ul class="space-y-2 text-slate-400">
-              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-slate-600"></span>PF 네트워크 격리 정책</li>
-              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-slate-600"></span>APFS 샌드박스 + ACL</li>
-            </ul>
-          </div>
-          <div class="bg-blue-500/5 border border-blue-500/20 rounded-2xl p-6">
-            <p class="font-bold text-blue-300 mb-3 flex items-center gap-2">
-              <span class="text-blue-400">➔</span> 당신이 해야 할 것
-            </p>
-            <ul class="space-y-2 text-slate-300">
-              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>Fern 런타임/권한 초기 구성</li>
-              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>LaunchDaemons plist 생성/등록</li>
-              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>launchctl 상태 및 로그 검증</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
       <div class="glass glass-hover p-8 rounded-[2rem] border-l-4 border-slate-500 shadow-xl">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-100">
           <span class="p-2 bg-slate-500/20 rounded-lg text-slate-400 text-sm">STEP 0</span>
@@ -1832,6 +1804,59 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
 
     <!-- 7. Maintenance & Monitoring Tab -->
     <div id="maintenance" class="tab-content space-y-6">
+      
+      <!-- ⚡ Quick Management & Shortcuts -->
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500 shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-3">
+          ⚡ 빠른 관리 & 바로가기
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <!-- Dashboard Access -->
+          <div class="bg-blue-500/5 p-6 rounded-2xl border border-blue-500/20 flex flex-col justify-between">
+            <div>
+              <p class="font-bold text-blue-300 mb-2 flex items-center gap-2">
+                🌐 대시보드 바로가기
+              </p>
+              <p class="text-xs text-slate-400 mb-4">현재 실행 중인 OpenClaw Gateway의 메인 채팅 세션에 즉시 접속합니다.</p>
+            </div>
+            <a href="http://127.0.0.1:18789/chat?session=agent%3Amain%3Amain" target="_blank" class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-blue-900/40 text-sm">
+              🚀 에이전트 대시보드 열기
+            </a>
+          </div>
+
+          <!-- Quick Update -->
+          <div class="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20">
+            <p class="font-bold text-emerald-300 mb-2 flex items-center gap-2">
+              📦 업데이트 및 버전 확인
+            </p>
+            <div class="space-y-3">
+              <div class="code-block text-[10px] p-4">
+                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># OpenClaw 최신 버전 업데이트
+npm update -g openclaw
+
+# 현재 설치된 버전 확인
+openclaw --version
+
+# 전체 서비스 상태 요약
+openclaw status</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Management Tips -->
+        <div class="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-6">
+          <h3 class="text-sm font-bold text-slate-200 mb-3 flex items-center gap-2">💡 관리 팁</h3>
+          <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
+            <li>NPM 업데이트 후에는 반드시 <strong class="text-slate-200">데몬을 재시작</strong>해야 변경사항이 반영됩니다.</li>
+            <li>대시보드가 열리지 않는다면 <strong class="text-blue-400">Gateway 서비스</strong>가 <code class="bg-black/30 px-1 rounded">running</code> 상태인지 확인하세요.</li>
+            <li>브라우저 제어 이슈 발생 시 <code class="bg-black/30 px-1 rounded">openclaw status</code>에서 <strong>Relay</strong> 연결 상태를 먼저 점검하세요.</li>
+          </ul>
+        </div>
+      </div>
+
       <div class="glass rounded-2xl overflow-hidden">
         <nav class="flex border-b border-slate-700/60">
           <button type="button" onclick="showMaintTab('maint-ollama')" id="mbtn-maint-ollama" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦙 Ollama 서버</button>
@@ -2164,6 +2189,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
 
   <script>
     function showTab(tabId) {
+      localStorage.setItem('openclaw_activeTab', tabId);
       document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
       });
@@ -2191,6 +2217,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
     }
 
     function showMaintTab(tabId) {
+      localStorage.setItem('openclaw_activeMaintTab', tabId);
       document.querySelectorAll('.maint-tab-content').forEach(el => {
         el.style.display = 'none';
       });
@@ -2245,6 +2272,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
     window.copyToClipboard = copyToClipboard;
 
     function showFernTab(tabId) {
+      localStorage.setItem('openclaw_activeFernTab', tabId);
       document.querySelectorAll('.fern-tab-content').forEach(el => {
         el.style.display = 'none';
       });
@@ -2268,6 +2296,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
     }
 
     function showCheckTab(tabId) {
+      localStorage.setItem('openclaw_activeCheckTab', tabId);
       document.querySelectorAll('.check-tab-content').forEach(el => {
         el.style.display = 'none';
       });
@@ -2290,7 +2319,12 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       }
     }
 
-    window.onload = () => { showTab('setup'); showMaintTab('maint-ollama'); showFernTab('fern-setup'); showCheckTab('check-list'); };
+    window.onload = () => {
+      showTab(localStorage.getItem('openclaw_activeTab') || 'setup');
+      showMaintTab(localStorage.getItem('openclaw_activeMaintTab') || 'maint-ollama');
+      showFernTab(localStorage.getItem('openclaw_activeFernTab') || 'fern-setup');
+      showCheckTab(localStorage.getItem('openclaw_activeCheckTab') || 'check-list');
+    };
   </script>
 </body>
 </html>
