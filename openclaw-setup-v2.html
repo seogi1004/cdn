@@ -331,10 +331,10 @@ openclaw gateway install && openclaw status</code></pre>
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">①</span> Playwright 바이너리 설치
+              <span class="text-yellow-400">①</span> Playwright 로컬 설치 (샌드박스)
               <span class="badge badge-stability">안정성</span>
             </h3>
-            <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">browser</code> 도구 AI 스냅샷 모드 활성화에 필요합니다. <strong class="text-slate-300">Fern 계정</strong>에서 실행하세요.</p>
+            <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">browser</code> 도구 AI 스냅샷 모드 활성화에 필요합니다. <strong class="text-slate-300">Fern 계정 + 샌드박스 경로</strong>에서 실행하세요.</p>
             <div class="bg-blue-950/20 p-3 rounded-lg border border-blue-800/30 mb-3">
               <p class="text-xs text-blue-300 font-bold mb-1">📌 빌트인 도구 (플러그인 설치 불필요)</p>
               <ul class="text-xs text-slate-400 space-y-0.5 list-disc list-inside">
@@ -346,16 +346,57 @@ openclaw gateway install && openclaw status</code></pre>
             </div>
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Fern 계정에서 실행
-npm install -g @playwright/test
+              <pre><code># Fern 계정 / 샌드박스(workspace) 안에서 실행
+cd /Users/fern/sandbox
+npm i -D @playwright/test
 npx playwright install
+npx playwright test
 openclaw plugins list</code></pre>
             </div>
           </div>
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">②</span> LaunchDaemons 에이전트 기동
+              <span class="text-yellow-400">②</span> Browser Relay 설정 (OpenClaw)
+              <span class="badge badge-required">필수</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-3">Playwright와 Relay는 브라우저 제어 모델이 다릅니다. 운영 환경에서는 Relay를 우선 권장합니다.</p>
+            <div class="bg-slate-900/40 p-4 rounded-lg border border-slate-700 mb-3">
+              <p class="text-xs text-slate-300 font-bold mb-2">Playwright vs Relay</p>
+              <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
+                <li>Playwright: 테스트 코드 기반 자동화. 샌드박스 내 로컬 실행 중심.</li>
+                <li>Relay: 크롬 확장 승인 탭만 제어. 운영 중 사용자 동의(Consent) 모델.</li>
+                <li>Playwright는 QA/회귀 테스트에 강하고, Relay는 실제 GUI 탭 제어에 강합니다.</li>
+              </ul>
+            </div>
+            <div class="code-block text-xs">
+              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># [1] Fern 계정에서 확장 소스 생성
+openclaw browser extension install
+
+# [2] Alvin Chrome에서 개발자 모드 ON
+# chrome://extensions
+
+# [3] Load unpacked 경로
+# /Users/fern/.openclaw/browser/chrome-extension
+
+# [4] 게이트웨이 확인
+curl -s http://127.0.0.1:18789 | head -n 5</code></pre>
+            </div>
+            <div class="bg-blue-950/20 p-3 rounded-lg border border-blue-800/30 mt-3">
+              <p class="text-xs text-blue-300 font-bold mb-1">핵심 체크</p>
+              <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
+                <li>확장 아이콘을 Pin 후, 제어 대상 탭에서 아이콘 클릭해 Badge ON 상태로 만듭니다.</li>
+                <li>새 탭에서 제어가 안 되면 해당 탭에서 아이콘을 다시 눌러 승인합니다.</li>
+                <li>설정 파일(<code class="text-emerald-400">openclaw.json</code>) 수동 수정은 필요 없습니다.</li>
+              </ul>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-3">공식 문서: OpenClaw Chrome Extension</p>
+          </div>
+
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
+              <span class="text-yellow-400">③</span> LaunchDaemons 에이전트 기동
               <span class="badge badge-stability">안정성</span>
             </h3>
             <p class="text-xs text-slate-400 mb-3">LaunchDaemons 등록 후 launchctl로 즉시 기동합니다. (plist는 마스터 스크립트에서 생성)</p>
@@ -368,13 +409,14 @@ sudo launchctl print system/com.openclaw.fern | head -n 30</code></pre>
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-slate-100 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">③</span> 페르소나 설정 (SOUL &amp; IDENTITY)
+              <span class="text-yellow-400">④</span> 페르소나 설정 (SOUL &amp; IDENTITY)
               <span class="badge badge-required">필수</span>
             </h3>
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 SOUL.md와 IDENTITY.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>BASE_DIR="/Users/fern/sandbox"
+              <pre><code># 샌드박스 경로 고정
+BASE_DIR="/Users/fern/sandbox"
 mkdir -p "$BASE_DIR"
 
 # 1. SOUL.md 생성
