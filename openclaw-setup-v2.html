@@ -198,15 +198,14 @@
 
     <!-- Main Content Tabs -->
     <nav class="mb-8 flex border-b border-slate-700/50 overflow-x-auto no-scrollbar">
-      <button onclick="showTab('setup')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-setup">1. 인프라 배포</button>
-      <button onclick="showTab('fern')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-fern">2. Fern (Agent)</button>
-      <button onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">3. 네트워크 & 보안</button>
-      <button onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">4. 샌드박싱</button>
+      <button onclick="showTab('setup')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-setup">인프라 배포</button>
+      <button onclick="showTab('fern')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-fern">Fern (Agent)</button>
+      <button onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">네트워크 &amp; 보안</button>
+      <button onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">샌드박싱</button>
       <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
-      <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">5. GUI 가이드</button>
-
-      <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">7. 관리</button>
-      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">8. 초기화</button>
+      <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">관리</button>
+      <button onclick="showTab('gui_guide')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-gui_guide">검증</button>
+      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">초기화</button>
     </nav>
 
     <!-- 1. Setup Tab -->
@@ -1695,7 +1694,7 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
           <!-- /maint-audit 끝 -->
 
             <!-- ⚡ 전체 스택 시작 / 종료 (공통) -->
-          <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-xl">
+          <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-xl mt-6">
             <h2 class="text-2xl font-bold mb-2 text-yellow-400 flex items-center gap-3">
               ⚡ 전체 스택 시작 / 종료 <span class="badge badge-stability">안정성</span>
             </h2>
