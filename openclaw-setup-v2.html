@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenClaw Setup v2 (macOS) - LaunchDaemons 전환</title>
+  <title>OpenClaw Setup (macOS) - LaunchDaemons 운영</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -155,16 +155,16 @@
     <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div>
         <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-emerald-400 to-indigo-400">
-          OpenClaw Setup v2 (macOS)
+          OpenClaw Setup (macOS)
         </h1>
-        <p class="text-slate-400 mt-3 text-lg">pm2 제거 + launchd 기반 OS Native 서비스 전환 · LAN Open</p>
+        <p class="text-slate-400 mt-3 text-lg">launchd 기반 OS Native 서비스 운영 · LAN Open</p>
       </div>
       <div class="glass p-5 rounded-2xl flex items-center gap-4 border-l-4 border-red-500 shadow-xl shadow-red-900/10">
         <div class="h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
         <div>
           <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Infrastructure Status</p>
           <div class="flex items-center">
-            <p class="text-sm font-semibold text-emerald-300">LaunchDaemons 전환 (pm2 제거)</p>
+            <p class="text-sm font-semibold text-emerald-300">LaunchDaemons 운영 상태</p>
             <span class="badge badge-required">필수</span>
           </div>
         </div>
@@ -198,14 +198,14 @@
 
     <!-- Main Content Tabs -->
     <nav class="mb-8 flex border-b border-slate-700/50 overflow-x-auto no-scrollbar">
-      <button onclick="showTab('setup')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-setup">인프라 배포</button>
-      <button onclick="showTab('fern')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-fern">Fern (Agent)</button>
-      <button onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">네트워크 &amp; 보안</button>
-      <button onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">샌드박싱</button>
-      <button onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
-      <button onclick="showTab('verification')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-verification">검증</button>
-      <button onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">관리</button>
-      <button onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">초기화</button>
+      <button type="button" onclick="showTab('setup')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-setup">인프라 배포</button>
+      <button type="button" onclick="showTab('fern')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-fern">Fern (Agent)</button>
+      <button type="button" onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">네트워크 &amp; 보안</button>
+      <button type="button" onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">샌드박싱</button>
+      <button type="button" onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
+      <button type="button" onclick="showTab('verification')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-verification">검증</button>
+      <button type="button" onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">관리</button>
+      <button type="button" onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">초기화</button>
     </nav>
 
     <!-- 1. Setup Tab -->
@@ -214,22 +214,22 @@
         <div class="glass glass-hover p-8 rounded-[2rem]">
           <h2 class="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-3">
             <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400 text-sm">01</span>
-            Before → After
+            운영 아키텍처
           </h2>
           <div class="space-y-4 text-sm text-slate-300">
             <div class="rounded-2xl bg-slate-900/50 border border-slate-700/50 p-5">
               <p class="font-bold text-slate-100 flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                Before (pm2)
+                서비스 체인
               </p>
-              <p class="mt-2 text-slate-400 leading-relaxed">root → alvin(pm2) → ollama / sudo -u fern → pm2 → openclaw gateway</p>
+              <p class="mt-2 text-slate-400 leading-relaxed">LaunchDaemons(system) → com.alvin.ollama(UserName=alvin) / com.openclaw.fern(UserName=fern)</p>
             </div>
             <div class="rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-5">
               <p class="font-bold text-emerald-400 flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                After (launchd)
+                운영 원칙
               </p>
-              <p class="mt-2 text-slate-300 leading-relaxed">LaunchDaemons → com.alvin.ollama(UserName=alvin) / com.openclaw.fern(UserName=fern)</p>
+              <p class="mt-2 text-slate-300 leading-relaxed">권한 경계 분리, 부팅 자동 기동, 로그 경로 고정으로 운영 안정성을 유지합니다.</p>
             </div>
           </div>
         </div>
@@ -243,30 +243,30 @@
               <thead class="bg-slate-900/80 text-slate-200">
                 <tr>
                   <th class="text-left p-4 font-semibold">항목</th>
-                  <th class="text-left p-4 font-semibold">pm2 (기존)</th>
-                  <th class="text-left p-4 font-semibold text-emerald-400">LaunchDaemons</th>
+                  <th class="text-left p-4 font-semibold">현재 운영 기준</th>
+                  <th class="text-left p-4 font-semibold text-emerald-400">검증 포인트</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/50">
                 <tr class="hover:bg-white/5 transition-colors">
                   <td class="p-4 font-medium text-slate-100">권한 경계</td>
-                  <td class="p-4 text-slate-400 italic">sudo 우회 혼재</td>
-                  <td class="p-4 text-emerald-300">OS Native isolation</td>
+                  <td class="p-4 text-slate-300">서비스별 실행 계정 분리</td>
+                  <td class="p-4 text-emerald-300">launchctl print에서 UserName 확인</td>
                 </tr>
                 <tr class="hover:bg-white/5 transition-colors">
                   <td class="p-4 font-medium text-slate-100">자동 재시작</td>
-                  <td class="p-4 text-slate-400 italic">pm2 의존</td>
-                  <td class="p-4 text-emerald-300">launchd native</td>
+                  <td class="p-4 text-slate-300">launchd 네이티브 재시작</td>
+                  <td class="p-4 text-emerald-300">재부팅 후 state/pid 유지 확인</td>
                 </tr>
                 <tr class="hover:bg-white/5 transition-colors">
                   <td class="p-4 font-medium text-slate-100">로그인 영향</td>
-                  <td class="p-4 text-slate-400 italic">GUI 필요 가능</td>
-                  <td class="p-4 text-emerald-300">부팅 즉시 자동</td>
+                  <td class="p-4 text-slate-300">부팅 즉시 자동 기동</td>
+                  <td class="p-4 text-emerald-300">로그인 전 서비스 활성 확인</td>
                 </tr>
                 <tr class="hover:bg-white/5 transition-colors">
                   <td class="p-4 font-medium text-slate-100">샌드박스</td>
-                  <td class="p-4 text-slate-400 italic">충돌 위험</td>
-                  <td class="p-4 text-emerald-300">독립 세션 보장</td>
+                  <td class="p-4 text-slate-300">Fern 샌드박스/ACL 분리</td>
+                  <td class="p-4 text-emerald-300">/Users/fern/sandbox 접근 통제 확인</td>
                 </tr>
               </tbody>
             </table>
@@ -294,9 +294,9 @@
               <span class="text-blue-400">➔</span> 당신이 해야 할 것
             </p>
             <ul class="space-y-2 text-slate-300">
-              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>pm2 제거</li>
+              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>Fern 런타임/권한 초기 구성</li>
               <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>LaunchDaemons plist 생성/등록</li>
-              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>launchctl 상태 확인</li>
+              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>launchctl 상태 및 로그 검증</li>
             </ul>
           </div>
         </div>
@@ -308,7 +308,7 @@
           환경 정리 (Alvin) <span class="badge badge-stability">안정성</span>
         </h2>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Alvin 계정에서 Playwright 라이브러리 및 브라우저 데이터 완전 삭제
 npm uninstall -g playwright
 rm -rf ~/Library/Caches/ms-playwright</code></pre>
@@ -318,25 +318,23 @@ rm -rf ~/Library/Caches/ms-playwright</code></pre>
       <div class="glass glass-hover p-8 border-l-4 border-blue-500 rounded-[2rem] shadow-xl">
         <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-blue-400">
           <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400 text-sm">STEP 1</span>
-          pm2 제거 (Alvin + Fern) <span class="badge badge-stability">안정성</span>
+          서비스 사전 점검 (Alvin + Fern) <span class="badge badge-stability">안정성</span>
         </h2>
         <p class="text-sm text-slate-400 mb-6 flex items-start gap-2">
           <span class="text-blue-400 text-base">ℹ</span>
           launchd는 macOS 기본 내장 서비스 관리자이므로 별도 설치가 필요 없습니다.
         </p>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># Alvin
-pm2 kill >/dev/null 2>&1 || true
-pm2 unstartup >/dev/null 2>&1 || true
-npm uninstall -g pm2
-rm -rf ~/.pm2 ~/.config/pm2
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># Alvin: 경로 및 서비스 파일 사전 점검
+which ollama
+ls -l /Library/LaunchDaemons/com.alvin.ollama.plist
+ls -l /Library/LaunchDaemons/com.openclaw.fern.plist
 
-# Fern: cwd 강제 고정 + pm2 제거
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 kill >/dev/null 2>&1 || true'
-sudo -H -u fern env -C /Users/fern zsh -lc 'pm2 unstartup >/dev/null 2>&1 || true'
-sudo -H -u fern env -C /Users/fern zsh -lc 'npm uninstall -g pm2'
-sudo rm -rf /Users/fern/.pm2 /Users/fern/.config/pm2</code></pre>
+# Fern: 런타임/설정 경로 확인
+sudo -H -u fern test -d /Users/fern/.nvm && echo "OK: nvm"
+sudo -H -u fern test -d /Users/fern/.openclaw && echo "OK: openclaw home"
+sudo -H -u fern test -d /Users/fern/sandbox && echo "OK: sandbox"</code></pre>
         </div>
       </div>
 
@@ -346,7 +344,7 @@ sudo rm -rf /Users/fern/.pm2 /Users/fern/.config/pm2</code></pre>
           Fern 런타임 구축 (Fern 계정) <span class="badge badge-required">필수</span>
         </h2>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 계정 전환 및 NVM/Node v24 원클릭 설치
 su - fern
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
@@ -389,11 +387,11 @@ openclaw gateway install && openclaw status</code></pre>
       <!-- 서브탭 -->
       <div class="glass rounded-[2rem] overflow-hidden shadow-2xl">
         <nav class="flex border-b border-slate-700/60 bg-slate-900/40">
-          <button onclick="showFernTab('fern-setup')" id="fbtn-fern-setup"
+          <button type="button" onclick="showFernTab('fern-setup')" id="fbtn-fern-setup"
             class="fern-tab-btn px-8 py-5 text-sm font-bold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap active">
             🛠️ 기본 설치 &amp; 페르소나
           </button>
-          <button onclick="showFernTab('fern-skills')" id="fbtn-fern-skills"
+          <button type="button" onclick="showFernTab('fern-skills')" id="fbtn-fern-skills"
             class="fern-tab-btn px-8 py-5 text-sm font-bold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">
             🧩 스킬 &amp; 훅
           </button>
@@ -427,7 +425,7 @@ openclaw gateway install && openclaw status</code></pre>
             </div>
 
             <div class="code-block text-xs">
-              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># Fern 계정 / 샌드박스(workspace) 안에서 실행
 cd /Users/fern/sandbox
 npm i -D @playwright/test
@@ -464,7 +462,7 @@ openclaw plugins list</code></pre>
             </div>
 
             <div class="code-block text-xs mb-6">
-              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># [1] 확장 소스 생성
 openclaw browser extension install
 
@@ -497,7 +495,7 @@ open -a "Google Chrome" --args \
             </h3>
             <p class="text-xs text-slate-400 mb-3">LaunchDaemons 등록 후 launchctl로 즉시 기동합니다. (plist는 마스터 스크립트에서 생성)</p>
             <div class="code-block text-xs">
-              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code>sudo launchctl kickstart -k system/com.openclaw.fern
 sudo launchctl print system/com.openclaw.fern | head -n 30</code></pre>
             </div>
@@ -510,7 +508,7 @@ sudo launchctl print system/com.openclaw.fern | head -n 30</code></pre>
             </h3>
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 SOUL.md와 IDENTITY.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
             <div class="code-block text-xs">
-              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># 1. SOUL.md 생성
 cat > "/Users/fern/sandbox/SOUL.md" << 'EOF'
 # Identity
@@ -598,7 +596,7 @@ echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini 
                 </div>
                 <p class="text-xs text-slate-400 mb-3">macOS 키체인 연동으로 비밀번호, API 키, 세션을 안전하게 조회합니다. Fern이 명령 실행 전 <code class="bg-black/30 px-1 rounded">op</code> CLI를 통해 인증합니다.</p>
                 <div class="code-block text-xs">
-                  <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                  <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                   <pre><code># 1. 1Password CLI 설치 확인
 op --version
 
@@ -713,7 +711,7 @@ openclaw skills install 1password</code></pre>
           🔒 핵심 1: 이중 계정 봉쇄 (Double Lock) <span class="badge badge-required">필수</span>
         </h2>
         <div class="code-block mb-4">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 에이전트 계정 격리
 sudo chmod 700 /Users/fern
 
@@ -728,7 +726,7 @@ sudo chmod 700 /Users/alvin</code></pre>
         </h2>
         <p class="text-sm text-slate-400 mb-4 italic">※ 24시간 운영 시 외부 SSH 진입점 최소화는 필수 위협 모델입니다.</p>
         <div class="code-block mb-4">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. sshd_config에서 Fern 원천 차단
 if ! sudo grep -q "^DenyUsers fern" /etc/ssh/sshd_config; then
   echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
@@ -744,7 +742,7 @@ su - fern</code></pre>
           📜 핵심 3: 네트워크 정책 요약 (pf.conf) <span class="badge badge-required">필수</span>
         </h2>
         <div class="code-block mb-4 text-slate-300">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code>#
 # Fern 계정 관련 네트워크 정책
 #
@@ -764,7 +762,7 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
         </div>
 
         <div class="code-block text-xs">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern << 'EOF'
 # ==========================================
@@ -813,7 +811,7 @@ echo "✅ PF 방화벽 격리 앵커 적용 완료"</code></pre>
         </h2>
         <p class="text-sm text-slate-400 mb-4">이미 구축되어 있다면 아래는 <strong class="text-slate-200">검증용</strong>으로만 사용하세요.</p>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 샌드박스 볼륨 멱등 생성 및 fstab 영구 마운트 설정
 CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
 if ! diskutil info "FernSandbox" >/dev/null 2>&1; then
@@ -834,7 +832,7 @@ fi
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true</code></pre>
         </div>
         <div class="code-block mt-4">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 마운트/권한 확인
 mount | grep /Users/fern/sandbox
 ls -ld /Users/fern/sandbox
@@ -862,7 +860,7 @@ ls -le /Users/Shared | head -n 5</code></pre>
             <h3 class="text-lg font-semibold text-slate-100 mb-2">plist 파일 위치</h3>
             <p class="text-sm text-slate-400">모든 plist는 시스템 레벨 LaunchDaemons 경로에 둡니다.</p>
             <div class="code-block mt-3 text-xs">
-              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist
 /Library/LaunchDaemons/com.openclaw.fern.plist</code></pre>
             </div>
@@ -870,7 +868,7 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
             <h3 class="text-lg font-semibold text-slate-100 mb-2">권한/검증/로드</h3>
             <div class="code-block text-xs">
-              <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code>sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 plutil -lint /Library/LaunchDaemons/com.alvin.ollama.plist
@@ -888,7 +886,7 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
           <h3 class="text-lg font-semibold text-slate-100 mb-2">생성 파일 목록</h3>
           <p class="text-sm text-slate-400 mb-3">마스터 스크립트가 생성하는 파일들입니다. 변경 시 반드시 root 권한 유지.</p>
           <div class="code-block text-xs">
-            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
             <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist
 /Library/LaunchDaemons/com.openclaw.fern.plist
 /usr/local/bin/run-fern-bot.sh
@@ -909,7 +907,7 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
         </div>
 
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
 
 # OpenClaw M4 Max Security Master Script v6.0-ULTIMATE
@@ -1114,15 +1112,41 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
           ✅ 주간 보안 체크리스트 <span class="badge badge-stability">안정성</span>
         </h2>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <div class="check-item"><div class="mt-1 text-emerald-400">✔</div><div><p class="font-bold text-slate-100 flex items-center">fstab 마운트 확인 <span class="badge badge-stability">안정성</span></p><p class="text-xs text-slate-400">/etc/fstab에 UUID 기반 자동 마운트가 설정되었는가?</p></div></div>
-          <div class="check-item"><div class="mt-1 text-emerald-400">✔</div><div><p class="font-bold text-slate-100 flex items-center">PF Syntax 무결성 <span class="badge badge-required">필수</span></p><p class="text-xs text-slate-400">PF 규칙에 따라 port 식별자 위치가 올바른가?</p></div></div>
-          <div class="check-item"><div class="mt-1 text-emerald-400">✔</div><div><p class="font-bold text-slate-100 flex items-center">ulimit 강제 종속 <span class="badge badge-stability">안정성</span></p><p class="text-xs text-slate-400">launchd ProgramArguments에 ulimit -u 512가 포함되어 있는가?</p></div></div>
-          <div class="check-item"><div class="mt-1 text-emerald-400">✔</div><div><p class="font-bold text-slate-100 flex items-center">ACL 안정성 <span class="badge badge-required">필수</span></p><p class="text-xs text-slate-400">재귀 옵션 없이 상위 루트 차단이 유효한가?</p></div></div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div>
+              <p class="font-bold text-slate-100 flex items-center">fstab 마운트 확인 <span class="badge badge-stability">안정성</span></p>
+              <p class="text-xs text-slate-400">/etc/fstab에 UUID 기반 자동 마운트가 설정되었는가?</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div>
+              <p class="font-bold text-slate-100 flex items-center">PF Syntax 무결성 <span class="badge badge-required">필수</span></p>
+              <p class="text-xs text-slate-400">PF 규칙에 따라 port 식별자 위치가 올바른가?</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div>
+              <p class="font-bold text-slate-100 flex items-center">ulimit 강제 종속 <span class="badge badge-stability">안정성</span></p>
+              <p class="text-xs text-slate-400">launchd ProgramArguments에 ulimit -u 512가 포함되어 있는가?</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="mt-1 text-emerald-400">✔</div>
+            <div>
+              <p class="font-bold text-slate-100 flex items-center">ACL 안정성 <span class="badge badge-required">필수</span></p>
+              <p class="text-xs text-slate-400">재귀 옵션 없이 상위 루트 차단이 유효한가?</p>
+            </div>
+          </div>
         </div>
+
         <h3 class="text-lg font-bold mb-4 text-slate-200 flex items-center">🔍 정기 보안 검증 커맨드 <span class="badge badge-required">필수</span></h3>
         <div class="code-block text-xs">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy All</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy All</button>
           <pre><code># 1. 홈 디렉토리 권한 확인
   ls -ld /Users/alvin /Users/fern
 
@@ -1139,30 +1163,132 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
       </div>
 
       <div class="glass border-l-4 border-emerald-500 rounded-2xl shadow-xl mb-8 overflow-hidden">
-        <div class="px-8 pt-8 pb-0"><h2 class="text-2xl font-bold mb-4 text-emerald-400 flex items-center gap-3">✅ 최종 체크리스트 <span class="badge badge-required">필수</span></h2></div>
+        <div class="px-8 pt-8 pb-0">
+          <h2 class="text-2xl font-bold mb-4 text-emerald-400 flex items-center gap-3">✅ 최종 체크리스트 <span class="badge badge-required">필수</span></h2>
+        </div>
+
         <nav class="flex border-b border-slate-700/60 px-8">
-          <button onclick="showCheckTab('check-list')" id="cbtn-check-list" class="check-tab-btn px-5 py-3 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">📋 체크리스트</button>
-          <button onclick="showCheckTab('check-audit')" id="cbtn-check-audit" class="check-tab-btn px-5 py-3 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">🔍 검증 기록</button>
+          <button type="button" onclick="showCheckTab('check-list')" id="cbtn-check-list" class="check-tab-btn px-5 py-3 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">📋 체크리스트</button>
+          <button type="button" onclick="showCheckTab('check-audit')" id="cbtn-check-audit" class="check-tab-btn px-5 py-3 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">🔍 검증 기록</button>
         </nav>
+
         <div id="check-list" class="check-tab-content p-8 space-y-6 text-sm text-slate-300">
-          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5"><p class="font-semibold text-slate-100 mb-3">1) PF 적용 확인</p><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo pfctl -s info | head
-  sudo pfctl -a fern -sr</code></pre></div></div>
-          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5"><p class="font-semibold text-slate-100 mb-3">2) fern 내부망 차단 확인</p><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo -u fern curl -m 2 http://10.0.0.1 || echo "OK: private blocked"
-  sudo -u fern curl -I https://example.com</code></pre></div></div>
-          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5"><p class="font-semibold text-slate-100 mb-3">3) launchd 등록/상태 확인</p><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.alvin.ollama | head -n 40
-  sudo launchctl print system/com.openclaw.fern | head -n 40</code></pre></div></div>
-          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5"><p class="font-semibold text-slate-100 mb-3">4) 로그 확인</p><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo tail -n 50 /var/log/openclaw/ollama.log
+          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+            <p class="font-semibold text-slate-100 mb-3">1) PF 적용 확인</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo pfctl -s info | head
+  sudo pfctl -a fern -sr</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+            <p class="font-semibold text-slate-100 mb-3">2) fern 내부망 차단 확인</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo -u fern curl -m 2 http://10.0.0.1 || echo "OK: private blocked"
+  sudo -u fern curl -I https://example.com</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+            <p class="font-semibold text-slate-100 mb-3">3) launchd 등록/상태 확인</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl print system/com.alvin.ollama | head -n 40
+  sudo launchctl print system/com.openclaw.fern | head -n 40</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+            <p class="font-semibold text-slate-100 mb-3">4) 로그 확인</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo tail -n 50 /var/log/openclaw/ollama.log
   sudo tail -n 50 /var/log/openclaw/ollama.err
   sudo tail -n 50 /var/log/openclaw/fern-bot.log
-  sudo tail -n 50 /var/log/openclaw/fern-bot.err</code></pre></div></div>
-          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5"><p class="font-semibold text-slate-100 mb-3">5) 재부팅 검증 (가장 중요)</p><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.alvin.ollama | grep -E "state|pid"
-  sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"</code></pre></div></div>
-          <div class="bg-emerald-950/20 border border-emerald-700/40 rounded-2xl p-5"><h3 class="text-lg font-semibold text-emerald-300 mb-2">🎯 최종 판정</h3><ul class="text-sm text-slate-300 space-y-1 list-disc list-inside"><li>보안 목표(소스코드 보호 + 내부망 차단): 달성</li><li>자동화(Playwright/Chrome): 달성</li><li>운영(launchd, 재부팅 자동 기동): 설계 완료</li></ul></div>
+  sudo tail -n 50 /var/log/openclaw/fern-bot.err</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+            <p class="font-semibold text-slate-100 mb-3">5) 재부팅 검증 (가장 중요)</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl print system/com.alvin.ollama | grep -E "state|pid"
+  sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-emerald-950/20 border border-emerald-700/40 rounded-2xl p-5">
+            <h3 class="text-lg font-semibold text-emerald-300 mb-2">🎯 최종 판정</h3>
+            <ul class="text-sm text-slate-300 space-y-1 list-disc list-inside">
+              <li>보안 목표(소스코드 보호 + 내부망 차단): 달성</li>
+              <li>자동화(Playwright/Chrome): 달성</li>
+              <li>운영(launchd, 재부팅 자동 기동): 설계 완료</li>
+            </ul>
+          </div>
         </div>
+
         <div id="check-audit" class="check-tab-content p-8 space-y-5" style="display:none">
-          <div class="flex items-center justify-between mb-2"><h3 class="text-base font-bold text-slate-100">🔍 PF 보안 검증 기록</h3><span class="text-xs text-slate-500">계속 업데이트됨</span></div>
-          <div class="bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden"><div class="flex items-center justify-between px-5 py-3 bg-emerald-950/30 border-b border-emerald-800/30"><div class="flex items-center gap-3"><span class="text-emerald-400 font-bold text-sm">1~3단계</span><span class="text-slate-200 font-semibold text-sm">fern pf / 내부망 / launchd 검증</span></div><span class="badge badge-optional">통과</span></div><div class="p-5 space-y-2 text-xs"><div class="flex items-start gap-3 p-3 rounded-lg bg-slate-900/40 border border-slate-700/50"><span class="text-emerald-400 font-bold shrink-0 mt-0.5">①</span><p class="text-emerald-300">대상 계정 및 기본 검증 통과 ✅</p></div><div class="flex items-start gap-3 p-3 rounded-lg bg-slate-900/40 border border-slate-700/50"><span class="text-emerald-400 font-bold shrink-0 mt-0.5">②</span><p class="text-emerald-300">pf 활성 / fern 앵커 로드 확인 ✅</p></div><div class="flex items-start gap-3 p-3 rounded-lg bg-slate-900/40 border border-slate-700/50"><span class="text-emerald-400 font-bold shrink-0 mt-0.5">③</span><p class="text-emerald-300">사내망 차단 / 외부 HTTPS 허용 실증 ✅</p></div></div></div>
-          <div class="rounded-xl border border-blue-700/40 bg-blue-950/10 overflow-hidden mt-2"><div class="px-5 py-4 border-b border-blue-800/30 flex items-center justify-between"><div><p class="text-blue-300 font-bold text-sm">📋 OpenClaw / fern 보안 검증 보고서</p><p class="text-slate-500 text-[11px] mt-0.5">검증일: 2026-02-25 · 검증자: Alvin</p></div><span class="badge badge-optional">검증 완료</span></div><div class="p-5 text-xs"><div class="grid grid-cols-2 md:grid-cols-4 gap-2"><div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center"><p class="text-[10px] text-slate-400 mb-0.5">네트워크 격리</p><p class="text-emerald-400 font-bold">✅ 완료</p></div><div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center"><p class="text-[10px] text-slate-400 mb-0.5">서비스 자동 기동</p><p class="text-emerald-400 font-bold">✅ 완료</p></div><div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center"><p class="text-[10px] text-slate-400 mb-0.5">Gateway / Telegram</p><p class="text-emerald-400 font-bold">✅ 동작</p></div><div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center"><p class="text-[10px] text-slate-400 mb-0.5">잔여 이슈</p><p class="text-emerald-400 font-bold">✅ 없음</p></div></div></div></div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-base font-bold text-slate-100">🔍 PF 보안 검증 기록</h3>
+            <span class="text-xs text-slate-500">계속 업데이트됨</span>
+          </div>
+
+          <div class="bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-3 bg-emerald-950/30 border-b border-emerald-800/30">
+              <div class="flex items-center gap-3">
+                <span class="text-emerald-400 font-bold text-sm">1~3단계</span>
+                <span class="text-slate-200 font-semibold text-sm">fern pf / 내부망 / launchd 검증</span>
+              </div>
+              <span class="badge badge-optional">통과</span>
+            </div>
+            <div class="p-5 space-y-2 text-xs">
+              <div class="flex items-start gap-3 p-3 rounded-lg bg-slate-900/40 border border-slate-700/50">
+                <span class="text-emerald-400 font-bold shrink-0 mt-0.5">①</span>
+                <p class="text-emerald-300">대상 계정 및 기본 검증 통과 ✅</p>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-lg bg-slate-900/40 border border-slate-700/50">
+                <span class="text-emerald-400 font-bold shrink-0 mt-0.5">②</span>
+                <p class="text-emerald-300">pf 활성 / fern 앵커 로드 확인 ✅</p>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-lg bg-slate-900/40 border border-slate-700/50">
+                <span class="text-emerald-400 font-bold shrink-0 mt-0.5">③</span>
+                <p class="text-emerald-300">사내망 차단 / 외부 HTTPS 허용 실증 ✅</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-blue-700/40 bg-blue-950/10 overflow-hidden mt-2">
+            <div class="px-5 py-4 border-b border-blue-800/30 flex items-center justify-between">
+              <div>
+                <p class="text-blue-300 font-bold text-sm">📋 OpenClaw / fern 보안 검증 보고서</p>
+                <p class="text-slate-500 text-[11px] mt-0.5">검증일: 2026-02-25 · 검증자: Alvin</p>
+              </div>
+              <span class="badge badge-optional">검증 완료</span>
+            </div>
+            <div class="p-5 text-xs">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center">
+                  <p class="text-[10px] text-slate-400 mb-0.5">네트워크 격리</p>
+                  <p class="text-emerald-400 font-bold">✅ 완료</p>
+                </div>
+                <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center">
+                  <p class="text-[10px] text-slate-400 mb-0.5">서비스 자동 기동</p>
+                  <p class="text-emerald-400 font-bold">✅ 완료</p>
+                </div>
+                <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center">
+                  <p class="text-[10px] text-slate-400 mb-0.5">Gateway / Telegram</p>
+                  <p class="text-emerald-400 font-bold">✅ 동작</p>
+                </div>
+                <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center">
+                  <p class="text-[10px] text-slate-400 mb-0.5">잔여 이슈</p>
+                  <p class="text-emerald-400 font-bold">✅ 없음</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1171,13 +1297,25 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
     <div id="maintenance" class="tab-content space-y-6">
       <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-xl">
         <h2 class="text-2xl font-bold mb-2 text-yellow-400 flex items-center gap-3">⚡ 전체 스택 시작 / 종료 <span class="badge badge-stability">안정성</span></h2>
-        <p class="text-sm text-slate-400 mb-5">2~4단계 검증은 공통 요소이며, 관리 탭에서는 Ollama/OpenClaw 운영 명령만 탭으로 구분합니다.</p>
+        <p class="text-sm text-slate-400 mb-5">검증 2~4단계는 공통으로 관리되며, 이 탭은 Ollama/OpenClaw 운영 명령만 서비스별로 구분해 제공합니다.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div><p class="text-xs font-bold text-emerald-400 uppercase mb-2">🟢 전체 시작</p><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl kickstart -k system/com.alvin.ollama
+          <div>
+            <p class="text-xs font-bold text-emerald-400 uppercase mb-2">🟢 전체 시작</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl kickstart -k system/com.alvin.ollama
 sleep 3 && curl -s http://127.0.0.1:11434/api/tags > /dev/null && echo "✅ Ollama 준비 완료"
-sudo launchctl kickstart -k system/com.openclaw.fern</code></pre></div></div>
-          <div><p class="text-xs font-bold text-red-400 uppercase mb-2">🔴 전체 종료</p><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
-sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre></div></div>
+sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-red-400 uppercase mb-2">🔴 전체 종료</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
+sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1187,14 +1325,14 @@ sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist</cod
           <div class="bg-emerald-950/30 p-4 rounded-xl border border-emerald-700/40">
             <p class="text-sm font-bold text-emerald-400 mb-2">🦅 Gateway Unreachable</p>
             <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>에서 unreachable이면 서비스가 중단 상태입니다.</p>
-            <div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
+            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
 sudo launchctl kickstart -k system/com.openclaw.fern
 openclaw status</code></pre></div>
           </div>
           <div class="bg-orange-950/30 p-4 rounded-xl border border-orange-700/40">
             <p class="text-sm font-bold text-orange-400 mb-2">🚨 Ollama 다운</p>
             <p class="text-xs text-slate-400 mb-3">FernBot이 Ollama에 연결하지 못하면 로컬 추론이 불가합니다.</p>
-            <div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.alvin.ollama | head -n 30
+            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.alvin.ollama | head -n 30
 sudo launchctl kickstart -k system/com.alvin.ollama
 curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre></div>
           </div>
@@ -1204,38 +1342,83 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre></div
       <div class="glass p-6 rounded-2xl border border-blue-700/40 bg-blue-950/10">
         <h2 class="text-lg font-bold text-blue-300 mb-3">🧾 로깅 방식 참고</h2>
         <p class="text-xs text-slate-400 mb-3">마스터 스크립트가 로그 파일을 미리 생성하고, 서비스 사용자별 소유권을 선할당합니다.</p>
-        <div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>ls -l /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
+        <div class="code-block text-xs">
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code>ls -l /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
 ls -l /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err
 sudo chown alvin:staff /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
-sudo chown fern:staff /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err</code></pre></div>
+sudo chown fern:staff /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err</code></pre>
+        </div>
       </div>
 
       <div class="glass rounded-2xl overflow-hidden">
         <nav class="flex border-b border-slate-700/60">
-          <button onclick="showMaintTab('maint-ollama')" id="mbtn-maint-ollama" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦙 Ollama 서버</button>
-          <button onclick="showMaintTab('maint-fernbot')" id="mbtn-maint-fernbot" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦅 FernBot (OpenClaw)</button>
+          <button type="button" onclick="showMaintTab('maint-ollama')" id="mbtn-maint-ollama" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦙 Ollama 서버</button>
+          <button type="button" onclick="showMaintTab('maint-fernbot')" id="mbtn-maint-fernbot" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦅 FernBot (OpenClaw)</button>
         </nav>
 
         <div id="maint-ollama" class="maint-tab-content p-6 space-y-5">
           <p class="text-xs text-slate-500">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다.</p>
-          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700"><h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-purple-400">①</span> 상태 확인</h3><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.alvin.ollama | head -n 30
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-purple-400">①</span> 상태 확인</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl print system/com.alvin.ollama | head -n 30
 lsof -i :11434
-curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre></div></div>
-          <div class="bg-purple-950/20 p-5 rounded-xl border border-purple-800/40"><h3 class="font-bold text-purple-300 mb-3 flex items-center gap-2"><span>②</span> 재시작</h3><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl kickstart -k system/com.alvin.ollama</code></pre></div></div>
-          <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30"><h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>③</span> 종료</h3><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
-pkill -f 'ollama serve'</code></pre></div></div>
+curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
+            </div>
+          </div>
+          <div class="bg-purple-950/20 p-5 rounded-xl border border-purple-800/40">
+            <h3 class="font-bold text-purple-300 mb-3 flex items-center gap-2"><span>②</span> 재시작</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
+            </div>
+          </div>
+          <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
+            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>③</span> 종료</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
+pkill -f 'ollama serve'</code></pre>
+            </div>
+          </div>
         </div>
 
         <div id="maint-fernbot" class="maint-tab-content p-6 space-y-5" style="display:none">
           <p class="text-xs text-slate-500">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다.</p>
-          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700"><h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-emerald-400">①</span> 상태 확인 및 로그</h3><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-emerald-400">①</span> 상태 확인 및 로그</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
 sudo tail -n 100 /var/log/openclaw/fern-bot.log
-sudo tail -n 100 /var/log/openclaw/fern-bot.err</code></pre></div></div>
-          <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40"><h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>②</span> 재시작</h3><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl kickstart -k system/com.openclaw.fern</code></pre></div></div>
-          <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30"><h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>③</span> 중지 / 종료</h3><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
-sudo pkill -u fern -f openclaw</code></pre></div></div>
-          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700"><h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">④</span> 설정 변경</h3><div class="code-block text-xs"><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo vi /Users/fern/.openclaw/openclaw.json
-sudo launchctl kickstart -k system/com.openclaw.fern</code></pre></div></div>
+sudo tail -n 100 /var/log/openclaw/fern-bot.err</code></pre>
+            </div>
+          </div>
+          <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
+            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>②</span> 재시작</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+            </div>
+          </div>
+          <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
+            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>③</span> 중지 / 종료</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
+sudo pkill -u fern -f openclaw</code></pre>
+            </div>
+          </div>
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">④</span> 설정 변경</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>sudo vi /Users/fern/.openclaw/openclaw.json
+sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1262,7 +1445,7 @@ sudo launchctl kickstart -k system/com.openclaw.fern</code></pre></div></div>
         </h2>
         <p class="text-sm text-slate-400 mb-4">launchd 데몬을 중지하고 시스템에서 언로드합니다.</p>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 데몬 언로드
 sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
 sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
@@ -1280,7 +1463,7 @@ pkill -f 'ollama serve' 2>/dev/null || true</code></pre>
         </h2>
         <p class="text-sm text-slate-400 mb-4">Fern 계정에서 openclaw, 플러그인, 설정 파일을 제거합니다.</p>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Fern 계정에서 실행
 su - fern
 
@@ -1306,7 +1489,7 @@ exit</code></pre>
         </h2>
         <p class="text-sm text-slate-400 mb-4">계정 삭제 전 FernSandbox 볼륨을 먼저 언마운트합니다.</p>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 샌드박스 볼륨 언마운트
 sudo diskutil unmount /Users/fern/sandbox 2>/dev/null || true
 
@@ -1325,7 +1508,7 @@ dscl . list /Users | grep fern   # 아무것도 출력되지 않으면 정상</c
           Step 4 — FernSandbox APFS 볼륨 &amp; fstab 제거
         </h2>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 볼륨이 남아 있다면 강제 언마운트 후 삭제
 diskutil list | grep FernSandbox   # 디스크 식별자 확인 (예: disk3s5)
 sudo diskutil apfs deleteVolume FernSandbox
@@ -1346,7 +1529,7 @@ cat /etc/fstab</code></pre>
           Step 5 — PF 방화벽 &amp; Anchor 제거
         </h2>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. pf.conf에서 fern anchor 라인 제거
 sudo sed -i '' '/anchor.*fern/d' /etc/pf.conf
 sudo sed -i '' '/load anchor.*fern/d' /etc/pf.conf
@@ -1368,7 +1551,7 @@ sudo pfctl -sr | grep fern   # 아무것도 출력되지 않으면 정상</code>
           Step 6 — SSH 정책 &amp; 홈 디렉터리 권한 복원 <span class="badge badge-optional">선택</span>
         </h2>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># sshd_config의 Fern 차단 규칙 제거 (필요 시)
 sudo sed -i '' '/^DenyUsers fern$/d' /etc/ssh/sshd_config
 
@@ -1387,7 +1570,7 @@ sudo chmod -a "user:fern deny list,add_file,search,delete,add_subdirectory,write
         </h2>
         <p class="text-sm text-slate-500 mb-4">Ollama를 다른 용도로 계속 사용한다면 이 단계는 건너뛰세요.</p>
         <div class="code-block">
-          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Ollama 바이너리 및 모델 데이터 완전 삭제
 sudo rm -rf /usr/local/bin/ollama
 sudo rm -rf ~/.ollama
@@ -1444,7 +1627,9 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
 
   <script>
     function showTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
       const targetContent = document.getElementById(tabId);
       if (targetContent) targetContent.classList.add('active');
 
@@ -1453,7 +1638,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
         btn.classList.add('text-slate-400','border-transparent');
       });
 
-      const activeBtn = document.getElementById('btn-' + tabId);
+      const activeBtn = document.getElementById(`btn-${tabId}`);
       if (activeBtn) {
         if (tabId === 'security' || tabId === 'sandbox' || tabId === 'rollback') {
           activeBtn.classList.add('active','border-red-500','text-red-400');
@@ -1469,7 +1654,9 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
     }
 
     function showMaintTab(tabId) {
-      document.querySelectorAll('.maint-tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.maint-tab-content').forEach(el => {
+        el.style.display = 'none';
+      });
       const target = document.getElementById(tabId);
       if (target) target.style.display = 'block';
 
@@ -1478,7 +1665,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
         btn.classList.add('text-slate-400','border-transparent');
       });
 
-      const activeBtn = document.getElementById('mbtn-' + tabId);
+      const activeBtn = document.getElementById(`mbtn-${tabId}`);
       if (activeBtn) {
         activeBtn.classList.remove('text-slate-400','border-transparent');
         if (tabId === 'maint-ollama') {
@@ -1518,8 +1705,12 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       document.body.removeChild(textarea);
     }
 
+    window.copyToClipboard = copyToClipboard;
+
     function showFernTab(tabId) {
-      document.querySelectorAll('.fern-tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.fern-tab-content').forEach(el => {
+        el.style.display = 'none';
+      });
       const target = document.getElementById(tabId);
       if (target) target.style.display = 'block';
 
@@ -1528,7 +1719,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
         btn.classList.add('text-slate-400','border-transparent');
       });
 
-      const activeBtn = document.getElementById('fbtn-' + tabId);
+      const activeBtn = document.getElementById(`fbtn-${tabId}`);
       if (activeBtn) {
         activeBtn.classList.remove('text-slate-400','border-transparent');
         if (tabId === 'fern-setup') {
@@ -1540,7 +1731,9 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
     }
 
     function showCheckTab(tabId) {
-      document.querySelectorAll('.check-tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.check-tab-content').forEach(el => {
+        el.style.display = 'none';
+      });
       const target = document.getElementById(tabId);
       if (target) target.style.display = 'block';
 
@@ -1549,7 +1742,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
         btn.classList.add('text-slate-400','border-transparent');
       });
 
-      const activeBtn = document.getElementById('cbtn-' + tabId);
+      const activeBtn = document.getElementById(`cbtn-${tabId}`);
       if (activeBtn) {
         activeBtn.classList.remove('text-slate-400','border-transparent');
         if (tabId === 'check-audit') {
