@@ -1564,8 +1564,8 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                     <li class="flex items-start gap-2">
                       <span class="text-emerald-400 shrink-0 mt-0.5">✅</span>
                       <div>
-                        <p class="text-slate-300 font-medium">Anthropic API 키 등록 완료</p>
-                        <p><code>auth-profiles.json</code>에 키 반영되어 anthropic 경로 호출 정상.</p>
+                        <p class="text-slate-300 font-medium">Anthropic API 키 미등록</p>
+                        <p><code>auth-profiles.json</code> 미반영 상태. 현재 Gemini 경로만 정상.</p>
                       </div>
                     </li>
                     <li class="flex items-start gap-2">
@@ -1605,7 +1605,7 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                   <div class="col-span-1 md:col-span-2 bg-emerald-950/20 p-3 rounded-lg border border-emerald-800/30">
                     <p class="text-emerald-300 font-bold text-[11px] mb-1.5">✅ 이슈 조치 완료</p>
                     <ol class="list-decimal list-inside text-slate-400 space-y-0.5">
-                      <li>Anthropic API 키 등록 완료 (<code>auth-profiles.json</code>)</li>
+                      <li>Anthropic API 키 미등록 (<code>auth-profiles.json</code>, Gemini 경로만 정상)</li>
                       <li>Chrome Relay 탭 attach 완료 (Badge ON)</li>
                       <li><code>openclaw.json</code> 스키마 정리 완료 (<code>browser.type/relay</code> 제거)</li>
                       <li><code>openclaw.json</code> watch 권한 조치 완료 (<code>EACCES</code> 해결)</li>
@@ -1696,8 +1696,8 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                   <p class="text-emerald-300 font-bold mb-2">✅ 이슈 조치 완료 (4건)</p>
                   <ol class="list-decimal list-inside text-slate-400 space-y-1.5">
                     <li>
-                      <strong class="text-slate-300">Anthropic API 키 등록</strong> —
-                      <code>auth-profiles.json</code> 반영 완료. Gemini/Anthropic 경로 모두 정상.
+                      <strong class="text-slate-300">Anthropic API 키 상태</strong> —
+                      <code>auth-profiles.json</code> 미반영. Gemini 경로만 정상.
                     </li>
                     <li>
                       <strong class="text-slate-300">Chrome Relay 탭 attach</strong> —
