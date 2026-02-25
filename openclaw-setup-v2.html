@@ -165,7 +165,7 @@
           <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Infrastructure Status</p>
           <div class="flex items-center">
             <p class="text-sm font-semibold text-emerald-300">LaunchDaemons 운영 상태</p>
-            <span class="badge badge-required">필수</span>
+            <span class="badge badge-required ml-2">필수</span>
           </div>
         </div>
       </div>
@@ -844,7 +844,7 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
         </h2>
         <div class="bg-red-950/20 p-4 rounded-2xl mb-6 border border-red-900/30">
           <p class="text-sm text-red-300 font-bold flex items-center">
-            💡 Fern PF Anchor: IPv4/IPv6 이중 격리 <span class="badge badge-required">필수</span>
+            💡 Fern PF Anchor: IPv4/IPv6 이중 격리 <span class="badge badge-required ml-2">필수</span>
           </p>
         </div>
 
@@ -936,7 +936,7 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <div>
             <div class="flex items-center">
               <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트</h2>
-              <span class="badge badge-stability">안정성</span>
+              <span class="badge badge-stability ml-2">안정성</span>
             </div>
             <p class="text-slate-400 text-sm mt-1">Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + LAN Open</p>
           </div>
@@ -1204,28 +1204,28 @@ echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
           <div class="check-item">
             <div class="mt-1 text-emerald-400">✔</div>
             <div>
-              <p class="font-bold text-slate-100 flex items-center">fstab 마운트 확인 <span class="badge badge-stability">안정성</span></p>
+              <p class="font-bold text-slate-100 flex items-center gap-2">fstab 마운트 확인 <span class="badge badge-stability">안정성</span></p>
               <p class="text-xs text-slate-400">/etc/fstab에 UUID 기반 자동 마운트가 설정되었는가?</p>
             </div>
           </div>
           <div class="check-item">
             <div class="mt-1 text-emerald-400">✔</div>
             <div>
-              <p class="font-bold text-slate-100 flex items-center">PF Syntax 무결성 <span class="badge badge-required">필수</span></p>
+              <p class="font-bold text-slate-100 flex items-center gap-2">PF Syntax 무결성 <span class="badge badge-required">필수</span></p>
               <p class="text-xs text-slate-400">PF 규칙에 따라 port 식별자 위치가 올바른가?</p>
             </div>
           </div>
           <div class="check-item">
             <div class="mt-1 text-emerald-400">✔</div>
             <div>
-              <p class="font-bold text-slate-100 flex items-center">ulimit 강제 종속 <span class="badge badge-stability">안정성</span></p>
+              <p class="font-bold text-slate-100 flex items-center gap-2">ulimit 강제 종속 <span class="badge badge-stability">안정성</span></p>
               <p class="text-xs text-slate-400">launchd ProgramArguments에 ulimit -u 512가 포함되어 있는가?</p>
             </div>
           </div>
           <div class="check-item">
             <div class="mt-1 text-emerald-400">✔</div>
             <div>
-              <p class="font-bold text-slate-100 flex items-center">ACL 안정성 <span class="badge badge-required">필수</span></p>
+              <p class="font-bold text-slate-100 flex items-center gap-2">ACL 안정성 <span class="badge badge-required">필수</span></p>
               <p class="text-xs text-slate-400">재귀 옵션 없이 상위 루트 차단이 유효한가?</p>
             </div>
           </div>
