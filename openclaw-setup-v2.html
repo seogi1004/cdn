@@ -401,8 +401,7 @@ openclaw gateway install && openclaw status</code></pre>
 
           <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
             <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              Playwright 로컬 설치 (샌드박스)
+              Step 1: Playwright 로컬 설치 (샌드박스)
               <span class="badge badge-stability">안정성</span>
             </h3>
             <p class="text-sm text-slate-400 mb-4 leading-relaxed"><code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">browser</code> 도구 AI 스냅샷 모드 활성화에 필요합니다. <strong class="text-slate-200 underline">Fern 계정 + 샌드박스 경로</strong>에서 실행하세요.</p>
@@ -437,8 +436,7 @@ openclaw plugins list</code></pre>
 
           <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
             <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              Browser Relay 설정 (OpenClaw)
+              Step 2: Browser Relay 설정 (OpenClaw)
               <span class="badge badge-required">필수</span>
             </h3>
             
@@ -490,7 +488,7 @@ open -a "Google Chrome" --args \
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">③</span> LaunchDaemons 에이전트 기동
+              Step 3: LaunchDaemons 에이전트 기동
               <span class="badge badge-stability">안정성</span>
             </h3>
             <p class="text-xs text-slate-400 mb-3">LaunchDaemons 등록 후 launchctl로 즉시 기동합니다. (plist는 마스터 스크립트에서 생성)</p>
@@ -503,7 +501,7 @@ sudo launchctl print system/com.openclaw.fern | head -n 30</code></pre>
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-slate-100 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">④</span> 페르소나 설정 (SOUL &amp; IDENTITY)
+              Step 4: 페르소나 설정 (SOUL &amp; IDENTITY)
               <span class="badge badge-required">필수</span>
             </h3>
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 SOUL.md와 IDENTITY.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
