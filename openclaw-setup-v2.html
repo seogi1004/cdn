@@ -133,7 +133,7 @@
         <h3 class="text-blue-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
           Hybrid Engine <span class="badge badge-required">필수</span>
         </h3>
-        <p class="text-xl font-bold text-blue-400">DeepSeek + Gemini</p>
+        <p class="text-xl font-bold text-blue-400">Qwen3 32B + Gemini</p>
         <p class="text-slate-400 text-sm">Local Privacy & High-speed Search</p>
       </div>
       <div class="glass p-6 rounded-2xl">
@@ -1130,16 +1130,15 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
             </div>
 
             <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-              <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">③</span> DeepSeek 모델 확인 및 다운로드</h3>
+              <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">③</span> Qwen3 모델 확인 및 다운로드</h3>
               <div class="code-block text-xs">
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                 <pre><code>ollama list
 
-# DeepSeek R1 Pull (버전에 따라 4~20GB)
-ollama pull deepseek-r1:14b   # 14B 권장 (M4 Max 64GB)
-# ollama pull deepseek-r1:32b
+# Qwen3 32B Pull (~20GB, M4 Max 64GB 권장)
+ollama pull qwen3:32b
 
-ollama run deepseek-r1:14b "안녕, 간단히 자기 소개해봐"</code></pre>
+ollama run qwen3:32b "안녕, 간단히 자기 소개해줘"</code></pre>
               </div>
             </div>
 
