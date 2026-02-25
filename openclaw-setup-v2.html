@@ -1552,58 +1552,6 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
                   </ul>
                 </div>
 
-                <!-- 4-3 fern 로그 (경고) -->
-                <div class="p-3 rounded-lg bg-amber-950/20 border border-amber-800/40">
-                  <p class="text-amber-300 font-semibold mb-2 flex items-center gap-2">
-                    <span>③</span> OpenClaw 로그 — 주의/조치 필요
-                  </p>
-                  <ul class="space-y-2.5 text-slate-400">
-                    <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
-                      <div>
-                        <p class="text-slate-300 font-medium">Anthropic API 키 누락</p>
-                        <code class="block text-slate-500 mb-0.5">No API key found for provider "anthropic" ... auth-profiles.json</code>
-                        <p>anthropic 모델 호출 시 실패. 현재 <code>google/gemini-3-flash-preview</code>는 동작 중이나 anthropic 경로는 깨져 있음.</p>
-                      </div>
-                    </li>
-                    <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
-                      <div>
-                        <p class="text-slate-300 font-medium">Chrome Relay 탭 미연결</p>
-                        <code class="block text-slate-500 mb-0.5">Chrome extension relay is running, but no tab is connected...</code>
-                        <p>크롬 확장은 살아있으나, 탭에서 아이콘을 눌러 attach하지 않아 브라우저 툴 실패 상태.</p>
-                      </div>
-                    </li>
-                    <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
-                      <div>
-                        <p class="text-slate-300 font-medium">openclaw.json watch 권한 문제 (EACCES)</p>
-                        <code class="block text-slate-500 mb-0.5">permission denied, watch '/Users/fern/.openclaw/openclaw.json'</code>
-                        <p>config watcher가 파일 감시 불가 → 자동 리로드 기능 깨짐.</p>
-                      </div>
-                    </li>
-                    <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
-                      <div>
-                        <p class="text-slate-300 font-medium">openclaw.json 스키마 오류</p>
-                        <code class="block text-slate-500 mb-0.5">Invalid config ... browser: Unrecognized keys: "type", "relay"</code>
-                        <p>현재 버전 스키마에서 <code>browser.type / relay</code> 키 미지원 → 설정 로딩/검증 실패.</p>
-                      </div>
-                    </li>
-                    <li class="flex items-start gap-2">
-                      <span class="text-slate-500 shrink-0 mt-0.5">ℹ️</span>
-                      <div>
-                        <p class="text-slate-400 font-medium">기타 참고</p>
-                        <ul class="list-disc list-inside space-y-0.5 mt-0.5">
-                          <li><code>MEMORY.md (ENOENT)</code> — 파일 없음</li>
-                          <li><code>tools canvas failed: node required</code> — Node 환경 조건 문제</li>
-                          <li><code>embedded run agent ... INTERNAL 500</code> — 특정 실행 내부 오류</li>
-                        </ul>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-
                 <!-- 결론 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                   <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30">
@@ -1614,17 +1562,8 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
                     <p class="text-[10px] text-slate-400 mb-0.5">Gateway / Telegram / Browser</p>
                     <p class="text-emerald-400 font-bold">✅ 기동 정상</p>
                   </div>
-                  <div class="col-span-1 md:col-span-2 bg-amber-950/20 p-3 rounded-lg border border-amber-800/30">
-                    <p class="text-amber-300 font-bold text-[11px] mb-1.5">⚠️ 다음 단계에서 해결 필요한 이슈</p>
-                    <ol class="list-decimal list-inside text-slate-400 space-y-0.5">
-                      <li>Anthropic API 키 누락 (<code>auth-profiles.json</code>)</li>
-                      <li>Chrome Relay 탭 attach 필요</li>
-                      <li><code>openclaw.json</code> 스키마 오류 (browser.type/relay 키 제거)</li>
-                      <li><code>openclaw.json</code> watch 권한 (<code>EACCES</code> 해결)</li>
-                    </ol>
-                  </div>
                 </div>
-
+                
               </div>
             </div>
             <!-- /4단계 끝 -->
