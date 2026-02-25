@@ -830,8 +830,14 @@ sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist</code></pr
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
-# OpenClaw M4 Max Security Master Script
-# (Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + Log Fix)
+
+# OpenClaw M4 Max Security Master Script v6.0-ULTIMATE
+# (Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + Security Patch)
+#
+# 작성자: Alvin (with Security Specialist AI)
+# 패치: ChatGPT 피드백 반영 (Idempotency Tag, Printf, Root-owned Wrapper, Modern Launchctl)
+# 환경: macOS Sequoia / M4 Max Mac mini (IP: 192.168.0.127)
+
 set -euo pipefail
 
 echo ">>> [0/6] 안전한 작업 디렉토리로 이동..."
@@ -839,110 +845,85 @@ cd / || true
 
 echo ">>> [1/6] 봇 전용 서비스 계정(fern) 확인 및 자동 생성..."
 if id -u fern >/dev/null 2>&1; then
-  echo "✅ 계정 'fern'이 이미 존재합니다. 생성을 스킵합니다."
+    echo "✅ 계정 'fern'이 이미 존재합니다."
 else
-  echo "⚠️ 계정 'fern'이 없습니다. 새롭게 생성합니다..."
-  # 애플 공식 명령어로 계정 생성 (어차피 SSH 원격 접속은 차단되므로 임의 패스워드 설정)
-  sudo sysadminctl -addUser fern -fullName "OpenClaw Bot" -password "FernBot1234!" >/dev/null 2>&1
-  echo "계정 생성 완료! OpenDirectory 동기화를 위해 3초 대기합니다..."
-  sleep 3
+    echo "⚠️ 계정 'fern' 생성 중..."
+    sudo sysadminctl -addUser fern -fullName "OpenClaw Bot" -password "FernBot1234!" >/dev/null 2>&1
+    sleep 3
 fi
 
 echo ">>> [2/6] 홈 디렉토리 및 ACL 격리 (Zero Trust)..."
 sudo chmod 700 /Users/alvin /Users/fern
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
 
-echo ">>> [3/6] APFS 샌드박스 볼륨(100G) 멱등 생성 + 영구 마운트..."
+echo ">>> [3/6] APFS 샌드박스 볼륨(100G) 멱등 생성 및 마운트..."
 CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
 
-# FernSandbox 존재 여부 확인 (존재하면 생성 스킵)
-if diskutil info "FernSandbox" >/dev/null 2>&1; then
-  echo "✅ FernSandbox already exists. Skipping addVolume."
-else
-  echo "Creating FernSandbox (quota 100g) in container: $CID"
-  sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
+if ! diskutil info "FernSandbox" >/dev/null 2>&1; then
+    sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
 fi
 
-# UUID 조회 (이름으로 조회)
 VOL_UUID="$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')"
-if [[ -z "${VOL_UUID:-}" ]]; then
-  echo "[ERROR] Failed to resolve FernSandbox Volume UUID" >&2
-  exit 1
-fi
-
-# /etc/fstab 중복 추가 방지 (UUID 기준)
 if ! sudo grep -q "UUID=${VOL_UUID} " /etc/fstab 2>/dev/null; then
-  echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
-else
-  echo "✅ fstab already contains FernSandbox UUID entry. Skipping."
+    echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
 fi
 
-# 마운트 포인트 준비
 sudo mkdir -p /Users/fern/sandbox
 sudo chown fern:staff /Users/fern/sandbox
 sudo chmod 700 /Users/fern/sandbox
 
-# 마운트 (이미 마운트되어 있으면 스킵)
-if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
-  echo "✅ FernSandbox already mounted at /Users/fern/sandbox. Skipping mount."
-else
-  sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
+if ! mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
+    sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
 fi
 
-echo ">>> [4/6] SSH 접근 통제 (sshd_config 기반 원천 차단)..."
-# 애플의 불안정한 dseditgroup 대신 표준 UNIX 방식인 DenyUsers 적용
+echo ">>> [4/6] SSH 접근 통제 (Deny fern)..."
 if ! sudo grep -q "^DenyUsers fern" /etc/ssh/sshd_config; then
-  echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
-  echo "sshd_config updated. fern user is now blocked from SSH."
-else
-  echo "✅ SSH restriction for fern is already set. Skipping."
+    echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
 fi
 
-echo ">>> [5/6] PF 방화벽 앵커 적용..."
+echo ">>> [5/6] PF 방화벽 및 네트워크 노출 설정 (v6.0 Patch)..."
+# [PATCH] fern 계정의 엄격한 차단 규칙 생성
 sudo tee /etc/pf.anchors/fern << 'EOF' >/dev/null
+# 1. 로컬 루프백 허용
 pass quick on lo0 user fern keep state
-# utun0~9 명시 차단 + ipsec0 차단
+# 2. VPN 및 가상 인터페이스 우회 차단
 block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
-# RFC1918 내부망 차단
+# 3. 사내망(RFC1918) 접근 차단 (내부 서버 보안)
 block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
-# IPv6 전면 차단
+# 4. IPv6 전면 차단
 block drop out quick inet6 from any to any user fern
-# 웹 전용 egress (HTTP/HTTPS + QUIC)
+# 5. 웹 서비스(HTTP/S) 허용
 pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
 pass out quick inet proto udp from any to any port 443 user fern keep state
-# 나머지 IPv4 egress 차단
+# 6. 나머지 차단
 block drop out quick inet from any to any user fern
 EOF
 
+# [PATCH] pf.conf에 LAN Ollama Access 멱등/안전 삽입 (printf 사용)
+PF_RULE_TAG="# LAN Ollama Access (v6.0)"
+PF_RULE_LINE="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
+
+if ! sudo grep -Fq "$PF_RULE_TAG" /etc/pf.conf; then
+    sudo sh -c "printf '\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_LINE' >> /etc/pf.conf"
+fi
+
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
-  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
-  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
+    echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+    echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
 fi
 sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
 sudo pfctl -E || true
 
-echo ">>> [6/6] 서비스 가동 (Launchd 네이티브 + 멱등 배포)..."
+echo ">>> [6/6] 서비스 가동 (Launchctl Modern + Security Fix)..."
 
-# Ollama는 시스템 공용(Homebrew), OpenClaw는 fern 격리 NVM 경로 사용
-OLLAMA_BIN="/opt/homebrew/bin/ollama"
-OPENCLAW_BIN="/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw"
-
-# ---------------------------------------------------------
-# [로깅] 중앙 로그 디렉토리 및 파일 권한 사전 세팅 (퍼펙트 버전 추가)
-# ---------------------------------------------------------
+# 로깅 설정
 sudo mkdir -p /var/log/openclaw
-sudo chown root:wheel /var/log/openclaw
-sudo chmod 755 /var/log/openclaw
-
-# 빈 로그 파일 미리 생성 및 각 데몬 실행자(alvin, fern)에게 소유권 부여
 sudo touch /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
 sudo touch /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err
 sudo chown alvin:staff /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
 sudo chown fern:staff /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err
 
-# ---------------------------------------------------------
-# [A] Ollama Daemon (alvin)
-# ---------------------------------------------------------
+# [6-1] Ollama Daemon (사내망 개방 + CORS 와일드카드 설정)
 sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null << EOF
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
@@ -952,45 +933,38 @@ sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null << EOF
   &lt;key&gt;UserName&lt;/key&gt;&lt;string&gt;alvin&lt;/string&gt;
   &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
   &lt;key&gt;KeepAlive&lt;/key&gt;&lt;true/&gt;
-  &lt;key&gt;ThrottleInterval&lt;/key&gt;&lt;integer&gt;10&lt;/integer&gt;
-
   &lt;key&gt;EnvironmentVariables&lt;/key&gt;
   &lt;dict&gt;
-    &lt;key&gt;OLLAMA_HOST&lt;/key&gt;&lt;string&gt;127.0.0.1:11434&lt;/string&gt;
+    &lt;key&gt;OLLAMA_HOST&lt;/key&gt;&lt;string&gt;0.0.0.0:11434&lt;/string&gt;
+    &lt;key&gt;OLLAMA_ORIGINS&lt;/key&gt;&lt;string&gt;*&lt;/string&gt;
     &lt;key&gt;PATH&lt;/key&gt;&lt;string&gt;/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&lt;/string&gt;
   &lt;/dict&gt;
-
   &lt;key&gt;ProgramArguments&lt;/key&gt;
   &lt;array&gt;
     &lt;string&gt;/bin/zsh&lt;/string&gt;
     &lt;string&gt;-lc&lt;/string&gt;
-    &lt;string&gt;${OLLAMA_BIN} serve&lt;/string&gt;
+    &lt;string&gt;/opt/homebrew/bin/ollama serve&lt;/string&gt;
   &lt;/array&gt;
-
   &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.log&lt;/string&gt;
   &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.err&lt;/string&gt;
 &lt;/dict&gt;
 &lt;/plist&gt;
 EOF
 
-# ---------------------------------------------------------
-# [B] Fern bot wrapper (root-owned, exec)
-# ---------------------------------------------------------
-sudo tee /usr/local/bin/run-fern-bot.sh >/dev/null << EOF
+# [6-2] Fern Bot Wrapper (Root-owned & Locked Patch)
+sudo tee /usr/local/bin/run-fern-bot.sh >/dev/null << 'EOF'
 #!/bin/zsh
 if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
-  cd /Users/fern/sandbox && ulimit -u 512 && exec ${OPENCLAW_BIN} gateway
+  cd /Users/fern/sandbox && exec /Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw gateway
 else
-  echo "[ERROR] Sandbox volume is not mounted. Aborting." >&2
   exit 78
 fi
 EOF
+# [PATCH] 실행 파일 위변조 방지
 sudo chown root:wheel /usr/local/bin/run-fern-bot.sh
 sudo chmod 755 /usr/local/bin/run-fern-bot.sh
 
-# ---------------------------------------------------------
-# [C] OpenClaw Daemon (fern)
-# ---------------------------------------------------------
+# [6-3] OpenClaw Daemon
 sudo tee /Library/LaunchDaemons/com.openclaw.fern.plist >/dev/null << 'EOF'
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
@@ -1001,36 +975,31 @@ sudo tee /Library/LaunchDaemons/com.openclaw.fern.plist >/dev/null << 'EOF'
   &lt;key&gt;GroupName&lt;/key&gt;&lt;string&gt;staff&lt;/string&gt;
   &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
   &lt;key&gt;KeepAlive&lt;/key&gt;&lt;true/&gt;
-  &lt;key&gt;ThrottleInterval&lt;/key&gt;&lt;integer&gt;10&lt;/integer&gt;
-
   &lt;key&gt;EnvironmentVariables&lt;/key&gt;
   &lt;dict&gt;
     &lt;key&gt;PATH&lt;/key&gt;&lt;string&gt;/Users/fern/.nvm/versions/node/v24.13.1/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&lt;/string&gt;
   &lt;/dict&gt;
-
   &lt;key&gt;ProgramArguments&lt;/key&gt;
   &lt;array&gt;
     &lt;string&gt;/usr/local/bin/run-fern-bot.sh&lt;/string&gt;
   &lt;/array&gt;
-
   &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/fern-bot.log&lt;/string&gt;
   &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/fern-bot.err&lt;/string&gt;
 &lt;/dict&gt;
 &lt;/plist&gt;
 EOF
 
-# plist 권한
 sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
 
-# 데몬 로드/재로드 (label 기준)
+# [PATCH] 서비스 최종 로드 (Modern Bootstrap Syntax)
 sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 
 sudo launchctl bootout system/com.openclaw.fern 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist
 
-echo "✅ 모든 배포가 완벽하게 끝났습니다 (Zero Trust + Log Fix 달성)"</code></pre>
+echo "✅ [v6.0] 모든 패치가 적용된 배포가 완료되었습니다!"</code></pre>
         </div>
       </div>
     </div>
