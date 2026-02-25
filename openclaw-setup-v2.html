@@ -141,7 +141,7 @@
           Isolation Policy <span class="badge badge-required">필수</span>
         </h3>
         <p class="text-xl font-bold text-emerald-400">Zero-Trust Account</p>
-        <p class="text-slate-400 text-sm">fstab Persistence & v5.8-ULTIMATE Syntax</p>
+        <p class="text-slate-400 text-sm">fstab Persistence &amp; Zero-Trust PF Anchor</p>
       </div>
     </section>
 
@@ -223,7 +223,7 @@
           <div class="bg-slate-900/40 border border-slate-700 rounded-xl p-4">
             <p class="font-semibold text-slate-100 mb-2">이미 적용됨 (건너뛰기 가능)</p>
             <ul class="list-disc list-inside space-y-1 text-slate-400">
-              <li>PF v5.8-ULTIMATE 정책</li>
+              <li>PF 네트워크 격리 정책</li>
               <li>APFS 샌드박스 + ACL</li>
             </ul>
           </div>
@@ -361,6 +361,16 @@ openclaw plugins list</code></pre>
               <span class="badge badge-required">필수</span>
             </h3>
             <p class="text-xs text-slate-400 mb-3">Playwright와 Relay는 브라우저 제어 모델이 다릅니다. 운영 환경에서는 Relay를 우선 권장합니다.</p>
+
+            <!-- 핵심 경고 -->
+            <div class="bg-amber-950/30 p-3 rounded-lg border border-amber-700/50 mb-3 flex items-start gap-2">
+              <span class="text-amber-400 text-base shrink-0">⚠️</span>
+              <div>
+                <p class="text-xs text-amber-300 font-bold mb-0.5">브라우저는 반드시 Fern 계정 화면에서 실행해야 합니다</p>
+                <p class="text-xs text-slate-400">Relay가 제어할 Chrome 인스턴스는 <strong class="text-slate-200">Fern 계정으로 로그인된 macOS 세션</strong>에서 띄워야 합니다. Alvin 계정의 Chrome은 Relay 대상이 될 수 없습니다.</p>
+              </div>
+            </div>
+
             <div class="bg-slate-900/40 p-4 rounded-lg border border-slate-700 mb-3">
               <p class="text-xs text-slate-300 font-bold mb-2">Playwright vs Relay</p>
               <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
@@ -369,25 +379,41 @@ openclaw plugins list</code></pre>
                 <li>Playwright는 QA/회귀 테스트에 강하고, Relay는 실제 GUI 탭 제어에 강합니다.</li>
               </ul>
             </div>
+
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># [1] Fern 계정에서 확장 소스 생성
 openclaw browser extension install
 
-# [2] Alvin Chrome에서 개발자 모드 ON
-# chrome://extensions
+# [2] Fern 계정 화면(macOS GUI 세션)에서 Chrome 실행
+#     → Fast User Switching 또는 별도 모니터로 Fern 세션 접근 후 실행
+#     방법 A: AppleScript로 Fern 세션에서 Chrome 열기 (Alvin 터미널에서 실행)
+sudo -u fern open -a "Google Chrome" --args \
+  --remote-debugging-port=9222 \
+  --user-data-dir=/Users/fern/.openclaw/chrome-profile
 
-# [3] Load unpacked 경로
-# /Users/fern/.openclaw/browser/chrome-extension
+#     방법 B: Fern 세션에 직접 로그인 후 실행
+#     (시스템 설정 > 사용자 > Fern 으로 빠른 사용자 전환)
+open -a "Google Chrome" --args \
+  --remote-debugging-port=9222 \
+  --user-data-dir=/Users/fern/.openclaw/chrome-profile
 
-# [4] 게이트웨이 확인
-curl -s http://127.0.0.1:18789 | head -n 5</code></pre>
+# [3] Fern 화면의 Chrome에서 개발자 모드 ON 후 확장 설치
+#     chrome://extensions  →  개발자 모드 ON  →  Load unpacked
+#     경로: /Users/fern/.openclaw/browser/chrome-extension
+
+# [4] 게이트웨이 연결 확인
+curl -s http://127.0.0.1:18789 | head -n 5
+curl -s http://127.0.0.1:9222/json | python3 -m json.tool</code></pre>
             </div>
+
             <div class="bg-blue-950/20 p-3 rounded-lg border border-blue-800/30 mt-3">
               <p class="text-xs text-blue-300 font-bold mb-1">핵심 체크</p>
               <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
+                <li><strong class="text-slate-300">Fern 화면</strong>에서 Chrome을 열고 확장을 설치해야 Relay가 정상 작동합니다.</li>
                 <li>확장 아이콘을 Pin 후, 제어 대상 탭에서 아이콘 클릭해 Badge ON 상태로 만듭니다.</li>
                 <li>새 탭에서 제어가 안 되면 해당 탭에서 아이콘을 다시 눌러 승인합니다.</li>
+                <li><code class="text-emerald-400">--remote-debugging-port=9222</code> 플래그로 CDP 연결이 활성화됩니다.</li>
                 <li>설정 파일(<code class="text-emerald-400">openclaw.json</code>) 수동 수정은 필요 없습니다.</li>
               </ul>
             </div>
@@ -570,7 +596,7 @@ openclaw skills install 1password</code></pre>
       <!-- 🌐 네트워크 허용/차단 요약 (추가됨) -->
       <div class="glass p-8 border-l-4 border-indigo-500 rounded-2xl shadow-xl shadow-indigo-900/10">
         <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
-          🌐 네트워크 허용/차단 요약 (v5.8-ULTIMATE Optimized)
+          🌐 네트워크 허용/차단 요약
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- 허용 리스트 -->
@@ -659,11 +685,11 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
 
       <div class="glass p-8 border-l-4 border-emerald-400 rounded-2xl shadow-xl shadow-emerald-900/10">
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
-          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세 v5.8-ULTIMATE) <span class="badge badge-required">필수</span>
+          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세) <span class="badge badge-required">필수</span>
         </h2>
         <div class="bg-red-950/20 p-4 rounded-2xl mb-6 border border-red-900/30">
           <p class="text-sm text-red-300 font-bold flex items-center">
-            💡 v5.8-ULTIMATE Anchor 요약: IPv4/IPv6 완벽 통제 <span class="badge badge-required">필수</span>
+            💡 Fern PF Anchor: IPv4/IPv6 이중 격리 <span class="badge badge-required">필수</span>
           </p>
         </div>
 
@@ -672,7 +698,7 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
           <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
 sudo tee /etc/pf.anchors/fern << 'EOF'
 # ==========================================
-# Fern PF Anchor - v5.8-ULTIMATE
+# Fern PF Anchor
 # 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
 # ==========================================
 
@@ -704,7 +730,7 @@ fi
 sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
 sudo pfctl -E
 
-echo "✅ PF 방화벽 격리 앵커 적용 완료 (우주방어 모드)"</code></pre>
+echo "✅ PF 방화벽 격리 앵커 적용 완료"</code></pre>
         </div>
       </div>
     </div>
@@ -747,7 +773,7 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v5.8-PERFECT-PROVISIONING)</h2>
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트</h2>
               <span class="badge badge-stability">안정성</span>
             </div>
             <p class="text-slate-400 text-sm mt-1">Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd</p>
@@ -804,7 +830,7 @@ sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist</code></pr
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
-# OpenClaw M4 Max Security Master Script v5.8-PERFECT-PROVISIONING
+# OpenClaw M4 Max Security Master Script
 # (Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + Log Fix)
 set -euo pipefail
 
@@ -872,7 +898,7 @@ else
   echo "✅ SSH restriction for fern is already set. Skipping."
 fi
 
-echo ">>> [5/6] PF 방화벽 강화 (v5.8-ULTIMATE 유지)..."
+echo ">>> [5/6] PF 방화벽 앵커 적용..."
 sudo tee /etc/pf.anchors/fern << 'EOF' >/dev/null
 pass quick on lo0 user fern keep state
 # utun0~9 명시 차단 + ipsec0 차단
@@ -1083,7 +1109,7 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
         </div>
 
         <div class="glass p-6 rounded-2xl border border-blue-700/40 bg-blue-950/10">
-          <h2 class="text-lg font-bold text-blue-300 mb-3">🧾 v5.8 로깅 방식 변경점</h2>
+          <h2 class="text-lg font-bold text-blue-300 mb-3">🧾 로깅 방식 참고</h2>
           <p class="text-xs text-slate-400 mb-3">마스터 스크립트가 로그 파일을 미리 생성하고, 서비스 사용자별 소유권을 선할당합니다.</p>
           <div class="code-block text-xs">
             <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
@@ -1290,7 +1316,7 @@ sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist</cod
               <div class="mt-1 text-emerald-400">✔</div>
               <div>
                 <p class="font-bold text-slate-100 flex items-center">PF Syntax 무결성 <span class="badge badge-required">필수</span></p>
-                <p class="text-xs text-slate-400">v5.8-ULTIMATE 규칙에 따라 port 식별자 위치가 올바른가?</p>
+                <p class="text-xs text-slate-400">PF 규칙에 따라 port 식별자 위치가 올바른가?</p>
               </div>
             </div>
             <div class="check-item">
@@ -1328,10 +1354,10 @@ ps aux | grep -v grep | egrep 'openclaw|ollama'</code></pre>
           </div>
         </div>
 
-        <!-- ✅ v5.8-PERFECT-PROVISIONING 최종 체크리스트 -->
+        <!-- ✅ 최종 체크리스트 -->
         <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl mb-8">
           <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
-            ✅ v5.8-PERFECT-PROVISIONING 최종 체크리스트 <span class="badge badge-required">필수</span>
+            ✅ 최종 체크리스트 <span class="badge badge-required">필수</span>
           </h2>
 
           <div class="space-y-6 text-sm text-slate-300">
@@ -1600,7 +1626,7 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
 
     <!-- Footer -->
     <footer class="mt-20 py-12 border-t border-slate-800/50 text-center text-slate-500 text-sm">
-      <p>© 2026 Alvin's AI Infrastructure | Security Protocol v5.8-ULTIMATE (Verified)</p>
+      <p>© 2026 Alvin's AI Infrastructure | OpenClaw Setup Guide</p>
     </footer>
   </div>
 
