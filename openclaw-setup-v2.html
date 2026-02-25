@@ -587,17 +587,18 @@ echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini 
 
           <div>
             <h3 class="text-base font-bold text-slate-100 mb-3">🧩 활성 스킬</h3>
-            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
-              <div class="bg-blue-600/20 p-2.5 rounded-lg border border-blue-500/30 text-2xl shrink-0">🔐</div>
-              <div class="flex-1">
-                <div class="flex items-center gap-2 mb-1">
-                  <p class="font-bold text-slate-100">1Password</p>
-                  <span class="badge badge-required">활성</span>
-                </div>
-                <p class="text-xs text-slate-400 mb-3">macOS 키체인 연동으로 비밀번호, API 키, 세션을 안전하게 조회합니다. Fern이 명령 실행 전 <code class="bg-black/30 px-1 rounded">op</code> CLI를 통해 인증합니다.</p>
-                <div class="code-block text-xs">
-                  <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                  <pre><code># 1. 1Password CLI 설치 확인
+            <div class="space-y-4">
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+                <div class="bg-blue-600/20 p-2.5 rounded-lg border border-blue-500/30 text-2xl shrink-0">🔐</div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <p class="font-bold text-slate-100">1Password</p>
+                    <span class="badge badge-required">활성</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mb-3">macOS 키체인 연동으로 비밀번호, API 키, 세션을 안전하게 조회합니다. Fern이 명령 실행 전 <code class="bg-black/30 px-1 rounded">op</code> CLI를 통해 인증합니다.</p>
+                  <div class="code-block text-xs">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre><code># 1. 1Password CLI 설치 확인
 op --version
 
 # 2. Fern 계정에서 세션 인증
@@ -605,6 +606,78 @@ op signin
 
 # 3. 스킬 활성화 (Fern sandbox에서 실행)
 openclaw skills install 1password</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+                <div class="bg-indigo-600/20 p-2.5 rounded-lg border border-indigo-500/30 text-2xl shrink-0">📝</div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <p class="font-bold text-slate-100">Notion (steipete/notion)</p>
+                    <span class="badge badge-required">추가</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mb-3">ClawHub Notion 스킬입니다. 페이지 조회/검색/문서 정리에 사용합니다. Notion 통합 토큰 및 워크스페이스 권한이 필요합니다.</p>
+                  <div class="code-block text-xs">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre><code># 1. ClawHub Notion 스킬 설치
+openclaw skills install steipete/notion
+
+# 설치 실패 시 대체 설치
+openclaw skills install https://github.com/steipete/notion-skill
+
+# 2. 설치 확인
+openclaw skills list | grep notion
+
+# 3. Notion API Key 저장
+mkdir -p ~/.config/notion
+echo "YOUR_NOTION_API_KEY" > ~/.config/notion/api_key
+
+# 4. 필요 시 활성화
+openclaw skills enable steipete/notion</code></pre>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-2">참고: https://clawhub.ai/steipete/notion · Notion 페이지/DB를 Integration에 직접 공유해야 조회됩니다.</p>
+                </div>
+              </div>
+
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+                <div class="bg-emerald-600/20 p-2.5 rounded-lg border border-emerald-500/30 text-2xl shrink-0">🌐</div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <p class="font-bold text-slate-100">Browser Relay (Chrome)</p>
+                    <span class="badge badge-required">활성</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mb-3">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다.</p>
+                  <div class="code-block text-xs">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre><code># Relay 확장 설치
+openclaw browser extension install
+
+# Fern 세션에서 Chrome 실행 (CDP)
+open -a "Google Chrome" --args \
+  --remote-debugging-port=9222 \
+  --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+                <div class="bg-cyan-600/20 p-2.5 rounded-lg border border-cyan-500/30 text-2xl shrink-0">🎭</div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <p class="font-bold text-slate-100">Playwright (Sandbox)</p>
+                    <span class="badge badge-optional">적용</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mb-3">Playwright는 Fern sandbox의 브라우저 자동화/검증 런타임입니다. Browser Relay와 함께 쓰면 GUI 흐름 점검과 회귀 확인을 빠르게 반복할 수 있습니다.</p>
+                  <div class="code-block text-xs">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre><code># Fern sandbox 기준 확인
+cd /Users/fern/sandbox
+npx playwright --version
+
+# 필요 시 브라우저 바이너리 재설치
+npx playwright install</code></pre>
+                  </div>
                 </div>
               </div>
             </div>
@@ -624,7 +697,23 @@ openclaw skills install 1password</code></pre>
               </div>
 
               <div class="check-item">
+                <div class="mt-1 text-emerald-400 text-lg font-bold">②</div>
+                <div>
+                  <p class="font-bold text-slate-100">Browser Relay 연결 상태 점검</p>
+                  <p class="text-xs text-slate-400">Gateway 시작 후 Chrome 확장 attach 상태(Badge ON)를 확인해 브라우저 제어 도구를 사용 가능한 상태로 유지합니다.</p>
+                </div>
+              </div>
+
+              <div class="check-item">
                 <div class="mt-1 text-emerald-400 text-lg font-bold">③</div>
+                <div>
+                  <p class="font-bold text-slate-100">Playwright 런타임 점검</p>
+                  <p class="text-xs text-slate-400">Gateway 세션 초기화 시 sandbox의 Playwright 런타임(<code class="text-emerald-400 bg-black/40 px-1 rounded">npx playwright --version</code>)을 확인해 브라우저 자동화 준비 상태를 보장합니다.</p>
+                </div>
+              </div>
+
+              <div class="check-item">
+                <div class="mt-1 text-emerald-400 text-lg font-bold">④</div>
                 <div>
                   <p class="font-bold text-slate-100">Persona / Identity 로드 (SOUL.md)</p>
                   <p class="text-xs text-slate-400">시작 시 <code class="text-emerald-400 bg-black/40 px-1 rounded">SOUL.md</code>와 <code class="text-emerald-400 bg-black/40 px-1 rounded">IDENTITY.md</code>를 sandbox에서 읽어 시스템 컨텍스트로 적용합니다.</p>
@@ -632,7 +721,7 @@ openclaw skills install 1password</code></pre>
               </div>
 
               <div class="check-item">
-                <div class="mt-1 text-emerald-400 text-lg font-bold">④</div>
+                <div class="mt-1 text-emerald-400 text-lg font-bold">⑤</div>
                 <div>
                   <p class="font-bold text-slate-100">Workspace 경로 설정</p>
                   <p class="text-xs text-slate-400">에이전트의 기본 작업 디렉터리를 <code class="text-emerald-400 bg-black/40 px-1 rounded">/Users/fern/sandbox</code>로 설정합니다.</p>
@@ -640,7 +729,7 @@ openclaw skills install 1password</code></pre>
               </div>
 
               <div class="check-item">
-                <div class="mt-1 text-emerald-400 text-lg font-bold">⑤</div>
+                <div class="mt-1 text-emerald-400 text-lg font-bold">⑥</div>
                 <div>
                   <p class="font-bold text-slate-100">Gateway 자동 등록</p>
                   <p class="text-xs text-slate-400"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway install</code> 훅이 실행되어 Gateway가 <span class="text-emerald-400 font-bold">running</span> 상태로 유지됩니다.</p>
