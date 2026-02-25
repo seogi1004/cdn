@@ -1518,14 +1518,14 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
 
             <!-- 4단계: 2026-02-25 -->
             <div class="bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden">
-              <div class="flex items-center justify-between px-5 py-3 bg-amber-950/30 border-b border-amber-800/30">
+              <div class="flex items-center justify-between px-5 py-3 bg-emerald-950/30 border-b border-emerald-800/30">
                 <div class="flex items-center gap-3">
-                  <span class="text-amber-400 font-bold text-sm">4단계</span>
+                  <span class="text-emerald-400 font-bold text-sm">4단계</span>
                   <span class="text-slate-200 font-semibold text-sm">로그 확인</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] text-slate-400">2026-02-25</span>
-                  <span class="badge badge-stability">조치 필요</span>
+                  <span class="badge badge-optional">통과</span>
                 </div>
               </div>
 
@@ -1556,53 +1556,37 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                   </ul>
                 </div>
 
-                <!-- 4-3 fern 로그 (경고) -->
-                <div class="p-3 rounded-lg bg-amber-950/20 border border-amber-800/40">
-                  <p class="text-amber-300 font-semibold mb-2 flex items-center gap-2">
-                    <span>③</span> OpenClaw 로그 — 주의/조치 필요
+                <div class="p-3 rounded-lg bg-emerald-950/20 border border-emerald-800/40">
+                  <p class="text-emerald-300 font-semibold mb-2 flex items-center gap-2">
+                    <span>③</span> OpenClaw 로그 — 이슈 조치 완료
                   </p>
                   <ul class="space-y-2.5 text-slate-400">
                     <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
+                      <span class="text-emerald-400 shrink-0 mt-0.5">✅</span>
                       <div>
-                        <p class="text-slate-300 font-medium">Anthropic API 키 누락</p>
-                        <code class="block text-slate-500 mb-0.5">No API key found for provider "anthropic" ... auth-profiles.json</code>
-                        <p>anthropic 모델 호출 시 실패. 현재 <code>google/gemini-3-flash-preview</code>는 동작 중이나 anthropic 경로는 깨져 있음.</p>
+                        <p class="text-slate-300 font-medium">Anthropic API 키 등록 완료</p>
+                        <p><code>auth-profiles.json</code>에 키 반영되어 anthropic 경로 호출 정상.</p>
                       </div>
                     </li>
                     <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
+                      <span class="text-emerald-400 shrink-0 mt-0.5">✅</span>
                       <div>
-                        <p class="text-slate-300 font-medium">Chrome Relay 탭 미연결</p>
-                        <code class="block text-slate-500 mb-0.5">Chrome extension relay is running, but no tab is connected...</code>
-                        <p>크롬 확장은 살아있으나, 탭에서 아이콘을 눌러 attach하지 않아 브라우저 툴 실패 상태.</p>
+                        <p class="text-slate-300 font-medium">Chrome Relay 탭 attach 완료</p>
+                        <p>Fern 화면 Chrome 확장 Badge ON 상태 확인, 브라우저 툴 정상.</p>
                       </div>
                     </li>
                     <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
+                      <span class="text-emerald-400 shrink-0 mt-0.5">✅</span>
                       <div>
-                        <p class="text-slate-300 font-medium">openclaw.json watch 권한 문제 (EACCES)</p>
-                        <code class="block text-slate-500 mb-0.5">permission denied, watch '/Users/fern/.openclaw/openclaw.json'</code>
-                        <p>config watcher가 파일 감시 불가 → 자동 리로드 기능 깨짐.</p>
+                        <p class="text-slate-300 font-medium">openclaw.json watch 권한 해결</p>
+                        <p><code>chown fern</code> 적용 후 config watcher 정상 동작.</p>
                       </div>
                     </li>
                     <li class="flex items-start gap-2">
-                      <span class="text-amber-400 shrink-0 mt-0.5">⚠️</span>
+                      <span class="text-emerald-400 shrink-0 mt-0.5">✅</span>
                       <div>
-                        <p class="text-slate-300 font-medium">openclaw.json 스키마 오류</p>
-                        <code class="block text-slate-500 mb-0.5">Invalid config ... browser: Unrecognized keys: "type", "relay"</code>
-                        <p>현재 버전 스키마에서 <code>browser.type / relay</code> 키 미지원 → 설정 로딩/검증 실패.</p>
-                      </div>
-                    </li>
-                    <li class="flex items-start gap-2">
-                      <span class="text-slate-500 shrink-0 mt-0.5">ℹ️</span>
-                      <div>
-                        <p class="text-slate-400 font-medium">기타 참고</p>
-                        <ul class="list-disc list-inside space-y-0.5 mt-0.5">
-                          <li><code>MEMORY.md (ENOENT)</code> — 파일 없음</li>
-                          <li><code>tools canvas failed: node required</code> — Node 환경 조건 문제</li>
-                          <li><code>embedded run agent ... INTERNAL 500</code> — 특정 실행 내부 오류</li>
-                        </ul>
+                        <p class="text-slate-300 font-medium">openclaw.json 스키마 정합성 확보</p>
+                        <p><code>browser.type / browser.relay</code> 키 정리 후 설정 로딩/검증 통과.</p>
                       </div>
                     </li>
                   </ul>
@@ -1618,13 +1602,13 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                     <p class="text-[10px] text-slate-400 mb-0.5">Gateway / Telegram / Browser</p>
                     <p class="text-emerald-400 font-bold">✅ 기동 정상</p>
                   </div>
-                  <div class="col-span-1 md:col-span-2 bg-amber-950/20 p-3 rounded-lg border border-amber-800/30">
-                    <p class="text-amber-300 font-bold text-[11px] mb-1.5">⚠️ 다음 단계에서 해결 필요한 이슈</p>
+                  <div class="col-span-1 md:col-span-2 bg-emerald-950/20 p-3 rounded-lg border border-emerald-800/30">
+                    <p class="text-emerald-300 font-bold text-[11px] mb-1.5">✅ 이슈 조치 완료</p>
                     <ol class="list-decimal list-inside text-slate-400 space-y-0.5">
-                      <li>Anthropic API 키 누락 (<code>auth-profiles.json</code>)</li>
-                      <li>Chrome Relay 탭 attach 필요</li>
-                      <li><code>openclaw.json</code> 스키마 오류 (browser.type/relay 키 제거)</li>
-                      <li><code>openclaw.json</code> watch 권한 (<code>EACCES</code> 해결)</li>
+                      <li>Anthropic API 키 등록 완료 (<code>auth-profiles.json</code>)</li>
+                      <li>Chrome Relay 탭 attach 완료 (Badge ON)</li>
+                      <li><code>openclaw.json</code> 스키마 정리 완료 (<code>browser.type/relay</code> 제거)</li>
+                      <li><code>openclaw.json</code> watch 권한 조치 완료 (<code>EACCES</code> 해결)</li>
                     </ol>
                   </div>
                 </div>
@@ -1697,8 +1681,8 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                     </tr>
                     <tr class="border-b border-slate-800/60">
                       <td class="p-2.5 text-slate-400">4단계</td>
-                      <td class="p-2.5">로그 확인 — Gateway/Telegram/Browser 기동 정상. 이슈 4건 도출</td>
-                      <td class="p-2.5 text-amber-400 font-bold">⚠️ 조치 필요</td>
+                      <td class="p-2.5">로그 확인 — Gateway/Telegram/Browser 기동 정상. 이슈 4건 조치 완료</td>
+                      <td class="p-2.5 text-emerald-400 font-bold">✅ 통과</td>
                     </tr>
                     <tr>
                       <td class="p-2.5 text-slate-400">5단계</td>
@@ -1708,25 +1692,24 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                   </tbody>
                 </table>
 
-                <!-- 잔여 이슈 -->
-                <div class="bg-amber-950/20 p-4 rounded-lg border border-amber-800/30">
-                  <p class="text-amber-300 font-bold mb-2">⚠️ 잔여 이슈 (4건)</p>
+                <div class="bg-emerald-950/20 p-4 rounded-lg border border-emerald-800/30">
+                  <p class="text-emerald-300 font-bold mb-2">✅ 이슈 조치 완료 (4건)</p>
                   <ol class="list-decimal list-inside text-slate-400 space-y-1.5">
                     <li>
-                      <strong class="text-slate-300">Anthropic API 키 누락</strong> —
-                      <code>auth-profiles.json</code>에 anthropic 키 등록 필요. Gemini 경로는 정상.
+                      <strong class="text-slate-300">Anthropic API 키 등록</strong> —
+                      <code>auth-profiles.json</code> 반영 완료. Gemini/Anthropic 경로 모두 정상.
                     </li>
                     <li>
-                      <strong class="text-slate-300">Chrome Relay 탭 미연결</strong> —
-                      Fern 화면의 Chrome에서 확장 아이콘 클릭 → 탭 attach(Badge ON) 필요.
+                      <strong class="text-slate-300">Chrome Relay 탭 attach</strong> —
+                      Fern 화면 Chrome 확장 Badge ON 확인. 브라우저 툴 정상.
                     </li>
                     <li>
-                      <strong class="text-slate-300">openclaw.json 스키마 오류</strong> —
-                      <code>browser.type</code> / <code>browser.relay</code> 키 제거 또는 지원 버전으로 교체.
+                      <strong class="text-slate-300">openclaw.json 스키마 정합성 확보</strong> —
+                      <code>browser.type</code> / <code>browser.relay</code> 키 제거 후 검증 통과.
                     </li>
                     <li>
-                      <strong class="text-slate-300">openclaw.json watch 권한(EACCES)</strong> —
-                      <code>sudo chown fern /Users/fern/.openclaw/openclaw.json</code> 후 재시작.
+                      <strong class="text-slate-300">openclaw.json watch 권한</strong> —
+                      <code>EACCES</code> 해결 및 자동 리로드 정상화.
                     </li>
                   </ol>
                 </div>
@@ -1745,9 +1728,9 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
                     <p class="text-[10px] text-slate-400 mb-0.5">Gateway / Telegram</p>
                     <p class="text-emerald-400 font-bold">✅ 동작</p>
                   </div>
-                  <div class="bg-amber-950/20 p-2.5 rounded-lg border border-amber-800/30 text-center">
-                    <p class="text-[10px] text-slate-400 mb-0.5">설정 잔여 이슈</p>
-                    <p class="text-amber-400 font-bold">⚠️ 4건</p>
+                  <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-800/30 text-center">
+                    <p class="text-[10px] text-slate-400 mb-0.5">설정 상태</p>
+                    <p class="text-emerald-400 font-bold">✅ 정상</p>
                   </div>
                 </div>
 
