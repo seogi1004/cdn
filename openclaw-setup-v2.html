@@ -12,87 +12,138 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
 
   <style>
+    :root {
+      --bg-main: #0f172a;
+      --glass-bg: rgba(30, 41, 59, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --accent-blue: #3b82f6;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --text-dim: #94a3b8;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #0f172a;
+      background-color: var(--bg-main);
       color: #f1f5f9;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
     }
+
     .glass {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
+    
+    .glass-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-hover:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(30, 41, 59, 0.6);
+      transform: translateY(-2px);
+    }
+
     .code-block {
       background-color: #000000;
       color: #10b981;
-      padding: 1.25rem;
-      border-radius: 0.75rem;
+      padding: 1.5rem;
+      border-radius: 1rem;
       position: relative;
       font-family: 'ui-monospace', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
       overflow-x: auto;
-      border: 1px solid #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
+
     .copy-btn {
       position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      background: #334155;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: rgba(51, 65, 85, 0.8);
       color: #f1f5f9;
-      padding: 0.35rem 0.75rem;
-      border-radius: 0.5rem;
-      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
       border: 1px solid rgba(255, 255, 255, 0.1);
       z-index: 10;
+      backdrop-filter: blur(4px);
     }
+
     .copy-btn:hover {
       background: #475569;
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    .tab-content { display: none; }
+
+    .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
     .tab-content.active { display: block; }
-    .tab-btn.active { color: #f8fafc; }
     
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-btn {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: currentColor;
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .tab-btn.active::after {
+      width: 100%;
+    }
+
     /* Badge Styling */
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 0.15rem 0.6rem;
-      border-radius: 9999px;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
       font-size: 0.65rem;
-      font-weight: 700;
-      margin-left: 0.5rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.025em;
+      letter-spacing: 0.05em;
     }
-    .badge-required { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .badge-optional { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-stability { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-required { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+    .badge-optional { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .badge-stability { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
 
-    .persona-block {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 1.5rem;
-      border-radius: 1rem;
-      border-left: 4px solid #3b82f6;
-      position: relative;
-    }
     .check-item {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      gap: 16px;
+      padding: 16px;
+      border-radius: 1.25rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
       transition: all 0.2s;
     }
-    .check-item:hover { background: rgba(255, 255, 255, 0.06); }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .check-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #475569; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
   </style>
@@ -159,57 +210,64 @@
     </nav>
 
     <!-- 1. Setup Tab -->
-    <div id="setup" class="tab-content active space-y-8">
+    <div id="setup" class="tab-content active space-y-12">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass p-6 rounded-2xl">
-          <h2 class="text-xl font-bold text-slate-100">Before → After (아키텍처)</h2>
-          <div class="mt-4 space-y-4 text-sm text-slate-300">
-            <div class="rounded-xl bg-slate-900/50 border border-slate-700 p-4">
-              <p class="font-semibold text-slate-100">Before (pm2)</p>
-              <p class="mt-2 text-slate-400">root → alvin(pm2) → ollama / sudo -u fern → pm2 → openclaw gateway</p>
+        <div class="glass glass-hover p-8 rounded-[2rem]">
+          <h2 class="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-3">
+            <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400 text-sm">01</span>
+            Before → After
+          </h2>
+          <div class="space-y-4 text-sm text-slate-300">
+            <div class="rounded-2xl bg-slate-900/50 border border-slate-700/50 p-5">
+              <p class="font-bold text-slate-100 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                Before (pm2)
+              </p>
+              <p class="mt-2 text-slate-400 leading-relaxed">root → alvin(pm2) → ollama / sudo -u fern → pm2 → openclaw gateway</p>
             </div>
-            <div class="rounded-xl bg-slate-900/50 border border-slate-700 p-4">
-              <p class="font-semibold text-slate-100">After (launchd)</p>
-              <p class="mt-2 text-slate-400">LaunchDaemons → com.alvin.ollama(UserName=alvin) / com.openclaw.fern(UserName=fern)</p>
+            <div class="rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-5">
+              <p class="font-bold text-emerald-400 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                After (launchd)
+              </p>
+              <p class="mt-2 text-slate-300 leading-relaxed">LaunchDaemons → com.alvin.ollama(UserName=alvin) / com.openclaw.fern(UserName=fern)</p>
             </div>
           </div>
         </div>
-        <div class="glass p-6 rounded-2xl">
-          <h2 class="text-xl font-bold text-slate-100">보안 영향 분석</h2>
-          <div class="mt-4 overflow-x-auto">
-            <table class="w-full text-sm text-slate-300 border border-slate-700/60">
-              <thead class="bg-slate-900/60 text-slate-200">
+        <div class="glass glass-hover p-8 rounded-[2rem]">
+          <h2 class="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-3">
+            <span class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400 text-sm">02</span>
+            보안 영향 분석
+          </h2>
+          <div class="overflow-hidden rounded-2xl border border-slate-700/50">
+            <table class="w-full text-sm text-slate-300">
+              <thead class="bg-slate-900/80 text-slate-200">
                 <tr>
-                  <th class="text-left p-3 border-b border-slate-700/60">항목</th>
-                  <th class="text-left p-3 border-b border-slate-700/60">pm2 (기존)</th>
-                  <th class="text-left p-3 border-b border-slate-700/60">LaunchDaemons (변경)</th>
+                  <th class="text-left p-4 font-semibold">항목</th>
+                  <th class="text-left p-4 font-semibold">pm2 (기존)</th>
+                  <th class="text-left p-4 font-semibold text-emerald-400">LaunchDaemons</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr class="border-b border-slate-800">
-                  <td class="p-3">권한 경계</td>
-                  <td class="p-3">sudo 우회 혼재</td>
-                  <td class="p-3">OS 레벨 drop privileges</td>
+              <tbody class="divide-y divide-slate-800/50">
+                <tr class="hover:bg-white/5 transition-colors">
+                  <td class="p-4 font-medium text-slate-100">권한 경계</td>
+                  <td class="p-4 text-slate-400 italic">sudo 우회 혼재</td>
+                  <td class="p-4 text-emerald-300">OS Native isolation</td>
                 </tr>
-                <tr class="border-b border-slate-800">
-                  <td class="p-3">자동 재시작</td>
-                  <td class="p-3">pm2 의존</td>
-                  <td class="p-3">launchd native</td>
+                <tr class="hover:bg-white/5 transition-colors">
+                  <td class="p-4 font-medium text-slate-100">자동 재시작</td>
+                  <td class="p-4 text-slate-400 italic">pm2 의존</td>
+                  <td class="p-4 text-emerald-300">launchd native</td>
                 </tr>
-                <tr class="border-b border-slate-800">
-                  <td class="p-3">로그인 영향</td>
-                  <td class="p-3">GUI 로그인 필요 가능</td>
-                  <td class="p-3">부팅 즉시 자동</td>
+                <tr class="hover:bg-white/5 transition-colors">
+                  <td class="p-4 font-medium text-slate-100">로그인 영향</td>
+                  <td class="p-4 text-slate-400 italic">GUI 필요 가능</td>
+                  <td class="p-4 text-emerald-300">부팅 즉시 자동</td>
                 </tr>
-                <tr class="border-b border-slate-800">
-                  <td class="p-3">샌드박스 호환</td>
-                  <td class="p-3">충돌 가능성</td>
-                  <td class="p-3">독립 세션 보장</td>
-                </tr>
-                <tr>
-                  <td class="p-3">감사 추적</td>
-                  <td class="p-3">불명확</td>
-                  <td class="p-3">Console.app 기반 명확</td>
+                <tr class="hover:bg-white/5 transition-colors">
+                  <td class="p-4 font-medium text-slate-100">샌드박스</td>
+                  <td class="p-4 text-slate-400 italic">충돌 위험</td>
+                  <td class="p-4 text-emerald-300">독립 세션 보장</td>
                 </tr>
               </tbody>
             </table>
@@ -217,30 +275,38 @@
         </div>
       </div>
 
-      <div class="glass p-6 rounded-2xl border border-emerald-700/40">
-        <h2 class="text-xl font-bold text-emerald-300">진행 가이드 (요약)</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm text-slate-300">
-          <div class="bg-slate-900/40 border border-slate-700 rounded-xl p-4">
-            <p class="font-semibold text-slate-100 mb-2">이미 적용됨 (건너뛰기 가능)</p>
-            <ul class="list-disc list-inside space-y-1 text-slate-400">
-              <li>PF 네트워크 격리 정책</li>
-              <li>APFS 샌드박스 + ACL</li>
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-emerald-500/50">
+        <h2 class="text-xl font-bold text-emerald-300 mb-6 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          진행 가이드 (요약)
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-300">
+          <div class="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-6">
+            <p class="font-bold text-slate-100 mb-3 flex items-center gap-2">
+              <span class="text-emerald-400">✓</span> 이미 적용됨 (건너뛰기)
+            </p>
+            <ul class="space-y-2 text-slate-400">
+              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-slate-600"></span>PF 네트워크 격리 정책</li>
+              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-slate-600"></span>APFS 샌드박스 + ACL</li>
             </ul>
           </div>
-          <div class="bg-slate-900/40 border border-slate-700 rounded-xl p-4">
-            <p class="font-semibold text-slate-100 mb-2">당신이 해야 할 것</p>
-            <ul class="list-disc list-inside space-y-1 text-slate-400">
-              <li>pm2 제거</li>
-              <li>LaunchDaemons plist 생성/등록</li>
-              <li>launchctl 상태 확인</li>
+          <div class="bg-blue-500/5 border border-blue-500/20 rounded-2xl p-6">
+            <p class="font-bold text-blue-300 mb-3 flex items-center gap-2">
+              <span class="text-blue-400">➔</span> 당신이 해야 할 것
+            </p>
+            <ul class="space-y-2 text-slate-300">
+              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>pm2 제거</li>
+              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>LaunchDaemons plist 생성/등록</li>
+              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-blue-500"></span>launchctl 상태 확인</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div class="glass p-8 rounded-2xl border-l-4 border-slate-500">
-        <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-slate-100">
-          Step 0: 환경 정리 (Alvin) <span class="badge badge-stability">안정성</span>
+      <div class="glass glass-hover p-8 rounded-[2rem] border-l-4 border-slate-500 shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-100">
+          <span class="p-2 bg-slate-500/20 rounded-lg text-slate-400 text-sm">STEP 0</span>
+          환경 정리 (Alvin) <span class="badge badge-stability">안정성</span>
         </h2>
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
@@ -250,11 +316,15 @@ rm -rf ~/Library/Caches/ms-playwright</code></pre>
         </div>
       </div>
 
-      <div class="glass p-8 border-l-4 border-blue-500 rounded-2xl">
+      <div class="glass glass-hover p-8 border-l-4 border-blue-500 rounded-[2rem] shadow-xl">
         <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-blue-400">
-          Step 1: pm2 제거 (Alvin + Fern) <span class="badge badge-stability">안정성</span>
+          <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400 text-sm">STEP 1</span>
+          pm2 제거 (Alvin + Fern) <span class="badge badge-stability">안정성</span>
         </h2>
-        <p class="text-sm text-slate-400 mb-4">launchd는 macOS 기본 내장 서비스 관리자이므로 별도 설치가 필요 없습니다.</p>
+        <p class="text-sm text-slate-400 mb-6 flex items-start gap-2">
+          <span class="text-blue-400 text-base">ℹ</span>
+          launchd는 macOS 기본 내장 서비스 관리자이므로 별도 설치가 필요 없습니다.
+        </p>
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># Alvin
@@ -271,9 +341,10 @@ sudo rm -rf /Users/fern/.pm2 /Users/fern/.config/pm2</code></pre>
         </div>
       </div>
 
-      <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl">
-        <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-emerald-400">
-          Step 2: Fern 런타임 구축 (Fern 계정) <span class="badge badge-required">필수</span>
+      <div class="glass glass-hover p-8 border-l-4 border-emerald-500 rounded-[2rem] shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-emerald-400">
+          <span class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400 text-sm">STEP 2</span>
+          Fern 런타임 구축 (Fern 계정) <span class="badge badge-required">필수</span>
         </h2>
         <div class="code-block">
           <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
@@ -294,56 +365,68 @@ openclaw gateway install && openclaw status</code></pre>
     </div>
 
     <!-- 2. Fern Tab -->
-    <div id="fern" class="tab-content space-y-6">
+    <div id="fern" class="tab-content space-y-12">
 
       <!-- Header -->
-      <div class="glass p-6 rounded-2xl border-t-4 border-blue-500 flex items-center gap-5">
-        <div class="bg-blue-600/20 p-1 rounded-2xl border border-blue-500/30 shrink-0">
-          <img src="https://placehold.co/64x64/3b82f6/white?text=Fern" class="rounded-xl shadow-lg shadow-blue-500/20" alt="Fern" />
+      <div class="glass p-10 rounded-[2.5rem] border-t-4 border-blue-500 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -mr-32 -mt-32"></div>
+        <div class="bg-blue-600/20 p-2 rounded-3xl border border-blue-500/30 shrink-0 relative">
+          <img src="https://placehold.co/80x80/3b82f6/white?text=Fern" class="rounded-2xl shadow-2xl shadow-blue-500/40" alt="Fern" />
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h2 class="text-2xl font-bold text-slate-100">Fern (Hybrid Agent)</h2>
+        <div class="relative z-10 text-center md:text-left">
+          <div class="flex flex-col md:flex-row items-center gap-3">
+            <h2 class="text-3xl font-bold text-slate-100 tracking-tight">Fern <span class="text-blue-400">Hybrid Agent</span></h2>
             <span class="badge badge-required">필수</span>
           </div>
-          <p class="text-blue-400 text-sm font-medium uppercase tracking-widest mt-1">
-            Concierge &amp; Researcher | <span class="text-red-400 font-bold">NO SOURCE CODE ACCESS</span>
+          <p class="text-blue-400 text-sm font-bold uppercase tracking-[0.2em] mt-2">
+            Concierge &amp; Researcher | <span class="text-red-400">Restricted Access</span>
           </p>
-          <p class="text-xs text-slate-500 mt-1">Local: Qwen &nbsp;|&nbsp; External: Gemini 2.5 Flash (via sessions_spawn) &nbsp;|&nbsp; Sandbox: /Users/fern/sandbox</p>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed max-w-2xl">
+            Local: <span class="text-slate-200">Qwen 32B</span> &nbsp;|&nbsp; External: <span class="text-slate-200">Gemini 2.0 Flash</span> &nbsp;|&nbsp; Sandbox: <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">/Users/fern/sandbox</code>
+          </p>
         </div>
       </div>
 
       <!-- 서브탭 -->
-      <div class="glass rounded-2xl overflow-hidden">
-        <nav class="flex border-b border-slate-700/60">
+      <div class="glass rounded-[2rem] overflow-hidden shadow-2xl">
+        <nav class="flex border-b border-slate-700/60 bg-slate-900/40">
           <button onclick="showFernTab('fern-setup')" id="fbtn-fern-setup"
-            class="fern-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">
+            class="fern-tab-btn px-8 py-5 text-sm font-bold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap active">
             🛠️ 기본 설치 &amp; 페르소나
           </button>
           <button onclick="showFernTab('fern-skills')" id="fbtn-fern-skills"
-            class="fern-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">
+            class="fern-tab-btn px-8 py-5 text-sm font-bold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">
             🧩 스킬 &amp; 훅
           </button>
         </nav>
 
-        <!-- Sub-tab 1: 기본 설치 & 페르소나 -->
-        <div id="fern-setup" class="fern-tab-content p-6 space-y-5">
+        <div id="fern-setup" class="fern-tab-content p-8 space-y-8">
 
-          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">①</span> Playwright 로컬 설치 (샌드박스)
+          <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
+            <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              Playwright 로컬 설치 (샌드박스)
               <span class="badge badge-stability">안정성</span>
             </h3>
-            <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">browser</code> 도구 AI 스냅샷 모드 활성화에 필요합니다. <strong class="text-slate-300">Fern 계정 + 샌드박스 경로</strong>에서 실행하세요.</p>
-            <div class="bg-blue-950/20 p-3 rounded-lg border border-blue-800/30 mb-3">
-              <p class="text-xs text-blue-300 font-bold mb-1">📌 빌트인 도구 (플러그인 설치 불필요)</p>
-              <ul class="text-xs text-slate-400 space-y-0.5 list-disc list-inside">
-                <li><code class="text-emerald-400">browser</code> — Playwright 기반 브라우저 자동화</li>
-                <li><code class="text-emerald-400">exec</code> — 터미널 명령 실행 (AppleScript 포함)</li>
-                <li><code class="text-emerald-400">web_fetch</code> / <code class="text-emerald-400">sessions_spawn</code> — 웹 크롤링 / Gemini 서브에이전트</li>
-                <li><code class="text-emerald-400">apply_patch</code> / <code class="text-emerald-400">process</code> — 파일 편집 / 프로세스 관리</li>
-              </ul>
+            <p class="text-sm text-slate-400 mb-4 leading-relaxed"><code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">browser</code> 도구 AI 스냅샷 모드 활성화에 필요합니다. <strong class="text-slate-200 underline">Fern 계정 + 샌드박스 경로</strong>에서 실행하세요.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div class="bg-blue-500/5 p-4 rounded-xl border border-blue-500/20">
+                <p class="text-xs text-blue-300 font-bold mb-2">📌 빌트인 도구 (전용)</p>
+                <ul class="text-[11px] text-slate-400 space-y-1.5">
+                  <li class="flex items-center gap-2"><span class="text-blue-500">✓</span><code class="text-emerald-400">browser</code> — Playwright 자동화</li>
+                  <li class="flex items-center gap-2"><span class="text-blue-500">✓</span><code class="text-emerald-400">exec</code> — 터미널 명령 실행</li>
+                </ul>
+              </div>
+              <div class="bg-blue-500/5 p-4 rounded-xl border border-blue-500/20">
+                <p class="text-xs text-blue-300 font-bold mb-2">🌐 통신 도구</p>
+                <ul class="text-[11px] text-slate-400 space-y-1.5">
+                  <li class="flex items-center gap-2"><span class="text-blue-500">✓</span><code class="text-emerald-400">web_fetch</code> — 크롤링</li>
+                  <li class="flex items-center gap-2"><span class="text-blue-500">✓</span><code class="text-emerald-400">sessions_spawn</code> — Gemini 서브에이전트</li>
+                </ul>
+              </div>
             </div>
+
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># Fern 계정 / 샌드박스(workspace) 안에서 실행
@@ -355,69 +438,57 @@ openclaw plugins list</code></pre>
             </div>
           </div>
 
-          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-              <span class="text-yellow-400">②</span> Browser Relay 설정 (OpenClaw)
+          <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
+            <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              Browser Relay 설정 (OpenClaw)
               <span class="badge badge-required">필수</span>
             </h3>
-            <p class="text-xs text-slate-400 mb-3">Playwright와 Relay는 브라우저 제어 모델이 다릅니다. 운영 환경에서는 Relay를 우선 권장합니다.</p>
-
-            <!-- 핵심 경고 -->
-            <div class="bg-amber-950/30 p-3 rounded-lg border border-amber-700/50 mb-3 flex items-start gap-2">
-              <span class="text-amber-400 text-base shrink-0">⚠️</span>
-              <div>
-                <p class="text-xs text-amber-300 font-bold mb-0.5">브라우저는 반드시 Fern 계정 화면에서 실행해야 합니다</p>
-                <p class="text-xs text-slate-400">Relay가 제어할 Chrome 인스턴스는 <strong class="text-slate-200">Fern 계정으로 로그인된 macOS 세션</strong>에서 띄워야 합니다. Alvin 계정의 Chrome은 Relay 대상이 될 수 없습니다.</p>
+            
+            <div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/20 mb-6 flex items-start gap-3">
+              <span class="text-xl">⚠️</span>
+              <div class="text-sm">
+                <p class="font-bold text-amber-300 mb-1">브라우저 실행 계정 주의</p>
+                <p class="text-slate-400 leading-relaxed">Relay가 제어할 Chrome 인스턴스는 반드시 <strong class="text-slate-200 underline">Fern 계정으로 로그인된 macOS 세션</strong>에서 띄워야 합니다. 타 계정의 Chrome은 연동 불가.</p>
               </div>
             </div>
 
-            <div class="bg-slate-900/40 p-4 rounded-lg border border-slate-700 mb-3">
-              <p class="text-xs text-slate-300 font-bold mb-2">Playwright vs Relay</p>
-              <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
-                <li>Playwright: 테스트 코드 기반 자동화. 샌드박스 내 로컬 실행 중심.</li>
-                <li>Relay: 크롬 확장 승인 탭만 제어. 운영 중 사용자 동의(Consent) 모델.</li>
-                <li>Playwright는 QA/회귀 테스트에 강하고, Relay는 실제 GUI 탭 제어에 강합니다.</li>
-              </ul>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/50">
+                <p class="text-xs text-slate-200 font-bold mb-2">Playwright</p>
+                <p class="text-[11px] text-slate-400">테스트 코드 자동화 중심. 샌드박스 내 로컬 실행.</p>
+              </div>
+              <div class="bg-blue-500/5 p-4 rounded-xl border border-blue-500/20">
+                <p class="text-xs text-blue-300 font-bold mb-2">Relay (추천)</p>
+                <p class="text-[11px] text-slate-400">실제 GUI 탭 제어. 사용자 동의(Consent) 모델.</p>
+              </div>
             </div>
 
-            <div class="code-block text-xs">
+            <div class="code-block text-xs mb-6">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># [1] Fern 계정에서 확장 소스 생성
+              <pre><code># [1] 확장 소스 생성
 openclaw browser extension install
 
-# [2] Fern 계정 화면(macOS GUI 세션)에서 Chrome 실행
-#     → Fast User Switching 또는 별도 모니터로 Fern 세션 접근 후 실행
-#     방법 A: AppleScript로 Fern 세션에서 Chrome 열기 (Alvin 터미널에서 실행)
+# [2] Fern 계정 GUI 세션에서 Chrome 실행
+# 방법 A: Alvin 터미널에서 AppleScript로 원격 기동
 sudo -u fern open -a "Google Chrome" --args \
   --remote-debugging-port=9222 \
   --user-data-dir=/Users/fern/.openclaw/chrome-profile
 
-#     방법 B: Fern 세션에 직접 로그인 후 실행
-#     (시스템 설정 > 사용자 > Fern 으로 빠른 사용자 전환)
+# 방법 B: 직접 로그인 후 실행 (추천)
 open -a "Google Chrome" --args \
   --remote-debugging-port=9222 \
-  --user-data-dir=/Users/fern/.openclaw/chrome-profile
-
-# [3] Fern 화면의 Chrome에서 개발자 모드 ON 후 확장 설치
-#     chrome://extensions  →  개발자 모드 ON  →  Load unpacked
-#     경로: /Users/fern/.openclaw/browser/chrome-extension
-
-# [4] 게이트웨이 연결 확인
-curl -s http://127.0.0.1:18789 | head -n 5
-curl -s http://127.0.0.1:9222/json | python3 -m json.tool</code></pre>
+  --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
             </div>
 
-            <div class="bg-blue-950/20 p-3 rounded-lg border border-blue-800/30 mt-3">
-              <p class="text-xs text-blue-300 font-bold mb-1">핵심 체크</p>
-              <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
-                <li><strong class="text-slate-300">Fern 화면</strong>에서 Chrome을 열고 확장을 설치해야 Relay가 정상 작동합니다.</li>
-                <li>확장 아이콘을 Pin 후, 제어 대상 탭에서 아이콘 클릭해 Badge ON 상태로 만듭니다.</li>
-                <li>새 탭에서 제어가 안 되면 해당 탭에서 아이콘을 다시 눌러 승인합니다.</li>
-                <li><code class="text-emerald-400">--remote-debugging-port=9222</code> 플래그로 CDP 연결이 활성화됩니다.</li>
-                <li>설정 파일(<code class="text-emerald-400">openclaw.json</code>) 수동 수정은 필요 없습니다.</li>
+            <div class="bg-blue-500/5 p-5 rounded-xl border border-blue-500/20">
+              <p class="text-sm text-blue-300 font-bold mb-2">핵심 체크리스트</p>
+              <ul class="text-xs text-slate-400 space-y-1.5 list-disc list-inside">
+                <li><strong class="text-slate-200">Fern 화면</strong>에서 크롬을 열고 확장을 설치했는가?</li>
+                <li>아이콘 Pin 후, Badge가 <span class="text-emerald-400 font-bold text-[10px] ml-1">ON</span> 상태인가?</li>
+                <li>CDP 포트(<code class="text-blue-300">9222</code>) 연결이 활성화되었는가?</li>
               </ul>
             </div>
-            <p class="text-[11px] text-slate-500 mt-3">공식 문서: OpenClaw Chrome Extension</p>
           </div>
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
