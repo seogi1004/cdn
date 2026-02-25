@@ -415,12 +415,8 @@ sudo launchctl print system/com.openclaw.fern | head -n 30</code></pre>
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 SOUL.md와 IDENTITY.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
             <div class="code-block text-xs">
               <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 샌드박스 경로 고정
-BASE_DIR="/Users/fern/sandbox"
-mkdir -p "$BASE_DIR"
-
-# 1. SOUL.md 생성
-cat > "$BASE_DIR/SOUL.md" << 'EOF'
+              <pre><code># 1. SOUL.md 생성
+cat > "/Users/fern/sandbox/SOUL.md" << 'EOF'
 # Identity
 You are Fern, Alvin's Expert Assistant & Strategic Pilot.
 Primary Interface: Gemini 3 Flash (External) | Main Reasoning Engine: Qwen 32B (Local).
@@ -456,7 +452,7 @@ You are the "Senior Architect" residing on the Mac Mini. Gemini must spawn you f
 EOF
 
 # 2. IDENTITY.md 생성
-cat > "$BASE_DIR/IDENTITY.md" << 'EOF'
+cat > "/Users/fern/sandbox/IDENTITY.md" << 'EOF'
 # Behavioral Guidelines
 
 ## Tone & Style
@@ -486,7 +482,7 @@ When Gemini spawns a session for the web or for Qwen, use:
 - Do not leak internal configuration details or model delegation logic to the final output.
 EOF
 
-echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini + Qwen) in $BASE_DIR"</code></pre>
+echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini + Qwen) in /Users/fern/sandbox"</code></pre>
             </div>
           </div>
 
