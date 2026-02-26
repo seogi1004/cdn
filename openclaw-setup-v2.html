@@ -440,7 +440,13 @@ openclaw plugins list</code></pre>
               <pre><code># [1] 확장 소스 생성
 openclaw browser extension install
 
-# [2] Fern 계정 GUI 세션에서 Chrome 실행
+# [2] Extension 수동 설치 가이드
+# 1. 크롬 설정 -> 확장 프로그램 이동
+# 2. 우측 상단 '개발자 모드' 활성화
+# 3. '압축해제된 확장 프로그램을 로드합니다' 선택
+# 4. .openclaw/browser/chrome-extension 폴더 선택
+
+# [3] Fern 계정 GUI 세션에서 Chrome 실행
 # 방법 A: Alvin 터미널에서 AppleScript로 원격 기동
 sudo -u fern open -a "Google Chrome" --args \
   --remote-debugging-port=9222 \
@@ -622,6 +628,15 @@ openclaw skills enable steipete/notion</code></pre>
                     <span class="badge badge-required">활성</span>
                   </div>
                   <p class="text-xs text-slate-400 mb-3">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다.</p>
+                  <div class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20 mb-3">
+                    <p class="text-[11px] font-bold text-blue-300 mb-2">🔌 Extension 수동 설치 가이드</p>
+                    <ol class="text-[10px] text-slate-400 space-y-1 list-decimal list-inside">
+                      <li>크롬 설정 -> 확장 프로그램 이동</li>
+                      <li>우측 상단 <strong>'개발자 모드'</strong> 활성화</li>
+                      <li><strong>'압축해제된 확장 프로그램을 로드합니다'</strong> 선택</li>
+                      <li><code class="bg-black/30 px-1 rounded">.openclaw/browser/chrome-extension</code> 폴더 선택</li>
+                    </ol>
+                  </div>
                   <div class="code-block text-xs">
                     <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                     <pre><code># Relay 확장 설치
@@ -1824,7 +1839,7 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
           ⚡ 빠른 관리 & 바로가기
         </h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <!-- Quick Restart -->
           <div class="bg-blue-500/5 p-6 rounded-2xl border border-blue-500/20 flex flex-col justify-between">
             <div>
@@ -1837,6 +1852,23 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># 에이전트(Fern) 즉시 재시작
 sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+            </div>
+          </div>
+
+          <!-- Browser Restart -->
+          <div class="bg-indigo-500/5 p-6 rounded-2xl border border-indigo-500/20 flex flex-col justify-between">
+            <div>
+              <p class="font-bold text-indigo-300 mb-2 flex items-center gap-2">
+                🌐 브라우저 재가동
+              </p>
+              <p class="text-xs text-slate-400 mb-4">CDP 포트를 열어 크롬을 다시 실행합니다.</p>
+            </div>
+            <div class="code-block text-[10px] p-4">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># Chrome 실행 (CDP)
+open -a "Google Chrome" --args \
+  --remote-debugging-port=9222 \
+  --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
             </div>
           </div>
 
