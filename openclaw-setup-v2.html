@@ -1399,6 +1399,193 @@ chmod 700 ~/stop-agent.sh</code></pre>
           OpenClaw의 아키텍처가 완전히 고착화되고 업데이트 주기가 길어지기 전까지는 <strong>[5. 마스터 스크립트] 탭의 수동 Bash 런처 방식을 유지</strong>할 것을 권장합니다. 자동 기동이 꼭 필요한 경우에도 <code>Login Items</code>에 터미널 스크립트를 등록하는 수준의 "완충형 자동화"가 LaunchAgent보다 안정적일 수 있습니다.
         </p>
       </div>
+
+      <!-- 🚀 LaunchAgent Migration Script -->
+      <div class="glass p-8 rounded-3xl border-2 border-blue-500/30 shadow-2xl">
+        <h3 class="text-2xl font-bold text-blue-400 mb-6 flex items-center gap-3">
+          🔄 LaunchAgent 마이그레이션 자동화 스크립트
+        </h3>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+          수동 런처에서 macOS 정식 서비스(LaunchAgent) 방식으로 전환하기로 결정했다면, 아래 스크립트를 실행하여 모든 환경을 자동으로 재구성할 수 있습니다. <br>
+          이 스크립트는 <strong>런너 생성, plist 등록, start/stop 스크립트 갱신</strong>을 원클릭으로 수행합니다.
+        </p>
+        
+        <div class="code-block text-[11px]">
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code>cat &gt; ~/migrate-to-launchagent.sh &lt;&lt; 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+echo "=================================================="
+echo "🔄 OpenClaw -&gt; LaunchAgent 마이그레이션 시작"
+echo "=================================================="
+
+USER_HOME="/Users/fern"
+SANDBOX_DIR="${USER_HOME}/sandbox"
+LOG_DIR="${SANDBOX_DIR}/logs"
+TMP_DIR="${LOG_DIR}/tmp"
+RUNNER_SCRIPT="${USER_HOME}/run-openclaw.sh"
+PLIST_NAME="com.fern.openclaw"
+PLIST_PATH="${USER_HOME}/Library/LaunchAgents/${PLIST_NAME}.plist"
+
+mkdir -p "${LOG_DIR}" "${TMP_DIR}" "${USER_HOME}/Library/LaunchAgents"
+
+# 1. LaunchAgent용 실제 구동 스크립트 생성 (Foreground 전용)
+echo "[INFO] 런처 스크립트(run-openclaw.sh) 생성 중..."
+cat &gt; "${RUNNER_SCRIPT}" &lt;&lt; 'RUNNER_EOF'
+#!/bin/bash
+set -euo pipefail
+
+# (1) 샌드박스 마운트 확인 (실패 시 10초 대기 후 종료 -&gt; launchd가 다시 재시작함)
+if ! mount | grep -q "on /Users/fern/sandbox "; then
+  echo "[ERROR] 샌드박스 볼륨이 마운트되지 않았습니다. 10초 후 재시도합니다." &gt;&amp;2
+  sleep 10
+  exit 78
+fi
+
+# (2) 경로 및 환경변수 설정
+export SANDBOX_DIR="/Users/fern/sandbox"
+export LOG_DIR="${SANDBOX_DIR}/logs"
+export TMPDIR="${LOG_DIR}/tmp"
+export OPENCLAW_LOG_DIR="${LOG_DIR}"
+export OPENCLAW_GATEWAY_BIND="127.0.0.1"
+export GATEWAY_PORT="18789"
+
+cd "${SANDBOX_DIR}"
+
+# (3) NVM 동적 로드 (launchd는 PATH를 모르므로 절대경로 및 source 필수)
+export NVM_DIR="/Users/fern/.nvm"
+if [ -s "${NVM_DIR}/nvm.sh" ]; then
+  source "${NVM_DIR}/nvm.sh"
+else
+  echo "[ERROR] NVM 스크립트를 찾을 수 없습니다." &gt;&amp;2
+  sleep 10
+  exit 127
+fi
+
+# (4) ★ 핵심: 실행 전 잔여 프로세스 완벽 정리 (재시작 시 포트 충돌 원천 차단)
+echo "[INFO] 기존 프로세스 및 크롬 찌꺼기 정리 중..."
+pkill -u fern -f "Google Chrome" 2&gt;/dev/null || true
+pkill -u fern -f "Chromium" 2&gt;/dev/null || true
+pkill -u fern -f "openclaw relay" 2&gt;/dev/null || true
+PIDS=$(/usr/sbin/lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN -u fern -t 2&gt;/dev/null || true)
+if [ -n "${PIDS}" ]; then
+  echo "${PIDS}" | xargs kill -9 2&gt;/dev/null || true
+fi
+sleep 1
+
+# (5) 대시보드는 백그라운드로 대기 실행
+(sleep 3 &amp;&amp; openclaw dashboard) &amp;
+
+# (6) ★ 핵심: exec를 통한 포그라운드(Foreground) 실행
+# nohup이나 &amp;를 쓰지 않고 exec를 써서 현재 Bash 쉘을 OpenClaw 프로세스로 대체시킵니다.
+# 이래야 launchd가 본체 프로세스의 PID를 정확히 모니터링할 수 있습니다.
+echo "[INFO] OpenClaw Gateway 시작..."
+if openclaw gateway --help 2&gt;&amp;1 | grep -q -- '--bind'; then
+  exec openclaw gateway --bind "${OPENCLAW_GATEWAY_BIND}" --port "${GATEWAY_PORT}"
+else
+  exec openclaw gateway --port "${GATEWAY_PORT}"
+fi
+RUNNER_EOF
+
+chmod 700 "${RUNNER_SCRIPT}"
+
+# 2. LaunchAgent plist 설정 파일 생성
+echo "[INFO] LaunchAgent plist 파일 생성 중..."
+cat &gt; "${PLIST_PATH}" &lt;&lt; PLIST_EOF
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;${PLIST_NAME}&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+    &lt;array&gt;
+        &lt;string&gt;${RUNNER_SCRIPT}&lt;/string&gt;
+    &lt;/array&gt;
+    
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+    
+    &lt;key&gt;KeepAlive&lt;/key&gt;
+    &lt;true/&gt;
+    
+    &lt;key&gt;LimitLoadToSessionType&lt;/key&gt;
+    &lt;string&gt;Aqua&lt;/string&gt;
+    
+    &lt;key&gt;StandardOutPath&lt;/key&gt;
+    &lt;string&gt;${LOG_DIR}/openclaw-launchd.out&lt;/string&gt;
+    &lt;key&gt;StandardErrorPath&lt;/key&gt;
+    &lt;string&gt;${LOG_DIR}/openclaw-launchd.err&lt;/string&gt;
+    
+    &lt;key&gt;WorkingDirectory&lt;/key&gt;
+    &lt;string&gt;${SANDBOX_DIR}&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+PLIST_EOF
+
+# 3. 새로운 start-agent.sh 덮어쓰기 (수동 제어용)
+echo "[INFO] start-agent.sh 덮어쓰기..."
+cat &gt; "${USER_HOME}/start-agent.sh" &lt;&lt; 'START_EOF'
+#!/bin/bash
+set -euo pipefail
+PLIST_PATH="/Users/fern/Library/LaunchAgents/com.fern.openclaw.plist"
+
+echo "=================================================="
+echo "🚀 OpenClaw 시작 (LaunchAgent 모드)"
+echo "=================================================="
+# 꼬임 방지를 위해 무조건 unload 후 load
+launchctl unload -w "${PLIST_PATH}" 2&gt;/dev/null || true
+launchctl load -w "${PLIST_PATH}"
+
+echo "✅ 백그라운드 서비스(LaunchAgent) 등록 및 실행 완료."
+echo "📜 실시간 로그: tail -f /Users/fern/sandbox/logs/openclaw-launchd.out"
+START_EOF
+chmod 700 "${USER_HOME}/start-agent.sh"
+
+# 4. 새로운 stop-agent.sh 덮어쓰기 (수동 제어용)
+echo "[INFO] stop-agent.sh 덮어쓰기..."
+cat &gt; "${USER_HOME}/stop-agent.sh" &lt;&lt; 'STOP_EOF'
+#!/bin/bash
+set -euo pipefail
+PLIST_PATH="/Users/fern/Library/LaunchAgents/com.fern.openclaw.plist"
+
+echo "=================================================="
+echo "🛑 OpenClaw 종료 (LaunchAgent 모드)"
+echo "=================================================="
+echo "[INFO] 서비스 내리기 (자동 재시작 중지)..."
+launchctl unload -w "${PLIST_PATH}" 2&gt;/dev/null || true
+sleep 1
+
+echo "[INFO] 잔류 프로세스 클리닝..."
+pkill -u fern -f "Google Chrome" 2&gt;/dev/null || true
+pkill -u fern -f "Chromium" 2&gt;/dev/null || true
+pkill -u fern -f "openclaw relay" 2&gt;/dev/null || true
+
+PORT="18789"
+PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2&gt;/dev/null || true)
+if [ -n "${PIDS}" ]; then
+  echo "${PIDS}" | xargs kill -9 2&gt;/dev/null || true
+fi
+echo "✅ 에이전트 및 연관 프로세스가 완전히 종료되었습니다."
+STOP_EOF
+chmod 700 "${USER_HOME}/stop-agent.sh"
+
+# 5. 기존 프로세스가 켜져 있다면 끄고 새 방식으로 런칭
+if [ -f "${USER_HOME}/stop-agent.sh" ]; then
+    bash "${USER_HOME}/stop-agent.sh" &gt;/dev/null 2&gt;&amp;1 || true
+fi
+
+echo "=================================================="
+echo "🎉 LaunchAgent 마이그레이션이 성공적으로 완료되었습니다!"
+echo "▶ 바로 적용하려면: ~/start-agent.sh 를 실행하세요."
+echo "=================================================="
+EOF
+
+chmod 700 ~/migrate-to-launchagent.sh
+~/migrate-to-launchagent.sh</code></pre>
+        </div>
+      </div>
     </div>
 
     <!-- 6. Verification Tab -->
