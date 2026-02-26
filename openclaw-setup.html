@@ -231,7 +231,7 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
                 서비스 운영 체계
               </p>
-              <p class="mt-2 text-slate-400 leading-relaxed">Ollama: 24/7 백그라운드 서비스 (alvin) / Fern: run-openclaw.sh 런처 실행 (fern)</p>
+              <p class="mt-2 text-slate-400 leading-relaxed">Ollama: 24/7 백그라운드 서비스 (alvin) / Fern: run-openclaw.sh 런처 & NPM 자동 업데이트 실행 (fern)</p>
             </div>
             <div class="rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-5">
               <p class="font-bold text-emerald-400 flex items-center gap-2">
@@ -1499,6 +1499,17 @@ http://&lt;IP_ADDRESS&gt;:18792
 http://&lt;IP_ADDRESS&gt;:9222</code></pre>
             </div>
           </div>
+          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+            <p class="font-semibold text-slate-100 mb-3">8) NPM 자동 업데이트 확인</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># LaunchAgent 등록 여부
+launchctl list | grep npmupdate
+
+# 로그 파일 생성 및 갱신 확인
+ls -l ~/sandbox/logs/npm-auto-update.log</code></pre>
+            </div>
+          </div>
           <div class="bg-emerald-950/20 border border-emerald-700/40 rounded-2xl p-5">
             <h3 class="text-lg font-semibold text-emerald-300 mb-2">🎯 최종 판정</h3>
             <ul class="text-sm text-slate-300 space-y-1 list-disc list-inside">
@@ -2102,11 +2113,14 @@ vi ~/.openclaw/openclaw.json
               📦 업데이트 및 확인
             </p>
             <div class="space-y-3">
+              <p class="text-[10px] text-slate-400">수동 업데이트 및 자동화 로그 확인</p>
               <div class="code-block text-[10px] p-4">
                 <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code># Fern 계정에서 업데이트 & 상태 확인
+                <pre><code># 수동 업데이트
 npm update -g openclaw
-openclaw status</code></pre>
+
+# 자동 업데이트 로그 확인
+tail -f ~/sandbox/logs/npm-auto-update.log</code></pre>
               </div>
             </div>
           </div>
@@ -2120,6 +2134,45 @@ openclaw status</code></pre>
             <li>서비스 상태 확인 시 <code class="bg-black/30 px-1 rounded">sudo -u fern</code>을 사용하여 에이전트 계정의 컨텍스트를 조회하세요.</li>
             <li>브라우저 제어 이슈 발생 시 <code class="bg-black/30 px-1 rounded">openclaw status</code>에서 <strong>Relay</strong> 연결 상태를 점검하세요.</li>
           </ul>
+        </div>
+      </div>
+
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-emerald-500 shadow-xl mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-emerald-400 flex items-center gap-3">
+          🔄 NPM 자동 업데이트 (LaunchAgent)
+        </h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+          매일 새벽 3시, LaunchAgent가 자동으로 전역 NPM 패키지를 업데이트합니다. <br class="hidden md:block">
+          마스터 스크립트를 통해 이미 설치되었으며, 아래 명령어로 상태를 관리할 수 있습니다.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <p class="text-xs font-bold text-blue-400 uppercase tracking-wider">업데이트 상태 및 로그 확인</p>
+            <div class="code-block text-[10px]">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># 최근 업데이트 로그 확인
+tail -n 50 ~/sandbox/logs/npm-auto-update.log
+
+# LaunchAgent 등록 확인
+launchctl list | grep npmupdate</code></pre>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <p class="text-xs font-bold text-red-400 uppercase tracking-wider">수동 제어</p>
+            <div class="code-block text-[10px]">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># 즉시 업데이트 실행
+~/npm-auto-update.sh run
+
+# 자동 업데이트 비활성화 (제거)
+~/npm-auto-update.sh remove
+
+# 자동 업데이트 활성화 (설치)
+~/npm-auto-update.sh install</code></pre>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2440,11 +2493,12 @@ tail -f ~/sandbox/logs/openclaw-gateway.log</code></pre>
         <h2 class="text-2xl font-bold mb-2 text-orange-400 flex items-center gap-3">
           Step 1 — 프로세스 중지 &amp; 서비스 해제
         </h2>
-        <p class="text-sm text-slate-400 mb-4">실행 중인 AI 프로세스를 모두 종료하고 Ollama 서비스를 언로드합니다.</p>
+        <p class="text-sm text-slate-400 mb-4">실행 중인 AI 프로세스를 모두 종료하고 Ollama 및 자동 업데이트 서비스를 언로드합니다.</p>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># Ollama 데몬 언로드
+          <pre><code># Ollama 및 자동 업데이트 데몬 언로드
 sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
+launchctl bootout gui/$(id -u fern) /Users/fern/Library/LaunchAgents/com.fern.npmupdate.plist 2>/dev/null || true
 
 # Fern 프로세스 및 잔류 노드 종료
 sudo pkill -9 -u fern -f openclaw
