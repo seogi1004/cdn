@@ -563,14 +563,14 @@ echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini 
           <div class="bg-indigo-950/20 p-5 rounded-xl border border-indigo-800/40">
             <h3 class="font-bold text-indigo-300 mb-2 flex items-center gap-2">
               Step 5: 네트워크 접근 허용 (LAN Open)
-              <span class="badge badge-stability">v6.1+</span>
+              <span class="badge badge-stability">v6.2+</span>
             </h3>
-            <p class="text-xs text-slate-400 mb-3">v6.1 부터는 Gateway(18789)와 Relay(18792) 포트가 LAN 내의 다른 기기에서도 접근 가능하도록 개방되었습니다. PF 방화벽 설정(Tab 3)을 확인하세요.</p>
+            <p class="text-xs text-slate-400 mb-3">v6.2 부터는 Ollama(11434)만 LAN에 개방되며, Gateway(18789)와 Relay(18792) 포트는 보안을 위해 LAN 접근이 차단됩니다. PF 방화벽 설정(Tab 3)을 확인하세요.</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># LAN 접근성 확인 (다른 기기에서 접속 가능)
-# 18789: API Gateway & Admin Web
-# 18792: OpenClaw Browser Relay</code></pre>
+              <pre><code># LAN 접근성 확인 (Ollama만 가능)
+# 11434: Ollama (Allow)
+# 18789, 18792: Blocked from LAN</code></pre>
             </div>
           </div>
 
@@ -641,7 +641,7 @@ openclaw skills enable steipete/notion</code></pre>
                     <p class="font-bold text-slate-100">Browser Relay (Chrome)</p>
                     <span class="badge badge-required">활성</span>
                   </div>
-                  <p class="text-xs text-slate-400 mb-3">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다. (v6.1+ 에서는 포트 18792를 통해 LAN에서도 접근 가능)</p>
+                  <p class="text-xs text-slate-400 mb-3">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다. (v6.2+ 에서는 보안을 위해 포트 18792의 LAN 접근이 차단됩니다)</p>
                   <div class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20 mb-3">
                     <p class="text-[11px] font-bold text-blue-300 mb-2">🔌 Extension 수동 설치 가이드</p>
                     <ol class="text-[10px] text-slate-400 space-y-1 list-decimal list-inside">
@@ -765,7 +765,11 @@ npx playwright install</code></pre>
             <ul class="space-y-2 text-sm text-slate-300">
               <li class="flex items-start gap-2">
                 <span class="text-emerald-500 font-bold">•</span>
-                <div><strong>로컬 서비스 (lo0):</strong> 11434(Ollama), 18789(API Gateway), 18792(OpenClaw Relay), 9222(Chrome CDP)</div>
+                <div><strong>로컬 서비스 (lo0):</strong> 11434, 18789, 18792, 9222 전면 허용</div>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <div><strong>LAN 접근 (v6.2):</strong> 11434(Ollama)만 허용 (타 포트 LAN 차단)</div>
               </li>
               <li class="flex items-start gap-2">
                 <span class="text-emerald-500 font-bold">•</span>
@@ -843,66 +847,73 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
         </div>
       </div>
 
-      <div class="glass p-8 border-l-4 border-emerald-400 rounded-2xl shadow-xl shadow-emerald-900/10">
-        <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
-          🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세) <span class="badge badge-required">필수</span>
-        </h2>
-        <div class="bg-red-950/20 p-4 rounded-2xl mb-6 border border-red-900/30">
-          <p class="text-sm text-red-300 font-bold flex items-center">
-            💡 Fern PF Anchor: IPv4/IPv6 이중 격리 <span class="badge badge-required ml-2">필수</span>
-          </p>
-        </div>
-
-        <div class="code-block text-xs">
-          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
-sudo tee /etc/pf.anchors/fern << 'EOF'
-# ==========================================
-# Fern PF Anchor
-# 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
-# ==========================================
-
-# [1] lo0 전면 허용 (Chrome IPC & Playwright 로컬 통신 보장)
-pass quick on lo0 user fern keep state
-
-# [2] VPN 인터페이스 전면 차단
-block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
-
-# [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
-block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
-
-# [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
-block drop out quick inet6 from any to any user fern
-
-# [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
-pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
-pass out quick inet proto udp from any to any port 443 user fern keep state
-
-# [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
-block drop out quick inet from any to any user fern
-EOF
-
-# PF 규칙 적용
-if ! grep -q 'anchor "fern"' /etc/pf.conf; then
-  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf
-  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf
-fi
-
-# [v6.1 추가] LAN 접근 허용 규칙 (Ollama + OpenClaw)
-PF_RULE_TAG="# LAN OpenClaw & Ollama Access (v6.1)"
-PF_RULE_LINE="pass in quick inet proto tcp from 192.168.0.0/16 to any port { 11434, 18789, 18792 } keep state"
-if ! sudo grep -Fq "$PF_RULE_TAG" /etc/pf.conf; then
-  sudo sed -i '' '/# LAN Ollama Access (v6.0)/d' /etc/pf.conf 2>/dev/null || true
-  sudo sed -i '' '/pass in quick inet proto tcp from 192.168.0.0\/16 to any port 11434 keep state/d' /etc/pf.conf 2>/dev/null || true
-  sudo sh -c "printf '\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_LINE' >> /etc/pf.conf"
-fi
-
-sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
-sudo pfctl -E
-
-echo "✅ PF 방화벽 격리 앵커 및 LAN 개방 설정 적용 완료"</code></pre>
-        </div>
-      </div>
+            <div class="glass p-8 border-l-4 border-emerald-400 rounded-2xl shadow-xl shadow-emerald-900/10">
+              <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+                🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세) <span class="badge badge-required">필수</span>
+              </h2>
+              <div class="bg-red-950/20 p-4 rounded-2xl mb-6 border border-red-900/30">
+                <p class="text-sm text-red-300 font-bold flex items-center">
+                  💡 Fern PF Anchor: IPv4/IPv6 이중 격리 <span class="badge badge-required ml-2">필수</span>
+                </p>
+              </div>
+      
+              <div class="code-block text-xs">
+                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
+      sudo tee /etc/pf.anchors/fern << 'EOF'
+      # ==========================================
+      # Fern PF Anchor
+      # 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
+      # ==========================================
+      
+      # [1] lo0 전면 허용 (Chrome IPC & Playwright 로컬 통신 보장)
+      pass quick on lo0 user fern keep state
+      
+      # [2] VPN 인터페이스 전면 차단
+      block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
+      
+      # [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
+      block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+      
+      # [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
+      block drop out quick inet6 from any to any user fern
+      
+      # [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
+      pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+      pass out quick inet proto udp from any to any port 443 user fern keep state
+      
+      # [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
+      block drop out quick inet from any to any user fern
+      EOF
+      
+      # 2. PF 규칙 적용 및 앵커 로드
+      if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+        echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+        echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
+      fi
+      
+      # 3. [v6.2] LAN 접근 규칙: Ollama만 허용, OpenClaw/디버깅 포트는 LAN 차단
+      # (네트워크 전환 버그를 막기 위해 IFACE 지정 없이 IP 대역으로만 통제)
+      PF_RULE_TAG="# --- LAN Custom Rules (v6.2) ---"
+      PF_RULE_ALLOW="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
+      PF_RULE_BLOCK="block drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }"
+      
+      # 기존 LAN 규칙 찌꺼기 완벽 정리 (키워드 기반 삭제로 macOS sed 호환성 확보)
+      sudo sed -i '' '/LAN Ollama Access/d' /etc/pf.conf 2>/dev/null || true
+      sudo sed -i '' '/LAN OpenClaw/d' /etc/pf.conf 2>/dev/null || true
+      sudo sed -i '' '/LAN Custom Rules/d' /etc/pf.conf 2>/dev/null || true
+      sudo sed -i '' '/port 11434/d' /etc/pf.conf 2>/dev/null || true
+      sudo sed -i '' '/port { 18789, 18792, 9222 }/d' /etc/pf.conf 2>/dev/null || true
+      
+      # 새로운 v6.2 규칙 등록
+      sudo sh -c "printf '\n%s\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_ALLOW' '$PF_RULE_BLOCK' >> /etc/pf.conf"
+      
+      # 4. 방화벽 재적용 및 활성화
+      sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
+      sudo pfctl -E 2>/dev/null || true
+      
+      echo "✅ PF 적용 완료: LAN 대역 Ollama(11434) 허용 / 18789, 18792, 9222 LAN 접근 차단"</code></pre>
+            </div>      </div>
     </div>
 
     <!-- 4. Sandboxing Tab -->
@@ -999,22 +1010,21 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
           </div>
         </div>
 
-        <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
-          <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v6.1-ULTIMATE)</h3>
-          <p class="text-sm text-slate-300 mb-2">💡 딱 하나! 나중을 위한 아주 작은 팁</p>
-          <p class="text-sm text-slate-300 mb-2">스크립트 안의 OpenClaw 실행 경로가 현재 설치하신 Node.js 버전에 맞춰져 있습니다.</p>
-                    <p class="text-sm text-slate-300 mb-2">👉 <code class="text-emerald-300 bg-black/30 px-1 rounded">/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw</code></p>
-                    <p class="text-sm text-slate-300 mb-2">🌐 <strong class="text-yellow-300">v6.1 변경사항:</strong> Ollama(11434) 뿐만 아니라 OpenClaw Gateway(18789) 및 Relay(18792)도 LAN 내에서 접근 가능하도록 PF 설정이 업데이트되었습니다. PF 방화벽으로 fern 계정의 사내망 접근은 여전히 차단됩니다.</p>
-                    <p class="text-sm text-slate-300">나중에(아마 한참 뒤겠지만) NVM으로 Node.js 버전을 더 높은 버전으로 업데이트하시게 된다면, 스크립트에서 저 경로의 숫자(v24.13.1 부분)만 살짝 바꿔주시면 평생 우려먹을 수 있습니다! ㅋㅋㅋ</p>
-                  </div>
-
-        <div class="code-block">
-          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code class="text-sm">#!/bin/bash
-
-# OpenClaw M4 Max Security Master Script v6.1-ULTIMATE
-# (Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + LAN Open)
-
+                <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
+                  <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v6.2-ULTIMATE)</h3>
+                  <p class="text-sm text-slate-300 mb-2">💡 딱 하나! 나중을 위한 아주 작은 팁</p>
+                  <p class="text-sm text-slate-300 mb-2">스크립트 안의 OpenClaw 실행 경로가 현재 설치하신 Node.js 버전에 맞춰져 있습니다.</p>
+                  <p class="text-sm text-slate-300 mb-2">👉 <code class="text-emerald-300 bg-black/30 px-1 rounded">/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw</code></p>
+                  <p class="text-sm text-slate-300 mb-2">🌐 <strong class="text-yellow-300">v6.2 변경사항:</strong> 보안 강화를 위해 LAN에서는 Ollama(11434)만 접근 가능하며, OpenClaw Gateway(18789) 및 Relay(18792)는 LAN 접근이 차단됩니다. PF 방화벽으로 fern 계정의 사내망 접근은 여전히 차단됩니다.</p>
+                  <p class="text-sm text-slate-300">나중에(아마 한참 뒤겠지만) NVM으로 Node.js 버전을 더 높은 버전으로 업데이트하시게 된다면, 스크립트에서 저 경로의 숫자(v24.13.1 부분)만 살짝 바꿔주시면 평생 우려먹을 수 있습니다! ㅋㅋㅋ</p>
+                </div>
+        
+                <div class="code-block">
+                  <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                  <pre><code class="text-sm">#!/bin/bash
+        
+        # OpenClaw M4 Max Security Master Script v6.2-ULTIMATE
+        # (Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + LAN Open)
 set -euo pipefail
 
 echo ">>> [0/6] 안전한 작업 디렉토리로 이동..."
@@ -1065,7 +1075,7 @@ if ! sudo grep -q "^DenyUsers fern" /etc/ssh/sshd_config; then
     echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
 fi
 
-echo ">>> [5/6] PF 방화벽 및 네트워크 노출 설정 (v6.1)..."
+echo ">>> [5/6] PF 방화벽 및 네트워크 노출 설정 (v6.2)..."
 sudo tee /etc/pf.anchors/fern << 'EOF' >/dev/null
 pass quick on lo0 user fern keep state
 block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
@@ -1076,19 +1086,27 @@ pass out quick inet proto udp from any to any port 443 user fern keep state
 block drop out quick inet from any to any user fern
 EOF
 
-# [멱등성 패치] printf를 사용한 안전한 규칙 삽입
-PF_RULE_TAG="# LAN OpenClaw & Ollama Access (v6.1)"
-PF_RULE_LINE="pass in quick inet proto tcp from 192.168.0.0/16 to any port { 11434, 18789, 18792 } keep state"
-if ! sudo grep -Fq "$PF_RULE_TAG" /etc/pf.conf; then
-  sudo sed -i '' '/# LAN Ollama Access (v6.0)/d' /etc/pf.conf 2>/dev/null || true
-  sudo sed -i '' '/pass in quick inet proto tcp from 192.168.0.0\/16 to any port 11434 keep state/d' /etc/pf.conf 2>/dev/null || true
-  sudo sh -c "printf '\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_LINE' >> /etc/pf.conf"
+# 2. PF 규칙 적용 및 앵커 로드
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
 fi
 
-if ! grep -q 'anchor "fern"' /etc/pf.conf; then
-    echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
-    echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
-fi
+# 3. [v6.2] LAN 접근 규칙: Ollama만 허용, OpenClaw/디버깅 포트는 LAN 차단
+PF_RULE_TAG="# --- LAN Custom Rules (v6.2) ---"
+PF_RULE_ALLOW="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
+PF_RULE_BLOCK="block drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }"
+
+# 기존 LAN 규칙 찌꺼기 완벽 정리
+sudo sed -i '' '/LAN Ollama Access/d' /etc/pf.conf 2>/dev/null || true
+sudo sed -i '' '/LAN OpenClaw/d' /etc/pf.conf 2>/dev/null || true
+sudo sed -i '' '/LAN Custom Rules/d' /etc/pf.conf 2>/dev/null || true
+sudo sed -i '' '/port 11434/d' /etc/pf.conf 2>/dev/null || true
+sudo sed -i '' '/port { 18789, 18792, 9222 }/d' /etc/pf.conf 2>/dev/null || true
+
+# 새로운 v6.2 규칙 등록
+sudo sh -c "printf '\n%s\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_ALLOW' '$PF_RULE_BLOCK' >> /etc/pf.conf"
+
 sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
 sudo pfctl -E || true
 
@@ -1176,7 +1194,7 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 sudo launchctl bootout system/com.openclaw.fern 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist
 
-echo "✅ [v6.1] 마스터 배포가 완료되었습니다!"</code></pre>
+echo "✅ [v6.2] 마스터 배포가 완료되었습니다!"</code></pre>
         </div>
       </div>
     </div>
@@ -1349,13 +1367,16 @@ sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
-            <p class="font-semibold text-slate-100 mb-3">7) LAN 접근 확인 (v6.1+)</p>
+            <p class="font-semibold text-slate-100 mb-3">7) LAN 접근 확인 (v6.2+)</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># LAN 내 다른 기기에서 브라우저로 접속 확인
+              <pre><code># [성공] Ollama 접속 확인 (Ollama만 가능)
 http://&lt;IP_ADDRESS&gt;:11434/api/tags
+
+# [실패] OpenClaw 및 디버깅 포트 (LAN 차단 확인)
 http://&lt;IP_ADDRESS&gt;:18789
-http://&lt;IP_ADDRESS&gt;:18792</code></pre>
+http://&lt;IP_ADDRESS&gt;:18792
+http://&lt;IP_ADDRESS&gt;:9222</code></pre>
             </div>
           </div>
           <div class="bg-emerald-950/20 border border-emerald-700/40 rounded-2xl p-5">
