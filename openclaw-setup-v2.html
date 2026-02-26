@@ -1882,6 +1882,65 @@ sudo -u fern openclaw status</code></pre>
         </div>
       </div>
 
+      <!-- 🔍 Expert Toolkit & Audit -->
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-emerald-500 shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
+          🔍 전문가 도구함 & 감사
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Deep Inspection -->
+          <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
+            <p class="font-bold text-slate-100 mb-3 flex items-center gap-2">🩺 정밀 진단 및 복구</p>
+            <div class="space-y-4">
+              <div>
+                <p class="text-[11px] text-slate-400 mb-1.5">시스템 환경, 권한, 구성 자동 점검 및 수리</p>
+                <div class="code-block text-[10px] p-3">
+                  <pre><code>sudo -u fern openclaw doctor --repair</code></pre>
+                </div>
+              </div>
+              <div>
+                <p class="text-[11px] text-slate-400 mb-1.5">실시간 로그 모니터링 (트러블슈팅 1순위)</p>
+                <div class="code-block text-[10px] p-3">
+                  <pre><code>sudo -u fern openclaw logs --follow</code></pre>
+                </div>
+              </div>
+              <div>
+                <p class="text-[11px] text-slate-400 mb-1.5">게이트웨이/세션/보안 심층 점검</p>
+                <div class="code-block text-[10px] p-3">
+                  <pre><code>sudo -u fern openclaw status --deep</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Engine & Security -->
+          <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
+            <p class="font-bold text-slate-100 mb-3 flex items-center gap-2">🛡️ AI 엔진 및 보안 감사</p>
+            <div class="space-y-4">
+              <div>
+                <p class="text-[11px] text-slate-400 mb-1.5">모델/프로바이더(Ollama, Gemini) 활성 상태</p>
+                <div class="code-block text-[10px] p-3">
+                  <pre><code>sudo -u fern openclaw models status</code></pre>
+                </div>
+              </div>
+              <div>
+                <p class="text-[11px] text-slate-400 mb-1.5">보안 설정/권한/네트워크 라우팅 정밀 감사</p>
+                <div class="code-block text-[10px] p-3">
+                  <pre><code>sudo -u fern openclaw security audit --deep</code></pre>
+                </div>
+              </div>
+              <div>
+                <p class="text-[11px] text-slate-400 mb-1.5">로컬/외부 신규 모델 스캔 및 갱신</p>
+                <div class="code-block text-[10px] p-3">
+                  <pre><code>sudo -u fern openclaw models scan</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="glass rounded-2xl overflow-hidden">
         <nav class="flex border-b border-slate-700/60">
           <button type="button" onclick="showMaintTab('maint-ollama')" id="mbtn-maint-ollama" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦙 Ollama 서버</button>
