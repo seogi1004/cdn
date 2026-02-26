@@ -447,15 +447,11 @@ openclaw browser extension install
 # 4. .openclaw/browser/chrome-extension 폴더 선택
 
 # [3] Fern 계정 GUI 세션에서 Chrome 실행
-# 방법 A: Alvin 터미널에서 AppleScript로 원격 기동
-sudo -u fern open -a "Google Chrome" --args \
-  --remote-debugging-port=9222 \
-  --user-data-dir=/Users/fern/.openclaw/chrome-profile
+# - 직접 명령어를 입력하는 대신, Fern 계정(화면 공유 등)으로 로그인 후 
+# - OpenClaw Dashboard에서 "Launch Browser" 버튼을 클릭하여 띄우는 것을 권장합니다.
 
-# 방법 B: 직접 로그인 후 실행 (추천)
-open -a "Google Chrome" --args \
-  --remote-debugging-port=9222 \
-  --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
+# (수동 실행 시 참고)
+# open -a "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
             </div>
 
             <div class="bg-blue-500/5 p-5 rounded-xl border border-blue-500/20">
@@ -656,10 +652,8 @@ openclaw skills enable steipete/notion</code></pre>
                     <pre><code># Relay 확장 설치
 openclaw browser extension install
 
-# Fern 세션에서 Chrome 실행 (CDP)
-open -a "Google Chrome" --args \
-  --remote-debugging-port=9222 \
-  --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
+# Fern 세션(화면 공유)에서 Chrome 실행
+# OpenClaw Dashboard의 'Launch Browser' 버튼 사용 권장</code></pre>
                   </div>
                 </div>
               </div>
@@ -1923,10 +1917,9 @@ sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
             </div>
             <div class="code-block text-[10px] p-4">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Chrome 실행 (CDP)
-open -a "Google Chrome" --args \
-  --remote-debugging-port=9222 \
-  --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
+              <pre><code># Fern 계정(화면 공유)으로 로그인 후
+# OpenClaw Dashboard에서
+# 'Launch Browser' 버튼 클릭</code></pre>
             </div>
           </div>
 
