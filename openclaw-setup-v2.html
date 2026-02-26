@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenClaw Setup (macOS) - LaunchDaemons 운영</title>
+  <title>OpenClaw Setup (macOS) - 수동 실행 & 격리 운영</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -157,14 +157,14 @@
         <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-emerald-400 to-indigo-400">
           OpenClaw Setup (macOS)
         </h1>
-        <p class="text-slate-400 mt-3 text-lg">launchd 기반 OS Native 서비스 운영 · LAN Open</p>
+        <p class="text-slate-400 mt-3 text-lg">수동 실행 최적화 & 격리 운영 · Zero Trust</p>
       </div>
-      <div class="glass p-5 rounded-2xl flex items-center gap-4 border-l-4 border-red-500 shadow-xl shadow-red-900/10">
-        <div class="h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
+      <div class="glass p-5 rounded-2xl flex items-center gap-4 border-l-4 border-emerald-500 shadow-xl shadow-emerald-900/10">
+        <div class="h-3 w-3 rounded-full bg-emerald-500 animate-pulse"></div>
         <div>
           <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Infrastructure Status</p>
           <div class="flex items-center">
-            <p class="text-sm font-semibold text-emerald-300">LaunchDaemons 운영 상태</p>
+            <p class="text-sm font-semibold text-emerald-300">수동 실행 & 격리 상태</p>
             <span class="badge badge-required ml-2">필수</span>
           </div>
         </div>
@@ -192,7 +192,7 @@
           Isolation Policy <span class="badge badge-required">필수</span>
         </h3>
         <p class="text-xl font-bold text-emerald-400">Zero-Trust Account</p>
-        <p class="text-slate-400 text-sm">fstab Persistence &amp; Zero-Trust PF + LAN Ollama Open</p>
+        <p class="text-slate-400 text-sm">fstab Persistence &amp; Zero-Trust PF + Ollama 24/7</p>
       </div>
     </section>
 
@@ -220,16 +220,16 @@
             <div class="rounded-2xl bg-slate-900/50 border border-slate-700/50 p-5">
               <p class="font-bold text-slate-100 flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                서비스 체인
+                서비스 운영 체계
               </p>
-              <p class="mt-2 text-slate-400 leading-relaxed">LaunchDaemons(system) → com.alvin.ollama(UserName=alvin) / com.openclaw.fern(UserName=fern)</p>
+              <p class="mt-2 text-slate-400 leading-relaxed">Ollama: 24/7 백그라운드 서비스 (alvin) / Fern: 필요 시 수동 실행 (fern)</p>
             </div>
             <div class="rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-5">
               <p class="font-bold text-emerald-400 flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                운영 원칙
+                격리 정책
               </p>
-              <p class="mt-2 text-slate-300 leading-relaxed">권한 경계 분리, 부팅 자동 기동, 로그 경로 고정으로 운영 안정성을 유지합니다.</p>
+              <p class="mt-2 text-slate-300 leading-relaxed">계정 격리(ACL), 네트워크 격리(PF), 파일 격리(APFS)를 통해 제로 트러스트 환경을 구축합니다.</p>
             </div>
           </div>
         </div>
@@ -251,22 +251,22 @@
                 <tr class="hover:bg-white/5 transition-colors">
                   <td class="p-4 font-medium text-slate-100">권한 경계</td>
                   <td class="p-4 text-slate-300">서비스별 실행 계정 분리</td>
-                  <td class="p-4 text-emerald-300">launchctl print에서 UserName 확인</td>
+                  <td class="p-4 text-emerald-300">PF 앵커 로드 상태 확인</td>
                 </tr>
                 <tr class="hover:bg-white/5 transition-colors">
-                  <td class="p-4 font-medium text-slate-100">자동 재시작</td>
-                  <td class="p-4 text-slate-300">launchd 네이티브 재시작</td>
-                  <td class="p-4 text-emerald-300">재부팅 후 state/pid 유지 확인</td>
+                  <td class="p-4 font-medium text-slate-100">실행 방식</td>
+                  <td class="p-4 text-slate-300">수동 실행 (Manual Start)</td>
+                  <td class="p-4 text-emerald-300">start-agent.sh 기동 확인</td>
                 </tr>
                 <tr class="hover:bg-white/5 transition-colors">
-                  <td class="p-4 font-medium text-slate-100">로그인 영향</td>
-                  <td class="p-4 text-slate-300">부팅 즉시 자동 기동</td>
-                  <td class="p-4 text-emerald-300">로그인 전 서비스 활성 확인</td>
+                  <td class="p-4 font-medium text-slate-100">영속성</td>
+                  <td class="p-4 text-slate-300">Ollama 서비스만 영속</td>
+                  <td class="p-4 text-emerald-300">재부팅 후 Ollama PID 유지</td>
                 </tr>
                 <tr class="hover:bg-white/5 transition-colors">
                   <td class="p-4 font-medium text-slate-100">샌드박스</td>
-                  <td class="p-4 text-slate-300">Fern 샌드박스/ACL 분리</td>
-                  <td class="p-4 text-emerald-300">/Users/fern/sandbox 접근 통제 확인</td>
+                  <td class="p-4 text-slate-300">APFS 샌드박스 격리</td>
+                  <td class="p-4 text-emerald-300">/Users/fern/sandbox 마운트 확인</td>
                 </tr>
               </tbody>
             </table>
@@ -294,18 +294,17 @@ rm -rf ~/Library/Caches/ms-playwright</code></pre>
         </h2>
         <p class="text-sm text-slate-400 mb-6 flex items-start gap-2">
           <span class="text-blue-400 text-base">ℹ</span>
-          launchd는 macOS 기본 내장 서비스 관리자이므로 별도 설치가 필요 없습니다.
+          Ollama는 백그라운드 데몬으로, Fern은 수동 런처로 운영됩니다.
         </p>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># Alvin: 경로 및 서비스 파일 사전 점검
-which ollama
+          <pre><code># Alvin: Ollama 서비스 상태 확인
 ls -l /Library/LaunchDaemons/com.alvin.ollama.plist
-ls -l /Library/LaunchDaemons/com.openclaw.fern.plist
+sudo launchctl print system/com.alvin.ollama | grep state
 
-# Fern: 런타임/설정 경로 확인
+# Fern: 런타임 및 수동 런처 존재 확인
 sudo -H -u fern test -d /Users/fern/.nvm && echo "OK: nvm"
-sudo -H -u fern test -d /Users/fern/.openclaw && echo "OK: openclaw home"
+sudo -H -u fern test -x /Users/fern/start-agent.sh && echo "OK: launcher ready"
 sudo -H -u fern test -d /Users/fern/sandbox && echo "OK: sandbox"</code></pre>
         </div>
       </div>
@@ -313,26 +312,26 @@ sudo -H -u fern test -d /Users/fern/sandbox && echo "OK: sandbox"</code></pre>
       <div class="glass glass-hover p-8 border-l-4 border-emerald-500 rounded-[2rem] shadow-xl">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-emerald-400">
           <span class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400 text-sm">STEP 2</span>
-          Fern 런타임 구축 (Fern 계정) <span class="badge badge-required">필수</span>
+          Fern 런타임 구축 및 수동 실행 <span class="badge badge-required">필수</span>
         </h2>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code># 1. 계정 전환 및 NVM/Node v24 원클릭 설치
 su - fern
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-echo 'export NVM_DIR="$HOME/.nvm"\n[ -s "$NVM_DIR/nvm.sh" ] && \\. "$NVM_DIR/nvm.sh"' >> ~/.zprofile
 source ~/.zprofile && nvm install 24 && nvm alias default 24
 
 # 2. 필수 패키지 및 OpenClaw 초기화
 npm install -g openclaw
 openclaw onboard      # 가이드에 따라 API Key 및 샌드박스(/Users/fern/sandbox) 설정
 
-# [보완] Credentials 권한 설정 (관리자 계정에서 실행)
-sudo chown fern:staff /Users/fern/.openclaw/credentials 2>/dev/null || true
-sudo chmod 700 /Users/fern/.openclaw/credentials 2>/dev/null || true
+# 3. 수동 실행 준비 (런처는 Fern 탭에서 생성)
+ls -l ~/start-agent.sh ~/stop-agent.sh
+chmod 700 ~/start-agent.sh ~/stop-agent.sh
 
-# 3. 게이트웨이 서비스 등록 및 확인
-openclaw gateway install && openclaw status</code></pre>
+# 4. 에이전트 실행 및 종료
+./start-agent.sh
+./stop-agent.sh</code></pre>
         </div>
       </div>
     </div>
@@ -449,7 +448,7 @@ openclaw browser extension install
 # [3] Fern 계정 GUI 세션에서 Chrome 실행
 # - 화면 공유 등으로 Fern 계정에 직접 로그인합니다.
 # - 터미널을 열고 아래 명령어를 실행하여 대시보드를 띄웁니다.
-openclaw dashboard
+start-dashboard
 # - 나타난 UI 창에서 "Launch Browser" 버튼을 클릭하면 CDP 포트(9222)가 열린 크롬이 실행됩니다.
 
 # (수동 실행 시 참고)
@@ -468,20 +467,161 @@ openclaw dashboard
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-              Step 3: LaunchDaemons 에이전트 기동
-              <span class="badge badge-stability">안정성</span>
+              Step 3: 런처 스크립트 구축 (Launchers)
+              <span class="badge badge-stability">보안 강화</span>
             </h3>
-            <p class="text-xs text-slate-400 mb-3">LaunchDaemons 등록 후 launchctl로 즉시 기동합니다. (plist는 마스터 스크립트에서 생성)</p>
+            <p class="text-xs text-slate-400 mb-4">에이전트를 백그라운드에서 안전하게 관리하기 위한 순수 Bash 런처를 생성합니다. <strong class="text-slate-200 underline">Fern 계정 홈(~)</strong>에서 실행하세요.</p>
+            
+            <div class="space-y-4">
+              <div>
+                <p class="text-[11px] font-bold text-emerald-400 mb-2">① start-agent.sh (시작 런처)</p>
+                <div class="code-block text-[10px]">
+                  <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                  <pre><code>cat > ~/start-agent.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+echo "=================================================="
+echo "🚀 OpenClaw Agent 시작 스크립트 (순수 Bash)"
+echo "=================================================="
+
+# 1. 샌드박스 마운트 확인
+if ! mount | grep -q "on /Users/fern/sandbox "; then
+  echo "[ERROR] 샌드박스 볼륨이 마운트되지 않았습니다." >&2
+  echo "       명령: sudo diskutil mount -mountPoint /Users/fern/sandbox FernSandbox" >&2
+  exit 78
+fi
+
+# 2. 경로 및 환경변수 설정
+SANDBOX_DIR="/Users/fern/sandbox"
+LOG_DIR="${SANDBOX_DIR}/logs"
+TMP_DIR="${LOG_DIR}/tmp"
+LOG_FILE="${LOG_DIR}/openclaw-gateway.log"
+HOST="127.0.0.1"
+PORT="18789"
+
+mkdir -p "${LOG_DIR}" "${TMP_DIR}"
+export TMPDIR="${TMP_DIR}"
+export OPENCLAW_LOG_DIR="${LOG_DIR}"
+export OPENCLAW_GATEWAY_BIND="${HOST}"
+export GATEWAY_PORT="${PORT}"
+
+cd "${SANDBOX_DIR}"
+
+# 3. NVM 동적 로드
+export NVM_DIR="/Users/fern/.nvm"
+if [ -s "${NVM_DIR}/nvm.sh" ]; then
+  source "${NVM_DIR}/nvm.sh"
+else
+  echo "[ERROR] NVM 스크립트를 찾을 수 없습니다: ${NVM_DIR}/nvm.sh" >&2
+  exit 127
+fi
+
+if ! command -v openclaw >/dev/null 2>&1; then
+  echo "[ERROR] 'openclaw' 명령어를 찾을 수 없습니다." >&2
+  exit 127
+fi
+
+# 4. 기존 프로세스 정리
+PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+if [ -n "${PIDS}" ]; then
+  echo "[INFO] 기존 OpenClaw 프로세스 정리 중 (PID: ${PIDS})..."
+  echo "${PIDS}" | xargs kill -TERM 2>/dev/null || true
+  sleep 2
+  PIDS2=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+  [ -n "${PIDS2}" ] && echo "${PIDS2}" | xargs kill -KILL 2>/dev/null || true
+fi
+
+# 5. OpenClaw 백그라운드 실행
+echo "[INFO] OpenClaw 시작 중... (${HOST}:${PORT})"
+: > "${LOG_FILE}"
+
+if openclaw gateway --help 2>&1 | grep -q -- '--bind'; then
+  nohup openclaw gateway --bind "${HOST}" --port "${PORT}" > "${LOG_FILE}" 2>&1 &
+else
+  nohup openclaw gateway --port "${PORT}" > "${LOG_FILE}" 2>&1 &
+fi
+
+MAIN_PID=$!
+echo "[INFO] 백그라운드 실행 완료 (PID: ${MAIN_PID})"
+
+# 6. 대시보드 띄우기
+(sleep 1.5 && openclaw dashboard) &
+
+echo "=================================================="
+echo "✅ 구동 완료."
+EOF
+chmod 700 ~/start-agent.sh</code></pre>
+                </div>
+              </div>
+
+              <div>
+                <p class="text-[11px] font-bold text-red-400 mb-2">② stop-agent.sh (종료 런처)</p>
+                <div class="code-block text-[10px]">
+                  <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                  <pre><code>cat > ~/stop-agent.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+echo "=================================================="
+echo "🛑 OpenClaw Agent 종료 스크립트 (순수 Bash)"
+echo "=================================================="
+
+PORT="18789"
+LOG_DIR="/Users/fern/sandbox/logs"
+STOP_LOG="${LOG_DIR}/openclaw-stop.log"
+
+mkdir -p "${LOG_DIR}"
+echo "[INFO] 종료 스크립트 실행 일시: $(date)" >> "${STOP_LOG}"
+
+PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+
+if [ -z "${PIDS}" ]; then
+  echo "✅ 실행 중인 OpenClaw 프로세스가 없습니다."
+  exit 0
+fi
+
+echo "[INFO] 발견된 PID: ${PIDS}. 정상 종료 요청..."
+echo "${PIDS}" | xargs kill -TERM 2>/dev/null || true
+
+for i in {1..5}; do
+  if ! /usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t >/dev/null 2>&1; then
+    echo "✅ OpenClaw가 안전하게 종료되었습니다."
+    exit 0
+  fi
+  sleep 1
+done
+
+echo "[WARN] 5초 초과. 강제 종료 시도..."
+PIDS2=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+if [ -n "${PIDS2}" ]; then
+  echo "${PIDS2}" | xargs kill -KILL 2>/dev/null || true
+  echo "✅ 강제 종료 완료."
+fi
+EOF
+chmod 700 ~/stop-agent.sh</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">
+              Step 4: 에이전트 수동 기동 (Manual Launch)
+              <span class="badge badge-stability">보안 강화</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-3">생성한 런처를 사용하여 에이전트를 제어합니다.</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl kickstart -k system/com.openclaw.fern
-sudo launchctl print system/com.openclaw.fern | head -n 30</code></pre>
+              <pre><code># Fern 계정 로그인 후 실행
+~/start-agent.sh  # 시작
+~/stop-agent.sh   # 종료</code></pre>
             </div>
           </div>
 
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-slate-100 mb-2 flex items-center gap-2">
-              Step 4: 페르소나 설정 (SOUL &amp; IDENTITY)
+              Step 5: 페르소나 설정 (SOUL &amp; IDENTITY)
               <span class="badge badge-required">필수</span>
             </h3>
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 SOUL.md와 IDENTITY.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
@@ -560,7 +700,7 @@ echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini 
 
           <div class="bg-indigo-950/20 p-5 rounded-xl border border-indigo-800/40">
             <h3 class="font-bold text-indigo-300 mb-2 flex items-center gap-2">
-              Step 5: 네트워크 접근 허용 (LAN Open)
+              Step 6: 네트워크 접근 허용 (LAN Open)
               <span class="badge badge-stability">v6.2+</span>
             </h3>
             <p class="text-xs text-slate-400 mb-3">v6.2 부터는 Ollama(11434)만 LAN에 개방되며, Gateway(18789)와 Relay(18792) 포트는 보안을 위해 LAN 접근이 차단됩니다. PF 방화벽 설정(Tab 3)을 확인하세요.</p>
@@ -958,122 +1098,134 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트</h2>
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v1.0-ULTIMATE)</h2>
               <span class="badge badge-stability ml-2">안정성</span>
             </div>
-            <p class="text-slate-400 text-sm mt-1">Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + LAN Open</p>
+            <p class="text-slate-400 text-sm mt-1">Manual Launch Only + Zero Trust Isolation + APFS Sandbox + Ollama 24/7</p>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
-            <h3 class="text-lg font-semibold text-slate-100 mb-2">plist 파일 위치</h3>
-            <p class="text-sm text-slate-400">모든 plist는 시스템 레벨 LaunchDaemons 경로에 둡니다.</p>
+            <h3 class="text-lg font-semibold text-slate-100 mb-2">LaunchDaemons (24/7)</h3>
+            <p class="text-sm text-slate-400">Ollama 서비스만 백그라운드로 유지됩니다.</p>
             <div class="code-block mt-3 text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist
-/Library/LaunchDaemons/com.openclaw.fern.plist</code></pre>
+              <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
-            <h3 class="text-lg font-semibold text-slate-100 mb-2">권한/검증/로드</h3>
-            <div class="code-block text-xs">
+            <h3 class="text-lg font-semibold text-slate-100 mb-2">Fern Infrastructure</h3>
+            <p class="text-sm text-slate-400">격리된 계정 및 샌드박스 환경을 구축합니다.</p>
+            <div class="code-block text-xs mt-3">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
-plutil -lint /Library/LaunchDaemons/com.alvin.ollama.plist
-plutil -lint /Library/LaunchDaemons/com.openclaw.fern.plist
-# Modern Bootstrap Syntax (macOS Ventura+)
-sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
-sudo launchctl bootout system/com.openclaw.fern 2>/dev/null || true
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</code></pre>
+              <pre><code>/Users/fern (isolated)
+/Users/fern/sandbox (APFS Volume)</code></pre>
             </div>
           </div>
         </div>
 
         <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5 mb-8">
           <h3 class="text-lg font-semibold text-slate-100 mb-2">생성 파일 목록</h3>
-          <p class="text-sm text-slate-400 mb-3">마스터 스크립트가 생성하는 파일들입니다. 변경 시 반드시 root 권한 유지.</p>
+          <p class="text-sm text-slate-400 mb-3">마스터 스크립트가 생성/관리하는 파일들입니다.</p>
           <div class="code-block text-xs">
             <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
             <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist
-/Library/LaunchDaemons/com.openclaw.fern.plist
-/usr/local/bin/run-fern-bot.sh
-/var/log/openclaw/ollama.log
-/var/log/openclaw/ollama.err
-/var/log/openclaw/fern-bot.log
-/var/log/openclaw/fern-bot.err</code></pre>
+/Users/fern/.zshrc (start-dashboard alias)
+/etc/pf.anchors/fern
+/var/log/openclaw/ollama.log</code></pre>
           </div>
         </div>
 
                 <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
-                  <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v6.2-ULTIMATE)</h3>
-                  <p class="text-sm text-slate-300 mb-2">💡 딱 하나! 나중을 위한 아주 작은 팁</p>
-                  <p class="text-sm text-slate-300 mb-2">스크립트 안의 OpenClaw 실행 경로가 현재 설치하신 Node.js 버전에 맞춰져 있습니다.</p>
-                  <p class="text-sm text-slate-300 mb-2">👉 <code class="text-emerald-300 bg-black/30 px-1 rounded">/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw</code></p>
-                  <p class="text-sm text-slate-300 mb-2">🌐 <strong class="text-yellow-300">v6.2 변경사항:</strong> 보안 강화를 위해 LAN에서는 Ollama(11434)만 접근 가능하며, OpenClaw Gateway(18789) 및 Relay(18792)는 LAN 접근이 차단됩니다. PF 방화벽으로 fern 계정의 사내망 접근은 여전히 차단됩니다.</p>
-                  <p class="text-sm text-slate-300">나중에(아마 한참 뒤겠지만) NVM으로 Node.js 버전을 더 높은 버전으로 업데이트하시게 된다면, 스크립트에서 저 경로의 숫자(v24.13.1 부분)만 살짝 바꿔주시면 평생 우려먹을 수 있습니다! ㅋㅋㅋ</p>
+                  <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v1.0-ULTIMATE)</h3>
+                  <p class="text-sm text-slate-300 mb-2">💡 **Infrastructure Only:** 이 스크립트는 OS 레벨의 격리 환경과 Ollama 서비스만 구축합니다.</p>
+                  <p class="text-sm text-slate-300 mb-2">👉 에이전트 런처(<code class="text-emerald-300 bg-black/30 px-1 rounded">start-agent.sh</code> 등)는 <strong class="text-slate-100">Fern (Agent) 탭</strong>에서 개별적으로 생성하세요.</p>
+                  <p class="text-sm text-slate-300">보안(PF/ACL/APFS)과 Ollama(관리자) 24/7 서비스는 이 스크립트로 철통 유지됩니다.</p>
                 </div>
         
                 <div class="code-block">
                   <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                   <pre><code class="text-sm">#!/bin/bash
-        
-        # OpenClaw M4 Max Security Master Script v6.2-ULTIMATE
-        # (Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + LAN Open)
+# ==============================================================================
+# OpenClaw M4 Max Security Master Script (인프라 전용 버전) v1.0-ULTIMATE
+# 용도: AI 에이전트 구동을 위한 제로 트러스트 기반 격리 환경(OS) 구축
+# 정책:
+#   - 에이전트 런처는 포함하지 않음 (사용자 별도 생성)
+#   - 보안(PF/ACL/APFS) 및 Ollama 데몬(alvin) 설정 중심
+# 실행: 관리자 계정(alvin)에서 sudo 권한으로 실행
+# ==============================================================================
+
 set -euo pipefail
 
-echo ">>> [0/6] 안전한 작업 디렉토리로 이동..."
+echo ">>> [0/6] 안전한 작업 디렉토리로 이동 및 잔재 청소..."
 cd / || true
 
-echo ">>> [1/6] 봇 전용 서비스 계정(fern) 확인 및 자동 생성..."
-if id -u fern >/dev/null 2>&1; then
-    echo "✅ 계정 'fern'이 이미 존재합니다."
-else
-    echo "⚠️ 계정 'fern' 생성 중..."
-sudo sysadminctl -addUser fern -fullName "OpenClaw Bot" -password "&lt;PASSWORD&gt;" >/dev/null 2>&1
-    sleep 3
-fi
+bootout_safe() {
+  sudo launchctl bootout "$1" 2>/dev/null || true
+}
+disable_safe() {
+  sudo launchctl disable "$1" 2>/dev/null || true
+}
+delete_by_find() {
+  local dir="$1"
+  local pattern="$2"
+  sudo /usr/bin/find "$dir" -maxdepth 1 -type f -name "$pattern" -delete 2>/dev/null || true
+}
 
-echo ">>> [2/6] 홈 디렉토리 및 ACL 격리 (Zero Trust)..."
+# 이전 자동 실행 데몬 흔적 제거
+bootout_safe system/com.openclaw.fern
+sudo rm -f /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
+sudo rm -f /usr/local/bin/run-fern-bot.sh 2>/dev/null || true
+
+# [1/6] 서비스 전용 계정 생성
+if id -u fern >/dev/null 2>&1; then
+  echo "✅ 계정 'fern'이 이미 존재합니다."
+else
+  sudo sysadminctl -addUser fern -fullName "OpenClaw Bot" -password "<PASSWORD>" >/dev/null 2>&1
+  sleep 3
+fi
+FERN_UID="$(id -u fern)"
+
+# [2/6] 파일 시스템 격리 및 권한 통제 (Zero Trust)
 sudo chmod 700 /Users/alvin /Users/fern
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
 
-# [추가] Credentials 보안 강화
-sudo mkdir -p /Users/fern/.openclaw
-sudo chown fern:staff /Users/fern/.openclaw/credentials 2>/dev/null || true
-sudo chmod 700 /Users/fern/.openclaw/credentials 2>/dev/null || true
-sudo chown fern:staff /Users/fern/.openclaw
-sudo chmod 700 /Users/fern/.openclaw
+# [2-1/6] GUI LaunchAgent 무력화 및 대시보드 alias
+for label in ai.openclaw.gateway com.openclaw.gateway com.clawdbot.gateway bot.molt.gateway; do
+  bootout_safe  "gui/${FERN_UID}/${label}"
+  disable_safe  "gui/${FERN_UID}/${label}"
+done
+delete_by_find "/Users/fern/Library/LaunchAgents" "*openclaw*gateway*.plist"
 
-echo ">>> [3/6] APFS 샌드박스 볼륨 구축..."
+sudo touch /Users/fern/.zshrc
+sudo sed -i '' '/start-dashboard/d' /Users/fern/.zshrc 2>/dev/null || true
+echo 'alias start-dashboard="open http://127.0.0.1:18789/"' | sudo tee -a /Users/fern/.zshrc >/dev/null
+sudo chown fern:staff /Users/fern/.zshrc
+
+# [3/6] APFS 샌드박스 볼륨 구축
 CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
-
 if ! diskutil info "FernSandbox" >/dev/null 2>&1; then
-    sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
+  sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
 fi
-
 VOL_UUID="$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')"
 if ! sudo grep -q "UUID=${VOL_UUID} " /etc/fstab 2>/dev/null; then
-    echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
+  echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
 fi
-
 sudo mkdir -p /Users/fern/sandbox
 sudo chown fern:staff /Users/fern/sandbox
 sudo chmod 700 /Users/fern/sandbox
-
 if ! mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
-    sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
+  sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
 fi
 
-echo ">>> [4/6] SSH 접근 통제..."
+# [4/6] SSH 외부 접속 통제
 if ! sudo grep -q "^DenyUsers fern" /etc/ssh/sshd_config; then
-    echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
+  echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
 fi
 
-echo ">>> [5/6] PF 방화벽 및 네트워크 노출 설정 (v6.2)..."
-sudo tee /etc/pf.anchors/fern << 'EOF' >/dev/null
+# [5/6] PF 방화벽 및 네트워크 노출 설정
+sudo tee /etc/pf.anchors/fern <<'EOF' >/dev/null
 pass quick on lo0 user fern keep state
 block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
 block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
@@ -1083,116 +1235,216 @@ pass out quick inet proto udp from any to any port 443 user fern keep state
 block drop out quick inet from any to any user fern
 EOF
 
-# 2. PF 규칙 적용 및 앵커 로드
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
   echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
   echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
 fi
 
-# 3. [v6.2] LAN 접근 규칙: Ollama만 허용, OpenClaw/디버깅 포트는 LAN 차단
-PF_RULE_TAG="# --- LAN Custom Rules (v6.2) ---"
-PF_RULE_ALLOW="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
-PF_RULE_BLOCK="block drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }"
+PF_BEGIN="# --- LAN Custom Rules (OpenClaw) BEGIN ---"
+PF_END="# --- LAN Custom Rules (OpenClaw) END ---"
+PF_BODY=$'pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state\nblock drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }'
+sudo perl -0777 -i -pe "s/\n\Q${PF_BEGIN}\E.*?\Q${PF_END}\E\n/\n/s" /etc/pf.conf 2>/dev/null || true
+sudo sh -c "cat >> /etc/pf.conf <<LANEOF
 
-# 기존 LAN 규칙 찌꺼기 완벽 정리
-sudo sed -i '' '/LAN Ollama Access/d' /etc/pf.conf 2>/dev/null || true
-sudo sed -i '' '/LAN OpenClaw/d' /etc/pf.conf 2>/dev/null || true
-sudo sed -i '' '/LAN Custom Rules/d' /etc/pf.conf 2>/dev/null || true
-sudo sed -i '' '/port 11434/d' /etc/pf.conf 2>/dev/null || true
-sudo sed -i '' '/port { 18789, 18792, 9222 }/d' /etc/pf.conf 2>/dev/null || true
+${PF_BEGIN}
+${PF_BODY}
+${PF_END}
+LANEOF"
+sudo pfctl -f /etc/pf.conf && sudo pfctl -E || true
 
-# 새로운 v6.2 규칙 등록
-sudo sh -c "printf '\n%s\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_ALLOW' '$PF_RULE_BLOCK' >> /etc/pf.conf"
-
-sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
-sudo pfctl -E || true
-
-echo ">>> [6/6] 서비스 가동 (Ollama LAN 개방 + 보안 강화)..."
-
-# 로깅 설정
+# [6/6] Ollama 데몬 유지 (24/7) + 로그 세팅
 sudo mkdir -p /var/log/openclaw
-sudo touch /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err
+sudo touch /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
 sudo chown alvin:staff /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
-sudo chown fern:staff /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err
 
-# [6-1] Ollama Daemon (LAN 개방 설정)
-sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null << EOF
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
-&lt;plist version="1.0"&gt;
-&lt;dict&gt;
-  &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;com.alvin.ollama&lt;/string&gt;
-  &lt;key&gt;UserName&lt;/key&gt;&lt;string&gt;alvin&lt;/string&gt;
-  &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
-  &lt;key&gt;KeepAlive&lt;/key&gt;&lt;true/&gt;
-  &lt;key&gt;EnvironmentVariables&lt;/key&gt;
-  &lt;dict&gt;
-    &lt;key&gt;OLLAMA_HOST&lt;/key&gt;&lt;string&gt;0.0.0.0:11434&lt;/string&gt;
-    &lt;key&gt;OLLAMA_ORIGINS&lt;/key&gt;&lt;string&gt;*&lt;/string&gt;
-    &lt;key&gt;PATH&lt;/key&gt;&lt;string&gt;/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&lt;/string&gt;
-  &lt;/dict&gt;
-  &lt;key&gt;ProgramArguments&lt;/key&gt;
-  &lt;array&gt;
-    &lt;string&gt;/bin/zsh&lt;/string&gt;
-    &lt;string&gt;-lc&lt;/string&gt;
-    &lt;string&gt;/opt/homebrew/bin/ollama serve&lt;/string&gt;
-  &lt;/array&gt;
-  &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.log&lt;/string&gt;
-  &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.err&lt;/string&gt;
-&lt;/dict&gt;
-&lt;/plist&gt;
+sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.alvin.ollama</string>
+  <key>UserName</key><string>alvin</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>OLLAMA_HOST</key><string>0.0.0.0:11434</string>
+    <key>OLLAMA_ORIGINS</key><string>*</string>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>/opt/homebrew/bin/ollama serve</string>
+  </array>
+  <key>StandardOutPath</key><string>/var/log/openclaw/ollama.log</string>
+  <key>StandardErrorPath</key><string>/var/log/openclaw/ollama.err</string>
+</dict>
+</plist>
 EOF
-
-# [6-2] Fern Bot Wrapper (보안 잠금)
-sudo tee /usr/local/bin/run-fern-bot.sh >/dev/null << 'EOF'
-#!/bin/zsh
-if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
-  cd /Users/fern/sandbox && ulimit -u 512 && exec /Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw gateway --port 18789 --host 0.0.0.0
-else
-  echo "[ERROR] Sandbox volume is not mounted. Aborting." >&2
-  exit 78
-fi
-EOF
-sudo chown root:wheel /usr/local/bin/run-fern-bot.sh
-sudo chmod 755 /usr/local/bin/run-fern-bot.sh
-
-# [6-3] OpenClaw Daemon
-sudo tee /Library/LaunchDaemons/com.openclaw.fern.plist >/dev/null << 'EOF'
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
-&lt;plist version="1.0"&gt;
-&lt;dict&gt;
-  &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;com.openclaw.fern&lt;/string&gt;
-  &lt;key&gt;UserName&lt;/key&gt;&lt;string&gt;fern&lt;/string&gt;
-  &lt;key&gt;GroupName&lt;/key&gt;&lt;string&gt;staff&lt;/string&gt;
-  &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
-  &lt;key&gt;KeepAlive&lt;/key&gt;&lt;true/&gt;
-  &lt;key&gt;EnvironmentVariables&lt;/key&gt;
-  &lt;dict&gt;
-    &lt;key&gt;PATH&lt;/key&gt;&lt;string&gt;/Users/fern/.nvm/versions/node/v24.13.1/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&lt;/string&gt;
-  &lt;/dict&gt;
-  &lt;key&gt;ProgramArguments&lt;/key&gt;
-  &lt;array&gt;
-    &lt;string&gt;/usr/local/bin/run-fern-bot.sh&lt;/string&gt;
-  &lt;/array&gt;
-  &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/fern-bot.log&lt;/string&gt;
-  &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/fern-bot.err&lt;/string&gt;
-&lt;/dict&gt;
-&lt;/plist&gt;
-EOF
-
-sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist /Library/LaunchDaemons/com.openclaw.fern.plist
-
-# 현대적인 서비스 재시작
 sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 
-sudo launchctl bootout system/com.openclaw.fern 2>/dev/null || true
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist
+echo "✅ 인프라 환경 구축이 완료되었습니다! (v1.0-ULTIMATE)"</code></pre>
+                </div>
 
-echo "✅ [v6.2] 마스터 배포가 완료되었습니다!"</code></pre>
+        <div class="mt-12 glass p-8 rounded-[2rem] border-2 border-emerald-500/30 shadow-2xl">
+          <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
+            🛠️ 수동 런처 생성 (Manual Launcher Generation)
+          </h2>
+          <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+            마스터 스크립트로 인프라를 구축한 후, <strong class="text-slate-200">Fern 계정</strong>으로 전환하여 아래의 런처들을 개별적으로 생성하세요.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Start Agent -->
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  start-agent.sh
+                </h3>
+                <span class="badge badge-required">실행용</span>
+              </div>
+              <div class="code-block text-[10px]">
+                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code>cat > ~/start-agent.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+echo "=================================================="
+echo "🚀 OpenClaw Agent 시작 스크립트 (순수 Bash)"
+echo "=================================================="
+
+# 1. 샌드박스 마운트 확인
+if ! mount | grep -q "on /Users/fern/sandbox "; then
+  echo "[ERROR] 샌드박스 볼륨이 마운트되지 않았습니다." >&2
+  echo "       명령: sudo diskutil mount -mountPoint /Users/fern/sandbox FernSandbox" >&2
+  exit 78
+fi
+
+# 2. 경로 및 환경변수 설정
+SANDBOX_DIR="/Users/fern/sandbox"
+LOG_DIR="${SANDBOX_DIR}/logs"
+TMP_DIR="${LOG_DIR}/tmp"
+LOG_FILE="${LOG_DIR}/openclaw-gateway.log"
+HOST="127.0.0.1"
+PORT="18789"
+
+mkdir -p "${LOG_DIR}" "${TMP_DIR}"
+export TMPDIR="${TMP_DIR}"
+export OPENCLAW_LOG_DIR="${LOG_DIR}"
+export OPENCLAW_GATEWAY_BIND="${HOST}"
+export GATEWAY_PORT="${PORT}"
+
+cd "${SANDBOX_DIR}"
+
+# 3. NVM 동적 로드
+export NVM_DIR="/Users/fern/.nvm"
+if [ -s "${NVM_DIR}/nvm.sh" ]; then
+  source "${NVM_DIR}/nvm.sh"
+else
+  echo "[ERROR] NVM 스크립트를 찾을 수 없습니다: ${NVM_DIR}/nvm.sh" >&2
+  exit 127
+fi
+
+if ! command -v openclaw >/dev/null 2>&1; then
+  echo "[ERROR] 'openclaw' 명령어를 찾을 수 없습니다." >&2
+  exit 127
+fi
+
+# 4. 기존 프로세스 정리
+PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+if [ -n "${PIDS}" ]; then
+  echo "[INFO] 기존 OpenClaw 프로세스 정리 중 (PID: ${PIDS})..."
+  echo "${PIDS}" | xargs kill -TERM 2>/dev/null || true
+  sleep 2
+  PIDS2=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+  [ -n "${PIDS2}" ] && echo "${PIDS2}" | xargs kill -KILL 2>/dev/null || true
+fi
+
+# 5. OpenClaw 백그라운드 실행
+echo "[INFO] OpenClaw 시작 중... (${HOST}:${PORT})"
+: > "${LOG_FILE}"
+
+if openclaw gateway --help 2>&1 | grep -q -- '--bind'; then
+  nohup openclaw gateway --bind "${HOST}" --port "${PORT}" > "${LOG_FILE}" 2>&1 &
+else
+  nohup openclaw gateway --port "${PORT}" > "${LOG_FILE}" 2>&1 &
+fi
+
+MAIN_PID=$!
+echo "[INFO] 백그라운드 실행 완료 (PID: ${MAIN_PID})"
+
+# 6. 대시보드 띄우기
+(sleep 1.5 && openclaw dashboard) &
+
+echo "=================================================="
+echo "✅ 구동 완료. 이 터미널 창을 닫아도 프로세스는 유지됩니다."
+EOF
+chmod 700 ~/start-agent.sh</code></pre>
+              </div>
+            </div>
+
+            <!-- Stop Agent -->
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                  stop-agent.sh
+                </h3>
+                <span class="badge badge-required">종료용</span>
+              </div>
+              <div class="code-block text-[10px]">
+                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code>cat > ~/stop-agent.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+echo "=================================================="
+echo "🛑 OpenClaw Agent 종료 스크립트 (순수 Bash)"
+echo "=================================================="
+
+PORT="18789"
+LOG_DIR="/Users/fern/sandbox/logs"
+STOP_LOG="${LOG_DIR}/openclaw-stop.log"
+
+mkdir -p "${LOG_DIR}"
+echo "[INFO] 종료 스크립트 실행 일시: $(date)" >> "${STOP_LOG}"
+
+PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+
+if [ -z "${PIDS}" ]; then
+  echo "✅ 실행 중인 OpenClaw 프로세스가 없습니다."
+  exit 0
+fi
+
+echo "[INFO] 발견된 PID: ${PIDS}. 정상 종료(SIGTERM)를 요청합니다..."
+echo "${PIDS}" | xargs kill -TERM 2>/dev/null || true
+
+for i in {1..5}; do
+  if ! /usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t >/dev/null 2>&1; then
+    echo "✅ OpenClaw가 안전하게 종료되었습니다."
+    exit 0
+  fi
+  sleep 1
+done
+
+echo "[WARN] 5초 초과. 프로세스 강제 종료(SIGKILL)를 시도합니다..."
+PIDS2=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
+if [ -n "${PIDS2}" ]; then
+  echo "${PIDS2}" | xargs kill -KILL 2>/dev/null || true
+  echo "✅ 강제 종료 완료."
+fi
+EOF
+chmod 700 ~/stop-agent.sh</code></pre>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
       </div>
     </div>
 
@@ -1332,11 +1584,14 @@ sudo -u fern curl -I https://example.com</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
-            <p class="font-semibold text-slate-100 mb-3">4) launchd 등록/상태 확인</p>
+            <p class="font-semibold text-slate-100 mb-3">4) 서비스 상태 확인</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl print system/com.alvin.ollama | head -n 40
-sudo launchctl print system/com.openclaw.fern | head -n 40</code></pre>
+              <pre><code># Ollama (LaunchDaemon)
+sudo launchctl print system/com.alvin.ollama | grep state
+
+# Fern (Process)
+ps aux | grep openclaw | grep -v grep</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
@@ -1345,22 +1600,21 @@ sudo launchctl print system/com.openclaw.fern | head -n 40</code></pre>
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># ollama
 sudo tail -n 50 /var/log/openclaw/ollama.log
-sudo tail -n 50 /var/log/openclaw/ollama.err
 
 # fern bot
-sudo tail -n 50 /var/log/openclaw/fern-bot.log
-sudo tail -n 50 /var/log/openclaw/fern-bot.err</code></pre>
+# 실행 중인 터미널 세션 또는 openclaw status 확인
+sudo -u fern openclaw status</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
-            <p class="font-semibold text-slate-100 mb-3">6) 재부팅 검증 (가장 중요)</p>
+            <p class="font-semibold text-slate-100 mb-3">6) 재부팅 검증 (격리 유지 확인)</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 재부팅 후 자동 기동 확인
+              <pre><code># 재부팅 후 Ollama 자동 기동 확인
 sudo launchctl print system/com.alvin.ollama | grep -E "state|pid"
-sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
 
-# 그리고 fern에서 크롬 제어/로그인 자동화 재시도</code></pre>
+# Fern은 수동 실행이므로 자동 실행되지 않아야 함 (보안 원칙)
+# 필요 시 start-agent.sh로 수동 기동</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
@@ -1638,18 +1892,16 @@ http://&lt;IP_ADDRESS&gt;:9222</code></pre>
                     <div class="flex items-start gap-3 mb-3">
                       <span class="text-emerald-400 font-bold shrink-0 mt-0.5">②</span>
                       <div>
-                        <p class="text-slate-300 font-semibold mb-1">OpenClaw fern LaunchDaemon 상태</p>
-                        <code class="text-slate-400 block mb-1">sudo launchctl print system/com.openclaw.fern | head -n 40</code>
-                        <p class="text-emerald-300">state = running ✅</p>
+                        <p class="text-slate-300 font-semibold mb-1">OpenClaw fern 수동 프로세스 상태</p>
+                        <code class="text-slate-400 block mb-1">ps aux | grep openclaw | grep -v grep</code>
+                        <p class="text-emerald-300">process running ✅</p>
                       </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 ml-6 text-[11px]">
-                      <div class="flex gap-2"><span class="text-slate-500 shrink-0">plist</span><code class="text-slate-400">/Library/LaunchDaemons/com.openclaw.fern.plist</code></div>
-                      <div class="flex gap-2"><span class="text-slate-500 shrink-0">program</span><code class="text-slate-400">/usr/local/bin/run-fern-bot.sh</code></div>
+                      <div class="flex gap-2"><span class="text-slate-500 shrink-0">launcher</span><code class="text-slate-400">/Users/fern/start-agent.sh</code></div>
+                      <div class="flex gap-2"><span class="text-slate-500 shrink-0">program</span><code class="text-slate-400">openclaw gateway --host 127.0.0.1</code></div>
                       <div class="flex gap-2"><span class="text-slate-500 shrink-0">PATH</span><code class="text-slate-400">/Users/fern/.nvm/versions/node/v24.13.1/bin 포함</code></div>
                       <div class="flex gap-2"><span class="text-slate-500 shrink-0">user</span><code class="text-slate-400">fern · group: staff</code></div>
-                      <div class="flex gap-2"><span class="text-slate-500 shrink-0">log</span><code class="text-slate-400">/var/log/openclaw/fern-bot.log · fern-bot.err</code></div>
-                      <div class="flex gap-2"><span class="text-slate-500 shrink-0">pid</span><code class="text-emerald-400">6640</code></div>
                     </div>
                   </div>
 
@@ -1895,18 +2147,21 @@ http://&lt;IP_ADDRESS&gt;:9222</code></pre>
         </h2>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <!-- Quick Restart -->
+          <!-- Quick Manual Start -->
           <div class="bg-blue-500/5 p-6 rounded-2xl border border-blue-500/20 flex flex-col justify-between">
             <div>
               <p class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-                🔄 서비스 재시작
+                🚀 에이전트 시작/종료
               </p>
-              <p class="text-xs text-slate-400 mb-4">에이전트를 안전하게 재시작합니다.</p>
+              <p class="text-xs text-slate-400 mb-4">런처를 통해 백그라운드로 실행하거나 안전하게 종료합니다.</p>
             </div>
             <div class="code-block text-[10px] p-4">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 에이전트(Fern) 즉시 재시작
-sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+              <pre><code># 시작
+./start-agent.sh
+
+# 종료
+./stop-agent.sh</code></pre>
             </div>
           </div>
 
@@ -1914,15 +2169,14 @@ sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
           <div class="bg-indigo-500/5 p-6 rounded-2xl border border-indigo-500/20 flex flex-col justify-between">
             <div>
               <p class="font-bold text-indigo-300 mb-2 flex items-center gap-2">
-                🌐 브라우저 재가동
+                🌐 대시보드 열기
               </p>
-              <p class="text-xs text-slate-400 mb-4">CDP 포트를 열어 크롬을 다시 실행합니다.</p>
+              <p class="text-xs text-slate-400 mb-4">대시보드와 크롬을 연결합니다.</p>
             </div>
             <div class="code-block text-[10px] p-4">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Fern 계정(화면 공유) 터미널 실행
-openclaw dashboard
-# 'Launch Browser' 버튼 클릭</code></pre>
+              <pre><code># Fern 계정 터미널에서 실행
+openclaw dashboard</code></pre>
             </div>
           </div>
 
@@ -1932,12 +2186,13 @@ openclaw dashboard
               <p class="font-bold text-amber-300 mb-2 flex items-center gap-2">
                 ⚙️ 설정 변경
               </p>
-              <p class="text-xs text-slate-400 mb-4">에이전트 설정을 수정하고 즉시 반영합니다.</p>
+              <p class="text-xs text-slate-400 mb-4">설정 수정 후 에이전트를 재시작합니다.</p>
             </div>
             <div class="code-block text-[10px] p-4">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 설정 수정 및 재시작 (One-line)
-sudo vi /Users/fern/.openclaw/openclaw.json && sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+              <pre><code># 설정 수정 후 재시작
+vi ~/.openclaw/openclaw.json
+./start-agent.sh</code></pre>
             </div>
           </div>
 
@@ -1949,9 +2204,9 @@ sudo vi /Users/fern/.openclaw/openclaw.json && sudo launchctl kickstart -k syste
             <div class="space-y-3">
               <div class="code-block text-[10px] p-4">
                 <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code># Fern 계정 환경에서 업데이트 & 상태 확인
-sudo -H -u fern npm update -g openclaw
-sudo -u fern openclaw status</code></pre>
+                <pre><code># Fern 계정에서 업데이트 & 상태 확인
+npm update -g openclaw
+openclaw status</code></pre>
               </div>
             </div>
           </div>
@@ -2064,90 +2319,69 @@ pkill -f 'ollama serve'</code></pre>
         </div>
 
         <div id="maint-fernbot" class="maint-tab-content p-6 space-y-5" style="display:none">
-          <p class="text-xs text-slate-500">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다.</p>
+          <p class="text-xs text-slate-500">아래 모든 명령어는 <strong class="text-slate-300">Fern 계정</strong>에서 실행합니다.</p>
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-emerald-400">①</span> 상태 확인 및 로그</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
-sudo tail -n 100 /var/log/openclaw/fern-bot.log
-sudo tail -n 100 /var/log/openclaw/fern-bot.err</code></pre>
+              <pre><code># 프로세스 실행 여부 확인
+ps aux | grep openclaw | grep -v grep
+openclaw status
+
+# 로그 실시간 모니터링
+tail -f ~/sandbox/logs/openclaw-gateway.log</code></pre>
             </div>
           </div>
           <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
-            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>②</span> 시작 / 재시작</h3>
+            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>②</span> 에이전트 시작</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># [방법 A] 서비스 등록 및 시작 (완전 재등록)
-sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist
-
-# [방법 B] 이미 등록된 경우 즉시 재시작
-sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+              <pre><code># 수동 런처 실행 (백그라운드)
+cd ~
+./start-agent.sh</code></pre>
             </div>
           </div>
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
             <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>③</span> 중지 / 종료</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 1. 서비스 등록 해제 (자동 재시작 방지)
-sudo launchctl unload -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
-
-# 2. 잔류 프로세스 확실히 사살
-sudo pkill -9 -u fern -f openclaw
-sudo pkill -9 -u fern node
-
-# 3. 확인사살 (아무것도 안 나와야 정상)
-sudo lsof -nP -iTCP:18789,18792 -sTCP:LISTEN</code></pre>
-            </div>
-          </div>
-          <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
-            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>④</span> 포트 정리 (강제 종료)</h3>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 18789, 18792 포트를 사용하는 프로세스 강제 종료 (관리자 권한)
-sudo lsof -ti :18789,18792 | xargs sudo kill -9</code></pre>
+              <pre><code># 종료 스크립트 실행
+cd ~
+./stop-agent.sh</code></pre>
             </div>
           </div>
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">⑤</span> 설정 변경</h3>
+            <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">④</span> 설정 변경</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo vi /Users/fern/.openclaw/openclaw.json
-sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+              <pre><code>vi ~/.openclaw/openclaw.json
+./start-agent.sh</code></pre>
             </div>
           </div>
         </div>
       </div>
 
       <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-xl">
-        <h2 class="text-2xl font-bold mb-2 text-yellow-400 flex items-center gap-3">⚡ 전체 스택 시작 / 종료 <span class="badge badge-stability">안정성</span></h2>
-        <p class="text-sm text-slate-400 mb-5">검증 2~4단계는 공통으로 관리되며, 이 탭은 Ollama/OpenClaw 운영 명령만 서비스별로 구분해 제공합니다.</p>
+        <h2 class="text-2xl font-bold mb-2 text-yellow-400 flex items-center gap-3">⚡ 서비스 운영 가이드 <span class="badge badge-stability">안정성</span></h2>
+        <p class="text-sm text-slate-400 mb-5">Ollama는 시스템 서비스로 상시 대기하며, FernBot은 필요 시 개별적으로 실행합니다.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <p class="text-xs font-bold text-emerald-400 uppercase mb-2">🟢 전체 시작</p>
+            <p class="text-xs font-bold text-emerald-400 uppercase mb-2">🟢 Ollama (24/7)</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code># Ollama 시작
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
-sudo launchctl kickstart -k system/com.alvin.ollama
-
-# FernBot 시작 (완전 재등록 및 기동)
-sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist
-sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
             </div>
           </div>
           <div>
-            <p class="text-xs font-bold text-red-400 uppercase mb-2">🔴 전체 종료</p>
+            <p class="text-xs font-bold text-blue-400 uppercase mb-2">🚀 FernBot (Manual)</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># FernBot 종료
-sudo launchctl unload -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
-sudo pkill -9 -u fern -f openclaw
-sudo pkill -9 -u fern node
-
-# Ollama 종료
-sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
-pkill -f 'ollama serve'</code></pre>
+              <pre><code># FernBot 실행/종료
+su - fern
+./start-agent.sh  # 실행
+./stop-agent.sh   # 종료</code></pre>
             </div>
           </div>
         </div>
@@ -2157,12 +2391,10 @@ pkill -f 'ollama serve'</code></pre>
         <h2 class="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">⚡ 빠른 복구</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-emerald-950/30 p-4 rounded-xl border border-emerald-700/40">
-            <p class="text-sm font-bold text-emerald-400 mb-2">🦅 Gateway Unreachable</p>
-            <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>에서 unreachable이면 서비스가 중단 상태입니다.</p>
-            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code># 등록 확인 후 재시작
-sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
-sudo launchctl kickstart -k system/com.openclaw.fern
-openclaw status</code></pre></div>
+            <p class="text-sm font-bold text-emerald-400 mb-2">🦅 Gateway 중단</p>
+            <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>에서 연결 불가인 경우 에이전트를 재실행합니다.</p>
+            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code># 런처로 즉시 재기동 (기존 프로세스 자동 정리됨)
+./start-agent.sh</code></pre></div>
           </div>
           <div class="bg-orange-950/30 p-4 rounded-xl border border-orange-700/40">
             <p class="text-sm font-bold text-orange-400 mb-2">🚨 Ollama 다운</p>
@@ -2177,13 +2409,14 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre></div
 
       <div class="glass p-6 rounded-2xl border border-blue-700/40 bg-blue-950/10">
         <h2 class="text-lg font-bold text-blue-300 mb-3">🧾 로깅 방식 참고</h2>
-        <p class="text-xs text-slate-400 mb-3">마스터 스크립트가 로그 파일을 미리 생성하고, 서비스 사용자별 소유권을 선할당합니다.</p>
+        <p class="text-xs text-slate-400 mb-3">Ollama는 시스템 레벨에서 로그가 기록되며, FernBot은 샌드박스 내부의 로그 파일을 통해 기록됩니다.</p>
         <div class="code-block text-xs">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code>ls -l /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
-ls -l /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err
-sudo chown alvin:staff /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
-sudo chown fern:staff /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.err</code></pre>
+          <pre><code># Ollama 로그 확인
+tail -f /var/log/openclaw/ollama.log
+
+# FernBot 로그 확인
+tail -f ~/sandbox/logs/openclaw-gateway.log</code></pre>
         </div>
       </div>
 
@@ -2203,19 +2436,18 @@ sudo chown fern:staff /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.
         </div>
       </div>
 
-      <!-- Step 1: FernBot 중지 -->
+      <!-- Step 1: 프로세스 중지 -->
       <div class="glass p-8 border-l-4 border-orange-500 rounded-2xl shadow-lg">
         <h2 class="text-2xl font-bold mb-2 text-orange-400 flex items-center gap-3">
-          Step 1 — LaunchDaemons 중지 &amp; 언로드
+          Step 1 — 프로세스 중지 &amp; 서비스 해제
         </h2>
-        <p class="text-sm text-slate-400 mb-4">launchd 데몬을 중지하고 시스템에서 언로드합니다.</p>
+        <p class="text-sm text-slate-400 mb-4">실행 중인 AI 프로세스를 모두 종료하고 Ollama 서비스를 언로드합니다.</p>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 데몬 언로드 (확실한 등록 해제)
-sudo launchctl unload -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
+          <pre><code># Ollama 데몬 언로드
 sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
 
-# 잔류 프로세스 강제 종료
+# Fern 프로세스 및 잔류 노드 종료
 sudo pkill -9 -u fern -f openclaw
 sudo pkill -9 -u fern node
 pkill -f 'ollama serve' 2>/dev/null || true
