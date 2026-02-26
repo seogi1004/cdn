@@ -2049,10 +2049,12 @@ curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
             </div>
           </div>
           <div class="bg-purple-950/20 p-5 rounded-xl border border-purple-800/40">
-            <h3 class="font-bold text-purple-300 mb-3 flex items-center gap-2"><span>②</span> 재시작</h3>
+            <h3 class="font-bold text-purple-300 mb-3 flex items-center gap-2"><span>②</span> 시작 / 재시작</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
+              <pre><code># 서비스 등록 및 시작
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
+sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
             </div>
           </div>
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
@@ -2077,10 +2079,14 @@ sudo tail -n 100 /var/log/openclaw/fern-bot.err</code></pre>
             </div>
           </div>
           <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
-            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>②</span> 재시작</h3>
+            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>②</span> 시작 / 재시작</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
+              <pre><code># [방법 A] 서비스 등록 및 시작 (완전 재등록)
+sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist
+
+# [방법 B] 이미 등록된 경우 즉시 재시작
+sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
             </div>
           </div>
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
@@ -2125,8 +2131,12 @@ sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
             <p class="text-xs font-bold text-emerald-400 uppercase mb-2">🟢 전체 시작</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl kickstart -k system/com.alvin.ollama
-sleep 3 && curl -s http://127.0.0.1:11434/api/tags > /dev/null && echo "✅ Ollama 준비 완료"
+              <pre><code># Ollama 시작
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
+sudo launchctl kickstart -k system/com.alvin.ollama
+
+# FernBot 시작 (완전 재등록 및 기동)
+sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist
 sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
             </div>
           </div>
