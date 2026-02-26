@@ -2163,14 +2163,16 @@ pkill -f 'ollama serve'</code></pre>
           <div class="bg-emerald-950/30 p-4 rounded-xl border border-emerald-700/40">
             <p class="text-sm font-bold text-emerald-400 mb-2">🦅 Gateway Unreachable</p>
             <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>에서 unreachable이면 서비스가 중단 상태입니다.</p>
-            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.openclaw.fern | head -n 30
+            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code># 등록 확인 후 재시작
+sudo launchctl load -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
 sudo launchctl kickstart -k system/com.openclaw.fern
 openclaw status</code></pre></div>
           </div>
           <div class="bg-orange-950/30 p-4 rounded-xl border border-orange-700/40">
             <p class="text-sm font-bold text-orange-400 mb-2">🚨 Ollama 다운</p>
             <p class="text-xs text-slate-400 mb-3">FernBot이 Ollama에 연결하지 못하면 로컬 추론이 불가합니다.</p>
-            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code>sudo launchctl print system/com.alvin.ollama | head -n 30
+            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code># 등록 확인 후 재시작
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
 sudo launchctl kickstart -k system/com.alvin.ollama
 curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre></div>
           </div>
