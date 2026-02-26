@@ -1106,8 +1106,9 @@ EOF
 sudo tee /usr/local/bin/run-fern-bot.sh >/dev/null << 'EOF'
 #!/bin/zsh
 if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
-  cd /Users/fern/sandbox && exec /Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw gateway
+  cd /Users/fern/sandbox && ulimit -u 512 && exec /Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw gateway --port 18789
 else
+  echo "[ERROR] Sandbox volume is not mounted. Aborting." >&2
   exit 78
 fi
 EOF
@@ -2033,8 +2034,16 @@ sudo tail -n 100 /var/log/openclaw/fern-bot.err</code></pre>
 sudo pkill -u fern -f openclaw</code></pre>
             </div>
           </div>
+          <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
+            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>④</span> 포트 정리 (강제 종료)</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># 18789 포트를 사용하는 프로세스 강제 종료 (관리자 권한)
+sudo lsof -ti :18789 | xargs sudo kill -9</code></pre>
+            </div>
+          </div>
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">④</span> 설정 변경</h3>
+            <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">⑤</span> 설정 변경</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code>sudo vi /Users/fern/.openclaw/openclaw.json
