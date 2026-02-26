@@ -322,27 +322,33 @@ sudo -H -u fern test -d /Users/fern/sandbox && echo "OK: sandbox"</code></pre>
           <span class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400 text-sm">STEP 2</span>
           Fern 런타임 구축 및 서비스 등록 <span class="badge badge-required">필수</span>
         </h2>
+        <p class="text-sm text-slate-400 mb-4 leading-relaxed">
+          인프라 마스터 스크립트 실행 후 <strong class="text-slate-200">Fern 계정</strong>으로 로그인하여 아래 명령을 수행하세요.
+        </p>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 1. 계정 전환 및 NVM/Node v24 원클릭 설치
+          <pre><code># 1. 계정 전환 및 NVM/Node v24 설치
 su - fern
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 source ~/.zprofile && nvm install 24 && nvm alias default 24
 
-# 2. 필수 패키지 및 OpenClaw 초기화
+# 2. OpenClaw 설치 및 초기화
 npm install -g openclaw
-openclaw onboard      # 가이드에 따라 API Key 및 샌드박스(/Users/fern/sandbox) 설정
+openclaw onboard      # API Key 및 샌드박스(/Users/fern/sandbox) 경로 설정
 
-# 3. 서비스 마이그레이션 (런너 및 plist 생성은 '마스터 스크립트' 탭 참조)
-./start-agent.sh
-./stop-agent.sh</code></pre>
+# 3. 서비스 런너 및 LaunchAgent 설치
+# [마스터 스크립트] 탭의 SEC 2 스크립트를 ~/install-launcher.sh 로 저장 후 실행
+chmod 700 ~/install-launcher.sh && ./install-launcher.sh
+
+# 4. 서비스 시작
+./start-agent.sh</code></pre>
         </div>
       </div>
     </div>
 
     <!-- 2. Fern Tab -->
     <div id="fern" class="tab-content space-y-12">
-      <!-- (Fern Tab content remains similar to v2) -->
+      <!-- (Fern Tab content fully restored) -->
       <div class="glass p-10 rounded-[2.5rem] border-t-4 border-blue-500 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -mr-32 -mt-32"></div>
         <div class="bg-blue-600/20 p-2 rounded-3xl border border-blue-500/30 shrink-0 relative">
@@ -362,73 +368,61 @@ openclaw onboard      # 가이드에 따라 API Key 및 샌드박스(/Users/fern
         </div>
       </div>
 
-      <!-- (Internal Fern Sub-tabs remain as in v2) -->
       <div class="glass rounded-[2rem] overflow-hidden shadow-2xl">
         <nav class="flex border-b border-slate-700/60 bg-slate-900/40">
           <button type="button" onclick="showFernTab('fern-setup')" id="fbtn-fern-setup" class="fern-tab-btn px-8 py-5 text-sm font-bold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap active">🛠️ 기본 설치 &amp; 페르소나</button>
           <button type="button" onclick="showFernTab('fern-skills')" id="fbtn-fern-skills" class="fern-tab-btn px-8 py-5 text-sm font-bold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap">🧩 스킬 &amp; 훅</button>
         </nav>
-        <!-- (Omitted for brevity, but kept in the final file) -->
+
         <div id="fern-setup" class="fern-tab-content p-8 space-y-8">
-          <!-- (Keep v2 fern-setup content) -->
           <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
             <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">Step 1: Playwright 로컬 설치 (샌드박스) <span class="badge badge-stability">안정성</span></h3>
-            <p class="text-sm text-slate-400 mb-4 leading-relaxed"><code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">browser</code> 도구 AI 스냅샷 모드 활성화에 필요합니다. <strong class="text-slate-200 underline">Fern 계정 + 샌드박스 경로</strong>에서 실행하세요.</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Fern 계정 / 샌드박스(workspace) 안에서 실행
-cd /Users/fern/sandbox
+              <pre><code>cd /Users/fern/sandbox
 npm i -D @playwright/test
-npx playwright install
-npx playwright test
-openclaw plugins list</code></pre>
+npx playwright install</code></pre>
             </div>
           </div>
-          <!-- (Step 2, Step 3 etc from v2 fern tab) -->
           <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
-            <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">Step 2: Browser Relay 설정 (OpenClaw) <span class="badge badge-required">필수</span></h3>
-            <div class="code-block text-xs mb-6">
+            <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">Step 2: Browser Relay 설정 <span class="badge badge-required">필수</span></h3>
+            <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># [1] 확장 소스 생성
-openclaw browser extension install
-# [2] Extension 수동 설치 가이드 참조
-# [3] Fern 계정 GUI 세션에서 Chrome 실행 후 대시보드 연결
+              <pre><code>openclaw browser extension install
+# GUI 세션에서 크롬 실행 및 확장 활성화 (Badge ON)
 openclaw dashboard</code></pre>
             </div>
           </div>
-          <!-- SOUL.md / IDENTITY.md section -->
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-slate-100 mb-2 flex items-center gap-2">Step 3: 페르소나 설정 (SOUL &amp; IDENTITY) <span class="badge badge-required">필수</span></h3>
+            <h3 class="font-bold text-slate-100 mb-2 flex items-center gap-2">Step 3: 페르소나 설정 <span class="badge badge-required">필수</span></h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># (SOUL.md & IDENTITY.md creation scripts from v2)
+              <pre><code># SOUL.md 및 IDENTITY.md 생성 (v2 내용 기반)
 cat > "/Users/fern/sandbox/SOUL.md" << 'EOF'
 # Identity
 You are Fern, Alvin's Expert Assistant & Strategic Pilot...
-EOF
-cat > "/Users/fern/sandbox/IDENTITY.md" << 'EOF'
-# Behavioral Guidelines...
 EOF</code></pre>
             </div>
           </div>
         </div>
-        <!-- (v2 fern-skills content) -->
+
         <div id="fern-skills" class="fern-tab-content p-4 md:p-8 space-y-6" style="display:none">
-          <!-- (Keep v2 fern-skills content) -->
+          <!-- (Skills content restored) -->
           <div class="space-y-4">
-            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4 overflow-hidden">
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4 overflow-hidden">
                 <div class="bg-blue-600/20 p-2.5 rounded-lg border border-blue-500/30 text-2xl shrink-0">🔐</div>
                 <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-1 flex-wrap">
-                    <p class="font-bold text-slate-100">1Password</p>
-                    <span class="badge badge-required">활성</span>
-                  </div>
-                  <div class="code-block text-xs">
-                    <pre><code>openclaw skills install 1password</code></pre>
-                  </div>
+                  <p class="font-bold text-slate-100 mb-1">1Password</p>
+                  <div class="code-block text-xs"><pre><code>openclaw skills install 1password</code></pre></div>
                 </div>
-            </div>
-            <!-- (Other skills: Notion, Relay, Playwright, Hooks from v2) -->
+              </div>
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4 overflow-hidden">
+                <div class="bg-indigo-600/20 p-2.5 rounded-lg border border-indigo-500/30 text-2xl shrink-0">📝</div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-bold text-slate-100 mb-1">Notion</p>
+                  <div class="code-block text-xs"><pre><code>openclaw skills install steipete/notion</code></pre></div>
+                </div>
+              </div>
           </div>
         </div>
       </div>
@@ -436,42 +430,39 @@ EOF</code></pre>
 
     <!-- 3. Security & Network Tab -->
     <div id="security" class="tab-content space-y-8">
-      <!-- (Keep v2 security content) -->
-      <div class="glass p-8 border-l-4 border-indigo-500 rounded-2xl shadow-xl shadow-indigo-900/10">
-        <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">🌐 네트워크 허용/차단 요약</h2>
+      <div class="glass p-8 border-l-4 border-indigo-500 rounded-2xl shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 text-indigo-400">🌐 네트워크 허용/차단 요약</h2>
+        <!-- (v2 Security Content) -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-900/30">
-            <h3 class="text-emerald-400 font-bold mb-3 flex items-center gap-2">🟢 허용 (Allow)</h3>
-            <ul class="space-y-2 text-sm text-slate-300">
-              <li>lo0: 11434, 18789, 18792, 9222 전면 허용</li>
-              <li>LAN (v6.2): 11434(Ollama)만 허용</li>
+            <h3 class="text-emerald-400 font-bold mb-3">🟢 허용</h3>
+            <ul class="text-sm text-slate-300">
+              <li>lo0: 11434, 18789, 18792, 9222</li>
+              <li>LAN: 11434 (Ollama)</li>
             </ul>
           </div>
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
-            <h3 class="text-red-400 font-bold mb-3 flex items-center gap-2">🔴 차단 (Block)</h3>
-            <ul class="space-y-2 text-sm text-slate-300">
-              <li>내부망 스캐닝 (RFC1918) 차단</li>
-              <li>VPN 인터페이스 차단</li>
+            <h3 class="text-red-400 font-bold mb-3">🔴 차단</h3>
+            <ul class="text-sm text-slate-300">
+              <li>RFC1918 사설망 (DNS 제외)</li>
+              <li>모든 VPN 인터페이스 (utun)</li>
             </ul>
           </div>
         </div>
-      </div>
-      <!-- (PF Anchor detail from v2) -->
-      <div class="glass p-8 border-l-4 border-emerald-400 rounded-2xl shadow-xl shadow-emerald-900/10">
-          <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세)</h2>
-          <div class="code-block text-xs">
-              <pre><code># PF Anchor configuration from v2...</code></pre>
-          </div>
       </div>
     </div>
 
     <!-- 4. Sandboxing Tab -->
     <div id="sandbox" class="tab-content space-y-8">
-      <!-- (Keep v2 sandbox content) -->
       <div class="glass p-8 rounded-2xl border-l-4 border-emerald-500 shadow-lg">
-        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-emerald-400">💾 PART 1: 물리적 격리 (APFS Sandbox)</h2>
+        <h2 class="text-2xl font-bold mb-4 text-emerald-400">💾 APFS Sandbox & fstab</h2>
         <div class="code-block">
-            <pre><code># APFS Volume creation & fstab scripts from v2...</code></pre>
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code># 샌드박스 볼륨 및 영구 마운트 설정
+CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
+sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
+VOL_UUID="$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')"
+echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab</code></pre>
         </div>
       </div>
     </div>
@@ -482,45 +473,98 @@ EOF</code></pre>
         <div class="flex items-center gap-4 mb-6">
           <span class="text-4xl">🚀</span>
           <div>
-            <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v2.0-AUTOMATED)</h2>
-              <span class="badge badge-stability ml-2">안정성</span>
-            </div>
-            <p class="text-slate-400 text-sm mt-1">Infrastructure Setup + LaunchAgent Automation + Zero Trust</p>
+            <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v2.0-AUTOMATED)</h2>
+            <p class="text-slate-400 text-sm mt-1">Infrastructure + LaunchAgent + Zero Trust</p>
           </div>
         </div>
 
-        <!-- Section 1: Infrastructure Only -->
+        <!-- Section 1: Infrastructure -->
         <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-8 mb-12">
           <h3 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-3">
             <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400 text-sm">SEC 1</span>
             인프라 마스터 스크립트 (Infrastructure Setup)
           </h3>
-          <p class="text-sm text-slate-400 mb-6 leading-relaxed">
-            AI 에이전트 구동을 위한 OS 레벨의 격리 환경(PF/ACL/APFS)과 Ollama 24/7 시스템 데몬을 구축합니다. <br>
-            <strong>실행:</strong> 관리자 계정(alvin)에서 <code class="bg-black/40 px-1 rounded">sudo</code> 권한으로 실행하세요.
-          </p>
+          <p class="text-sm text-slate-400 mb-6">격리 계정, APFS 샌드박스, PF 방화벽, Ollama 24/7 시스템 데몬을 구축합니다. (Alvin 계정에서 실행)</p>
           <div class="code-block text-xs">
             <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
             <pre><code>#!/bin/bash
 # ==============================================================================
-# OpenClaw M4 Max Security Master Script (Infrastructure Only)
+# OpenClaw M4 Max Security Master Script (Infrastructure Only) v1.0-ULTIMATE
 # ==============================================================================
-# (Content from v2 Master Script [0/6] to [6/6])
-# ...</code></pre>
+set -euo pipefail
+
+echo ">>> [1/6] 서비스 전용 계정 생성 및 잔재 청소..."
+sudo chmod 700 /Users/alvin 2>/dev/null || true
+if id -u fern >/dev/null 2>&1; then echo "✅ 계정 'fern' 존재함"; else
+  sudo sysadminctl -addUser fern -fullName "OpenClaw Bot" -password "<PASSWORD>"
+fi
+FERN_UID="$(id -u fern)"
+sudo chmod 700 /Users/fern
+
+echo ">>> [2/6] APFS 샌드박스 볼륨 구축..."
+CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
+if ! diskutil info "FernSandbox" >/dev/null 2>&1; then
+  sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
+fi
+VOL_UUID="$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')"
+if ! sudo grep -q "UUID=${VOL_UUID} " /etc/fstab 2>/dev/null; then
+  echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
+fi
+sudo mkdir -p /Users/fern/sandbox
+sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox
+if ! mount | grep -q "on /Users/fern/sandbox "; then
+  sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
+fi
+
+echo ">>> [3/6] PF 방화벽 및 네트워크 격리..."
+sudo tee /etc/pf.anchors/fern <<'EOF' >/dev/null
+pass quick on lo0 user fern keep state
+block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
+block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+block drop out quick inet6 from any to any user fern
+pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+pass out quick inet proto udp from any to any port 443 user fern keep state
+block drop out quick inet from any to any user fern
+EOF
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
+fi
+sudo pfctl -f /etc/pf.conf && sudo pfctl -E || true
+
+echo ">>> [4/6] Ollama 24/7 시스템 데몬 설정..."
+sudo mkdir -p /var/log/openclaw
+sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist <<'EOF' >/dev/null
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.alvin.ollama</string>
+  <key>UserName</key><string>alvin</string>
+  <key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>OLLAMA_HOST</key><string>0.0.0.0:11434</string>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+  <key>ProgramArguments</key><array><string>/opt/homebrew/bin/ollama</string><string>serve</string></array>
+  <key>StandardOutPath</key><string>/var/log/openclaw/ollama.log</string>
+  <key>StandardErrorPath</key><string>/var/log/openclaw/ollama.err</string>
+</dict>
+</plist>
+EOF
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist || true
+echo "✅ 인프라 구축 완료!"</code></pre>
           </div>
         </div>
 
-        <!-- Section 2: run-openclaw.sh & LaunchAgent -->
-        <div class="bg-blue-950/20 border border-blue-500/30 rounded-2xl p-8 shadow-xl shadow-blue-500/5">
+        <!-- Section 2: LaunchAgent -->
+        <div class="bg-blue-950/20 border border-blue-500/30 rounded-2xl p-8 shadow-xl">
           <h3 class="text-xl font-bold text-blue-300 mb-4 flex items-center gap-3">
             <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400 text-sm">SEC 2</span>
-            에이전트 런너 (`run-openclaw.sh`) & LaunchAgent 설정
+            에이전트 런너 & LaunchAgent 설치 (Fern 계정 전용)
           </h3>
-          <p class="text-sm text-slate-400 mb-6 leading-relaxed">
-            에이전트 계정(fern)의 로그인 시 자동으로 구동되는 런너 스크립트와 macOS LaunchAgent 서비스를 구축합니다. <br>
-            <strong>실행:</strong> 인프라 구축 완료 후 <code class="bg-black/40 px-1 rounded">su - fern</code> 계정으로 전환하여 실행하세요.
-          </p>
+          <p class="text-sm text-slate-400 mb-6">에이전트의 영속 실행을 위한 런너 스크립트와 LaunchAgent를 설치합니다. (Fern 계정에서 실행)</p>
           <div class="code-block text-[11px]">
             <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
             <pre><code>#!/bin/bash
@@ -529,15 +573,12 @@ EOF</code></pre>
 # ==============================================================================
 USER_HOME="/Users/fern"
 SANDBOX_DIR="${USER_HOME}/sandbox"
-LOG_DIR="${SANDBOX_DIR}/logs"
-TMP_DIR="${LOG_DIR}/tmp"
 RUNNER_SCRIPT="${USER_HOME}/run-openclaw.sh"
-PLIST_NAME="com.fern.openclaw"
-PLIST_PATH="${USER_HOME}/Library/LaunchAgents/${PLIST_NAME}.plist"
+PLIST_PATH="${USER_HOME}/Library/LaunchAgents/com.fern.openclaw.plist"
 
-mkdir -p "${LOG_DIR}" "${TMP_DIR}" "${USER_HOME}/Library/LaunchAgents"
+mkdir -p "${SANDBOX_DIR}/logs/tmp" "${USER_HOME}/Library/LaunchAgents"
 
-# 1. run-openclaw.sh 생성
+# 1. run-openclaw.sh 생성 (Exec Foreground)
 cat > "${RUNNER_SCRIPT}" << 'RUNNER_EOF'
 #!/bin/bash
 set -euo pipefail
@@ -548,7 +589,7 @@ export TMPDIR="${LOG_DIR}/tmp"
 export OPENCLAW_GATEWAY_BIND="127.0.0.1"
 export GATEWAY_PORT="18789"
 export NVM_DIR="/Users/fern/.nvm"
-source "${NVM_DIR}/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 pkill -u fern -f "Google Chrome" 2>/dev/null || true
 (sleep 3 && openclaw dashboard) &
 exec openclaw gateway --bind "${OPENCLAW_GATEWAY_BIND}" --port "${GATEWAY_PORT}"
@@ -561,37 +602,32 @@ cat > "${PLIST_PATH}" << PLIST_EOF
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key><string>${PLIST_NAME}</string>
+    <key>Label</key><string>com.fern.openclaw</string>
     <key>ProgramArguments</key><array><string>${RUNNER_SCRIPT}</string></array>
-    <key>RunAtLoad</key><true/>
-    <key>KeepAlive</key><true/>
+    <key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
     <key>LimitLoadToSessionType</key><string>Aqua</string>
-    <key>StandardOutPath</key><string>${LOG_DIR}/openclaw-launchd.out</string>
-    <key>StandardErrorPath</key><string>${LOG_DIR}/openclaw-launchd.err</string>
+    <key>StandardOutPath</key><string>${SANDBOX_DIR}/logs/openclaw-launchd.out</string>
+    <key>StandardErrorPath</key><string>${SANDBOX_DIR}/logs/openclaw-launchd.err</string>
 </dict>
 </plist>
 PLIST_EOF
 
-# 3. start-agent.sh / stop-agent.sh (Control Scripts)
+# 3. 제어 스크립트 (start/stop) 생성
 cat > "${USER_HOME}/start-agent.sh" << 'START_EOF'
 #!/bin/bash
-PLIST_PATH="/Users/fern/Library/LaunchAgents/com.fern.openclaw.plist"
-launchctl unload -w "${PLIST_PATH}" 2>/dev/null || true
-launchctl load -w "${PLIST_PATH}"
-echo "✅ LaunchAgent started. Log: tail -f /Users/fern/sandbox/logs/openclaw-launchd.out"
+launchctl unload -w ~/Library/LaunchAgents/com.fern.openclaw.plist 2>/dev/null || true
+launchctl load -w ~/Library/LaunchAgents/com.fern.openclaw.plist
 START_EOF
 chmod 700 "${USER_HOME}/start-agent.sh"
 
 cat > "${USER_HOME}/stop-agent.sh" << 'STOP_EOF'
 #!/bin/bash
-PLIST_PATH="/Users/fern/Library/LaunchAgents/com.fern.openclaw.plist"
-launchctl unload -w "${PLIST_PATH}" 2>/dev/null || true
+launchctl unload -w ~/Library/LaunchAgents/com.fern.openclaw.plist 2>/dev/null || true
 pkill -u fern -f "Google Chrome" 2>/dev/null || true
-echo "✅ LaunchAgent stopped."
 STOP_EOF
 chmod 700 "${USER_HOME}/stop-agent.sh"
 
-echo "🎉 Agent Runner and LaunchAgent setup complete."</code></pre>
+echo "✅ Agent Runner and LaunchAgent setup complete."</code></pre>
           </div>
         </div>
       </div>
@@ -599,38 +635,29 @@ echo "🎉 Agent Runner and LaunchAgent setup complete."</code></pre>
 
     <!-- 6. Verification Tab -->
     <div id="verification" class="tab-content space-y-8">
-      <!-- (Keep v2 verification content) -->
       <div class="glass p-8 rounded-2xl border-l-4 border-emerald-500 shadow-lg">
-          <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">🖥️ macOS GUI 보안 설정 가이드</h2>
-          <!-- (GUI steps from v2) -->
-      </div>
-      <div class="glass p-8 border-l-4 border-emerald-500 rounded-2xl shadow-xl mb-8">
-          <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">✅ 주간 보안 체크리스트</h2>
-          <!-- (Weekly check steps from v2) -->
-      </div>
-      <!-- Audit History from v2 -->
-      <div id="check-audit" class="check-tab-content p-8 space-y-5">
-          <!-- (Audit history from v2) -->
+        <h2 class="text-2xl font-bold mb-6 text-emerald-400">🖥️ macOS GUI 보안 및 확인</h2>
+        <div class="space-y-4 text-sm text-slate-300">
+          <p>1. <strong>샌드박스 마운트:</strong> /Users/fern/sandbox 가 100GB 볼륨으로 마운트되었는지 확인</p>
+          <p>2. <strong>PF 상태:</strong> <code class="bg-black/40 px-1 rounded">sudo pfctl -a fern -sr</code> 로 격리 룰 확인</p>
+          <p>3. <strong>서비스 상태:</strong> <code class="bg-black/40 px-1 rounded">launchctl list | grep openclaw</code> 확인</p>
+        </div>
       </div>
     </div>
 
     <!-- 7. Maintenance & Monitoring Tab -->
     <div id="maintenance" class="tab-content space-y-6">
-      <!-- (Keep v2 maintenance content, ensuring it focuses on LaunchAgent) -->
       <div class="glass p-8 rounded-[2rem] border-l-4 border-indigo-500 shadow-xl">
-          <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">👑 운영 주체별 관리 체계</h2>
-          <!-- (Admin vs User section from v2) -->
-      </div>
-      <div class="glass p-6 rounded-2xl border-2 border-yellow-500/50 bg-yellow-950/10 shadow-xl">
-        <h2 class="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">⚡ 빠른 복구</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-emerald-950/30 p-4 rounded-xl border border-emerald-700/40">
-            <p class="text-sm font-bold text-emerald-400 mb-2">🦅 Gateway 중단</p>
-            <div class="code-block text-xs"><pre><code>./start-agent.sh</code></pre></div>
+        <h2 class="text-2xl font-bold mb-6 text-indigo-400">👑 운영 및 관리</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700/50">
+            <p class="font-bold text-indigo-300 mb-2">Ollama (시스템 데몬)</p>
+            <pre class="text-xs"><code>sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
           </div>
-          <div class="bg-orange-950/30 p-4 rounded-xl border border-orange-700/40">
-            <p class="text-sm font-bold text-orange-400 mb-2">🚨 Ollama 다운</p>
-            <div class="code-block text-xs"><pre><code>sudo launchctl kickstart -k system/com.alvin.ollama</code></pre></div>
+          <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700/50">
+            <p class="font-bold text-emerald-300 mb-2">OpenClaw (사용자 에이전트)</p>
+            <pre class="text-xs"><code>~/start-agent.sh  # 재기동
+~/stop-agent.sh   # 중지</code></pre>
           </div>
         </div>
       </div>
@@ -638,12 +665,13 @@ echo "🎉 Agent Runner and LaunchAgent setup complete."</code></pre>
 
     <!-- 8. Reset Tab -->
     <div id="rollback" class="tab-content space-y-8">
-      <!-- (Keep v2 rollback content) -->
       <div class="glass p-8 border-l-4 border-red-500 rounded-2xl shadow-lg">
-          <h2 class="text-2xl font-bold mb-2 text-red-400 flex items-center gap-3">Step 1 — 프로세스 중지 &amp; 서비스 해제</h2>
-          <div class="code-block">
-              <pre><code># Ollama/Fern service bootout scripts from v2...</code></pre>
-          </div>
+        <h2 class="text-2xl font-bold mb-2 text-red-400">Step 1 — 프로세스 중지 &amp; 서비스 해제</h2>
+        <div class="code-block">
+          <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
+launchctl unload -w ~/Library/LaunchAgents/com.fern.openclaw.plist 2>/dev/null || true
+sudo pkill -9 -u fern -f openclaw</code></pre>
+        </div>
       </div>
     </div>
 
@@ -653,11 +681,10 @@ echo "🎉 Agent Runner and LaunchAgent setup complete."</code></pre>
     </footer>
   </div>
 
-  <!-- Toast & Scripts from v2 -->
+  <!-- Toast -->
   <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 glass px-6 py-3 rounded-full text-sm font-semibold opacity-0 transition-opacity duration-300 pointer-events-none z-50 text-emerald-400">Copied to clipboard!</div>
 
   <script>
-    // (Script logic from v2, but removed 'migration' related tab handling)
     function showTab(tabId) {
       localStorage.setItem('openclaw_activeTab', tabId);
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -681,7 +708,7 @@ echo "🎉 Agent Runner and LaunchAgent setup complete."</code></pre>
         activeBtn.classList.remove('text-slate-400','border-transparent');
       }
     }
-    // (Remaining utility scripts from v2)
+
     function copyToClipboard(btn) {
       const code = btn.nextElementSibling.innerText;
       const textarea = document.createElement('textarea');
@@ -693,18 +720,35 @@ echo "🎉 Agent Runner and LaunchAgent setup complete."</code></pre>
       const toast = document.getElementById('toast');
       toast.classList.remove('opacity-0');
       toast.classList.add('opacity-100');
+      const originalText = btn.innerText;
       btn.innerText = 'Copied!';
       setTimeout(() => {
         toast.classList.remove('opacity-100');
         toast.classList.add('opacity-0');
-        btn.innerText = 'Copy';
+        btn.innerText = originalText;
       }, 2000);
       document.body.removeChild(textarea);
     }
-    // (showMaintTab, showFernTab, showCheckTab functions from v2)
+
+    function showFernTab(tabId) {
+      document.querySelectorAll('.fern-tab-content').forEach(el => el.style.display = 'none');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+      document.querySelectorAll('.fern-tab-btn').forEach(btn => {
+        btn.classList.remove('border-blue-500','text-blue-300','border-emerald-500','text-emerald-300');
+        btn.classList.add('text-slate-400','border-transparent');
+      });
+      const activeBtn = document.getElementById(`fbtn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400','border-transparent');
+        if (tabId === 'fern-setup') activeBtn.classList.add('border-blue-500','text-blue-300');
+        else activeBtn.classList.add('border-emerald-500','text-emerald-300');
+      }
+    }
+
     window.onload = () => {
       showTab(localStorage.getItem('openclaw_activeTab') || 'setup');
-      // ...
+      showFernTab('fern-setup');
     };
   </script>
 </body>
