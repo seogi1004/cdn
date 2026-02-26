@@ -560,6 +560,20 @@ echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini 
             </div>
           </div>
 
+          <div class="bg-indigo-950/20 p-5 rounded-xl border border-indigo-800/40">
+            <h3 class="font-bold text-indigo-300 mb-2 flex items-center gap-2">
+              Step 5: 네트워크 접근 허용 (LAN Open)
+              <span class="badge badge-stability">v6.1+</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-3">v6.1 부터는 Gateway(18789)와 Relay(18792) 포트가 LAN 내의 다른 기기에서도 접근 가능하도록 개방되었습니다. PF 방화벽 설정(Tab 3)을 확인하세요.</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># LAN 접근성 확인 (다른 기기에서 접속 가능)
+# 18789: API Gateway & Admin Web
+# 18792: OpenClaw Browser Relay</code></pre>
+            </div>
+          </div>
+
         </div>
 
         <!-- Sub-tab 2: 스킬 & 훅 -->
@@ -627,7 +641,7 @@ openclaw skills enable steipete/notion</code></pre>
                     <p class="font-bold text-slate-100">Browser Relay (Chrome)</p>
                     <span class="badge badge-required">활성</span>
                   </div>
-                  <p class="text-xs text-slate-400 mb-3">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다.</p>
+                  <p class="text-xs text-slate-400 mb-3">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다. (v6.1+ 에서는 포트 18792를 통해 LAN에서도 접근 가능)</p>
                   <div class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20 mb-3">
                     <p class="text-[11px] font-bold text-blue-300 mb-2">🔌 Extension 수동 설치 가이드</p>
                     <ol class="text-[10px] text-slate-400 space-y-1 list-decimal list-inside">
@@ -873,10 +887,18 @@ if ! grep -q 'anchor "fern"' /etc/pf.conf; then
   echo 'anchor "fern"' | sudo tee -a /etc/pf.conf
   echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf
 fi
+
+# [v6.1 추가] LAN 접근 허용 규칙 (Ollama + OpenClaw)
+PF_RULE_TAG="# LAN OpenClaw & Ollama Access (v6.1)"
+PF_RULE_LINE="pass in quick inet proto tcp from 192.168.0.0/16 to any port { 11434, 18789, 18792 } keep state"
+if ! sudo grep -Fq "$PF_RULE_TAG" /etc/pf.conf; then
+  sudo sh -c "printf '\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_LINE' >> /etc/pf.conf"
+fi
+
 sudo pfctl -vnf /etc/pf.conf && sudo pfctl -f /etc/pf.conf
 sudo pfctl -E
 
-echo "✅ PF 방화벽 격리 앵커 적용 완료"</code></pre>
+echo "✅ PF 방화벽 격리 앵커 및 LAN 개방 설정 적용 완료"</code></pre>
         </div>
       </div>
     </div>
@@ -1108,7 +1130,7 @@ EOF
 sudo tee /usr/local/bin/run-fern-bot.sh >/dev/null << 'EOF'
 #!/bin/zsh
 if mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
-  cd /Users/fern/sandbox && ulimit -u 512 && exec /Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw gateway --port 18789
+  cd /Users/fern/sandbox && ulimit -u 512 && exec /Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw gateway --port 18789 --host 0.0.0.0
 else
   echo "[ERROR] Sandbox volume is not mounted. Aborting." >&2
   exit 78
@@ -1322,6 +1344,16 @@ sudo launchctl print system/com.alvin.ollama | grep -E "state|pid"
 sudo launchctl print system/com.openclaw.fern | grep -E "state|pid"
 
 # 그리고 fern에서 크롬 제어/로그인 자동화 재시도</code></pre>
+            </div>
+          </div>
+          <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
+            <p class="font-semibold text-slate-100 mb-3">7) LAN 접근 확인 (v6.1+)</p>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># LAN 내 다른 기기에서 브라우저로 접속 확인
+http://&lt;IP_ADDRESS&gt;:11434/api/tags
+http://&lt;IP_ADDRESS&gt;:18789
+http://&lt;IP_ADDRESS&gt;:18792</code></pre>
             </div>
           </div>
           <div class="bg-emerald-950/20 border border-emerald-700/40 rounded-2xl p-5">
@@ -2047,8 +2079,8 @@ sudo lsof -nP -iTCP:18789,18792 -sTCP:LISTEN</code></pre>
             <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>④</span> 포트 정리 (강제 종료)</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 18789 포트를 사용하는 프로세스 강제 종료 (관리자 권한)
-sudo lsof -ti :18789 | xargs sudo kill -9</code></pre>
+              <pre><code># 18789, 18792 포트를 사용하는 프로세스 강제 종료 (관리자 권한)
+sudo lsof -ti :18789,18792 | xargs sudo kill -9</code></pre>
             </div>
           </div>
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
