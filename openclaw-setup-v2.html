@@ -2032,8 +2032,15 @@ sudo tail -n 100 /var/log/openclaw/fern-bot.err</code></pre>
             <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>③</span> 중지 / 종료</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
-sudo pkill -u fern -f openclaw</code></pre>
+              <pre><code># 1. 서비스 등록 해제 (자동 재시작 방지)
+sudo launchctl unload -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
+
+# 2. 잔류 프로세스 확실히 사살
+sudo pkill -9 -u fern -f openclaw
+sudo pkill -9 -u fern node
+
+# 3. 확인사살 (아무것도 안 나와야 정상)
+sudo lsof -nP -iTCP:18789,18792 -sTCP:LISTEN</code></pre>
             </div>
           </div>
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
@@ -2072,8 +2079,14 @@ sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
             <p class="text-xs font-bold text-red-400 uppercase mb-2">🔴 전체 종료</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
-sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
+              <pre><code># FernBot 종료
+sudo launchctl unload -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
+sudo pkill -9 -u fern -f openclaw
+sudo pkill -9 -u fern node
+
+# Ollama 종료
+sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
+pkill -f 'ollama serve'</code></pre>
             </div>
           </div>
         </div>
@@ -2135,13 +2148,17 @@ sudo chown fern:staff /var/log/openclaw/fern-bot.log /var/log/openclaw/fern-bot.
         <p class="text-sm text-slate-400 mb-4">launchd 데몬을 중지하고 시스템에서 언로드합니다.</p>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 데몬 언로드
-sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
-sudo launchctl bootout system /Library/LaunchDaemons/com.openclaw.fern.plist
+          <pre><code># 데몬 언로드 (확실한 등록 해제)
+sudo launchctl unload -w /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
+sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
 
 # 잔류 프로세스 강제 종료
-sudo pkill -u fern -f openclaw 2>/dev/null || true
-pkill -f 'ollama serve' 2>/dev/null || true</code></pre>
+sudo pkill -9 -u fern -f openclaw
+sudo pkill -9 -u fern node
+pkill -f 'ollama serve' 2>/dev/null || true
+
+# 포트 점검
+sudo lsof -nP -iTCP:11434,18789,18792 -sTCP:LISTEN</code></pre>
         </div>
       </div>
 
