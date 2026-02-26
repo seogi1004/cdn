@@ -751,7 +751,7 @@ npx playwright install</code></pre>
             <ul class="space-y-2 text-sm text-slate-300">
               <li class="flex items-start gap-2">
                 <span class="text-emerald-500 font-bold">•</span>
-                <div><strong>로컬 서비스 (lo0):</strong> 11434(Ollama), 18789(API Gateway), 9222(Chrome CDP)</div>
+                <div><strong>로컬 서비스 (lo0):</strong> 11434(Ollama), 18789(API Gateway), 18792(OpenClaw Relay), 9222(Chrome CDP)</div>
               </li>
               <li class="flex items-start gap-2">
                 <span class="text-emerald-500 font-bold">•</span>
@@ -976,11 +976,11 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
         </div>
 
         <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
-          <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v6.0-ULTIMATE)</h3>
+          <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v6.1-ULTIMATE)</h3>
           <p class="text-sm text-slate-300 mb-2">💡 딱 하나! 나중을 위한 아주 작은 팁</p>
           <p class="text-sm text-slate-300 mb-2">스크립트 안의 OpenClaw 실행 경로가 현재 설치하신 Node.js 버전에 맞춰져 있습니다.</p>
           <p class="text-sm text-slate-300 mb-2">👉 <code class="text-emerald-300 bg-black/30 px-1 rounded">/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw</code></p>
-          <p class="text-sm text-slate-300 mb-2">🌐 <strong class="text-yellow-300">v6.0 변경사항:</strong> OLLAMA_HOST가 <code class="text-emerald-300 bg-black/30 px-1 rounded">0.0.0.0:11434</code>로 변경되어 LAN 내 모든 기기에서 Ollama 접근이 가능합니다. PF 방화벽으로 fern 계정의 사내망 접근은 여전히 차단됩니다.</p>
+          <p class="text-sm text-slate-300 mb-2">🌐 <strong class="text-yellow-300">v6.1 변경사항:</strong> Ollama(11434) 뿐만 아니라 OpenClaw Gateway(18789) 및 Relay(18792)도 LAN 내에서 접근 가능하도록 PF 설정이 업데이트되었습니다. PF 방화벽으로 fern 계정의 사내망 접근은 여전히 차단됩니다.</p>
           <p class="text-sm text-slate-300">나중에(아마 한참 뒤겠지만) NVM으로 Node.js 버전을 더 높은 버전으로 업데이트하시게 된다면, 스크립트에서 저 경로의 숫자(v24.13.1 부분)만 살짝 바꿔주시면 평생 우려먹을 수 있습니다! ㅋㅋㅋ</p>
         </div>
 
@@ -988,7 +988,7 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
 
-# OpenClaw M4 Max Security Master Script v6.0-ULTIMATE
+# OpenClaw M4 Max Security Master Script v6.1-ULTIMATE
 # (Auto-Provisioning + Idempotent APFS + Zero Trust PF + NVM Launchd + LAN Open)
 
 set -euo pipefail
@@ -1041,7 +1041,7 @@ if ! sudo grep -q "^DenyUsers fern" /etc/ssh/sshd_config; then
     echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
 fi
 
-echo ">>> [5/6] PF 방화벽 및 네트워크 노출 설정 (v6.0)..."
+echo ">>> [5/6] PF 방화벽 및 네트워크 노출 설정 (v6.1)..."
 sudo tee /etc/pf.anchors/fern << 'EOF' >/dev/null
 pass quick on lo0 user fern keep state
 block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
@@ -1053,9 +1053,11 @@ block drop out quick inet from any to any user fern
 EOF
 
 # [멱등성 패치] printf를 사용한 안전한 규칙 삽입
-PF_RULE_TAG="# LAN Ollama Access (v6.0)"
-PF_RULE_LINE="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
+PF_RULE_TAG="# LAN OpenClaw & Ollama Access (v6.1)"
+PF_RULE_LINE="pass in quick inet proto tcp from 192.168.0.0/16 to any port { 11434, 18789, 18792 } keep state"
 if ! sudo grep -Fq "$PF_RULE_TAG" /etc/pf.conf; then
+  sudo sed -i '' '/# LAN Ollama Access (v6.0)/d' /etc/pf.conf 2>/dev/null || true
+  sudo sed -i '' '/pass in quick inet proto tcp from 192.168.0.0\/16 to any port 11434 keep state/d' /etc/pf.conf 2>/dev/null || true
   sudo sh -c "printf '\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_LINE' >> /etc/pf.conf"
 fi
 
