@@ -1863,8 +1863,8 @@ sudo vi /Users/fern/.openclaw/openclaw.json && sudo launchctl kickstart -k syste
             <div class="space-y-3">
               <div class="code-block text-[10px] p-4">
                 <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code># 업데이트 & 버전 확인
-sudo npm update -g openclaw
+                <pre><code># Fern 계정 환경에서 업데이트 & 상태 확인
+sudo -H -u fern npm update -g openclaw
 sudo -u fern openclaw status</code></pre>
               </div>
             </div>
