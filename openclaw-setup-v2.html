@@ -138,8 +138,17 @@
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.04);
       transition: all 0.2s;
+      overflow: hidden;
     }
+    .check-item > div:last-child {
+      min-width: 0;
+      flex: 1;
+    }
+    
     .check-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+    
+    .break-all { word-break: break-all; }
+    .min-w-0 { min-width: 0; }
     
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -562,19 +571,19 @@ echo "✅ SOUL.md and IDENTITY.md successfully updated for Hybrid Model (Gemini 
         </div>
 
         <!-- Sub-tab 2: 스킬 & 훅 -->
-        <div id="fern-skills" class="fern-tab-content p-6 space-y-6" style="display:none">
+        <div id="fern-skills" class="fern-tab-content p-4 md:p-8 space-y-6 overflow-x-hidden" style="display:none">
 
           <div>
             <h3 class="text-base font-bold text-slate-100 mb-3">🧩 활성 스킬</h3>
             <div class="space-y-4">
-              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4 overflow-hidden">
                 <div class="bg-blue-600/20 p-2.5 rounded-lg border border-blue-500/30 text-2xl shrink-0">🔐</div>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1 flex-wrap">
                     <p class="font-bold text-slate-100">1Password</p>
                     <span class="badge badge-required">활성</span>
                   </div>
-                  <p class="text-xs text-slate-400 mb-3">macOS 키체인 연동으로 비밀번호, API 키, 세션을 안전하게 조회합니다. Fern이 명령 실행 전 <code class="bg-black/30 px-1 rounded">op</code> CLI를 통해 인증합니다.</p>
+                  <p class="text-xs text-slate-400 mb-3 break-all">macOS 키체인 연동으로 비밀번호, API 키, 세션을 안전하게 조회합니다. Fern이 명령 실행 전 <code class="bg-black/30 px-1 rounded">op</code> CLI를 통해 인증합니다.</p>
                   <div class="code-block text-xs">
                     <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                     <pre><code># 1. 1Password CLI 설치 확인
@@ -589,14 +598,14 @@ openclaw skills install 1password</code></pre>
                 </div>
               </div>
 
-              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4 overflow-hidden">
                 <div class="bg-indigo-600/20 p-2.5 rounded-lg border border-indigo-500/30 text-2xl shrink-0">📝</div>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1 flex-wrap">
                     <p class="font-bold text-slate-100">Notion (steipete/notion)</p>
                     <span class="badge badge-required">추가</span>
                   </div>
-                  <p class="text-xs text-slate-400 mb-3">ClawHub Notion 스킬입니다. 페이지 조회/검색/문서 정리에 사용합니다. Notion 통합 토큰 및 워크스페이스 권한이 필요합니다.</p>
+                  <p class="text-xs text-slate-400 mb-3 break-all">ClawHub Notion 스킬입니다. 페이지 조회/검색/문서 정리에 사용합니다. Notion 통합 토큰 및 워크스페이스 권한이 필요합니다.</p>
                   <div class="code-block text-xs">
                     <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                     <pre><code># 1. ClawHub Notion 스킬 설치
@@ -619,14 +628,14 @@ openclaw skills enable steipete/notion</code></pre>
                 </div>
               </div>
 
-              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4 overflow-hidden">
                 <div class="bg-emerald-600/20 p-2.5 rounded-lg border border-emerald-500/30 text-2xl shrink-0">🌐</div>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1 flex-wrap">
                     <p class="font-bold text-slate-100">Browser Relay (Chrome)</p>
                     <span class="badge badge-required">활성</span>
                   </div>
-                  <p class="text-xs text-slate-400 mb-3">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다. (v6.2+ 에서는 보안을 위해 포트 18792의 LAN 접근이 차단됩니다)</p>
+                  <p class="text-xs text-slate-400 mb-3 break-all">크롬 제어는 Fern 운영에서 핵심 스킬처럼 취급합니다. 확장 설치 + 탭 attach(Badge ON) 상태를 유지해야 브라우저 도구가 정상 동작합니다. (v6.2+ 에서는 보안을 위해 포트 18792의 LAN 접근이 차단됩니다)</p>
                   <div class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20 mb-3">
                     <p class="text-[11px] font-bold text-blue-300 mb-2">🔌 Extension 수동 설치 가이드</p>
                     <ol class="text-[10px] text-slate-400 space-y-1 list-decimal list-inside">
@@ -648,14 +657,14 @@ openclaw dashboard
                 </div>
               </div>
 
-              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4">
+              <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-start gap-4 overflow-hidden">
                 <div class="bg-cyan-600/20 p-2.5 rounded-lg border border-cyan-500/30 text-2xl shrink-0">🎭</div>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1 flex-wrap">
                     <p class="font-bold text-slate-100">Playwright (Sandbox)</p>
                     <span class="badge badge-optional">적용</span>
                   </div>
-                  <p class="text-xs text-slate-400 mb-3">Playwright는 Fern sandbox의 브라우저 자동화/검증 런타임입니다. Browser Relay와 함께 쓰면 GUI 흐름 점검과 회귀 확인을 빠르게 반복할 수 있습니다.</p>
+                  <p class="text-xs text-slate-400 mb-3 break-all">Playwright는 Fern sandbox의 브라우저 자동화/검증 런타임입니다. Browser Relay와 함께 쓰면 GUI 흐름 점검과 회귀 확인을 빠르게 반복할 수 있습니다.</p>
                   <div class="code-block text-xs">
                     <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                     <pre><code># Fern sandbox 기준 확인
@@ -675,51 +684,51 @@ npx playwright install</code></pre>
             <p class="text-xs text-slate-500 mb-3">Gateway 시작 시 자동 실행되는 초기화 시퀀스입니다.</p>
             <div class="space-y-3">
 
-              <div class="check-item">
+              <div class="check-item overflow-hidden">
                 <div class="mt-1 text-emerald-400 text-lg font-bold">①</div>
-                <div>
+                <div class="min-w-0">
                   <p class="font-bold text-slate-100">API Key 주입</p>
-                  <p class="text-xs text-slate-400">Gemini API 키를 <code class="text-emerald-400 bg-black/40 px-1 rounded">~/.openclaw/openclaw.json</code>에서 읽어 세션에 주입합니다.</p>
+                  <p class="text-xs text-slate-400 break-all">Gemini API 키를 <code class="text-emerald-400 bg-black/40 px-1 rounded">~/.openclaw/openclaw.json</code>에서 읽어 세션에 주입합니다.</p>
                 </div>
               </div>
 
-              <div class="check-item">
+              <div class="check-item overflow-hidden">
                 <div class="mt-1 text-emerald-400 text-lg font-bold">②</div>
-                <div>
+                <div class="min-w-0">
                   <p class="font-bold text-slate-100">Browser Relay 연결 상태 점검</p>
-                  <p class="text-xs text-slate-400">Gateway 시작 후 Chrome 확장 attach 상태(Badge ON)를 확인해 브라우저 제어 도구를 사용 가능한 상태로 유지합니다.</p>
+                  <p class="text-xs text-slate-400 break-all">Gateway 시작 후 Chrome 확장 attach 상태(Badge ON)를 확인해 브라우저 제어 도구를 사용 가능한 상태로 유지합니다.</p>
                 </div>
               </div>
 
-              <div class="check-item">
+              <div class="check-item overflow-hidden">
                 <div class="mt-1 text-emerald-400 text-lg font-bold">③</div>
-                <div>
+                <div class="min-w-0">
                   <p class="font-bold text-slate-100">Playwright 런타임 점검</p>
-                  <p class="text-xs text-slate-400">Gateway 세션 초기화 시 sandbox의 Playwright 런타임(<code class="text-emerald-400 bg-black/40 px-1 rounded">npx playwright --version</code>)을 확인해 브라우저 자동화 준비 상태를 보장합니다.</p>
+                  <p class="text-xs text-slate-400 break-all">Gateway 세션 초기화 시 sandbox의 Playwright 런타임(<code class="text-emerald-400 bg-black/40 px-1 rounded">npx playwright --version</code>)을 확인해 브라우저 자동화 준비 상태를 보장합니다.</p>
                 </div>
               </div>
 
-              <div class="check-item">
+              <div class="check-item overflow-hidden">
                 <div class="mt-1 text-emerald-400 text-lg font-bold">④</div>
-                <div>
+                <div class="min-w-0">
                   <p class="font-bold text-slate-100">Persona / Identity 로드 (SOUL.md)</p>
-                  <p class="text-xs text-slate-400">시작 시 <code class="text-emerald-400 bg-black/40 px-1 rounded">SOUL.md</code>와 <code class="text-emerald-400 bg-black/40 px-1 rounded">IDENTITY.md</code>를 sandbox에서 읽어 시스템 컨텍스트로 적용합니다.</p>
+                  <p class="text-xs text-slate-400 break-all">시작 시 <code class="text-emerald-400 bg-black/40 px-1 rounded">SOUL.md</code>와 <code class="text-emerald-400 bg-black/40 px-1 rounded">IDENTITY.md</code>를 sandbox에서 읽어 시스템 컨텍스트로 적용합니다.</p>
                 </div>
               </div>
 
-              <div class="check-item">
+              <div class="check-item overflow-hidden">
                 <div class="mt-1 text-emerald-400 text-lg font-bold">⑤</div>
-                <div>
+                <div class="min-w-0">
                   <p class="font-bold text-slate-100">Workspace 경로 설정</p>
-                  <p class="text-xs text-slate-400">에이전트의 기본 작업 디렉터리를 <code class="text-emerald-400 bg-black/40 px-1 rounded">/Users/fern/sandbox</code>로 설정합니다.</p>
+                  <p class="text-xs text-slate-400 break-all">에이전트의 기본 작업 디렉터리를 <code class="text-emerald-400 bg-black/40 px-1 rounded">/Users/fern/sandbox</code>로 설정합니다.</p>
                 </div>
               </div>
 
-              <div class="check-item">
+              <div class="check-item overflow-hidden">
                 <div class="mt-1 text-emerald-400 text-lg font-bold">⑥</div>
-                <div>
+                <div class="min-w-0">
                   <p class="font-bold text-slate-100">Gateway 자동 등록</p>
-                  <p class="text-xs text-slate-400"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway install</code> 훅이 실행되어 Gateway가 <span class="text-emerald-400 font-bold">running</span> 상태로 유지됩니다.</p>
+                  <p class="text-xs text-slate-400 break-all"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw gateway install</code> 훅이 실행되어 Gateway가 <span class="text-emerald-400 font-bold">running</span> 상태로 유지됩니다.</p>
                 </div>
               </div>
 
@@ -841,63 +850,63 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
                 </p>
               </div>
       
-                            <div class="code-block text-xs">
-                              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                              <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
-              sudo tee /etc/pf.anchors/fern &lt;&lt; 'EOF'
-              # ==========================================
-              # Fern PF Anchor
-              # 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
-              # ==========================================
-                    
-              # [1] lo0 전면 허용 (Chrome IPC &amp; Playwright 로컬 통신 보장)
-              pass quick on lo0 user fern keep state
-              
-              # [2] VPN 인터페이스 전면 차단
-              block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
-              
-              # [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
-              block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
-              
-              # [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
-              block drop out quick inet6 from any to any user fern
-              
-              # [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
-              pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
-              pass out quick inet proto udp from any to any port 443 user fern keep state
-              
-              # [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
-              block drop out quick inet from any to any user fern
-              EOF
-                    
-              # 2. PF 규칙 적용 및 앵커 로드
-              if ! grep -q 'anchor "fern"' /etc/pf.conf; then
-                echo 'anchor "fern"' | sudo tee -a /etc/pf.conf &gt;/dev/null
-                echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf &gt;/dev/null
-              fi
-              
-              # 3. [v6.2] LAN 접근 규칙: Ollama만 허용, OpenClaw/디버깅 포트는 LAN 차단
-              # (네트워크 전환 버그를 막기 위해 IFACE 지정 없이 IP 대역으로만 통제)
-              PF_RULE_TAG="# --- LAN Custom Rules (v6.2) ---"
-              PF_RULE_ALLOW="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
-              PF_RULE_BLOCK="block drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }"
-              
-              # 기존 LAN 규칙 찌꺼기 완벽 정리 (키워드 기반 삭제로 macOS sed 호환성 확보)
-              sudo sed -i '' '/LAN Ollama Access/d' /etc/pf.conf 2&gt;/dev/null || true
-              sudo sed -i '' '/LAN OpenClaw/d' /etc/pf.conf 2&gt;/dev/null || true
-              sudo sed -i '' '/LAN Custom Rules/d' /etc/pf.conf 2&gt;/dev/null || true
-              sudo sed -i '' '/port 11434/d' /etc/pf.conf 2&gt;/dev/null || true
-              sudo sed -i '' '/port { 18789, 18792, 9222 }/d' /etc/pf.conf 2&gt;/dev/null || true
-              
-              # 새로운 v6.2 규칙 등록
-              sudo sh -c "printf '\n%s\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_ALLOW' '$PF_RULE_BLOCK' &gt;&gt; /etc/pf.conf"
-              
-              # 4. 방화벽 재적용 및 활성화
-              sudo pfctl -vnf /etc/pf.conf &amp;&amp; sudo pfctl -f /etc/pf.conf
-              sudo pfctl -E 2&gt;/dev/null || true
-              
-              echo "✅ PF 적용 완료: LAN 대역 Ollama(11434) 허용 / 18789, 18792, 9222 LAN 접근 차단"</code></pre>
-                            </div>      </div>
+              <div class="code-block text-xs">
+                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <pre><code># 1. 전용 Anchor 파일 생성 (/etc/pf.anchors/fern)
+sudo tee /etc/pf.anchors/fern &lt;&lt; 'EOF'
+# ==========================================
+# Fern PF Anchor
+# 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
+# ==========================================
+      
+# [1] lo0 전면 허용 (Chrome IPC &amp; Playwright 로컬 통신 보장)
+pass quick on lo0 user fern keep state
+
+# [2] VPN 인터페이스 전면 차단
+block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
+
+# [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
+block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+
+# [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
+block drop out quick inet6 from any to any user fern
+
+# [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
+pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
+pass out quick inet proto udp from any to any port 443 user fern keep state
+
+# [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
+block drop out quick inet from any to any user fern
+EOF
+      
+# 2. PF 규칙 적용 및 앵커 로드
+if ! grep -q 'anchor "fern"' /etc/pf.conf; then
+  echo 'anchor "fern"' | sudo tee -a /etc/pf.conf &gt;/dev/null
+  echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf &gt;/dev/null
+fi
+
+# 3. [v6.2] LAN 접근 규칙: Ollama만 허용, OpenClaw/디버깅 포트는 LAN 차단
+# (네트워크 전환 버그를 막기 위해 IFACE 지정 없이 IP 대역으로만 통제)
+PF_RULE_TAG="# --- LAN Custom Rules (v6.2) ---"
+PF_RULE_ALLOW="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
+PF_RULE_BLOCK="block drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }"
+
+# 기존 LAN 규칙 찌꺼기 완벽 정리 (키워드 기반 삭제로 macOS sed 호환성 확보)
+sudo sed -i '' '/LAN Ollama Access/d' /etc/pf.conf 2&gt;/dev/null || true
+sudo sed -i '' '/LAN OpenClaw/d' /etc/pf.conf 2&gt;/dev/null || true
+sudo sed -i '' '/LAN Custom Rules/d' /etc/pf.conf 2&gt;/dev/null || true
+sudo sed -i '' '/port 11434/d' /etc/pf.conf 2&gt;/dev/null || true
+sudo sed -i '' '/port { 18789, 18792, 9222 }/d' /etc/pf.conf 2&gt;/dev/null || true
+
+# 새로운 v6.2 규칙 등록
+sudo sh -c "printf '\n%s\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_ALLOW' '$PF_RULE_BLOCK' &gt;&gt; /etc/pf.conf"
+
+# 4. 방화벽 재적용 및 활성화
+sudo pfctl -vnf /etc/pf.conf &amp;&amp; sudo pfctl -f /etc/pf.conf
+sudo pfctl -E 2&gt;/dev/null || true
+
+echo "✅ PF 적용 완료: LAN 대역 Ollama(11434) 허용 / 18789, 18792, 9222 LAN 접근 차단"</code></pre>
+              </div>      </div>
     </div>
 
     <!-- 4. Sandboxing Tab -->
@@ -1214,6 +1223,12 @@ if ! command -v openclaw &gt;/dev/null 2&gt;&amp;1; then
 fi
 
 # 4. 기존 프로세스 정리
+echo "[INFO] 잔류 크롬 및 릴레이 프로세스 정리 중..."
+pkill -u fern -f "Google Chrome" 2&gt;/dev/null || true
+pkill -u fern -f "Chromium" 2&gt;/dev/null || true
+pkill -u fern -f "openclaw relay" 2&gt;/dev/null || true
+sleep 1
+
 PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2&gt;/dev/null || true)
 if [ -n "${PIDS}" ]; then
   echo "[INFO] 기존 OpenClaw 프로세스 정리 중 (PID: ${PIDS})..."
@@ -2161,6 +2176,55 @@ openclaw status</code></pre>
         </div>
       </div>
 
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500 shadow-xl mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-blue-400 flex items-center gap-3">
+          💡 새벽 자동화 (Self-Healing)
+        </h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+          브라우저 제어 자동화는 장시간 가동 시 메모리 누수나 프로세스 좀비화가 발생할 수 있습니다. <br class="hidden md:block">
+          매일 새벽 1회 자동 재시작을 통해 스스로 업데이트를 반영하고 쾌적한 상태를 유지하도록 설정하세요.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <p class="text-xs font-bold text-emerald-400 uppercase tracking-wider">1단계: 재시작 래퍼 스크립트 생성</p>
+            <div class="code-block text-[10px]">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>cat &gt; ~/daily-restart.sh &lt;&lt; 'EOF'
+#!/bin/bash
+# daily-restart.sh - Fern Agent Self-Healing Script
+
+# 1. 기존 에이전트 종료
+~/stop-agent.sh
+sleep 2
+
+# 2. NVM 로드 및 OpenClaw 자동 업데이트
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh"
+npm update -g openclaw
+
+# 3. 에이전트 새로 시작
+~/start-agent.sh
+echo "[$(date)] Daily restart and update completed." &gt;&gt; ~/sandbox/logs/self-healing.log
+EOF
+chmod 700 ~/daily-restart.sh</code></pre>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <p class="text-xs font-bold text-blue-400 uppercase tracking-wider">2단계: Crontab 등록 (새벽 4시)</p>
+            <div class="code-block text-[10px]">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># crontab 편집 (fern 계정에서 실행)
+crontab -e
+
+# 아래 내용 추가 (매일 새벽 4시 실행)
+0 4 * * * /Users/fern/daily-restart.sh &gt; /dev/null 2&gt;&amp;1</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 🔍 Expert Toolkit & Audit -->
       <div class="glass p-8 rounded-[2rem] border-l-4 border-emerald-500 shadow-xl">
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
@@ -2364,12 +2428,12 @@ tail -f ~/sandbox/logs/openclaw-gateway.log</code></pre>
     <div id="rollback" class="tab-content space-y-8">
 
       <!-- 경고 배너 -->
-      <div class="glass p-6 rounded-2xl border-2 border-red-500/70 bg-red-950/20 shadow-xl shadow-red-900/20">
+      <div class="glass p-6 rounded-2xl border-2 border-red-500/70 bg-red-950/20 shadow-xl shadow-red-900/20 overflow-hidden">
         <div class="flex items-start gap-4">
-          <span class="text-4xl mt-1">⚠️</span>
-          <div>
+          <span class="text-4xl mt-1 shrink-0">⚠️</span>
+          <div class="min-w-0">
             <h2 class="text-xl font-bold text-red-400 mb-1">OpenClaw 전체 스택 초기화 가이드</h2>
-            <p class="text-sm text-slate-400">아래 절차는 <strong class="text-red-300">되돌릴 수 없는 삭제</strong>를 포함합니다. 단계를 순서대로 실행하세요. 부분 제거가 필요하면 해당 섹션만 선택 실행하세요.</p>
+            <p class="text-sm text-slate-400 break-words">아래 절차는 <strong class="text-red-300">되돌릴 수 없는 삭제</strong>를 포함합니다. 단계를 순서대로 실행하세요. 부분 제거가 필요하면 해당 섹션만 선택 실행하세요.</p>
           </div>
         </div>
       </div>
