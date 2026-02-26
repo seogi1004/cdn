@@ -448,7 +448,7 @@ openclaw browser extension install
 # [3] Fern 계정 GUI 세션에서 Chrome 실행
 # - 화면 공유 등으로 Fern 계정에 직접 로그인합니다.
 # - 터미널을 열고 아래 명령어를 실행하여 대시보드를 띄웁니다.
-start-dashboard
+openclaw dashboard
 # - 나타난 UI 창에서 "Launch Browser" 버튼을 클릭하면 CDP 포트(9222)가 열린 크롬이 실행됩니다.
 
 # (수동 실행 시 참고)
@@ -1055,36 +1055,50 @@ echo "✅ PF 적용 완료: LAN 대역 Ollama(11434) 허용 / 18789, 18792, 9222
 
     <!-- 4. Sandboxing Tab -->
     <div id="sandbox" class="tab-content space-y-8">
+      <!-- Part 1: Physical Isolation -->
       <div class="glass p-8 rounded-2xl border-l-4 border-emerald-500 shadow-lg">
         <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-emerald-400">
-          💾 1. APFS 샌드박스 볼륨 구축 <span class="badge badge-stability">안정성</span>
+          💾 PART 1: 물리적 격리 (APFS Sandbox) <span class="badge badge-stability">안정성</span>
         </h2>
-        <p class="text-sm text-slate-400 mb-4">이미 구축되어 있다면 아래는 <strong class="text-slate-200">검증용</strong>으로만 사용하세요.</p>
+        <p class="text-sm text-slate-400 mb-4">별도의 APFS 볼륨을 생성하여 에이전트 데이터 저장소를 물리적으로 고립시키고 용량을 제한합니다.</p>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 1. 샌드박스 볼륨 멱등 생성 및 fstab 영구 마운트 설정
+          <pre><code># 1. 샌드박스 볼륨 생성 (Quota 100GB 제한)
 CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
 if ! diskutil info "FernSandbox" >/dev/null 2>&1; then
   sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
 fi
 
+# 2. fstab 영구 마운트 설정 (/Users/fern/sandbox)
 VOL_UUID="$(diskutil info "FernSandbox" | awk '/Volume UUID:/ {print $3}')"
 if ! sudo grep -q "UUID=${VOL_UUID} " /etc/fstab 2>/dev/null; then
   echo "UUID=${VOL_UUID} /Users/fern/sandbox apfs rw,nodev,nosuid" | sudo tee -a /etc/fstab >/dev/null
 fi
 
-# 2. 마운트 및 소유권/ACL 권한 고립
+# 3. 즉시 마운트 실행
 sudo mkdir -p /Users/fern/sandbox
-sudo chown fern:staff /Users/fern/sandbox && sudo chmod 700 /Users/fern/sandbox
 if ! mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
   sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
-fi
-sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true</code></pre>
+fi</code></pre>
         </div>
-        <div class="code-block mt-4">
+      </div>
+
+      <!-- Part 2: Operational Isolation -->
+      <div class="glass p-8 rounded-2xl border-l-4 border-blue-500 shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-blue-400">
+          🔐 PART 2: 운영적 격리 (ACL & Permissions) <span class="badge badge-required">필수</span>
+        </h2>
+        <p class="text-sm text-slate-400 mb-4">계정 권한 및 ACL(Access Control List)을 통해 에이전트의 시스템 접근 범위를 엄격히 제한합니다.</p>
+        <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># 마운트/권한 확인
-mount | grep /Users/fern/sandbox
+          <pre><code># 1. 샌드박스 소유권 및 접근 권한 고립 (Only Fern)
+sudo chown fern:staff /Users/fern/sandbox
+sudo chmod 700 /Users/fern/sandbox
+
+# 2. 공용 폴더(/Users/Shared) 쓰기/목록 조회 봉쇄
+sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
+
+# 3. 권한 설정 최종 검증
 ls -ld /Users/fern/sandbox
 ls -le /Users/Shared | head -n 5</code></pre>
         </div>
@@ -1131,7 +1145,7 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <div class="code-block text-xs">
             <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
             <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist
-/Users/fern/.zshrc (start-dashboard alias)
+/Users/fern/.zshrc
 /etc/pf.anchors/fern
 /var/log/openclaw/ollama.log</code></pre>
           </div>
@@ -1191,7 +1205,7 @@ FERN_UID="$(id -u fern)"
 sudo chmod 700 /Users/alvin /Users/fern
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
 
-# [2-1/6] GUI LaunchAgent 무력화 및 대시보드 alias
+# [2-1/6] GUI LaunchAgent 무력화
 for label in ai.openclaw.gateway com.openclaw.gateway com.clawdbot.gateway bot.molt.gateway; do
   bootout_safe  "gui/${FERN_UID}/${label}"
   disable_safe  "gui/${FERN_UID}/${label}"
@@ -1199,8 +1213,6 @@ done
 delete_by_find "/Users/fern/Library/LaunchAgents" "*openclaw*gateway*.plist"
 
 sudo touch /Users/fern/.zshrc
-sudo sed -i '' '/start-dashboard/d' /Users/fern/.zshrc 2>/dev/null || true
-echo 'alias start-dashboard="open http://127.0.0.1:18789/"' | sudo tee -a /Users/fern/.zshrc >/dev/null
 sudo chown fern:staff /Users/fern/.zshrc
 
 # [3/6] APFS 샌드박스 볼륨 구축
@@ -1288,163 +1300,6 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 
 echo "✅ 인프라 환경 구축이 완료되었습니다! (v1.0-ULTIMATE)"</code></pre>
                 </div>
-
-        <div class="mt-12 glass p-8 rounded-[2rem] border-2 border-emerald-500/30 shadow-2xl">
-          <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            🛠️ 수동 런처 생성 (Manual Launcher Generation)
-          </h2>
-          <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-            마스터 스크립트로 인프라를 구축한 후, <strong class="text-slate-200">Fern 계정</strong>으로 전환하여 아래의 런처들을 개별적으로 생성하세요.
-          </p>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Start Agent -->
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  start-agent.sh
-                </h3>
-                <span class="badge badge-required">실행용</span>
-              </div>
-              <div class="code-block text-[10px]">
-                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>cat > ~/start-agent.sh << 'EOF'
-#!/bin/bash
-set -euo pipefail
-
-echo "=================================================="
-echo "🚀 OpenClaw Agent 시작 스크립트 (순수 Bash)"
-echo "=================================================="
-
-# 1. 샌드박스 마운트 확인
-if ! mount | grep -q "on /Users/fern/sandbox "; then
-  echo "[ERROR] 샌드박스 볼륨이 마운트되지 않았습니다." >&2
-  echo "       명령: sudo diskutil mount -mountPoint /Users/fern/sandbox FernSandbox" >&2
-  exit 78
-fi
-
-# 2. 경로 및 환경변수 설정
-SANDBOX_DIR="/Users/fern/sandbox"
-LOG_DIR="${SANDBOX_DIR}/logs"
-TMP_DIR="${LOG_DIR}/tmp"
-LOG_FILE="${LOG_DIR}/openclaw-gateway.log"
-HOST="127.0.0.1"
-PORT="18789"
-
-mkdir -p "${LOG_DIR}" "${TMP_DIR}"
-export TMPDIR="${TMP_DIR}"
-export OPENCLAW_LOG_DIR="${LOG_DIR}"
-export OPENCLAW_GATEWAY_BIND="${HOST}"
-export GATEWAY_PORT="${PORT}"
-
-cd "${SANDBOX_DIR}"
-
-# 3. NVM 동적 로드
-export NVM_DIR="/Users/fern/.nvm"
-if [ -s "${NVM_DIR}/nvm.sh" ]; then
-  source "${NVM_DIR}/nvm.sh"
-else
-  echo "[ERROR] NVM 스크립트를 찾을 수 없습니다: ${NVM_DIR}/nvm.sh" >&2
-  exit 127
-fi
-
-if ! command -v openclaw >/dev/null 2>&1; then
-  echo "[ERROR] 'openclaw' 명령어를 찾을 수 없습니다." >&2
-  exit 127
-fi
-
-# 4. 기존 프로세스 정리
-PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
-if [ -n "${PIDS}" ]; then
-  echo "[INFO] 기존 OpenClaw 프로세스 정리 중 (PID: ${PIDS})..."
-  echo "${PIDS}" | xargs kill -TERM 2>/dev/null || true
-  sleep 2
-  PIDS2=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
-  [ -n "${PIDS2}" ] && echo "${PIDS2}" | xargs kill -KILL 2>/dev/null || true
-fi
-
-# 5. OpenClaw 백그라운드 실행
-echo "[INFO] OpenClaw 시작 중... (${HOST}:${PORT})"
-: > "${LOG_FILE}"
-
-if openclaw gateway --help 2>&1 | grep -q -- '--bind'; then
-  nohup openclaw gateway --bind "${HOST}" --port "${PORT}" > "${LOG_FILE}" 2>&1 &
-else
-  nohup openclaw gateway --port "${PORT}" > "${LOG_FILE}" 2>&1 &
-fi
-
-MAIN_PID=$!
-echo "[INFO] 백그라운드 실행 완료 (PID: ${MAIN_PID})"
-
-# 6. 대시보드 띄우기
-(sleep 1.5 && openclaw dashboard) &
-
-echo "=================================================="
-echo "✅ 구동 완료. 이 터미널 창을 닫아도 프로세스는 유지됩니다."
-EOF
-chmod 700 ~/start-agent.sh</code></pre>
-              </div>
-            </div>
-
-            <!-- Stop Agent -->
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-red-500"></span>
-                  stop-agent.sh
-                </h3>
-                <span class="badge badge-required">종료용</span>
-              </div>
-              <div class="code-block text-[10px]">
-                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code>cat > ~/stop-agent.sh << 'EOF'
-#!/bin/bash
-set -euo pipefail
-
-echo "=================================================="
-echo "🛑 OpenClaw Agent 종료 스크립트 (순수 Bash)"
-echo "=================================================="
-
-PORT="18789"
-LOG_DIR="/Users/fern/sandbox/logs"
-STOP_LOG="${LOG_DIR}/openclaw-stop.log"
-
-mkdir -p "${LOG_DIR}"
-echo "[INFO] 종료 스크립트 실행 일시: $(date)" >> "${STOP_LOG}"
-
-PIDS=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
-
-if [ -z "${PIDS}" ]; then
-  echo "✅ 실행 중인 OpenClaw 프로세스가 없습니다."
-  exit 0
-fi
-
-echo "[INFO] 발견된 PID: ${PIDS}. 정상 종료(SIGTERM)를 요청합니다..."
-echo "${PIDS}" | xargs kill -TERM 2>/dev/null || true
-
-for i in {1..5}; do
-  if ! /usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t >/dev/null 2>&1; then
-    echo "✅ OpenClaw가 안전하게 종료되었습니다."
-    exit 0
-  fi
-  sleep 1
-done
-
-echo "[WARN] 5초 초과. 프로세스 강제 종료(SIGKILL)를 시도합니다..."
-PIDS2=$(/usr/sbin/lsof -nP -iTCP:${PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
-if [ -n "${PIDS2}" ]; then
-  echo "${PIDS2}" | xargs kill -KILL 2>/dev/null || true
-  echo "✅ 강제 종료 완료."
-fi
-EOF
-chmod 700 ~/stop-agent.sh</code></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
       </div>
     </div>
 
