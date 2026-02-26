@@ -214,7 +214,7 @@
       <button type="button" onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
       <button type="button" onclick="showTab('migration')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-migration">📋 마이그레이션 계획</button>
       <button type="button" onclick="showTab('verification')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-verification">검증</button>
-      <button type="button" onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">관리</button>
+      <button type="button" onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">🛠️ 운영 및 관리</button>
       <button type="button" onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">초기화</button>
     </nav>
 
@@ -2280,6 +2280,37 @@ http://&lt;IP_ADDRESS&gt;:9222</code></pre>
     <!-- 7. Maintenance & Monitoring Tab -->
     <div id="maintenance" class="tab-content space-y-6">
       
+      <!-- 👑 운영 주체별 관리 체계 (Admin vs User) -->
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-indigo-500 shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
+          👑 운영 주체별 관리 체계
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Admin: LaunchDaemon -->
+          <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
+            <p class="text-xs font-bold text-indigo-300 uppercase tracking-widest mb-2">Admin Mode (Daemon)</p>
+            <h3 class="text-lg font-bold text-slate-100 mb-3">Ollama 서버</h3>
+            <p class="text-xs text-slate-400 mb-4 leading-relaxed">관리자(alvin) 권한으로 24/7 구동되는 시스템 서비스입니다.</p>
+            <ul class="text-[11px] text-slate-300 space-y-2">
+              <li class="flex gap-2"><span>•</span> <span><strong>경로:</strong> /Library/LaunchDaemons/</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>권한:</strong> root / sudo 필요</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>특징:</strong> 로그인 여부와 관계없이 상시 구동</span></li>
+            </ul>
+          </div>
+          <!-- User: LaunchAgent -->
+          <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
+            <p class="text-xs font-bold text-emerald-300 uppercase tracking-widest mb-2">User Mode (Agent)</p>
+            <h3 class="text-lg font-bold text-slate-100 mb-3">Fern 에이전트</h3>
+            <p class="text-xs text-slate-400 mb-4 leading-relaxed">사용자(fern) 세션에서 GUI 브라우저와 연동되는 개인 서비스입니다.</p>
+            <ul class="text-[11px] text-slate-300 space-y-2">
+              <li class="flex gap-2"><span>•</span> <span><strong>경로:</strong> ~/Library/LaunchAgents/</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>권한:</strong> fern 계정 (sudo 불필요)</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>특징:</strong> GUI 세션 로그인 시 자동 시작</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <!-- ⚡ Quick Management & Shortcuts -->
       <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500 shadow-xl">
         <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-3">
@@ -2293,14 +2324,14 @@ http://&lt;IP_ADDRESS&gt;:9222</code></pre>
               <p class="font-bold text-blue-300 mb-2 flex items-center gap-2">
                 🚀 에이전트 시작/종료
               </p>
-              <p class="text-xs text-slate-400 mb-4">런처를 통해 백그라운드로 실행하거나 안전하게 종료합니다.</p>
+              <p class="text-xs text-slate-400 mb-4">마이그레이션 후에는 런처가 LaunchAgent를 제어합니다.</p>
             </div>
             <div class="code-block text-[10px] p-4">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 시작
+              <pre><code># 시작 (또는 갱신)
 ./start-agent.sh
 
-# 종료
+# 종료 (재시작 중지)
 ./stop-agent.sh</code></pre>
             </div>
           </div>
@@ -2513,12 +2544,15 @@ pkill -f 'ollama serve'</code></pre>
             <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-emerald-400">①</span> 상태 확인 및 로그</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 프로세스 실행 여부 확인
+              <pre><code># LaunchAgent 등록 상태 확인
+launchctl list | grep openclaw
+
+# 프로세스 실행 여부 확인
 ps aux | grep openclaw | grep -v grep
 openclaw status
 
-# 로그 실시간 모니터링
-tail -f ~/sandbox/logs/openclaw-gateway.log</code></pre>
+# 로그 실시간 모니터링 (LaunchAgent용)
+tail -f ~/sandbox/logs/openclaw-launchd.out</code></pre>
             </div>
           </div>
           <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
