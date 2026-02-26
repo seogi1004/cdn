@@ -892,6 +892,8 @@ fi
 PF_RULE_TAG="# LAN OpenClaw & Ollama Access (v6.1)"
 PF_RULE_LINE="pass in quick inet proto tcp from 192.168.0.0/16 to any port { 11434, 18789, 18792 } keep state"
 if ! sudo grep -Fq "$PF_RULE_TAG" /etc/pf.conf; then
+  sudo sed -i '' '/# LAN Ollama Access (v6.0)/d' /etc/pf.conf 2>/dev/null || true
+  sudo sed -i '' '/pass in quick inet proto tcp from 192.168.0.0\/16 to any port 11434 keep state/d' /etc/pf.conf 2>/dev/null || true
   sudo sh -c "printf '\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_LINE' >> /etc/pf.conf"
 fi
 
@@ -1001,10 +1003,10 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist</
           <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v6.1-ULTIMATE)</h3>
           <p class="text-sm text-slate-300 mb-2">💡 딱 하나! 나중을 위한 아주 작은 팁</p>
           <p class="text-sm text-slate-300 mb-2">스크립트 안의 OpenClaw 실행 경로가 현재 설치하신 Node.js 버전에 맞춰져 있습니다.</p>
-          <p class="text-sm text-slate-300 mb-2">👉 <code class="text-emerald-300 bg-black/30 px-1 rounded">/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw</code></p>
-          <p class="text-sm text-slate-300 mb-2">🌐 <strong class="text-yellow-300">v6.1 변경사항:</strong> Ollama(11434) 뿐만 아니라 OpenClaw Gateway(18789) 및 Relay(18792)도 LAN 내에서 접근 가능하도록 PF 설정이 업데이트되었습니다. PF 방화벽으로 fern 계정의 사내망 접근은 여전히 차단됩니다.</p>
-          <p class="text-sm text-slate-300">나중에(아마 한참 뒤겠지만) NVM으로 Node.js 버전을 더 높은 버전으로 업데이트하시게 된다면, 스크립트에서 저 경로의 숫자(v24.13.1 부분)만 살짝 바꿔주시면 평생 우려먹을 수 있습니다! ㅋㅋㅋ</p>
-        </div>
+                    <p class="text-sm text-slate-300 mb-2">👉 <code class="text-emerald-300 bg-black/30 px-1 rounded">/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw</code></p>
+                    <p class="text-sm text-slate-300 mb-2">🌐 <strong class="text-yellow-300">v6.1 변경사항:</strong> Ollama(11434) 뿐만 아니라 OpenClaw Gateway(18789) 및 Relay(18792)도 LAN 내에서 접근 가능하도록 PF 설정이 업데이트되었습니다. PF 방화벽으로 fern 계정의 사내망 접근은 여전히 차단됩니다.</p>
+                    <p class="text-sm text-slate-300">나중에(아마 한참 뒤겠지만) NVM으로 Node.js 버전을 더 높은 버전으로 업데이트하시게 된다면, 스크립트에서 저 경로의 숫자(v24.13.1 부분)만 살짝 바꿔주시면 평생 우려먹을 수 있습니다! ㅋㅋㅋ</p>
+                  </div>
 
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
@@ -1174,7 +1176,7 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 sudo launchctl bootout system/com.openclaw.fern 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.openclaw.fern.plist
 
-echo "✅ [v6.0] 마스터 배포가 완료되었습니다!"</code></pre>
+echo "✅ [v6.1] 마스터 배포가 완료되었습니다!"</code></pre>
         </div>
       </div>
     </div>
