@@ -447,8 +447,10 @@ openclaw browser extension install
 # 4. .openclaw/browser/chrome-extension 폴더 선택
 
 # [3] Fern 계정 GUI 세션에서 Chrome 실행
-# - 직접 명령어를 입력하는 대신, Fern 계정(화면 공유 등)으로 로그인 후 
-# - OpenClaw Dashboard에서 "Launch Browser" 버튼을 클릭하여 띄우는 것을 권장합니다.
+# - 화면 공유 등으로 Fern 계정에 직접 로그인합니다.
+# - 터미널을 열고 아래 명령어를 실행하여 대시보드를 띄웁니다.
+openclaw dashboard
+# - 나타난 UI 창에서 "Launch Browser" 버튼을 클릭하면 CDP 포트(9222)가 열린 크롬이 실행됩니다.
 
 # (수동 실행 시 참고)
 # open -a "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir=/Users/fern/.openclaw/chrome-profile</code></pre>
@@ -652,8 +654,9 @@ openclaw skills enable steipete/notion</code></pre>
                     <pre><code># Relay 확장 설치
 openclaw browser extension install
 
-# Fern 세션(화면 공유)에서 Chrome 실행
-# OpenClaw Dashboard의 'Launch Browser' 버튼 사용 권장</code></pre>
+# Fern 세션(화면 공유) 터미널에서 아래 명령어 실행
+openclaw dashboard
+# 나타난 UI에서 'Launch Browser' 버튼 클릭</code></pre>
                   </div>
                 </div>
               </div>
@@ -1917,8 +1920,8 @@ sudo launchctl kickstart -k system/com.openclaw.fern</code></pre>
             </div>
             <div class="code-block text-[10px] p-4">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Fern 계정(화면 공유)으로 로그인 후
-# OpenClaw Dashboard에서
+              <pre><code># Fern 계정(화면 공유) 터미널 실행
+openclaw dashboard
 # 'Launch Browser' 버튼 클릭</code></pre>
             </div>
           </div>
