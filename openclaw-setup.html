@@ -1393,17 +1393,96 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 sudo mkdir -p /usr/local/sbin
 sudo tee /usr/local/sbin/ollama-watchdog.sh >/dev/null <<'WATCHDOG_EOF'
 #!/bin/bash
-# Ollama Inference Watchdog (Health Check)
-ENDPOINT="http://127.0.0.1:11434/api/generate"
-MODEL="qwen3:14b"
-TIMEOUT=60
+set -euo pipefail
+exec >>/var/log/ollama/ollama-watchdog.log 2>>/var/log/ollama/ollama-watchdog.err
+echo "[$(date -Iseconds)] watchdog start"
 
-if ! curl -s -X POST "$ENDPOINT" -d "{\"model\": \"$MODEL\", \"prompt\": \"hi\", \"stream\": false}" --max-time "$TIMEOUT" > /dev/null; then
-  echo "[$(date)] Ollama unresponsive. Restarting..."
-  sudo launchctl kickstart -k system/com.alvin.ollama
-else
-  echo "[$(date)] Ollama healthy."
+#/** @description generate 기반 헬스체크로 "추론 좀비"를 감지하고, 강제 복구 + 워밍업까지 수행한다. */
+HOST="192.168.0.127"
+PORT="11434"
+HEALTH_MODEL="qwen3:14b"
+URL="http://${HOST}:${PORT}/api/generate"
+BODY="{\"model\":\"${HEALTH_MODEL}\",\"prompt\":\"ping\",\"stream\":false}"
+
+FAIL_THRESHOLD=3
+TIMEOUT_SEC=15
+
+STATE_DIR="/var/run"
+FAIL_FILE="${STATE_DIR}/ollama-watchdog.failcount"
+LOCK_DIR="${STATE_DIR}/ollama-watchdog.lock"
+
+SERVICE_LABEL="com.alvin.ollama"
+SERVICE_PLIST="/Library/LaunchDaemons/com.alvin.ollama.plist"
+
+umask 022
+
+#/** @description 중복 실행 방지 */
+if ! mkdir "${LOCK_DIR}" 2>/dev/null; then
+  exit 0
 fi
+trap 'rmdir "${LOCK_DIR}" >/dev/null 2>&1 || true' EXIT
+
+#/** @description 실패 카운트 로드 */
+fail_count=0
+if [[ -f "${FAIL_FILE}" ]]; then
+  fail_count="$(cat "${FAIL_FILE}" 2>/dev/null || echo 0)"
+fi
+if ! [[ "${fail_count}" =~ ^[0-9]+$ ]]; then
+  fail_count=0
+fi
+
+#/** @description 추론 헬스체크 */
+if /usr/bin/curl -fsS --max-time "${TIMEOUT_SEC}" \
+  -H 'Content-Type: application/json' \
+  -d "${BODY}" \
+  "${URL}" >/dev/null 2>&1; then
+  echo 0 > "${FAIL_FILE}"
+  exit 0
+fi
+
+#/** @description 실패 누적 */
+fail_count=$((fail_count + 1))
+echo "${fail_count}" > "${FAIL_FILE}"
+
+#/** @description 임계치 미도달이면 종료 */
+if (( fail_count < FAIL_THRESHOLD )); then
+  exit 0
+fi
+
+#/** @description 임계치 도달: 강제 복구 시퀀스 */
+logger -t ollama-watchdog "Generate healthcheck failed ${fail_count}x; hard-recover ${SERVICE_LABEL}"
+
+# (1) runner/serve 포함 프로세스 강제 종료
+/usr/bin/pkill -9 -x ollama >/dev/null 2>&1 || true
+sleep 2
+
+# (2) job 완전 재로딩(bootout -> bootstrap)으로 launchd 상태까지 리셋
+/bin/launchctl bootout "system/${SERVICE_LABEL}" >/dev/null 2>&1 || true
+sleep 1
+/bin/launchctl bootstrap system "${SERVICE_PLIST}" >/dev/null 2>&1 || true
+/bin/launchctl kickstart -k "system/${SERVICE_LABEL}" >/dev/null 2>&1 || true
+
+# (3) 워밍업: 짧은 generate가 성공할 때까지 제한된 횟수 재시도
+ok=0
+for i in 1 2 3 4 5; do
+  sleep 2
+  if /usr/bin/curl -fsS --max-time 12 \
+    -H 'Content-Type: application/json' \
+    -d "${BODY}" \
+    "${URL}" >/dev/null 2>&1; then
+    ok=1
+    break
+  fi
+done
+
+if [[ "${ok}" -eq 1 ]]; then
+  logger -t ollama-watchdog "Recovery OK (warmup success)"
+else
+  logger -t ollama-watchdog "Recovery attempted but warmup still failing"
+fi
+
+#/** @description 카운트 리셋(다시 관찰) */
+echo 0 > "${FAIL_FILE}"
 WATCHDOG_EOF
 sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
 
