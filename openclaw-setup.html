@@ -2294,11 +2294,11 @@ sudo chmod 644 /var/log/ollama/ollama-watchdog.*
 sudo tee /usr/local/sbin/ollama-watchdog.sh &lt;&lt; 'EOF'
 #!/bin/bash
 #/**
-# * Ollama Healthcheck &amp; Recovery Watchdog
-# * 대상: http://192.168.0.127:11434/api/version
+# * Ollama Inference-based Healthcheck &amp; Recovery Watchdog
+# * 대상: http://192.168.0.127:11434/api/generate
 # */
 
-TARGET_URL="http://192.168.0.127:11434/api/version"
+TARGET_URL="http://192.168.0.127:11434/api/generate"
 FAIL_COUNT_FILE="/var/run/ollama-watchdog.failcount"
 LOCK_DIR="/var/run/ollama-watchdog.lock"
 MAX_FAILURES=3
@@ -2309,8 +2309,10 @@ if ! mkdir "$LOCK_DIR" 2&gt;/dev/null; then
 fi
 trap 'rm -rf "$LOCK_DIR"' EXIT
 
-#/** 헬스체크 수행: curl 응답 2초 타임아웃 설정 */
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "$TARGET_URL")
+#/** 헬스체크 수행: /api/generate 호출로 실질 추론 상태 점검 (5초 타임아웃) */
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+    --max-time 5 -X POST "$TARGET_URL" \
+    -d '{"model": "qwen3:14b", "prompt": "health", "stream": false}')
 
 if [ "$HTTP_CODE" -eq 200 ]; then
     #/** 성공 시: 기존 실패 카운트 파일을 0으로 초기화 */
@@ -2322,7 +2324,7 @@ else
     CUR_FAIL=$((CUR_FAIL + 1))
     echo "$CUR_FAIL" &gt; "$FAIL_COUNT_FILE"
     
-    echo "[$(date)] Healthcheck failed (HTTP: $HTTP_CODE, Count: $CUR_FAIL)" &gt;&gt; /var/log/ollama/ollama-watchdog.log
+    echo "[$(date)] Inference check failed (HTTP: $HTTP_CODE, Count: $CUR_FAIL)" &gt;&gt; /var/log/ollama/ollama-watchdog.log
 
     #/** 임계치 도달 확인: 3회 이상 실패 시 복구 작업 개시 */
     if [ "$CUR_FAIL" -ge "$MAX_FAILURES" ]; then
@@ -2333,7 +2335,8 @@ else
         sleep 5
         
         #/** 2차 시도: 여전히 무응답일 경우 pkill로 프로세스 강제 종료 (최후 수단) */
-        if ! curl -s -o /dev/null --max-time 2 "$TARGET_URL"; then
+        CHECK_AGAIN=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "http://192.168.0.127:11434/api/version")
+        if [ "$CHECK_AGAIN" -ne 200 ]; then
             sudo pkill -9 -x ollama
         fi
         
@@ -2486,31 +2489,91 @@ sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.watchdog.p
         </nav>
 
         <div id="maint-ollama" class="maint-tab-content p-6 space-y-5">
-          <p class="text-xs text-slate-500">아래 모든 명령어는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 실행합니다.</p>
-          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-purple-400">①</span> 상태 확인</h3>
+          <p class="text-xs text-slate-500">아래 모든 절차는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 sudo 권한으로 진행합니다.</p>
+          
+          <div class="bg-blue-950/20 p-5 rounded-xl border border-blue-800/40">
+            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">🚀 최종 운영형 LaunchDaemon 설정 (Hardened)</h3>
+            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+              EnvironmentVariables 블록에만 의존할 경우 간헐적으로 환경변수가 누락되는 이슈가 확인되었습니다. <br>
+              &lt;strong&gt;ProgramArguments에서 export를 통해 명시적으로 주입&lt;/strong&gt;하는 확정형 설정을 권장합니다.
+            </p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl print system/com.alvin.ollama | head -n 30
-lsof -i :11434
-curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre>
+              <pre><code># [1] 기존 서비스 중지
+sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2&gt;/dev/null || true
+
+# [2] 확정형 plist 작성 (export 강제 버전)
+sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist &lt;&lt; 'EOF'
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;com.alvin.ollama&lt;/string&gt;
+    &lt;key&gt;UserName&lt;/key&gt;&lt;string&gt;alvin&lt;/string&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
+    &lt;key&gt;KeepAlive&lt;/key&gt;&lt;dict&gt;&lt;key&gt;SuccessfulExit&lt;/key&gt;&lt;false/&gt;&lt;/dict&gt;
+    &lt;key&gt;ThrottleInterval&lt;/key&gt;&lt;integer&gt;30&lt;/integer&gt;
+    &lt;key&gt;WorkingDirectory&lt;/key&gt;&lt;string&gt;/Users/alvin&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+    &lt;array&gt;
+        &lt;string&gt;/bin/bash&lt;/string&gt;
+        &lt;string&gt;-lc&lt;/string&gt;
+        &lt;string&gt;export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"; export OLLAMA_HOST="http://192.168.0.127:11434"; export OLLAMA_ORIGINS="*"; export OLLAMA_FLASH_ATTENTION=1; export OLLAMA_KEEP_ALIVE=3m; exec /opt/homebrew/bin/ollama serve&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama.log&lt;/string&gt;
+    &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama.err&lt;/string&gt;
+    &lt;key&gt;HardResourceLimits&lt;/key&gt;
+    &lt;dict&gt;
+        &lt;key&gt;Core&lt;/key&gt;&lt;integer&gt;0&lt;/integer&gt;
+        &lt;key&gt;NumberOfFiles&lt;/key&gt;&lt;integer&gt;8192&lt;/integer&gt;
+    &lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+EOF
+
+# [3] 권한 설정 및 재등록
+sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist
+sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
             </div>
           </div>
-          <div class="bg-purple-950/20 p-5 rounded-xl border border-purple-800/40">
-            <h3 class="font-bold text-purple-300 mb-3 flex items-center gap-2"><span>②</span> 시작 / 재시작</h3>
+
+          <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
+            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">✅ 4단계 운영 검증 프로토콜</h3>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 서비스 등록 및 시작
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
-sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
+              <pre><code># 1단계: 서비스 상태 및 종료 코드 확인 (state=running, exit code=0 확인)
+sudo launchctl print system/com.alvin.ollama | egrep "state =|pid =|last exit code"
+
+# 2단계: 네트워크 바인딩 확인 (11434 LISTEN 여부)
+sudo lsof -nP -iTCP:11434 -sTCP:LISTEN
+
+# 3단계: 기본 API 응답 확인
+curl -s http://192.168.0.127:11434/api/version
+
+# 4단계: 실질 추론 동작 확인 (헬스 모델: qwen3:14b)
+curl -s -X POST http://192.168.0.127:11434/api/generate \
+  -d '{"model": "qwen3:14b", "prompt": "hi", "stream": false}'</code></pre>
             </div>
           </div>
+
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
-            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2"><span>③</span> 종료</h3>
+            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2">🚨 EX_CONFIG(78) 및 포트 미리스닝 해결</h3>
+            <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">
+              &lt;strong&gt;현상:&lt;/strong&gt; 서비스는 살아있으나 11434 포트가 닫혀있거나, last exit code가 78인 경우 환경설정 오류입니다.
+            </p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
-pkill -f 'ollama serve'</code></pre>
+              <pre><code># [체크 1] IP 주소 유효성 확인
+ifconfig | grep "192.168.0.127"
+
+# [체크 2] 수동 실행으로 상세 로그 확인 (에러 메시지 직접 노출)
+sudo -u alvin /bin/zsh -lc "export OLLAMA_HOST='http://192.168.0.127:11434'; /opt/homebrew/bin/ollama serve"
+
+# [조치] plist를 위 '최종 운영형'으로 교체 후 완전 재로딩
+sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
+sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
             </div>
           </div>
         </div>
