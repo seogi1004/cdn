@@ -212,7 +212,6 @@
       <button type="button" onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">네트워크 &amp; 보안</button>
       <button type="button" onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">샌드박싱</button>
       <button type="button" onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
-      <button type="button" onclick="showTab('launcher')" class="px-6 py-4 font-semibold text-blue-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-launcher">🚀 에이전트 런처</button>
       <button type="button" onclick="showTab('verification')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-verification">검증</button>
       <button type="button" onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">🛠️ 운영 및 관리</button>
       <button type="button" onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">초기화</button>
@@ -358,9 +357,8 @@ chmod 700 ~/run-openclaw.sh
               <img src="https://placehold.co/80x80/3b82f6/white?text=Fern" class="rounded-2xl shadow-2xl shadow-blue-500/40" alt="Fern" />
             </div>
             <div class="text-center md:text-left">
-              <div class="flex flex-col md:flex-row items-center gap-3">
+                <div class="flex flex-col md:flex-row items-center gap-3">
                 <h2 class="text-3xl font-bold text-slate-100 tracking-tight">Fern <span class="text-blue-400">Hybrid Agent</span></h2>
-                <span class="badge badge-required">v1.0-READY</span>
               </div>
               <p class="text-blue-400 text-sm font-bold uppercase tracking-[0.2em] mt-2">
                 Expert Assistant & Strategic Pilot | <span class="text-red-400">Zero-Trust Secured</span>
@@ -402,173 +400,6 @@ chmod 700 ~/run-openclaw.sh
                   
                           </div>
                   
-                          <!-- Sub-tab 3: 설정 (config) -->
-                          <div id="fern-config" class="fern-tab-content p-8 space-y-8" style="display:none">
-                            <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
-                              <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">
-                                ⚙️ OpenClaw Configuration (openclaw.json)
-                                <span class="badge badge-stability">v2026.2.24</span>
-                              </h3>
-                              <div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/20 mb-6 flex items-start gap-3">
-                                <span class="text-xl">⚠️</span>
-                                <div class="text-sm">
-                                  <p class="font-bold text-amber-300 mb-1">보안 주의사항</p>
-                                  <p class="text-slate-400 leading-relaxed">아래 설정 파일에는 <strong class="text-slate-200">API 키, 봇 토큰, 게이트웨이 토큰</strong> 등 민감한 정보가 포함됩니다. 실제 환경에서는 이 정보를 별도의 보안 저장소(예: 1Password)에 보관하거나, 노출되지 않도록 각별히 주의하십시오.</p>
-                                </div>
-                              </div>
-                  
-                              <div class="code-block text-xs">
-                                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy JSON</button>
-                                <pre><code>{
-                    "meta": {
-                      "lastTouchedVersion": "2026.2.24",
-                      "lastTouchedAt": "2026-02-27T00:40:00.000Z"
-                    },
-                    "wizard": {
-                      "lastRunAt": "2026-02-26T00:06:08.478Z",
-                      "lastRunVersion": "2026.2.24",
-                      "lastRunCommand": "onboard",
-                      "lastRunMode": "local"
-                    },
-                    "auth": {
-                      "profiles": {
-                        "google:default": {
-                          "provider": "google",
-                          "mode": "api_key"
-                        },
-                        "openai:default": {
-                          "provider": "openai",
-                          "mode": "api_key"
-                        }
-                      }
-                    },
-                    "models": {
-                      "mode": "merge",
-                      "providers": {
-                        "custom-127-0-0-1-11434": {
-                          "baseUrl": "http://127.0.0.1:11434/v1",
-                          "apiKey": "sk-local-********", // Masked for security
-                          "api": "openai-completions",
-                          "models": [
-                            {
-                              "id": "qwen3:32b",
-                              "name": "qwen3:32b (Local Primary)",
-                              "reasoning": false,
-                              "input": ["text"],
-                              "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-                              "contextWindow": 32768,
-                              "maxTokens": 8192
-                            },
-                            {
-                              "id": "qwen3:14b",
-                              "name": "qwen3:14b (Local Fast)",
-                              "reasoning": false,
-                              "input": ["text"],
-                              "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-                              "contextWindow": 32768,
-                              "maxTokens": 4096
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    "agents": {
-                      "defaults": {
-                        "sandbox": { "mode": "off" },
-                        "model": {
-                          "primary": "custom-127-0-0-1-11434/qwen3:32b",
-                          "fallbacks": [
-                            "google/gemini-2.5-flash",
-                            "openai/gpt-5-mini",
-                            "google/gemini-2.5-pro"
-                          ]
-                        },
-                        "models": {
-                          "custom-127-0-0-1-11434/qwen3:14b": { "alias": "qwen14b" },
-                          "custom-127-0-0-1-11434/qwen3:32b": { "alias": "qwen32b" },
-                          "google/gemini-3-flash-preview": { "alias": "gemini3" },
-                          "google/gemini-2.5-flash": {},
-                          "google/gemini-2.5-pro": {},
-                          "openai/gpt-5-mini": {},
-                          "openai/gpt-5-nano": {}
-                        },
-                        "workspace": "/Users/fern/sandbox",
-                        "compaction": { "mode": "safeguard", "reserveTokens": 4000 },
-                        "maxConcurrent": 1,
-                        "subagents": { "maxConcurrent": 1 },
-                        "memorySearch": {
-                          "enabled": true,
-                          "provider": "gemini",
-                          "fallback": "none"
-                        }
-                      }
-                    },
-                    "tools": {
-                      "web": {
-                        "search": {
-                          "enabled": true,
-                          "provider": "brave",
-                          "apiKey": "BSAhsvxuUKstibN_********" // Masked for security
-                        },
-                        "fetch": { "enabled": true }
-                      }
-                    },
-                    "messages": { "ackReactionScope": "group-mentions" },
-                    "commands": {
-                      "native": "auto",
-                      "nativeSkills": "auto",
-                      "restart": true,
-                      "ownerDisplay": "raw"
-                    },
-                    "session": { "dmScope": "per-channel-peer" },
-                    "hooks": {
-                      "internal": {
-                        "enabled": true,
-                        "entries": {
-                          "command-logger": { "enabled": true },
-                          "session-memory": { "enabled": true },
-                          "boot-md": { "enabled": true }
-                        }
-                      }
-                    },
-                    "channels": {
-                      "telegram": {
-                        "enabled": true,
-                        "dmPolicy": "pairing",
-                        "botToken": "8381665033:AAES5mjlMJRrx6oJ********", // Masked for security
-                        "groupPolicy": "allowlist",
-                        "streaming": "off"
-                      }
-                    },
-                    "gateway": {
-                      "port": 18789,
-                      "mode": "local",
-                      "bind": "loopback",
-                      "auth": {
-                        "mode": "token",
-                        "token": "5075546bf2abb268531054e576387********" // Masked for security
-                      },
-                      "tailscale": { "mode": "off", "resetOnExit": false },
-                      "nodes": {
-                        "denyCommands": [
-                          "camera.snap", "camera.clip", "screen.record",
-                          "calendar.add", "contacts.add", "reminders.add"
-                        ]
-                      }
-                    },
-                    "skills": {
-                      "install": { "nodeManager": "npm" },
-                      "entries": {
-                        "goplaces": { "apiKey": "AIzaSyDgfJkyGTGbN2C93aj********" }, // Masked for security
-                        "playwright": {}
-                      }
-                    },
-                    "plugins": { "entries": { "telegram": { "enabled": true } } },
-                    "logging": { "file": "/Users/fern/.openclaw/logs/openclaw.log" }
-                  }</code></pre>
-                              </div>
-                            </div>
-                          </div>
                   
                         </div>
                   
@@ -975,14 +806,178 @@ npx playwright install</code></pre>
         </div>
       </div>
 
+      <div id="fern-config" class="fern-tab-content p-8 space-y-8" style="display:none">
+        <div class="glass glass-hover p-6 rounded-2xl border border-slate-700/50 bg-slate-900/30">
+          <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-3">
+            ⚙️ OpenClaw Configuration (openclaw.json)
+            <span class="badge badge-stability">v2026.2.24</span>
+          </h3>
+          <div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/20 mb-6 flex items-start gap-3">
+            <span class="text-xl">⚠️</span>
+            <div class="text-sm">
+              <p class="font-bold text-amber-300 mb-1">보안 주의사항</p>
+              <p class="text-slate-400 leading-relaxed">아래 설정 파일에는 <strong class="text-slate-200">API 키, 봇 토큰, 게이트웨이 토큰</strong> 등 민감한 정보가 포함됩니다. 실제 환경에서는 이 정보를 별도의 보안 저장소(예: 1Password)에 보관하거나, 노출되지 않도록 각별히 주의하십시오.</p>
+            </div>
+          </div>
+
+          <div class="code-block text-xs">
+            <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy JSON</button>
+            <pre><code>{
+  "meta": {
+    "lastTouchedVersion": "2026.2.24",
+    "lastTouchedAt": "2026-02-27T00:40:00.000Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-26T00:06:08.478Z",
+    "lastRunVersion": "2026.2.24",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "google:default": {
+        "provider": "google",
+        "mode": "api_key"
+      },
+      "openai:default": {
+        "provider": "openai",
+        "mode": "api_key"
+      }
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "custom-127-0-0-1-11434": {
+        "baseUrl": "http://127.0.0.1:11434/v1",
+        "apiKey": "sk-local-********", // Masked for security
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "qwen3:32b",
+            "name": "qwen3:32b (Local Primary)",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 32768,
+            "maxTokens": 8192
+          },
+          {
+            "id": "qwen3:14b",
+            "name": "qwen3:14b (Local Fast)",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 32768,
+            "maxTokens": 4096
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "sandbox": { "mode": "off" },
+      "model": {
+        "primary": "custom-127-0-0-1-11434/qwen3:32b",
+        "fallbacks": [
+          "google/gemini-2.5-flash",
+          "openai/gpt-5-mini",
+          "google/gemini-2.5-pro"
+        ]
+      },
+      "models": {
+        "custom-127-0-0-1-11434/qwen3:14b": { "alias": "qwen14b" },
+        "custom-127-0-0-1-11434/qwen3:32b": { "alias": "qwen32b" },
+        "google/gemini-3-flash-preview": { "alias": "gemini3" },
+        "google/gemini-2.5-flash": {},
+        "google/gemini-2.5-pro": {},
+        "openai/gpt-5-mini": {},
+        "openai/gpt-5-nano": {}
+      },
+      "workspace": "/Users/fern/sandbox",
+      "compaction": { "mode": "safeguard", "reserveTokens": 4000 },
+      "maxConcurrent": 1,
+      "subagents": { "maxConcurrent": 1 },
+      "memorySearch": {
+        "enabled": true,
+        "provider": "gemini",
+        "fallback": "none"
+      }
+    }
+  },
+  "tools": {
+    "web": {
+      "search": {
+        "enabled": true,
+        "provider": "brave",
+        "apiKey": "BSAhsvxuUKstibN_********" // Masked for security
+      },
+      "fetch": { "enabled": true }
+    }
+  },
+  "messages": { "ackReactionScope": "group-mentions" },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": { "dmScope": "per-channel-peer" },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "command-logger": { "enabled": true },
+        "session-memory": { "enabled": true },
+        "boot-md": { "enabled": true }
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "botToken": "8381665033:AAES5mjlMJRrx6oJ********", // Masked for security
+      "groupPolicy": "allowlist",
+      "streaming": "off"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "5075546bf2abb268531054e576387********" // Masked for security
+    },
+    "tailscale": { "mode": "off", "resetOnExit": false },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap", "camera.clip", "screen.record",
+        "calendar.add", "contacts.add", "reminders.add"
+      ]
+    }
+  },
+  "skills": {
+    "install": { "nodeManager": "npm" },
+    "entries": {
+      "goplaces": { "apiKey": "AIzaSyDgfJkyGTGbN2C93aj********" }, // Masked for security
+      "playwright": {}
+    }
+  },
+  "plugins": { "entries": { "telegram": { "enabled": true } } },
+  "logging": { "file": "/Users/fern/.openclaw/logs/openclaw.log" }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
     </div>
 
 
     <!-- 3. Security & Network Tab -->
     <div id="security" class="tab-content space-y-8">
-      <div class="glass p-5 rounded-2xl border border-emerald-700/40">
-        <p class="text-sm text-slate-300"><strong class="text-emerald-300">이미 적용된 환경이라면</strong> 아래 섹션은 변경 없이 <strong class="text-slate-100">검증용</strong>으로만 사용하세요.</p>
-      </div>
       <!-- 🌐 네트워크 허용/차단 요약 (추가됨) -->
       <div class="glass p-8 border-l-4 border-indigo-500 rounded-2xl shadow-xl shadow-indigo-900/10">
         <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
@@ -1198,29 +1193,27 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v1.0-INFRA)</h2>
-              <span class="badge badge-stability ml-2">안정성</span>
+              <h2 class="text-3xl font-bold text-yellow-400">마스터 스크립트</h2>
             </div>
-            <p class="text-slate-400 text-sm mt-1">Zero Trust Isolation + APFS Sandbox + Ollama 24/7 (Environment Only)</p>
+            <p class="text-slate-400 text-sm mt-1">Zero Trust 인프라 구축과 Fern 런처 운영을 한곳에서 보여줍니다.</p>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
-            <h3 class="text-lg font-semibold text-slate-100 mb-2">LaunchDaemons (24/7)</h3>
-            <p class="text-sm text-slate-400">Ollama 서비스만 백그라운드로 유지됩니다.</p>
+            <h3 class="text-lg font-semibold text-slate-100 mb-2">Alvin 인프라 서비스</h3>
+            <p class="text-sm text-slate-400">PF/ACL/APFS 격리와 Ollama LaunchDaemon을 관리자 계정에서 설정합니다.</p>
             <div class="code-block mt-3 text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
               <pre><code>/Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
-            <h3 class="text-lg font-semibold text-slate-100 mb-2">Fern Infrastructure</h3>
-            <p class="text-sm text-slate-400">격리된 계정 및 샌드박스 환경을 구축합니다.</p>
+            <h3 class="text-lg font-semibold text-slate-100 mb-2">Fern 런처 & LaunchAgent</h3>
+            <p class="text-sm text-slate-400">Fern 계정에서 LaunchAgent를 등록하여 OpenClaw Gateway/Browser를 자동 기동합니다.</p>
             <div class="code-block text-xs mt-3">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>/Users/fern (isolated)
-/Users/fern/sandbox (APFS Volume)</code></pre>
+              <pre><code>/Users/fern/Library/LaunchAgents/com.fern.openclaw.plist</code></pre>
             </div>
           </div>
         </div>
@@ -1237,17 +1230,17 @@ ls -le /Users/Shared | head -n 5</code></pre>
           </div>
         </div>
 
-                <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
-                  <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v1.0-INFRA)</h3>
-                  <p class="text-sm text-slate-300 mb-2">💡 **Infrastructure Focus:** 이 스크립트는 OS 격리 환경 구축 및 Ollama 서비스 설정에 집중합니다.</p>
-                  <p class="text-sm text-slate-300">보안(PF/ACL/APFS)과 Ollama(관리자) 24/7 서비스 환경이 이 스크립트로 철통 유지됩니다. <strong>에이전트 런처(run-openclaw.sh)는 별도 탭에서 생성하세요.</strong></p>
-                </div>
-        
-                <div class="code-block">
-                  <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                  <pre><code class="text-sm">#!/bin/bash
+        <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
+          <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항</h3>
+          <p class="text-sm text-slate-300 mb-2">이 스크립트는 관리자(alvin) 계정으로 OS 격리, PF/ACL/APFS, Ollama 데몬 구성에 집중합니다.</p>
+          <p class="text-sm text-slate-300">Fern 런처(run-openclaw.sh)는 아래 별도 섹션에 있으며 Fern 계정에서 LaunchAgent 기반으로 자동 기동됩니다.</p>
+        </div>
+
+        <div class="code-block">
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code class="text-sm">#!/bin/bash
 # ==============================================================================
-# OpenClaw M4 Max Security Master Script (인프라 전용 버전) v1.0-INFRA
+# OpenClaw M4 Max Security Master Script (인프라 전용)
 # 용도: AI 에이전트 구동을 위한 제로 트러스트 격리 환경 구축
 # 정책:
 #   - 보안(PF/ACL/APFS) 및 Ollama 데몬(alvin) 설정 중심
@@ -1402,7 +1395,7 @@ HOST="192.168.0.127"
 PORT="11434"
 HEALTH_MODEL="qwen3:14b"
 URL="http://${HOST}:${PORT}/api/generate"
-BODY="{\"model\":\"${HEALTH_MODEL}\",\"prompt\":\"ping\",\"stream\":false}"
+BODY="{"model":"${HEALTH_MODEL}","prompt":"ping","stream":false}"
 
 FAIL_THRESHOLD=3
 TIMEOUT_SEC=15
@@ -1432,10 +1425,7 @@ if ! [[ "${fail_count}" =~ ^[0-9]+$ ]]; then
 fi
 
 #/** @description 추론 헬스체크 */
-if /usr/bin/curl -fsS --max-time "${TIMEOUT_SEC}" \
-  -H 'Content-Type: application/json' \
-  -d "${BODY}" \
-  "${URL}" >/dev/null 2>&1; then
+if /usr/bin/curl -fsS --max-time "${TIMEOUT_SEC}"   -H 'Content-Type: application/json'   -d "${BODY}"   "${URL}" >/dev/null 2>&1; then
   echo 0 > "${FAIL_FILE}"
   exit 0
 fi
@@ -1466,10 +1456,7 @@ sleep 1
 ok=0
 for i in 1 2 3 4 5; do
   sleep 2
-  if /usr/bin/curl -fsS --max-time 12 \
-    -H 'Content-Type: application/json' \
-    -d "${BODY}" \
-    "${URL}" >/dev/null 2>&1; then
+  if /usr/bin/curl -fsS --max-time 12     -H 'Content-Type: application/json'     -d "${BODY}"     "${URL}" >/dev/null 2>&1; then
     ok=1
     break
   fi
@@ -1485,7 +1472,6 @@ fi
 echo 0 > "${FAIL_FILE}"
 WATCHDOG_EOF
 sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
-
 sudo tee /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist >/dev/null <<'WATCHDOG_PLIST_EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -1510,51 +1496,20 @@ WATCHDOG_PLIST_EOF
 sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
 
-echo "✅ 인프라 환경 및 Ollama 와치독 구축 완료! (v1.0-INFRA)"</code></pre>
-                </div>
-
-        <div class="mt-12 glass p-8 rounded-[2rem] border-2 border-slate-500/30 shadow-2xl">
-          <h2 class="text-2xl font-bold text-slate-300 mb-6 flex items-center gap-3">
-            🛠️ 다음 단계
-          </h2>
-          <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-            인프라 구축이 완료되었습니다. 이제 <strong class="text-blue-400">에이전트 런처</strong> 탭으로 이동하여 에이전트를 제어할 스크립트를 생성하세요.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. Launcher Tab -->
-    <div id="launcher" class="tab-content space-y-8">
-      <div class="glass p-10 rounded-3xl border-2 border-blue-500/50 shadow-2xl shadow-blue-500/10">
-        <div class="flex items-center gap-4 mb-6">
-          <span class="text-4xl">🚀</span>
-          <div>
-            <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-blue-400">에이전트 통합 제어기 (run-openclaw.sh)</h2>
-              <span class="badge badge-stability ml-2">v1.0-RUNNER</span>
-            </div>
-            <p class="text-slate-400 text-sm mt-1">OpenClaw Launcher & LaunchAgent Manager</p>
-          </div>
+echo "✅ 인프라 환경 및 Ollama 와치독 구축 완료!"</code></pre>
         </div>
 
         <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
-          <h3 class="text-lg font-semibold text-blue-300 mb-2">런처 역할 및 특징</h3>
-          <p class="text-sm text-slate-300 mb-2">💡 **Unified Control:** 이 스크립트는 에이전트의 시작, 종료, 상태 확인을 통합 관리합니다. 
-          단순 프로세스 실행이 아닌 **macOS LaunchAgent**를 통해 영속성을 보장합니다.</p>
-          <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
-            <li>자동 재시작 (Self-Healing) 지원</li>
-            <li>샌드박스 볼륨 마운트 자동 검증</li>
-            <li>충돌 프로세스(Chrome/Node) 자동 정리</li>
-            <li>NVM 및 Node.js v24 환경 자동 로드</li>
-          </ul>
+          <h3 class="text-lg font-semibold text-blue-300 mb-2">Fern 런처 (LaunchAgent)</h3>
+          <p class="text-sm text-slate-300 mb-2">Fern 계정에서 LaunchAgent를 등록하여 OpenClaw Gateway/Browser를 자동 생성, 재시작, 상태 검증합니다.</p>
+          <p class="text-sm text-slate-300">별도 계정·운영 방식이므로 아래 섹션에서 run-openclaw.sh를 LaunchAgent로 관리하세요.</p>
         </div>
 
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
 # ==============================================================================
-# OpenClaw Agent Launcher (run-openclaw.sh) v1.0-RUNNER
+# OpenClaw Agent Launcher (run-openclaw.sh)
 # 용도: 에이전트의 LaunchAgent 기반 구동 및 생존성 관리
 # 위치: /Users/fern/run-openclaw.sh
 # 실행: 에이전트 계정(fern)에서 실행
@@ -1688,7 +1643,7 @@ echo "✅ run-openclaw.sh 생성 및 권한 설정 완료!"</code></pre>
             🛠️ 런처 사용법
           </h2>
           <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-            위 스크립트를 <strong class="text-slate-200">/Users/fern/run-openclaw.sh</strong>에 저장한 후 아래 명령어로 에이전트를 관리하세요.
+            해당 스크립트를 <strong class="text-slate-200">/Users/fern/run-openclaw.sh</strong>에 저장한 후 아래 명령어로 에이전트를 관리하세요.
           </p>
 
           <div class="space-y-4">
@@ -1715,9 +1670,17 @@ echo "✅ run-openclaw.sh 생성 및 권한 설정 완료!"</code></pre>
             </div>
           </div>
         </div>
+
+        <div class="mt-12 glass p-8 rounded-[2rem] border-2 border-slate-500/30 shadow-2xl">
+          <h2 class="text-2xl font-bold text-slate-300 mb-6 flex items-center gap-3">
+            🛠️ 다음 단계
+          </h2>
+          <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+            인프라 구축이 완료되었습니다. 아래 Fern 런처 섹션에서 LaunchAgent 설정을 확인하고, 컨트롤 작업을 Fern 계정으로 수행하세요.
+          </p>
+        </div>
       </div>
     </div>
-
     <!-- 7. Verification Tab -->
 
     <div id="verification" class="tab-content space-y-8">
@@ -2613,11 +2576,14 @@ tail -f ~/sandbox/logs/openclaw-launchd.out</code></pre>
           </div>
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
             <h3 class="font-bold text-white mb-3">🔄 자동 업데이트 & 힐링</h3>
+            <p class="text-xs text-slate-400 mb-3">Fern의 NPM 자동 업데이트는 LaunchAgent <code class="text-slate-300">com.fern.npmupdate</code>으로 하루 단위로 실행됩니다.</p>
             <div class="code-block text-xs">
               <pre><code># NPM 업데이트 로그
 tail -f ~/sandbox/logs/npm-auto-update.log
-# 매일 새벽 4시 재시작 (daily-restart.sh)
-crontab -l | grep daily-restart</code></pre>
+# LaunchAgent 상태 확인
+launchctl list | grep com.fern.npmupdate
+# LaunchAgent 정의
+ls ~/Library/LaunchAgents/com.fern.npmupdate.plist</code></pre>
             </div>
           </div>
         </div>
@@ -2831,11 +2797,15 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
 
   <script>
     function showTab(tabId) {
-      localStorage.setItem('openclaw_activeTab', tabId);
+      let targetTab = tabId;
+      if (!document.getElementById(targetTab)) {
+        targetTab = 'setup';
+      }
+      localStorage.setItem('openclaw_activeTab', targetTab);
       document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
       });
-      const targetContent = document.getElementById(tabId);
+      const targetContent = document.getElementById(targetTab);
       if (targetContent) targetContent.classList.add('active');
 
       document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2843,13 +2813,13 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
         btn.classList.add('text-slate-400','border-transparent');
       });
 
-      const activeBtn = document.getElementById(`btn-${tabId}`);
+      const activeBtn = document.getElementById(`btn-${targetTab}`);
       if (activeBtn) {
-        if (tabId === 'security' || tabId === 'sandbox' || tabId === 'rollback') {
+        if (targetTab === 'security' || targetTab === 'sandbox' || targetTab === 'rollback') {
           activeBtn.classList.add('active','border-red-500','text-red-400');
-        } else if (tabId === 'master_script') {
+        } else if (targetTab === 'master_script') {
           activeBtn.classList.add('active','border-yellow-400','text-yellow-400');
-        } else if (tabId === 'verification') {
+        } else if (targetTab === 'verification') {
           activeBtn.classList.add('active','border-emerald-500','text-emerald-400');
         } else {
           activeBtn.classList.add('active','border-blue-500','text-slate-100');
