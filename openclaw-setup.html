@@ -865,7 +865,7 @@ npx playwright install</code></pre>
     "providers": {
       "custom-127-0-0-1-11434": {
         "baseUrl": "http://127.0.0.1:11434/v1",
-        "apiKey": "sk-local-********", // Masked for security
+        "apiKey": "sk-****************",
         "api": "openai-completions",
         "models": [
           {
@@ -893,12 +893,13 @@ npx playwright install</code></pre>
   "agents": {
     "defaults": {
       "sandbox": { "mode": "off" },
+      "typingMode": "thinking",
+      "typingIntervalSeconds": 6,
       "model": {
-        "primary": "custom-127-0-0-1-11434/qwen3:32b",
+        "primary": "google/gemini-2.5-flash",
         "fallbacks": [
-          "google/gemini-2.5-flash",
-          "openai/gpt-5-mini",
-          "google/gemini-2.5-pro"
+          "google/gemini-2.5-pro",
+          "openai/gpt-5-mini"
         ]
       },
       "models": {
@@ -913,12 +914,8 @@ npx playwright install</code></pre>
       "workspace": "/Users/fern/sandbox",
       "compaction": { "mode": "safeguard", "reserveTokens": 4000 },
       "maxConcurrent": 1,
-      "subagents": { "maxConcurrent": 1 },
-      "memorySearch": {
-        "enabled": true,
-        "provider": "gemini",
-        "fallback": "none"
-      }
+      "subagents": { "maxConcurrent": 2 },
+      "memorySearch": { "enabled": true, "provider": "gemini", "fallback": "none" }
     }
   },
   "tools": {
@@ -926,7 +923,7 @@ npx playwright install</code></pre>
       "search": {
         "enabled": true,
         "provider": "brave",
-        "apiKey": "BSAhsvxuUKstibN_********" // Masked for security
+        "apiKey": "BSA****************"
       },
       "fetch": { "enabled": true }
     }
@@ -953,7 +950,7 @@ npx playwright install</code></pre>
     "telegram": {
       "enabled": true,
       "dmPolicy": "pairing",
-      "botToken": "8381665033:AAES5mjlMJRrx6oJ********", // Masked for security
+      "botToken": "838***********************",
       "groupPolicy": "allowlist",
       "streaming": "off"
     }
@@ -964,24 +961,39 @@ npx playwright install</code></pre>
     "bind": "loopback",
     "auth": {
       "mode": "token",
-      "token": "5075546bf2abb268531054e576387********" // Masked for security
+      "token": "507********************************"
     },
     "tailscale": { "mode": "off", "resetOnExit": false },
     "nodes": {
       "denyCommands": [
-        "camera.snap", "camera.clip", "screen.record",
-        "calendar.add", "contacts.add", "reminders.add"
+        "system.run",
+        "browser.proxy",
+        "canvas.eval",
+        "canvas.snapshot",
+        "canvas.a2ui.push",
+        "canvas.a2ui.pushJSONL",
+        "canvas.a2ui.reset",
+        "location.get",
+        "contacts.search",
+        "calendar.events",
+        "reminders.list",
+        "photos.latest"
       ]
     }
   },
   "skills": {
     "install": { "nodeManager": "npm" },
     "entries": {
-      "goplaces": { "apiKey": "AIzaSyDgfJkyGTGbN2C93aj********" }, // Masked for security
+      "goplaces": { "apiKey": "AIza**********************" },
       "playwright": {}
     }
   },
-  "plugins": { "entries": { "telegram": { "enabled": true } } },
+  "plugins": {
+    "entries": {
+      "telegram": { "enabled": true },
+      "acpx": { "enabled": true }
+    }
+  },
   "logging": { "file": "/Users/fern/.openclaw/logs/openclaw.log" }
 }</code></pre>
           </div>
