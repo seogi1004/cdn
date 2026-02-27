@@ -1376,30 +1376,30 @@ sudo touch /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
 sudo chown alvin:staff /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
 
 sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist >/dev/null <<'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key><string>com.alvin.ollama</string>
-  <key>UserName</key><string>alvin</string>
-  <key>RunAtLoad</key><true/>
-  <key>KeepAlive</key><true/>
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>OLLAMA_HOST</key><string>0.0.0.0:11434</string>
-    <key>OLLAMA_ORIGINS</key><string>*</string>
-    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/zsh</string>
-    <string>-lc</string>
-    <string>/opt/homebrew/bin/ollama serve</string>
-  </array>
-  <key>StandardOutPath</key><string>/var/log/openclaw/ollama.log</string>
-  <key>StandardErrorPath</key><string>/var/log/openclaw/ollama.err</string>
-</dict>
-</plist>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+  &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;com.alvin.ollama&lt;/string&gt;
+  &lt;key&gt;UserName&lt;/key&gt;&lt;string&gt;alvin&lt;/string&gt;
+  &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
+  &lt;key&gt;KeepAlive&lt;/key&gt;&lt;true/&gt;
+  &lt;key&gt;EnvironmentVariables&lt;/key&gt;
+  &lt;dict&gt;
+    &lt;key&gt;OLLAMA_HOST&lt;/key&gt;&lt;string&gt;0.0.0.0:11434&lt;/string&gt;
+    &lt;key&gt;OLLAMA_ORIGINS&lt;/key&gt;&lt;string&gt;*&lt;/string&gt;
+    &lt;key&gt;PATH&lt;/key&gt;&lt;string&gt;/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&lt;/string&gt;
+  &lt;/dict&gt;
+  &lt;key&gt;ProgramArguments&lt;/key&gt;
+  &lt;array&gt;
+    &lt;string&gt;/bin/zsh&lt;/string&gt;
+    &lt;string&gt;-lc&lt;/string&gt;
+    &lt;string&gt;/opt/homebrew/bin/ollama serve&lt;/string&gt;
+  &lt;/array&gt;
+  &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.log&lt;/string&gt;
+  &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/openclaw/ollama.err&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
 EOF
 sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
@@ -1409,7 +1409,7 @@ sudo mkdir -p /usr/local/sbin
 sudo tee /usr/local/sbin/ollama-watchdog.sh >/dev/null <<'WATCHDOG_EOF'
 #!/bin/bash
 set -euo pipefail
-exec >>/var/log/ollama/ollama-watchdog.log 2>>/var/log/ollama/ollama-watchdog.err
+exec &gt;&gt;/var/log/ollama/ollama-watchdog.log 2&gt;&gt;/var/log/ollama/ollama-watchdog.err
 echo "[$(date -Iseconds)] watchdog start"
 
 #/** @description generate 기반 헬스체크로 "추론 좀비"를 감지하고, 강제 복구 + 워밍업까지 수행한다. */
@@ -1432,32 +1432,32 @@ SERVICE_PLIST="/Library/LaunchDaemons/com.alvin.ollama.plist"
 umask 022
 
 #/** @description 중복 실행 방지 */
-if ! mkdir "${LOCK_DIR}" 2>/dev/null; then
+if ! mkdir "${LOCK_DIR}" 2&gt;/dev/null; then
   exit 0
 fi
-trap 'rmdir "${LOCK_DIR}" >/dev/null 2>&1 || true' EXIT
+trap 'rmdir "${LOCK_DIR}" &gt;/dev/null 2&gt;&1 || true' EXIT
 
 #/** @description 실패 카운트 로드 */
 fail_count=0
 if [[ -f "${FAIL_FILE}" ]]; then
-  fail_count="$(cat "${FAIL_FILE}" 2>/dev/null || echo 0)"
+  fail_count="$(cat "${FAIL_FILE}" 2&gt;/dev/null || echo 0)"
 fi
 if ! [[ "${fail_count}" =~ ^[0-9]+$ ]]; then
   fail_count=0
 fi
 
 #/** @description 추론 헬스체크 */
-if /usr/bin/curl -fsS --max-time "${TIMEOUT_SEC}"   -H 'Content-Type: application/json'   -d "${BODY}"   "${URL}" >/dev/null 2>&1; then
-  echo 0 > "${FAIL_FILE}"
+if /usr/bin/curl -fsS --max-time "${TIMEOUT_SEC}"   -H 'Content-Type: application/json'   -d "${BODY}"   "${URL}" &gt;/dev/null 2&gt;&1; then
+  echo 0 &gt; "${FAIL_FILE}"
   exit 0
 fi
 
 #/** @description 실패 누적 */
 fail_count=$((fail_count + 1))
-echo "${fail_count}" > "${FAIL_FILE}"
+echo "${fail_count}" &gt; "${FAIL_FILE}"
 
 #/** @description 임계치 미도달이면 종료 */
-if (( fail_count < FAIL_THRESHOLD )); then
+if (( fail_count &lt; FAIL_THRESHOLD )); then
   exit 0
 fi
 
@@ -1465,20 +1465,20 @@ fi
 logger -t ollama-watchdog "Generate healthcheck failed ${fail_count}x; hard-recover ${SERVICE_LABEL}"
 
 # (1) runner/serve 포함 프로세스 강제 종료
-/usr/bin/pkill -9 -x ollama >/dev/null 2>&1 || true
+/usr/bin/pkill -9 -x ollama &gt;/dev/null 2&gt;&1 || true
 sleep 2
 
-# (2) job 완전 재로딩(bootout -> bootstrap)으로 launchd 상태까지 리셋
-/bin/launchctl bootout "system/${SERVICE_LABEL}" >/dev/null 2>&1 || true
+# (2) job 완전 재로딩(bootout -&gt; bootstrap)으로 launchd 상태까지 리셋
+/bin/launchctl bootout "system/${SERVICE_LABEL}" &gt;/dev/null 2&gt;&1 || true
 sleep 1
-/bin/launchctl bootstrap system "${SERVICE_PLIST}" >/dev/null 2>&1 || true
-/bin/launchctl kickstart -k "system/${SERVICE_LABEL}" >/dev/null 2>&1 || true
+/bin/launchctl bootstrap system "${SERVICE_PLIST}" &gt;/dev/null 2&gt;&1 || true
+/bin/launchctl kickstart -k "system/${SERVICE_LABEL}" &gt;/dev/null 2&gt;&1 || true
 
 # (3) 워밍업: 짧은 generate가 성공할 때까지 제한된 횟수 재시도
 ok=0
 for i in 1 2 3 4 5; do
   sleep 2
-  if /usr/bin/curl -fsS --max-time 12     -H 'Content-Type: application/json'     -d "${BODY}"     "${URL}" >/dev/null 2>&1; then
+  if /usr/bin/curl -fsS --max-time 12     -H 'Content-Type: application/json'     -d "${BODY}"     "${URL}" &gt;/dev/null 2&gt;&1; then
     ok=1
     break
   fi
@@ -1491,29 +1491,29 @@ else
 fi
 
 #/** @description 카운트 리셋(다시 관찰) */
-echo 0 > "${FAIL_FILE}"
+echo 0 &gt; "${FAIL_FILE}"
 WATCHDOG_EOF
 sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
 sudo tee /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist >/dev/null <<'WATCHDOG_PLIST_EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key><string>com.alvin.ollama.watchdog</string>
-  <key>RunAtLoad</key><true/>
-  <key>StartInterval</key><integer>20</integer>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/bash</string>
-    <string>-lc</string>
-    <string>/usr/local/sbin/ollama-watchdog.sh</string>
-  </array>
-  <key>StandardOutPath</key><string>/var/log/ollama/ollama-watchdog.log</string>
-  <key>StandardErrorPath</key><string>/var/log/ollama/ollama-watchdog.err</string>
-  <key>HardResourceLimits</key>
-  <dict><key>Core</key><integer>0</integer></dict>
-</dict>
-</plist>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+  &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;com.alvin.ollama.watchdog&lt;/string&gt;
+  &lt;key&gt;RunAtLoad&lt;/key&gt;&lt;true/&gt;
+  &lt;key&gt;StartInterval&lt;/key&gt;&lt;integer&gt;20&lt;/integer&gt;
+  &lt;key&gt;ProgramArguments&lt;/key&gt;
+  &lt;array&gt;
+    &lt;string&gt;/bin/bash&lt;/string&gt;
+    &lt;string&gt;-lc&lt;/string&gt;
+    &lt;string&gt;/usr/local/sbin/ollama-watchdog.sh&lt;/string&gt;
+  &lt;/array&gt;
+  &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama-watchdog.log&lt;/string&gt;
+  &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama-watchdog.err&lt;/string&gt;
+  &lt;key&gt;HardResourceLimits&lt;/key&gt;
+  &lt;dict&gt;&lt;key&gt;Core&lt;/key&gt;&lt;integer&gt;0&lt;/integer&gt;&lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
 WATCHDOG_PLIST_EOF
 sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
