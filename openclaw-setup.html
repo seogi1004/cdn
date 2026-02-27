@@ -114,6 +114,22 @@
       width: 100%;
     }
 
+    .master-subtab-btn {
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      color: #cbd5f5;
+    }
+
+    .master-subtab-btn.active {
+      border-color: currentColor;
+      color: #f8fafc;
+    }
+
+    .master-subtab-content { display: none; }
+    .master-subtab-content.active { display: block; }
+
     /* Badge Styling */
     .badge {
       display: inline-flex;
@@ -1198,8 +1214,13 @@ ls -le /Users/Shared | head -n 5</code></pre>
             <p class="text-slate-400 text-sm mt-1">Zero Trust 인프라 구축과 Fern 런처 운영을 한곳에서 보여줍니다.</p>
           </div>
         </div>
+        <nav class="flex gap-4 border-b border-slate-700/60 mb-6">
+          <button type="button" onclick="showMasterSubTab('ms-alvin')" id="msbtn-alvin" class="master-subtab-btn active text-slate-100 border-blue-500">관리자 (Alvin)</button>
+          <button type="button" onclick="showMasterSubTab('ms-fern')" id="msbtn-fern" class="master-subtab-btn text-slate-400">Fern (Agent)</button>
+        </nav>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div id="ms-alvin" class="master-subtab-content space-y-8 active" style="display:block;">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
             <h3 class="text-lg font-semibold text-slate-100 mb-2">Alvin 인프라 서비스</h3>
             <p class="text-sm text-slate-400">PF/ACL/APFS 격리와 Ollama LaunchDaemon을 관리자 계정에서 설정합니다.</p>
@@ -1230,7 +1251,8 @@ ls -le /Users/Shared | head -n 5</code></pre>
           </div>
         </div>
 
-        <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
+        
+          <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8 mt-2">
           <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항</h3>
           <p class="text-sm text-slate-300 mb-2">이 스크립트는 관리자(alvin) 계정으로 OS 격리, PF/ACL/APFS, Ollama 데몬 구성에 집중합니다.</p>
           <p class="text-sm text-slate-300">Fern 런처(run-openclaw.sh)는 아래 별도 섹션에 있으며 Fern 계정에서 LaunchAgent 기반으로 자동 기동됩니다.</p>
@@ -1498,7 +1520,8 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog
 
 echo "✅ 인프라 환경 및 Ollama 와치독 구축 완료!"</code></pre>
         </div>
-
+        </div>
+        <div id="ms-fern" class="master-subtab-content space-y-8" style="display:none;">
         <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
           <h3 class="text-lg font-semibold text-blue-300 mb-2">Fern 런처 (LaunchAgent)</h3>
           <p class="text-sm text-slate-300 mb-2">Fern 계정에서 LaunchAgent를 등록하여 OpenClaw Gateway/Browser를 자동 생성, 재시작, 상태 검증합니다.</p>
@@ -2788,11 +2811,11 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
     <footer class="mt-20 py-12 border-t border-slate-800/50 text-center text-slate-500 text-sm">
       <p>© 2026 Alvin's AI Infrastructure | OpenClaw Setup Guide</p>
     </footer>
-  </div>
 
   <!-- Toast -->
   <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 glass px-6 py-3 rounded-full text-sm font-semibold opacity-0 transition-opacity duration-300 pointer-events-none z-50 text-emerald-400">
     Copied to clipboard!
+  </div>
   </div>
 
   <script>
@@ -2882,6 +2905,29 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       }
     }
 
+    function showMasterSubTab(tabId) {
+      let target = tabId;
+      if (!document.getElementById(target)) {
+        target = 'ms-alvin';
+      }
+      localStorage.setItem('openclaw_masterSubTab', target);
+      document.querySelectorAll('.master-subtab-content').forEach(el => {
+        el.style.display = 'none';
+      });
+      const targetContent = document.getElementById(target);
+      if (targetContent) targetContent.style.display = 'block';
+      document.querySelectorAll('.master-subtab-btn').forEach(btn => {
+        btn.classList.remove('active','border-blue-500','text-slate-100');
+        btn.classList.add('text-slate-400');
+      });
+      const idx = target.split('-')[1];
+      const activeBtn = document.getElementById(`msbtn-${idx}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active','border-blue-500','text-slate-100');
+        activeBtn.classList.remove('text-slate-400');
+      }
+    }
+
     function showCheckTab(tabId) {
       localStorage.setItem('openclaw_activeCheckTab', tabId);
       document.querySelectorAll('.check-tab-content').forEach(el => {
@@ -2910,7 +2956,9 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       showTab(localStorage.getItem('openclaw_activeTab') || 'setup');
       showFernTab(localStorage.getItem('openclaw_activeFernTab') || 'fern-setup');
       showCheckTab(localStorage.getItem('openclaw_activeCheckTab') || 'check-list');
+      showMasterSubTab(localStorage.getItem('openclaw_masterSubTab') || 'ms-alvin');
     };
   </script>
+  </div>
 </body>
 </html>
