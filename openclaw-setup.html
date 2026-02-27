@@ -1081,9 +1081,9 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
               <h2 class="text-2xl font-bold mb-6 text-emerald-400 flex items-center gap-3">
                 🛡️ 핵심 4: PF 네트워크 격리 (Anchor 상세) <span class="badge badge-required">필수</span>
               </h2>
-              <div class="bg-red-950/20 p-4 rounded-2xl mb-6 border border-red-900/30">
-                <p class="text-sm text-red-300 font-bold flex items-center">
-                  💡 Fern PF Anchor: IPv4/IPv6 이중 격리 <span class="badge badge-required ml-2">필수</span>
+              <div class="bg-indigo-950/20 p-4 rounded-2xl mb-6 border border-indigo-900/30">
+                <p class="text-sm text-indigo-300 font-bold flex items-center">
+                  💡 Fern PF Anchor: LAN 통제 캡슐화 및 DNS 최적화 <span class="badge badge-required ml-2">v6.3</span>
                 </p>
               </div>
       
@@ -1093,56 +1093,49 @@ load anchor "fern" from "/etc/pf.anchors/fern"</code></pre>
 sudo tee /etc/pf.anchors/fern &lt;&lt; 'EOF'
 # ==========================================
 # Fern PF Anchor
-# 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결)
+# 목적: 소스코드 유출 경로 완벽 봉쇄 (IPv6 맹점 해결 &amp; LAN 통제 캡슐화)
 # ==========================================
-      
+
+# [0] LAN Custom Rules (OpenClaw)
+#/** @description LAN(192.168/16)에서 Ollama(11434)만 인바운드 허용하고, OpenClaw/Chrome Debug 포트는 차단한다. */
+pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state
+block return in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }
+
 # [1] lo0 전면 허용 (Chrome IPC &amp; Playwright 로컬 통신 보장)
 pass quick on lo0 user fern keep state
 
-# [2] VPN 인터페이스 전면 차단
-block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
+# [2] ★ DNS 예외 허용 (목적지 상관없이 53번 포트 전면 허용) ★
+#/** @description 사설망 차단보다 위에 배치하여 공유기(내부망) DNS 타임아웃을 완벽 방지한다. */
+pass out quick inet proto { tcp, udp } from any to any port 53 user fern keep state
 
-# [3] 사설망/사내망 IPv4 완전 차단 (DNS 예외 없음)
-block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+# [3] VPN 인터페이스 전면 차단
+block return quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
 
-# [4] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
-block drop out quick inet6 from any to any user fern
+# [4] 사설망/사내망 IPv4 완전 차단 (DNS 예외는 위에서 처리)
+block return quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
 
-# [5] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
+# [5] IPv6 전면 차단 (가장 안전한 Zero Trust - 우회 유출 원천 봉쇄)
+block return out quick inet6 from any to any user fern
+
+# [6] 외부 통신 허용: 웹 트래픽 전용 (IPv4 80/443 TCP, 443 UDP)
 pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
 pass out quick inet proto udp from any to any port 443 user fern keep state
 
-# [6] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
-block drop out quick inet from any to any user fern
+# [7] 그 외 fern의 모든 IPv4 외부 트래픽 원천 차단 (최종 방어선)
+block return out quick inet from any to any user fern
 EOF
       
-# 2. PF 규칙 적용 및 앵커 로드
+# 2. PF 규칙 적용 및 앵커 로드 (pf.conf)
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
   echo 'anchor "fern"' | sudo tee -a /etc/pf.conf &gt;/dev/null
   echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf &gt;/dev/null
 fi
 
-# 3. [v6.2] LAN 접근 규칙: Ollama만 허용, OpenClaw/디버깅 포트는 LAN 차단
-# (네트워크 전환 버그를 막기 위해 IFACE 지정 없이 IP 대역으로만 통제)
-PF_RULE_TAG="# --- LAN Custom Rules (v6.2) ---"
-PF_RULE_ALLOW="pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state"
-PF_RULE_BLOCK="block drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }"
-
-# 기존 LAN 규칙 찌꺼기 완벽 정리 (키워드 기반 삭제로 macOS sed 호환성 확보)
-sudo sed -i '' '/LAN Ollama Access/d' /etc/pf.conf 2&gt;/dev/null || true
-sudo sed -i '' '/LAN OpenClaw/d' /etc/pf.conf 2&gt;/dev/null || true
-sudo sed -i '' '/LAN Custom Rules/d' /etc/pf.conf 2&gt;/dev/null || true
-sudo sed -i '' '/port 11434/d' /etc/pf.conf 2&gt;/dev/null || true
-sudo sed -i '' '/port { 18789, 18792, 9222 }/d' /etc/pf.conf 2&gt;/dev/null || true
-
-# 새로운 v6.2 규칙 등록
-sudo sh -c "printf '\n%s\n%s\n%s\n' '$PF_RULE_TAG' '$PF_RULE_ALLOW' '$PF_RULE_BLOCK' &gt;&gt; /etc/pf.conf"
-
-# 4. 방화벽 재적용 및 활성화
+# 3. 방화벽 재적용 및 활성화
 sudo pfctl -vnf /etc/pf.conf &amp;&amp; sudo pfctl -f /etc/pf.conf
 sudo pfctl -E 2&gt;/dev/null || true
 
-echo "✅ PF 적용 완료: LAN 대역 Ollama(11434) 허용 / 18789, 18792, 9222 LAN 접근 차단"</code></pre>
+echo "✅ PF 적용 완료: LAN 통제 캡슐화 및 DNS 예외 허용 (v6.3)"</code></pre>
               </div>      </div>
     </div>
 
@@ -1327,32 +1320,39 @@ if ! sudo grep -q "^DenyUsers fern" /etc/ssh/sshd_config; then
   echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
 fi
 
-# [5/6] PF 방화벽 및 네트워크 노출 설정
+# [5/6] PF 방화벽 및 네트워크 노출 설정 (Anchor 캡슐화)
 sudo tee /etc/pf.anchors/fern <<'EOF' >/dev/null
+# [0] LAN Custom Rules
+pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state
+block return in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }
+
+# [1] lo0 로컬 통신
 pass quick on lo0 user fern keep state
-block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
-block drop quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
-block drop out quick inet6 from any to any user fern
+
+# [2] DNS 예외 허용 (타임아웃 방지)
+pass out quick inet proto { tcp, udp } from any to any port 53 user fern keep state
+
+# [3] VPN 인터페이스 전면 차단
+block return quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
+
+# [4] 사설망 IPv4 차단
+block return quick inet proto { tcp, udp } from any to { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } user fern
+
+# [5] IPv6 전면 차단
+block return out quick inet6 from any to any user fern
+
+# [6] 외부 웹 트래픽 허용
 pass out quick inet proto tcp from any to any port { 80, 443 } user fern keep state
 pass out quick inet proto udp from any to any port 443 user fern keep state
-block drop out quick inet from any to any user fern
+
+# [7] 최종 방어선
+block return out quick inet from any to any user fern
 EOF
 
 if ! grep -q 'anchor "fern"' /etc/pf.conf; then
   echo 'anchor "fern"' | sudo tee -a /etc/pf.conf >/dev/null
   echo 'load anchor "fern" from "/etc/pf.anchors/fern"' | sudo tee -a /etc/pf.conf >/dev/null
 fi
-
-PF_BEGIN="# --- LAN Custom Rules (OpenClaw) BEGIN ---"
-PF_END="# --- LAN Custom Rules (OpenClaw) END ---"
-PF_BODY=$'pass in quick inet proto tcp from 192.168.0.0/16 to any port 11434 keep state\nblock drop in quick inet proto tcp from 192.168.0.0/16 to any port { 18789, 18792, 9222 }'
-sudo perl -0777 -i -pe "s/\n\Q${PF_BEGIN}\E.*?\Q${PF_END}\E\n/\n/s" /etc/pf.conf 2>/dev/null || true
-sudo sh -c "cat >> /etc/pf.conf <<LANEOF
-
-${PF_BEGIN}
-${PF_BODY}
-${PF_END}
-LANEOF"
 sudo pfctl -f /etc/pf.conf && sudo pfctl -E || true
 
 # [6/6] Ollama 데몬 유지 (24/7) + 로그 세팅
