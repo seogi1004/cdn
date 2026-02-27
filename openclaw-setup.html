@@ -2064,385 +2064,30 @@ ls -l ~/sandbox/logs/npm-auto-update.log</code></pre>
     <!-- 8. Maintenance & Monitoring Tab -->
     <div id="maintenance" class="tab-content space-y-6">
       
-      <!-- 👑 운영 주체별 관리 체계 (Admin vs User) -->
+      <!-- 👑 운영 주체별 관리 체계 -->
       <div class="glass p-8 rounded-[2rem] border-l-4 border-indigo-500 shadow-xl">
         <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
           👑 운영 주체별 관리 체계
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Admin: LaunchDaemon -->
           <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
             <p class="text-xs font-bold text-indigo-300 uppercase tracking-widest mb-2">Admin Mode (Daemon)</p>
             <h3 class="text-lg font-bold text-slate-100 mb-3">Ollama 서버</h3>
             <p class="text-xs text-slate-400 mb-4 leading-relaxed">관리자(alvin) 권한으로 24/7 구동되는 시스템 서비스입니다.</p>
             <ul class="text-[11px] text-slate-300 space-y-2">
-              <li class="flex gap-2"><span>•</span> <span><strong>경로:</strong> /Library/LaunchDaemons/</span></li>
-              <li class="flex gap-2"><span>•</span> <span><strong>권한:</strong> root / sudo 필요</span></li>
-              <li class="flex gap-2"><span>•</span> <span><strong>특징:</strong> 로그인 여부와 관계없이 상시 구동</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>경로:</strong> /Library/LaunchDaemons/com.alvin.ollama.plist</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>권한:</strong> root / sudo 필요 (로그는 alvin 소유)</span></li>
             </ul>
           </div>
-          <!-- User: LaunchAgent -->
           <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
             <p class="text-xs font-bold text-emerald-300 uppercase tracking-widest mb-2">User Mode (Agent)</p>
             <h3 class="text-lg font-bold text-slate-100 mb-3">Fern 에이전트</h3>
             <p class="text-xs text-slate-400 mb-4 leading-relaxed">사용자(fern) 세션에서 GUI 브라우저와 연동되는 개인 서비스입니다.</p>
             <ul class="text-[11px] text-slate-300 space-y-2">
-              <li class="flex gap-2"><span>•</span> <span><strong>경로:</strong> ~/Library/LaunchAgents/</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>런처:</strong> ~/run-openclaw.sh (LaunchAgent 관리)</span></li>
               <li class="flex gap-2"><span>•</span> <span><strong>권한:</strong> fern 계정 (sudo 불필요)</span></li>
-              <li class="flex gap-2"><span>•</span> <span><strong>특징:</strong> GUI 세션 로그인 시 자동 시작</span></li>
             </ul>
           </div>
-        </div>
-      </div>
-
-      <!-- ⚡ Quick Management & Shortcuts -->
-      <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500 shadow-xl">
-        <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-3">
-          ⚡ 빠른 관리 & 바로가기
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <!-- Quick Manual Start -->
-          <div class="bg-blue-500/5 p-6 rounded-2xl border border-blue-500/20 flex flex-col justify-between">
-            <div>
-              <p class="font-bold text-blue-300 mb-2 flex items-center gap-2">
-                🚀 에이전트 시작/종료
-              </p>
-              <p class="text-xs text-slate-400 mb-4">LaunchAgent 환경에서는 run-openclaw.sh가 런처를 제어합니다.</p>
-            </div>
-            <div class="code-block text-[10px] p-4">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 시작 (또는 갱신)
-./run-openclaw.sh start
-
-# 종료 (재시작 중지)
-./run-openclaw.sh stop</code></pre>
-            </div>
-          </div>
-
-          <!-- Browser Restart -->
-          <div class="bg-indigo-500/5 p-6 rounded-2xl border border-indigo-500/20 flex flex-col justify-between">
-            <div>
-              <p class="font-bold text-indigo-300 mb-2 flex items-center gap-2">
-                🌐 대시보드 열기
-              </p>
-              <p class="text-xs text-slate-400 mb-4">대시보드와 크롬을 연결합니다.</p>
-            </div>
-            <div class="code-block text-[10px] p-4">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Fern 계정 터미널에서 실행
-openclaw dashboard</code></pre>
-            </div>
-          </div>
-
-          <!-- Config Change -->
-          <div class="bg-amber-500/5 p-6 rounded-2xl border border-amber-500/20 flex flex-col justify-between">
-            <div>
-              <p class="font-bold text-amber-300 mb-2 flex items-center gap-2">
-                ⚙️ 설정 변경
-              </p>
-              <p class="text-xs text-slate-400 mb-4">설정 수정 후 에이전트를 재시작합니다.</p>
-            </div>
-            <div class="code-block text-[10px] p-4">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 설정 수정 후 재시작
-vi ~/.openclaw/openclaw.json
-./run-openclaw.sh restart</code></pre>
-            </div>
-          </div>
-
-          <!-- Quick Update -->
-          <div class="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20">
-            <p class="font-bold text-emerald-300 mb-2 flex items-center gap-2">
-              📦 업데이트 및 확인
-            </p>
-            <div class="space-y-3">
-              <p class="text-[10px] text-slate-400">수동 업데이트 및 자동화 로그 확인</p>
-              <div class="code-block text-[10px] p-4">
-                <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-                <pre><code># 수동 업데이트
-npm update -g openclaw
-
-# 자동 업데이트 로그 확인
-tail -f ~/sandbox/logs/npm-auto-update.log</code></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Management Tips -->
-        <div class="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-6">
-          <h3 class="text-sm font-bold text-slate-200 mb-3 flex items-center gap-2">💡 관리 팁</h3>
-          <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
-            <li>NPM 업데이트는 **관리자 권한(sudo)**이 필요하며, 완료 후 데몬을 재시작해야 반영됩니다.</li>
-            <li>서비스 상태 확인 시 <code class="bg-black/30 px-1 rounded">sudo -u fern</code>을 사용하여 에이전트 계정의 컨텍스트를 조회하세요.</li>
-            <li>브라우저 제어 이슈 발생 시 <code class="bg-black/30 px-1 rounded">openclaw status</code>에서 <strong>Relay</strong> 연결 상태를 점검하세요.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="glass p-8 rounded-[2rem] border-l-4 border-emerald-500 shadow-xl mb-8">
-        <h2 class="text-2xl font-bold mb-4 text-emerald-400 flex items-center gap-3">
-          🔄 NPM 자동 업데이트 (LaunchAgent)
-        </h2>
-        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
-          매일 새벽 3시, LaunchAgent가 자동으로 전역 NPM 패키지를 업데이트합니다. <br class="hidden md:block">
-          마스터 스크립트를 통해 이미 설치되었으며, 아래 명령어로 상태를 관리할 수 있습니다.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-blue-400 uppercase tracking-wider">업데이트 상태 및 로그 확인</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 최근 업데이트 로그 확인
-tail -n 50 ~/sandbox/logs/npm-auto-update.log
-
-# LaunchAgent 등록 확인
-launchctl list | grep npmupdate</code></pre>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-red-400 uppercase tracking-wider">수동 제어</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 즉시 업데이트 실행
-~/npm-auto-update.sh run
-
-# 자동 업데이트 비활성화 (제거)
-~/npm-auto-update.sh remove
-
-# 자동 업데이트 활성화 (설치)
-~/npm-auto-update.sh install</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500 shadow-xl mb-8">
-        <h2 class="text-2xl font-bold mb-4 text-blue-400 flex items-center gap-3">
-          💡 새벽 자동화 (Self-Healing)
-        </h2>
-        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
-          브라우저 제어 자동화는 장시간 가동 시 메모리 누수나 프로세스 좀비화가 발생할 수 있습니다. <br class="hidden md:block">
-          매일 새벽 1회 자동 재시작을 통해 스스로 업데이트를 반영하고 쾌적한 상태를 유지하도록 설정하세요.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-emerald-400 uppercase tracking-wider">1단계: 재시작 래퍼 스크립트 생성</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>cat &gt; ~/daily-restart.sh &lt;&lt; 'EOF'
-#!/bin/bash
-# daily-restart.sh - Fern Agent Self-Healing Script
-
-# 1. 기존 에이전트 종료
-~/run-openclaw.sh stop
-sleep 2
-
-# 2. NVM 로드 및 OpenClaw 자동 업데이트
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh"
-npm update -g openclaw
-
-# 3. 에이전트 새로 시작
-~/run-openclaw.sh start
-echo "[$(date)] Daily restart and update completed." &gt;&gt; ~/sandbox/logs/self-healing.log
-EOF
-chmod 700 ~/daily-restart.sh</code></pre>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-blue-400 uppercase tracking-wider">2단계: Crontab 등록 (새벽 4시)</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># crontab 편집 (fern 계정에서 실행)
-crontab -e
-
-# 아래 내용 추가 (매일 새벽 4시 실행)
-0 4 * * * /Users/fern/daily-restart.sh &gt; /dev/null 2&gt;&amp;1</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🛡️ Ollama Watchdog (Auto-Recovery) -->
-      <div class="glass p-8 rounded-[2rem] border-l-4 border-amber-500 shadow-xl mb-8">
-        <h2 class="text-2xl font-bold mb-4 text-amber-400 flex items-center gap-3">
-          🛡️ Ollama 워치독 (자동 복구 시스템)
-        </h2>
-        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
-          Ollama 프로세스는 살아있으나 응답이 없는 '좀비 상태'를 감지하고 자동으로 서비스를 재시작합니다. <br>
-          20초 간격으로 헬스체크를 수행하며, 3회 연속 실패 시 강제 복구 시퀀스를 가동합니다.
-        </p>
-
-        <div class="grid grid-cols-1 gap-6">
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-amber-300 uppercase tracking-wider">1단계: 워치독 스크립트 생성 (/usr/local/sbin/ollama-watchdog.sh)</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># [1] 디렉토리 준비
-sudo mkdir -p /usr/local/sbin /var/log/ollama
-sudo touch /var/log/ollama/ollama-watchdog.log /var/log/ollama/ollama-watchdog.err
-sudo chown -R root:wheel /var/log/ollama
-sudo chmod 644 /var/log/ollama/ollama-watchdog.*
-
-# [2] 스크립트 작성
-sudo tee /usr/local/sbin/ollama-watchdog.sh &lt;&lt; 'EOF'
-#!/bin/bash
-#/**
-# * Ollama Inference-based Healthcheck &amp; Recovery Watchdog
-# * 대상: http://192.168.0.127:11434/api/generate
-# */
-
-TARGET_URL="http://192.168.0.127:11434/api/generate"
-FAIL_COUNT_FILE="/var/run/ollama-watchdog.failcount"
-LOCK_DIR="/var/run/ollama-watchdog.lock"
-MAX_FAILURES=3
-
-#/** 중복 실행 방지: 락 디렉토리가 존재하면 종료 */
-if ! mkdir "$LOCK_DIR" 2&gt;/dev/null; then
-    exit 0
-fi
-trap 'rm -rf "$LOCK_DIR"' EXIT
-
-#/** 헬스체크 수행: /api/generate 호출로 실질 추론 상태 점검 (5초 타임아웃) */
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-    --max-time 5 -X POST "$TARGET_URL" \
-    -d '{"model": "qwen3:14b", "prompt": "health", "stream": false}')
-
-if [ "$HTTP_CODE" -eq 200 ]; then
-    #/** 성공 시: 기존 실패 카운트 파일을 0으로 초기화 */
-    echo 0 &gt; "$FAIL_COUNT_FILE"
-    exit 0
-else
-    #/** 실패 시: 실패 카운트 증가 및 기록 */
-    CUR_FAIL=$(cat "$FAIL_COUNT_FILE" 2&gt;/dev/null || echo 0)
-    CUR_FAIL=$((CUR_FAIL + 1))
-    echo "$CUR_FAIL" &gt; "$FAIL_COUNT_FILE"
-    
-    echo "[$(date)] Inference check failed (HTTP: $HTTP_CODE, Count: $CUR_FAIL)" &gt;&gt; /var/log/ollama/ollama-watchdog.log
-
-    #/** 임계치 도달 확인: 3회 이상 실패 시 복구 작업 개시 */
-    if [ "$CUR_FAIL" -ge "$MAX_FAILURES" ]; then
-        echo "[$(date)] CRITICAL: $MAX_FAILURES failures reached. Starting recovery..." &gt;&gt; /var/log/ollama/ollama-watchdog.log
-        
-        #/** 1차 시도: launchctl kickstart로 서비스 강제 재시작 */
-        sudo launchctl kickstart -k system/com.alvin.ollama
-        sleep 5
-        
-        #/** 2차 시도: 여전히 무응답일 경우 pkill로 프로세스 강제 종료 (최후 수단) */
-        CHECK_AGAIN=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "http://192.168.0.127:11434/api/version")
-        if [ "$CHECK_AGAIN" -ne 200 ]; then
-            sudo pkill -9 -x ollama
-        fi
-        
-        #/** 복구 후 카운트 리셋 */
-        echo 0 &gt; "$FAIL_COUNT_FILE"
-        echo "[$(date)] Recovery attempt completed." &gt;&gt; /var/log/ollama/ollama-watchdog.log
-    fi
-fi
-EOF
-
-sudo chown root:wheel /usr/local/sbin/ollama-watchdog.sh
-sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh</code></pre>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-amber-300 uppercase tracking-wider">2단계: LaunchDaemon 등록 (/Library/LaunchDaemons/com.alvin.ollama.watchdog.plist)</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>sudo tee /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist &lt;&lt; 'EOF'
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
-&lt;plist version="1.0"&gt;
-&lt;dict&gt;
-    &lt;key&gt;Label&lt;/key&gt;
-    &lt;string&gt;com.alvin.ollama.watchdog&lt;/string&gt;
-    &lt;key&gt;ProgramArguments&lt;/key&gt;
-    &lt;array&gt;
-        &lt;string&gt;/bin/bash&lt;/string&gt;
-        &lt;string&gt;-lc&lt;/string&gt;
-        &lt;string&gt;/usr/local/sbin/ollama-watchdog.sh&lt;/string&gt;
-    &lt;/array&gt;
-    &lt;key&gt;RunAtLoad&lt;/key&gt;
-    &lt;true/&gt;
-    &lt;key&gt;StartInterval&lt;/key&gt;
-    &lt;integer&gt;20&lt;/integer&gt;
-    &lt;key&gt;StandardOutPath&lt;/key&gt;
-    &lt;string&gt;/var/log/ollama/ollama-watchdog.log&lt;/string&gt;
-    &lt;key&gt;StandardErrorPath&lt;/key&gt;
-    &lt;string&gt;/var/log/ollama/ollama-watchdog.err&lt;/string&gt;
-    &lt;key&gt;SoftResourceLimits&lt;/key&gt;
-    &lt;dict&gt;
-        &lt;key&gt;Core&lt;/key&gt;
-        &lt;integer&gt;0&lt;/integer&gt;
-    &lt;/dict&gt;
-&lt;/dict&gt;
-&lt;/plist&gt;
-EOF
-
-sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
-
-# 서비스 활성화
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></pre>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-emerald-400 uppercase tracking-wider">3단계: 관리 및 상태 확인</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># [상태 확인]
-# 워치독은 주기 실행 후 종료되므로 'not running'으로 보일 수 있으나 정상입니다.
-sudo launchctl print system/com.alvin.ollama.watchdog
-
-# [로그 모니터링]
-tail -f /var/log/ollama/ollama-watchdog.log
-
-# [수동 즉시 실행]
-sudo launchctl kickstart -k system/com.alvin.ollama.watchdog
-
-# [서비스 중지 및 제거]
-sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></pre>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-blue-400 uppercase tracking-wider">4단계: 권한 일괄 정리 및 초기화 (Standard)</p>
-            <div class="code-block text-[10px]">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>#/** [1] 스크립트 및 설정 파일 권한 고정 (root) */
-sudo chown root:wheel /usr/local/sbin/ollama-watchdog.sh /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
-sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
-
-#/** [2] 워치독 로그 권한 고정 (root) */
-sudo touch /var/log/ollama/ollama-watchdog.log /var/log/ollama/ollama-watchdog.err
-sudo chown root:wheel /var/log/ollama/ollama-watchdog.*
-sudo chmod 644 /var/log/ollama/ollama-watchdog.*
-
-#/** [3] 상태 파일 및 락 초기화 (필요 시) */
-sudo rm -f /var/run/ollama-watchdog.failcount /var/run/ollama-watchdog.lock
-
-#/** [4] 완전 재등록 */
-sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist 2&gt;/dev/null || true
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></pre>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-amber-950/20 border border-amber-800/40 rounded-2xl p-5 mt-6">
-          <h3 class="text-sm font-bold text-amber-300 mb-2 flex items-center gap-2">⚠️ 주의 사항</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Watchdog Job은 20초마다 스크립트를 실행하고 작업을 마친 뒤 즉시 종료되는 방식입니다. <br>
-            따라서 &lt;code&gt;launchctl print&lt;/code&gt; 커맨드 결과에서 &lt;strong&gt;state = already loaded&lt;/strong&gt; 혹은 &lt;strong&gt;not running&lt;/strong&gt;으로 표시되더라도 설정된 간격(StartInterval)에 맞춰 정상 작동합니다.
-          </p>
         </div>
       </div>
 
@@ -2453,75 +2098,45 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog
         </h2>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Deep Inspection -->
           <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
             <p class="font-bold text-slate-100 mb-3 flex items-center gap-2">🩺 정밀 진단 및 복구</p>
             <div class="space-y-4">
               <div>
                 <p class="text-[11px] text-slate-400 mb-1.5">시스템 환경, 권한, 구성 자동 점검 및 수리</p>
-                <div class="code-block text-[10px] p-3">
-                  <pre><code>sudo -u fern openclaw doctor --repair</code></pre>
-                </div>
+                <div class="code-block text-[10px] p-3"><pre><code>sudo -u fern openclaw doctor --repair</code></pre></div>
               </div>
               <div>
                 <p class="text-[11px] text-slate-400 mb-1.5">실시간 로그 모니터링 (트러블슈팅 1순위)</p>
-                <div class="code-block text-[10px] p-3">
-                  <pre><code>sudo -u fern openclaw logs --follow</code></pre>
-                </div>
-              </div>
-              <div>
-                <p class="text-[11px] text-slate-400 mb-1.5">게이트웨이/세션/보안 심층 점검</p>
-                <div class="code-block text-[10px] p-3">
-                  <pre><code>sudo -u fern openclaw status --deep</code></pre>
-                </div>
+                <div class="code-block text-[10px] p-3"><pre><code>sudo -u fern openclaw logs --follow</code></pre></div>
               </div>
             </div>
           </div>
 
-          <!-- AI Engine & Security -->
           <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
             <p class="font-bold text-slate-100 mb-3 flex items-center gap-2">🛡️ AI 엔진 및 보안 감사</p>
             <div class="space-y-4">
               <div>
                 <p class="text-[11px] text-slate-400 mb-1.5">모델/프로바이더(Ollama, Gemini) 활성 상태</p>
-                <div class="code-block text-[10px] p-3">
-                  <pre><code>sudo -u fern openclaw models status</code></pre>
-                </div>
+                <div class="code-block text-[10px] p-3"><pre><code>sudo -u fern openclaw models status</code></pre></div>
               </div>
               <div>
                 <p class="text-[11px] text-slate-400 mb-1.5">보안 설정/권한/네트워크 라우팅 정밀 감사</p>
-                <div class="code-block text-[10px] p-3">
-                  <pre><code>sudo -u fern openclaw security audit --deep</code></pre>
-                </div>
-              </div>
-              <div>
-                <p class="text-[11px] text-slate-400 mb-1.5">로컬/외부 신규 모델 스캔 및 갱신</p>
-                <div class="code-block text-[10px] p-3">
-                  <pre><code>sudo -u fern openclaw models scan</code></pre>
-                </div>
+                <div class="code-block text-[10px] p-3"><pre><code>sudo -u fern openclaw security audit --deep</code></pre></div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="glass rounded-2xl overflow-hidden">
-        <nav class="flex border-b border-slate-700/60">
-          <button type="button" onclick="showMaintTab('maint-ollama')" id="mbtn-maint-ollama" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦙 Ollama 서버</button>
-          <button type="button" onclick="showMaintTab('maint-fernbot')" id="mbtn-maint-fernbot" class="maint-tab-btn px-6 py-3.5 text-sm font-semibold text-slate-400 border-b-2 border-transparent transition-all whitespace-nowrap flex items-center gap-2">🦅 FernBot (OpenClaw)</button>
-        </nav>
-
-        <div id="maint-ollama" class="maint-tab-content p-6 space-y-5">
-          <p class="text-xs text-slate-500">아래 모든 절차는 <strong class="text-slate-300">관리자(Alvin) 계정</strong>에서 sudo 권한으로 진행합니다.</p>
-          
-          <div class="bg-blue-950/20 p-5 rounded-xl border border-blue-800/40">
-            <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">🚀 최종 운영형 LaunchDaemon 설정 (Hardened)</h3>
-            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-              &lt;strong&gt;핵심:&lt;/strong&gt; 환경변수를 ProgramArguments에서 직접 &lt;code&gt;export&lt;/code&gt;하여 주입하고, 로그 파일 권한을 UserName(&lt;code&gt;alvin&lt;/code&gt;)에 맞춰 설정합니다.
-            </p>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># [1] 기존 서비스 중지
+      <!-- 🦙 Ollama Core Operations -->
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500 shadow-xl space-y-6">
+        <h2 class="text-2xl font-bold text-blue-400 flex items-center gap-3">🦙 Ollama 핵심 운영</h2>
+        
+        <div class="bg-blue-950/20 p-5 rounded-xl border border-blue-800/40">
+          <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">🚀 최종 운영형 LaunchDaemon 설정 (Hardened)</h3>
+          <div class="code-block text-xs">
+            <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            <pre><code># [1] 기존 서비스 중지
 sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist 2&gt;/dev/null || true
 
 # [2] 확정형 plist 작성 (export 강제 버전)
@@ -2545,10 +2160,7 @@ sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist &lt;&lt; 'EOF'
     &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama.log&lt;/string&gt;
     &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama.err&lt;/string&gt;
     &lt;key&gt;HardResourceLimits&lt;/key&gt;
-    &lt;dict&gt;
-        &lt;key&gt;Core&lt;/key&gt;&lt;integer&gt;0&lt;/integer&gt;
-        &lt;key&gt;NumberOfFiles&lt;/key&gt;&lt;integer&gt;8192&lt;/integer&gt;
-    &lt;/dict&gt;
+    &lt;dict&gt;&lt;key&gt;Core&lt;/key&gt;&lt;integer&gt;0&lt;/integer&gt;&lt;key&gt;NumberOfFiles&lt;/key&gt;&lt;integer&gt;8192&lt;/integer&gt;&lt;/dict&gt;
 &lt;/dict&gt;
 &lt;/plist&gt;
 EOF
@@ -2556,175 +2168,99 @@ EOF
 # [3] 권한 설정 및 재등록
 sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist
 sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
-            </div>
           </div>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
-            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">📂 Ollama 로그 권한 정책 (필수)</h3>
-            <p class="text-xs text-slate-400 mb-3 leading-relaxed">
-              UserName=alvin인 데몬은 로그 파일에 쓰기 권한이 없으면 즉시 종료(EX_CONFIG)됩니다.
-            </p>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>#/** [1] 로그 디렉토리 권한을 alvin에게 부여 */
-sudo mkdir -p /var/log/ollama
+            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">📂 로그 권한 정책</h3>
+            <div class="code-block text-[10px]">
+              <pre><code>sudo mkdir -p /var/log/ollama
 sudo chown -R alvin:staff /var/log/ollama
 sudo chmod 755 /var/log/ollama
-
-#/** [2] 개별 로그 파일 권한 설정 */
 sudo touch /var/log/ollama/ollama.log /var/log/ollama/ollama.err
 sudo chown alvin:staff /var/log/ollama/ollama.*
-sudo chmod 644 /var/log/ollama/ollama.*
-
-#/** [3] 서비스 활성화 */
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
             </div>
           </div>
-
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
-            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2">🚨 트러블슈팅: EX_CONFIG(78) 및 포트 미리스닝</h3>
-            <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">
-              &lt;strong&gt;현상:&lt;/strong&gt; &lt;code&gt;spawn scheduled&lt;/code&gt; 반복 및 &lt;code&gt;last exit code = 78&lt;/code&gt; 발생 시 아래를 점검하세요.
-            </p>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>#/** [1] 진단 명령 */
+            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2">🚨 트러블슈팅 (EX_CONFIG)</h3>
+            <div class="code-block text-[10px]">
+              <pre><code># 상태 진단
 sudo launchctl print system/com.alvin.ollama | egrep "state =|pid =|last exit code"
+# 포트 확인
 sudo lsof -nP -iTCP:11434 -sTCP:LISTEN
-ls -lah /var/log/ollama
-
-#/** [2] 해결: 로그 권한 교정 후 재로딩 */
-sudo chown -R alvin:staff /var/log/ollama
-sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
+# 강제 재시작
 sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
-            </div>
-          </div>
-
-          <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
-            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">✅ 최종 운영 검증 프로토콜</h3>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 1단계: launchd 상태 확인 (state=running 확인)
-sudo launchctl print system/com.alvin.ollama | egrep "state =|pid =|last exit code"
-
-# 2단계: 네트워크 바인딩 확인 (11434 LISTEN)
-sudo lsof -nP -iTCP:11434 -sTCP:LISTEN
-
-# 3단계: 기본 API 및 모델 목록 확인
-curl -s http://localhost:11434/api/version
-curl -s http://localhost:11434/api/tags
-
-# 4단계: 실질 추론 동작 확인 (추론 좀비 여부 점검)
-curl -s -X POST http://localhost:11434/api/generate \
-  -d '{"model": "qwen3:14b", "prompt": "hi", "stream": false}' --max-time 120</code></pre>
             </div>
           </div>
         </div>
 
-        <div id="maint-fernbot" class="maint-tab-content p-6 space-y-5" style="display:none">
-          <p class="text-xs text-slate-500">에이전트 제어는 <strong class="text-slate-300">run-openclaw.sh</strong> 런처를 통해 수행하며, 내부적으로 macOS LaunchAgent를 관리합니다.</p>
-          
-          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-white mb-3 flex items-center gap-2"><span class="text-emerald-400">①</span> 상태 확인 및 로그</h3>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 서비스 상태 및 포트 리슨 확인
-./run-openclaw.sh status
+        <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
+          <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">✅ 운영 검증 프로토콜</h3>
+          <div class="code-block text-xs">
+            <pre><code># 1. API 버전 확인
+curl -s http://localhost:11434/api/version
+# 2. 실질 추론 동작 확인 (헬스 모델: qwen3:14b)
+curl -s -X POST http://localhost:11434/api/generate \
+  -d '{"model": "qwen3:14b", "prompt": "hi", "stream": false}' --max-time 120</code></pre>
+          </div>
+        </div>
+      </div>
 
-# 실시간 통합 로그 모니터링
+      <!-- 🛡️ Ollama Watchdog (Auto-Recovery) -->
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-amber-500 shadow-xl space-y-6">
+        <h2 class="text-2xl font-bold text-amber-400 flex items-center gap-3">🛡️ Ollama 워치독 (추론 좀비 대응)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <p class="text-xs font-bold text-amber-300 uppercase tracking-wider">1단계: 워치독 스크립트 작성</p>
+            <div class="code-block text-[10px]">
+              <pre><code># /usr/local/sbin/ollama-watchdog.sh 생성
+# (내용 중략: /api/generate qwen3:14b 기반 헬스체크 및 kickstart 로직)</code></pre>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <p class="text-xs font-bold text-amber-300 uppercase tracking-wider">2단계: 권한 정리 및 초기화</p>
+            <div class="code-block text-[10px]">
+              <pre><code>sudo chown root:wheel /usr/local/sbin/ollama-watchdog.sh /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
+sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
+sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
+sudo touch /var/log/ollama/ollama-watchdog.log
+sudo chown root:wheel /var/log/ollama/ollama-watchdog.*</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🦅 Fern 에이전트 핵심 운영 -->
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-emerald-500 shadow-xl space-y-6">
+        <h2 class="text-2xl font-bold text-emerald-400 flex items-center gap-3">🦅 Fern 에이전트 핵심 운영</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+            <h3 class="font-bold text-white mb-3">🎮 에이전트 제어</h3>
+            <div class="code-block text-xs">
+              <pre><code># 시작/재시작
+~/run-openclaw.sh start
+~/run-openclaw.sh restart
+# 상태 확인
+./run-openclaw.sh status
+# 로그 확인
 tail -f ~/sandbox/logs/openclaw-launchd.out</code></pre>
             </div>
           </div>
-
-          <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
-            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>②</span> 에이전트 제어 (시작/종료/재시작)</h3>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 시작 (LaunchAgent 등록)
-./run-openclaw.sh start
-
-# 재시작 (설정 갱신)
-./run-openclaw.sh restart
-
-# 중지 (LaunchAgent 해제)
-./run-openclaw.sh stop</code></pre>
-            </div>
-          </div>
-
           <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700">
-            <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2"><span class="text-slate-400">③</span> 설정 변경</h3>
+            <h3 class="font-bold text-white mb-3">🔄 자동 업데이트 & 힐링</h3>
             <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 설정 수정 후 재시작 권장
-vi ~/.openclaw/openclaw.json
-./run-openclaw.sh restart</code></pre>
+              <pre><code># NPM 업데이트 로그
+tail -f ~/sandbox/logs/npm-auto-update.log
+# 매일 새벽 4시 재시작 (daily-restart.sh)
+crontab -l | grep daily-restart</code></pre>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="glass p-8 border-l-4 border-yellow-500 rounded-2xl shadow-xl">
-        <h2 class="text-2xl font-bold mb-2 text-yellow-400 flex items-center gap-3">⚡ 서비스 운영 가이드 <span class="badge badge-stability">안정성</span></h2>
-        <p class="text-sm text-slate-400 mb-5">Ollama는 시스템 서비스로 상시 대기하며, FernBot은 필요 시 개별적으로 실행합니다.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <p class="text-xs font-bold text-emerald-400 uppercase mb-2">🟢 Ollama (24/7)</p>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># Ollama 시작
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
-sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
-            </div>
-          </div>
-          <div>
-            <p class="text-xs font-bold text-blue-400 uppercase mb-2">🚀 FernBot (Manual)</p>
-            <div class="code-block text-xs">
-              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># FernBot 실행/종료
-su - fern
-./run-openclaw.sh start  # 실행
-./run-openclaw.sh stop   # 종료</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="glass p-6 rounded-2xl border-2 border-yellow-500/50 bg-yellow-950/10 shadow-xl">
-        <h2 class="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">⚡ 빠른 복구</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-emerald-950/30 p-4 rounded-xl border border-emerald-700/40">
-            <p class="text-sm font-bold text-emerald-400 mb-2">🦅 Gateway 중단</p>
-            <p class="text-xs text-slate-400 mb-3"><code class="text-emerald-400 bg-black/40 px-1 rounded">openclaw status</code>에서 연결 불가인 경우 에이전트를 재실행합니다.</p>
-            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code># 런처로 즉시 재기동 (기존 프로세스 자동 정리됨)
-./run-openclaw.sh restart</code></pre></div>
-          </div>
-          <div class="bg-orange-950/30 p-4 rounded-xl border border-orange-700/40">
-            <p class="text-sm font-bold text-orange-400 mb-2">🚨 Ollama 다운</p>
-            <p class="text-xs text-slate-400 mb-3">FernBot이 Ollama에 연결하지 못하면 로컬 추론이 불가합니다.</p>
-            <div class="code-block text-xs"><button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button><pre><code># 등록 확인 후 재시작
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist 2>/dev/null || true
-sudo launchctl kickstart -k system/com.alvin.ollama
-curl -s http://127.0.0.1:11434/api/tags | python3 -m json.tool</code></pre></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="glass p-6 rounded-2xl border border-blue-700/40 bg-blue-950/10">
-        <h2 class="text-lg font-bold text-blue-300 mb-3">🧾 로깅 방식 참고</h2>
-        <p class="text-xs text-slate-400 mb-3">Ollama는 시스템 레벨에서 로그가 기록되며, FernBot은 샌드박스 내부의 로그 파일을 통해 기록됩니다.</p>
-        <div class="code-block text-xs">
-          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-          <pre><code># Ollama 로그 확인
-tail -f /var/log/openclaw/ollama.log
-
-# FernBot 로그 확인
-tail -f ~/sandbox/logs/openclaw-gateway.log</code></pre>
         </div>
       </div>
 
     </div>
-
     <!-- 9. Reset Tab -->
     <div id="rollback" class="tab-content space-y-8">
 
@@ -2959,30 +2495,6 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
       }
     }
 
-    function showMaintTab(tabId) {
-      localStorage.setItem('openclaw_activeMaintTab', tabId);
-      document.querySelectorAll('.maint-tab-content').forEach(el => {
-        el.style.display = 'none';
-      });
-      const target = document.getElementById(tabId);
-      if (target) target.style.display = 'block';
-
-      document.querySelectorAll('.maint-tab-btn').forEach(btn => {
-        btn.classList.remove('border-purple-500','text-purple-300','border-emerald-500','text-emerald-300');
-        btn.classList.add('text-slate-400','border-transparent');
-      });
-
-      const activeBtn = document.getElementById(`mbtn-${tabId}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('text-slate-400','border-transparent');
-        if (tabId === 'maint-ollama') {
-          activeBtn.classList.add('border-purple-500','text-purple-300');
-        } else {
-          activeBtn.classList.add('border-emerald-500','text-emerald-300');
-        }
-      }
-    }
-
     function copyToClipboard(btn) {
       const code = btn.nextElementSibling.innerText;
       const textarea = document.createElement('textarea');
@@ -3063,7 +2575,6 @@ which ollama   # 아무것도 출력되지 않으면 정상</code></pre>
 
     window.onload = () => {
       showTab(localStorage.getItem('openclaw_activeTab') || 'setup');
-      showMaintTab(localStorage.getItem('openclaw_activeMaintTab') || 'maint-ollama');
       showFernTab(localStorage.getItem('openclaw_activeFernTab') || 'fern-setup');
       showCheckTab(localStorage.getItem('openclaw_activeCheckTab') || 'check-list');
     };
