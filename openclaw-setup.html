@@ -2412,6 +2412,29 @@ sudo launchctl kickstart -k system/com.alvin.ollama.watchdog
 sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></pre>
             </div>
           </div>
+
+          <div class="space-y-4">
+            <p class="text-xs font-bold text-blue-400 uppercase tracking-wider">4단계: 권한 일괄 정리 및 초기화 (Standard)</p>
+            <div class="code-block text-[10px]">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code>#/** [1] 스크립트 및 설정 파일 권한 고정 (root) */
+sudo chown root:wheel /usr/local/sbin/ollama-watchdog.sh /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
+sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
+sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
+
+#/** [2] 워치독 로그 권한 고정 (root) */
+sudo touch /var/log/ollama/ollama-watchdog.log /var/log/ollama/ollama-watchdog.err
+sudo chown root:wheel /var/log/ollama/ollama-watchdog.*
+sudo chmod 644 /var/log/ollama/ollama-watchdog.*
+
+#/** [3] 상태 파일 및 락 초기화 (필요 시) */
+sudo rm -f /var/run/ollama-watchdog.failcount /var/run/ollama-watchdog.lock
+
+#/** [4] 완전 재등록 */
+sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist 2&gt;/dev/null || true
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></pre>
+            </div>
+          </div>
         </div>
 
         <div class="bg-amber-950/20 border border-amber-800/40 rounded-2xl p-5 mt-6">
@@ -2494,8 +2517,7 @@ sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.watchdog.p
           <div class="bg-blue-950/20 p-5 rounded-xl border border-blue-800/40">
             <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">🚀 최종 운영형 LaunchDaemon 설정 (Hardened)</h3>
             <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-              EnvironmentVariables 블록에만 의존할 경우 간헐적으로 환경변수가 누락되는 이슈가 확인되었습니다. <br>
-              &lt;strong&gt;ProgramArguments에서 export를 통해 명시적으로 주입&lt;/strong&gt;하는 확정형 설정을 권장합니다.
+              &lt;strong&gt;핵심:&lt;/strong&gt; 환경변수를 ProgramArguments에서 직접 &lt;code&gt;export&lt;/code&gt;하여 주입하고, 로그 파일 권한을 UserName(&lt;code&gt;alvin&lt;/code&gt;)에 맞춰 설정합니다.
             </p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
@@ -2518,7 +2540,7 @@ sudo tee /Library/LaunchDaemons/com.alvin.ollama.plist &lt;&lt; 'EOF'
     &lt;array&gt;
         &lt;string&gt;/bin/bash&lt;/string&gt;
         &lt;string&gt;-lc&lt;/string&gt;
-        &lt;string&gt;export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"; export OLLAMA_HOST="http://192.168.0.127:11434"; export OLLAMA_ORIGINS="*"; export OLLAMA_FLASH_ATTENTION=1; export OLLAMA_KEEP_ALIVE=3m; exec /opt/homebrew/bin/ollama serve&lt;/string&gt;
+        &lt;string&gt;export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"; export OLLAMA_HOST="0.0.0.0:11434"; export OLLAMA_ORIGINS="*"; export OLLAMA_FLASH_ATTENTION=1; export OLLAMA_KEEP_ALIVE=3m; exec /opt/homebrew/bin/ollama serve&lt;/string&gt;
     &lt;/array&gt;
     &lt;key&gt;StandardOutPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama.log&lt;/string&gt;
     &lt;key&gt;StandardErrorPath&lt;/key&gt;&lt;string&gt;/var/log/ollama/ollama.err&lt;/string&gt;
@@ -2533,47 +2555,69 @@ EOF
 
 # [3] 권한 설정 및 재등록
 sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.plist
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
+sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
             </div>
           </div>
 
           <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
-            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">✅ 4단계 운영 검증 프로토콜</h3>
+            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">📂 Ollama 로그 권한 정책 (필수)</h3>
+            <p class="text-xs text-slate-400 mb-3 leading-relaxed">
+              UserName=alvin인 데몬은 로그 파일에 쓰기 권한이 없으면 즉시 종료(EX_CONFIG)됩니다.
+            </p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 1단계: 서비스 상태 및 종료 코드 확인 (state=running, exit code=0 확인)
-sudo launchctl print system/com.alvin.ollama | egrep "state =|pid =|last exit code"
+              <pre><code>#/** [1] 로그 디렉토리 권한을 alvin에게 부여 */
+sudo mkdir -p /var/log/ollama
+sudo chown -R alvin:staff /var/log/ollama
+sudo chmod 755 /var/log/ollama
 
-# 2단계: 네트워크 바인딩 확인 (11434 LISTEN 여부)
-sudo lsof -nP -iTCP:11434 -sTCP:LISTEN
+#/** [2] 개별 로그 파일 권한 설정 */
+sudo touch /var/log/ollama/ollama.log /var/log/ollama/ollama.err
+sudo chown alvin:staff /var/log/ollama/ollama.*
+sudo chmod 644 /var/log/ollama/ollama.*
 
-# 3단계: 기본 API 응답 확인
-curl -s http://192.168.0.127:11434/api/version
-
-# 4단계: 실질 추론 동작 확인 (헬스 모델: qwen3:14b)
-curl -s -X POST http://192.168.0.127:11434/api/generate \
-  -d '{"model": "qwen3:14b", "prompt": "hi", "stream": false}'</code></pre>
+#/** [3] 서비스 활성화 */
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist</code></pre>
             </div>
           </div>
 
           <div class="bg-red-950/20 p-5 rounded-xl border border-red-900/30">
-            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2">🚨 EX_CONFIG(78) 및 포트 미리스닝 해결</h3>
+            <h3 class="font-bold text-red-400 mb-3 flex items-center gap-2">🚨 트러블슈팅: EX_CONFIG(78) 및 포트 미리스닝</h3>
             <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">
-              &lt;strong&gt;현상:&lt;/strong&gt; 서비스는 살아있으나 11434 포트가 닫혀있거나, last exit code가 78인 경우 환경설정 오류입니다.
+              &lt;strong&gt;현상:&lt;/strong&gt; &lt;code&gt;spawn scheduled&lt;/code&gt; 반복 및 &lt;code&gt;last exit code = 78&lt;/code&gt; 발생 시 아래를 점검하세요.
             </p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># [체크 1] IP 주소 유효성 확인
-ifconfig | grep "192.168.0.127"
+              <pre><code>#/** [1] 진단 명령 */
+sudo launchctl print system/com.alvin.ollama | egrep "state =|pid =|last exit code"
+sudo lsof -nP -iTCP:11434 -sTCP:LISTEN
+ls -lah /var/log/ollama
 
-# [체크 2] 수동 실행으로 상세 로그 확인 (에러 메시지 직접 노출)
-sudo -u alvin /bin/zsh -lc "export OLLAMA_HOST='http://192.168.0.127:11434'; /opt/homebrew/bin/ollama serve"
-
-# [조치] plist를 위 '최종 운영형'으로 교체 후 완전 재로딩
+#/** [2] 해결: 로그 권한 교정 후 재로딩 */
+sudo chown -R alvin:staff /var/log/ollama
 sudo launchctl bootout system /Library/LaunchDaemons/com.alvin.ollama.plist
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 sudo launchctl kickstart -k system/com.alvin.ollama</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-emerald-950/20 p-5 rounded-xl border border-emerald-800/40">
+            <h3 class="font-bold text-emerald-300 mb-3 flex items-center gap-2">✅ 최종 운영 검증 프로토콜</h3>
+            <div class="code-block text-xs">
+              <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+              <pre><code># 1단계: launchd 상태 확인 (state=running 확인)
+sudo launchctl print system/com.alvin.ollama | egrep "state =|pid =|last exit code"
+
+# 2단계: 네트워크 바인딩 확인 (11434 LISTEN)
+sudo lsof -nP -iTCP:11434 -sTCP:LISTEN
+
+# 3단계: 기본 API 및 모델 목록 확인
+curl -s http://localhost:11434/api/version
+curl -s http://localhost:11434/api/tags
+
+# 4단계: 실질 추론 동작 확인 (추론 좀비 여부 점검)
+curl -s -X POST http://localhost:11434/api/generate \
+  -d '{"model": "qwen3:14b", "prompt": "hi", "stream": false}' --max-time 120</code></pre>
             </div>
           </div>
         </div>
