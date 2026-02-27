@@ -212,6 +212,7 @@
       <button type="button" onclick="showTab('security')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-security">네트워크 &amp; 보안</button>
       <button type="button" onclick="showTab('sandbox')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-sandbox">샌드박싱</button>
       <button type="button" onclick="showTab('master_script')" class="px-6 py-4 font-semibold text-yellow-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-master_script">🚀 마스터 스크립트</button>
+      <button type="button" onclick="showTab('launcher')" class="px-6 py-4 font-semibold text-blue-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-launcher">🚀 에이전트 런처</button>
       <button type="button" onclick="showTab('verification')" class="px-6 py-4 font-semibold text-emerald-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-verification">검증</button>
       <button type="button" onclick="showTab('maintenance')" class="px-6 py-4 font-semibold text-slate-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-maintenance">🛠️ 운영 및 관리</button>
       <button type="button" onclick="showTab('rollback')" class="px-6 py-4 font-semibold text-red-400 border-b-2 border-transparent transition-all tab-btn whitespace-nowrap" id="btn-rollback">초기화</button>
@@ -334,7 +335,7 @@ source ~/.zprofile && nvm install 24 && nvm alias default 24
 npm install -g openclaw
 openclaw onboard      # 가이드에 따라 API Key 및 샌드박스(/Users/fern/sandbox) 설정
 
-# 3. 런처 실행 준비 (런처는 마스터 스크립트 탭에서 생성)
+# 3. 런처 실행 준비 (런처는 '에이전트 런처' 탭에서 생성)
 ls -l ~/run-openclaw.sh
 chmod 700 ~/run-openclaw.sh
 
@@ -967,10 +968,10 @@ ls -le /Users/Shared | head -n 5</code></pre>
           <span class="text-4xl">🚀</span>
           <div>
             <div class="flex items-center">
-              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v1.0-ULTIMATE)</h2>
+              <h2 class="text-3xl font-bold text-yellow-400">보안 마스터 스크립트 (v1.0-INFRA)</h2>
               <span class="badge badge-stability ml-2">안정성</span>
             </div>
-            <p class="text-slate-400 text-sm mt-1">Manual Launch Only + Zero Trust Isolation + APFS Sandbox + Ollama 24/7</p>
+            <p class="text-slate-400 text-sm mt-1">Zero Trust Isolation + APFS Sandbox + Ollama 24/7 (Environment Only)</p>
           </div>
         </div>
 
@@ -1007,26 +1008,25 @@ ls -le /Users/Shared | head -n 5</code></pre>
         </div>
 
                 <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
-                  <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v1.0-ULTIMATE)</h3>
-                  <p class="text-sm text-slate-300 mb-2">💡 **Full-Stack Automation:** 이 스크립트는 OS 격리 환경 구축, Ollama 서비스 설정, 그리고 <strong>에이전트 통합 제어기(run-openclaw.sh) 생성</strong>까지 한 번에 처리합니다.</p>
-                  <p class="text-sm text-slate-300">보안(PF/ACL/APFS)과 Ollama(관리자) 24/7 서비스, 그리고 에이전트 런처 환경이 이 스크립트로 철통 유지됩니다.</p>
+                  <h3 class="text-lg font-semibold text-blue-300 mb-2">주의사항 (v1.0-INFRA)</h3>
+                  <p class="text-sm text-slate-300 mb-2">💡 **Infrastructure Focus:** 이 스크립트는 OS 격리 환경 구축 및 Ollama 서비스 설정에 집중합니다.</p>
+                  <p class="text-sm text-slate-300">보안(PF/ACL/APFS)과 Ollama(관리자) 24/7 서비스 환경이 이 스크립트로 철통 유지됩니다. <strong>에이전트 런처(run-openclaw.sh)는 별도 탭에서 생성하세요.</strong></p>
                 </div>
         
                 <div class="code-block">
                   <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
                   <pre><code class="text-sm">#!/bin/bash
 # ==============================================================================
-# OpenClaw M4 Max Security Master Script (통합 자동화 버전) v1.0-ULTIMATE
-# 용도: AI 에이전트 구동을 위한 제로 트러스트 격리 환경 구축 및 통합 제어기 생성
+# OpenClaw M4 Max Security Master Script (인프라 전용 버전) v1.0-INFRA
+# 용도: AI 에이전트 구동을 위한 제로 트러스트 격리 환경 구축
 # 정책:
-#   - 에이전트 통합 제어기(run-openclaw.sh) 자동 생성 포함
 #   - 보안(PF/ACL/APFS) 및 Ollama 데몬(alvin) 설정 중심
 # 실행: 관리자 계정(alvin)에서 sudo 권한으로 실행
 # ==============================================================================
 
 set -euo pipefail
 
-echo ">>> [0/7] 안전한 작업 디렉토리로 이동 및 잔재 청소..."
+echo ">>> [0/6] 안전한 작업 디렉토리로 이동 및 잔재 청소..."
 cd / || true
 
 bootout_safe() {
@@ -1046,7 +1046,7 @@ bootout_safe system/com.openclaw.fern
 sudo rm -f /Library/LaunchDaemons/com.openclaw.fern.plist 2>/dev/null || true
 sudo rm -f /usr/local/bin/run-fern-bot.sh 2>/dev/null || true
 
-# [1/7] 서비스 전용 계정 생성
+# [1/6] 서비스 전용 계정 생성
 if id -u fern >/dev/null 2>&1; then
   echo "✅ 계정 'fern'이 이미 존재합니다."
 else
@@ -1055,11 +1055,11 @@ else
 fi
 FERN_UID="$(id -u fern)"
 
-# [2/7] 파일 시스템 격리 및 권한 통제 (Zero Trust)
+# [2/6] 파일 시스템 격리 및 권한 통제 (Zero Trust)
 sudo chmod 700 /Users/alvin /Users/fern
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
 
-# [2-1/7] GUI LaunchAgent 무력화
+# [2-1/6] GUI LaunchAgent 무력화
 for label in ai.openclaw.gateway com.openclaw.gateway com.clawdbot.gateway bot.molt.gateway; do
   bootout_safe  "gui/${FERN_UID}/${label}"
   disable_safe  "gui/${FERN_UID}/${label}"
@@ -1069,7 +1069,7 @@ delete_by_find "/Users/fern/Library/LaunchAgents" "*openclaw*gateway*.plist"
 sudo touch /Users/fern/.zshrc
 sudo chown fern:staff /Users/fern/.zshrc
 
-# [3/7] APFS 샌드박스 볼륨 구축
+# [3/6] APFS 샌드박스 볼륨 구축
 CID="$(diskutil info / | awk -F': *' '/APFS Container:/ {print $2; exit}')"
 if ! diskutil info "FernSandbox" >/dev/null 2>&1; then
   sudo diskutil apfs addVolume "$CID" APFS FernSandbox -quota 100g
@@ -1085,12 +1085,12 @@ if ! mount | /usr/bin/grep -q "on /Users/fern/sandbox "; then
   sudo diskutil mount -mountPoint /Users/fern/sandbox "FernSandbox" || true
 fi
 
-# [4/7] SSH 외부 접속 통제
+# [4/6] SSH 외부 접속 통제
 if ! sudo grep -q "^DenyUsers fern" /etc/ssh/sshd_config; then
   echo "DenyUsers fern" | sudo tee -a /etc/ssh/sshd_config >/dev/null
 fi
 
-# [5/7] PF 방화벽 및 네트워크 노출 설정
+# [5/6] PF 방화벽 및 네트워크 노출 설정
 sudo tee /etc/pf.anchors/fern <<'EOF' >/dev/null
 pass quick on lo0 user fern keep state
 block drop quick on { utun0, utun1, utun2, utun3, utun4, utun5, utun6, utun7, utun8, utun9, ipsec0 } user fern
@@ -1118,7 +1118,7 @@ ${PF_END}
 LANEOF"
 sudo pfctl -f /etc/pf.conf && sudo pfctl -E || true
 
-# [6/7] Ollama 데몬 유지 (24/7) + 로그 세팅
+# [6/6] Ollama 데몬 유지 (24/7) + 로그 세팅
 sudo mkdir -p /var/log/openclaw
 sudo touch /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
 sudo chown alvin:staff /var/log/openclaw/ollama.log /var/log/openclaw/ollama.err
@@ -1152,10 +1152,56 @@ EOF
 sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 
-# [7/7] 통합 에이전트 제어기(run-openclaw.sh) 생성
-echo ">>> [7/7] 에이전트 통합 제어기 생성..."
-sudo tee /Users/fern/run-openclaw.sh << 'RUNNER_EOF' >/dev/null
-#!/bin/bash
+echo "✅ 인프라 환경 구축 완료! (v1.0-INFRA)"</code></pre>
+                </div>
+
+        <div class="mt-12 glass p-8 rounded-[2rem] border-2 border-slate-500/30 shadow-2xl">
+          <h2 class="text-2xl font-bold text-slate-300 mb-6 flex items-center gap-3">
+            🛠️ 다음 단계
+          </h2>
+          <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+            인프라 구축이 완료되었습니다. 이제 <strong class="text-blue-400">에이전트 런처</strong> 탭으로 이동하여 에이전트를 제어할 스크립트를 생성하세요.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Launcher Tab -->
+    <div id="launcher" class="tab-content space-y-8">
+      <div class="glass p-10 rounded-3xl border-2 border-blue-500/50 shadow-2xl shadow-blue-500/10">
+        <div class="flex items-center gap-4 mb-6">
+          <span class="text-4xl">🚀</span>
+          <div>
+            <div class="flex items-center">
+              <h2 class="text-3xl font-bold text-blue-400">에이전트 통합 제어기 (run-openclaw.sh)</h2>
+              <span class="badge badge-stability ml-2">v1.0-RUNNER</span>
+            </div>
+            <p class="text-slate-400 text-sm mt-1">OpenClaw Launcher & LaunchAgent Manager</p>
+          </div>
+        </div>
+
+        <div class="bg-blue-950/20 p-5 rounded-2xl border border-blue-800/40 mb-8">
+          <h3 class="text-lg font-semibold text-blue-300 mb-2">런처 역할 및 특징</h3>
+          <p class="text-sm text-slate-300 mb-2">💡 **Unified Control:** 이 스크립트는 에이전트의 시작, 종료, 상태 확인을 통합 관리합니다. 
+          단순 프로세스 실행이 아닌 **macOS LaunchAgent**를 통해 영속성을 보장합니다.</p>
+          <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside">
+            <li>자동 재시작 (Self-Healing) 지원</li>
+            <li>샌드박스 볼륨 마운트 자동 검증</li>
+            <li>충돌 프로세스(Chrome/Node) 자동 정리</li>
+            <li>NVM 및 Node.js v24 환경 자동 로드</li>
+          </ul>
+        </div>
+
+        <div class="code-block">
+          <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <pre><code class="text-sm">#!/bin/bash
+# ==============================================================================
+# OpenClaw Agent Launcher (run-openclaw.sh) v1.0-RUNNER
+# 용도: 에이전트의 LaunchAgent 기반 구동 및 생존성 관리
+# 위치: /Users/fern/run-openclaw.sh
+# 실행: 에이전트 계정(fern)에서 실행
+# ==============================================================================
+
 set -euo pipefail
 
 CMD="${1:-status}"
@@ -1275,40 +1321,38 @@ case "$CMD" in
 esac
 RUNNER_EOF
 
-sudo chown fern:staff /Users/fern/run-openclaw.sh
-sudo chmod 700 /Users/fern/run-openclaw.sh
+chmod 700 /Users/fern/run-openclaw.sh
+echo "✅ run-openclaw.sh 생성 및 권한 설정 완료!"</code></pre>
+        </div>
 
-echo "✅ 인프라 환경 및 통합 제어기 구축 완료! (v1.0-ULTIMATE)"</code></pre>
-                </div>
-
-        <div class="mt-12 glass p-8 rounded-[2rem] border-2 border-emerald-500/30 shadow-2xl">
+        <div class="mt-8 glass p-8 rounded-[2rem] border-2 border-emerald-500/30 shadow-2xl">
           <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            🛠️ 에이전트 구동 및 제어
+            🛠️ 런처 사용법
           </h2>
           <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-            마스터 스크립트 실행이 완료되면, <strong class="text-slate-200">Fern 계정</strong>으로 전환하여 생성된 통합 제어기를 사용해 에이전트를 시작하세요.
+            위 스크립트를 <strong class="text-slate-200">/Users/fern/run-openclaw.sh</strong>에 저장한 후 아래 명령어로 에이전트를 관리하세요.
           </p>
 
           <div class="space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                run-openclaw.sh 사용법
+                커맨드 리스트
               </h3>
               <span class="badge badge-required">Fern 계정 전용</span>
             </div>
             <div class="code-block text-[11px]">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 1. 에이전트 계정 전환
-su - fern
-
-# 2. 에이전트 시작 (LaunchAgent 등록 및 실행)
+              <pre><code># 1. 에이전트 시작 (LaunchAgent 등록 및 실행)
 ./run-openclaw.sh start
 
-# 3. 상태 확인
+# 2. 상태 확인
 ./run-openclaw.sh status
 
-# 4. 종료
+# 3. 재시작 (설정 변경 반영 등)
+./run-openclaw.sh restart
+
+# 4. 종료 (완전 정지)
 ./run-openclaw.sh stop</code></pre>
             </div>
           </div>
@@ -1316,7 +1360,7 @@ su - fern
       </div>
     </div>
 
-    <!-- 6. Verification Tab -->
+    <!-- 7. Verification Tab -->
 
     <div id="verification" class="tab-content space-y-8">
       <div class="glass p-8 rounded-2xl border-l-4 border-emerald-500 shadow-lg">
@@ -2017,7 +2061,7 @@ ls -l ~/sandbox/logs/npm-auto-update.log</code></pre>
       </div>
     </div>
 
-    <!-- 7. Maintenance & Monitoring Tab -->
+    <!-- 8. Maintenance & Monitoring Tab -->
     <div id="maintenance" class="tab-content space-y-6">
       
       <!-- 👑 운영 주체별 관리 체계 (Admin vs User) -->
@@ -2474,7 +2518,7 @@ tail -f ~/sandbox/logs/openclaw-gateway.log</code></pre>
 
     </div>
 
-    <!-- 7. Reset Tab -->
+    <!-- 9. Reset Tab -->
     <div id="rollback" class="tab-content space-y-8">
 
       <!-- 경고 배너 -->
