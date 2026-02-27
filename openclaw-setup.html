@@ -1389,7 +1389,49 @@ EOF
 sudo launchctl bootout system/com.alvin.ollama 2>/dev/null || true
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
 
-echo "✅ 인프라 환경 구축 완료! (v1.0-INFRA)"</code></pre>
+# [7/6] Ollama Watchdog (Inference-based Auto-Recovery)
+sudo mkdir -p /usr/local/sbin
+sudo tee /usr/local/sbin/ollama-watchdog.sh >/dev/null <<'WATCHDOG_EOF'
+#!/bin/bash
+# Ollama Inference Watchdog (Health Check)
+ENDPOINT="http://127.0.0.1:11434/api/generate"
+MODEL="qwen3:14b"
+TIMEOUT=60
+
+if ! curl -s -X POST "$ENDPOINT" -d "{\"model\": \"$MODEL\", \"prompt\": \"hi\", \"stream\": false}" --max-time "$TIMEOUT" > /dev/null; then
+  echo "[$(date)] Ollama unresponsive. Restarting..."
+  sudo launchctl kickstart -k system/com.alvin.ollama
+else
+  echo "[$(date)] Ollama healthy."
+fi
+WATCHDOG_EOF
+sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
+
+sudo tee /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist >/dev/null <<'WATCHDOG_PLIST_EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.alvin.ollama.watchdog</string>
+  <key>RunAtLoad</key><true/>
+  <key>StartInterval</key><integer>20</integer>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>/usr/local/sbin/ollama-watchdog.sh</string>
+  </array>
+  <key>StandardOutPath</key><string>/var/log/ollama/ollama-watchdog.log</string>
+  <key>StandardErrorPath</key><string>/var/log/ollama/ollama-watchdog.err</string>
+  <key>HardResourceLimits</key>
+  <dict><key>Core</key><integer>0</integer></dict>
+</dict>
+</plist>
+WATCHDOG_PLIST_EOF
+sudo chown root:wheel /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
+
+echo "✅ 인프라 환경 및 Ollama 와치독 구축 완료! (v1.0-INFRA)"</code></pre>
                 </div>
 
         <div class="mt-12 glass p-8 rounded-[2rem] border-2 border-slate-500/30 shadow-2xl">
@@ -2447,24 +2489,26 @@ curl -s -X POST http://localhost:11434/api/generate \
 
       <!-- 🛡️ Ollama Watchdog (Auto-Recovery) -->
       <div class="glass p-8 rounded-[2rem] border-l-4 border-amber-500 shadow-xl space-y-6">
-        <h2 class="text-2xl font-bold text-amber-400 flex items-center gap-3">🛡️ Ollama 워치독 (추론 좀비 대응)</h2>
+        <h2 class="text-2xl font-bold text-amber-400 flex items-center gap-3">🛡️ Ollama 워치독 (Auto-Recovery)</h2>
+        <p class="text-sm text-slate-400">Ollama 서비스의 응답성(Inference)을 20초마다 체크하여 무응답(좀비 상태) 시 자동으로 재시작합니다.</p>
+        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-amber-300 uppercase tracking-wider">1단계: 워치독 스크립트 작성</p>
-            <div class="code-block text-[10px]">
-              <pre><code># /usr/local/sbin/ollama-watchdog.sh 생성
-# (내용 중략: /api/generate qwen3:14b 기반 헬스체크 및 kickstart 로직)</code></pre>
+          <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
+            <p class="text-xs font-bold text-amber-300 uppercase tracking-widest mb-2">Watchdog Status</p>
+            <div class="code-block text-[10px] p-3">
+              <pre><code># 서비스 상태 확인
+sudo launchctl print system/com.alvin.ollama.watchdog | grep state
+# 실시간 로그 모니터링
+sudo tail -f /var/log/ollama/ollama-watchdog.log</code></pre>
             </div>
           </div>
-          <div class="space-y-4">
-            <p class="text-xs font-bold text-amber-300 uppercase tracking-wider">2단계: 권한 정리 및 초기화</p>
-            <div class="code-block text-[10px]">
-              <pre><code>sudo chown root:wheel /usr/local/sbin/ollama-watchdog.sh /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
-sudo chmod 755 /usr/local/sbin/ollama-watchdog.sh
-sudo chmod 644 /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist
-sudo touch /var/log/ollama/ollama-watchdog.log
-sudo chown root:wheel /var/log/ollama/ollama-watchdog.*</code></pre>
-            </div>
+          <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
+            <p class="text-xs font-bold text-amber-300 uppercase tracking-widest mb-2">Configuration Files</p>
+            <ul class="text-[11px] text-slate-300 space-y-2">
+              <li><strong>Script:</strong> <code class="text-slate-400">/usr/local/sbin/ollama-watchdog.sh</code></li>
+              <li><strong>Plist:</strong> <code class="text-slate-400">/Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></li>
+              <li><strong>Logs:</strong> <code class="text-slate-400">/var/log/ollama/ollama-watchdog.log</code></li>
+            </ul>
           </div>
         </div>
       </div>
