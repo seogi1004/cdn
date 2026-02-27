@@ -2568,25 +2568,28 @@ curl -s -X POST http://localhost:11434/api/generate \
 
       <!-- 🛡️ Ollama Watchdog (Auto-Recovery) -->
       <div class="glass p-8 rounded-[2rem] border-l-4 border-amber-500 shadow-xl space-y-6">
-        <h2 class="text-2xl font-bold text-amber-400 flex items-center gap-3">🛡️ Ollama 워치독 (Auto-Recovery)</h2>
-        <p class="text-sm text-slate-400">Ollama 서비스의 응답성(Inference)을 20초마다 체크하여 무응답(좀비 상태) 시 자동으로 재시작합니다.</p>
+        <h2 class="text-2xl font-bold text-amber-400 flex items-center gap-3">🛡️ Ollama 워치독 (Auto-Recovery v1.1)</h2>
+        <p class="text-sm text-slate-400">Ollama 서비스의 응답성(Inference)을 20초마다 체크하여 <strong class="text-amber-300">3회 연속 실패</strong> 시 하드 복구(pkill &amp; bootstrap) 및 워밍업을 수행합니다.</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
-            <p class="text-xs font-bold text-amber-300 uppercase tracking-widest mb-2">Watchdog Status</p>
+            <p class="text-xs font-bold text-amber-300 uppercase tracking-widest mb-2">Operational Status</p>
             <div class="code-block text-[10px] p-3">
-              <pre><code># 서비스 상태 확인
+              <pre><code># 1. 와치독 가동 상태 확인
 sudo launchctl print system/com.alvin.ollama.watchdog | grep state
-# 실시간 로그 모니터링
-sudo tail -f /var/log/ollama/ollama-watchdog.log</code></pre>
+# 2. 실패 카운트 및 락 파일 점검
+cat /var/run/ollama-watchdog.failcount
+ls -d /var/run/ollama-watchdog.lock
+# 3. 상세 복구 이력 확인 (syslog)
+log show --predicate 'process == "logger" AND eventMessage contains "ollama-watchdog"' --last 1h</code></pre>
             </div>
           </div>
           <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">
-            <p class="text-xs font-bold text-amber-300 uppercase tracking-widest mb-2">Configuration Files</p>
+            <p class="text-xs font-bold text-amber-300 uppercase tracking-widest mb-2">Watchdog Logic (v1.1)</p>
             <ul class="text-[11px] text-slate-300 space-y-2">
-              <li><strong>Script:</strong> <code class="text-slate-400">/usr/local/sbin/ollama-watchdog.sh</code></li>
-              <li><strong>Plist:</strong> <code class="text-slate-400">/Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></li>
-              <li><strong>Logs:</strong> <code class="text-slate-400">/var/log/ollama/ollama-watchdog.log</code></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>중복 방지:</strong> Lock 디렉토리를 통한 인스턴스 보호</span></li>
+              <li class="flex gap-2"><span>•</span> <span><strong>하드 리셋:</strong> <code>pkill -9</code> 및 <code>launchctl bootstrap</code> 재수행</span></li>
+              <li class="flex gap-2"><span>•</span> <span><span><strong>워밍업:</strong> 복구 후 <code>qwen3:14b</code> 모델로 성공 시까지 검증</span></span></li>
             </ul>
           </div>
         </div>
