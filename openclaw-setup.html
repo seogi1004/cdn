@@ -349,6 +349,63 @@ chmod 700 ~/run-openclaw.sh
     <!-- 2. Fern Tab -->
     <div id="fern" class="tab-content space-y-12">
 
+      <!-- Operational Protocol (Fern Protocol) -->
+      <div class="glass p-8 rounded-[2rem] border-l-4 border-indigo-500 shadow-xl shadow-indigo-900/10">
+        <h2 class="text-2xl font-bold mb-6 text-indigo-400 flex items-center gap-3">
+          📜 OpenClaw Local AI Agent Operations Guide (Fern Protocol)
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-bold text-slate-100 mb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                1. System Environment & Security
+              </h3>
+              <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside ml-2">
+                <li><strong>Hardware</strong>: Mac Mini M4 (64GB RAM)</li>
+                <li><strong>Isolation</strong>: Dedicated OS-level account + PF Firewall</li>
+                <li><strong>Sandbox</strong>: <code class="text-emerald-400 bg-black/40 px-1.5 py-0.5 rounded">"sandbox": { "mode": "off" }</code> (OS-level isolation relied upon)</li>
+                <li><strong>Network</strong>: Bind to internal LAN/Wi-Fi IP (No <code class="text-slate-400">0.0.0.0</code> / <code class="text-slate-400">127.0.0.1</code> for external access)</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-100 mb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                2. Model Orchestration (Two-Track)
+              </h3>
+              <div class="space-y-3 ml-2">
+                <div class="bg-slate-900/40 p-3 rounded-xl border border-slate-700">
+                  <p class="text-xs font-bold text-blue-400 uppercase">Gateway: Qwen 14B</p>
+                  <p class="text-[11px] text-slate-400">Rapid triage, web search, routine operations.</p>
+                </div>
+                <div class="bg-indigo-900/20 p-3 rounded-xl border border-indigo-700/30">
+                  <p class="text-xs font-bold text-indigo-400 uppercase">Reasoning: Qwen 32B</p>
+                  <p class="text-[11px] text-slate-400">"The Architect" — Complex logic, strategy, and high-fidelity code generation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-bold text-slate-100 mb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                3. Configuration Baselines
+              </h3>
+              <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside ml-2">
+                <li><strong>Context Window</strong>: Strictly <code class="text-indigo-300">16384</code> tokens</li>
+                <li><strong>Implementation</strong>: <code class="text-slate-400">openclaw.json</code> + Ollama <code class="text-slate-400">Modelfile</code> (<code class="text-slate-400">num_ctx</code>)</li>
+              </ul>
+            </div>
+            <div class="bg-blue-900/10 p-5 rounded-2xl border border-blue-800/30">
+              <h3 class="text-sm font-bold text-blue-300 mb-2 uppercase tracking-wider">4. Core Missions</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Tailored for <strong class="text-slate-200">Product QA</strong>, high-fidelity regression testing, and <strong class="text-slate-200">APM research</strong> for legacy software. Reports must be actionable and formatted for direct sharing with <strong class="text-indigo-300">Aiden</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Header -->
       <div class="glass p-10 rounded-[2.5rem] border-t-4 border-blue-500 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -mr-32 -mt-32"></div>
