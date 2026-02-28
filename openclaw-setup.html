@@ -209,7 +209,7 @@
         <h3 class="text-blue-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
           Hybrid Engine <span class="badge badge-required">필수</span>
         </h3>
-        <p class="text-xl font-bold text-blue-400">Qwen3 32B + Gemini</p>
+        <p class="text-xl font-bold text-blue-400">Qwen3.5 27B + Gemini</p>
         <p class="text-slate-400 text-sm">Local Privacy & High-speed Search</p>
       </div>
       <div class="glass p-6 rounded-2xl">
@@ -380,7 +380,7 @@ chmod 700 ~/run-openclaw.sh
                 Expert Assistant & Strategic Pilot | <span class="text-red-400">Zero-Trust Secured</span>
               </p>
               <p class="text-sm text-slate-400 mt-3 leading-relaxed max-w-2xl">
-                로컬 <span class="text-slate-200">Qwen 32B</span>의 강력한 추론과 외부 <span class="text-slate-200">Gemini</span>의 실시간 지능을 결합한 하이브리드 에이전트 프로토콜입니다.
+                로컬 <span class="text-slate-200">Qwen 3.5 27B</span>의 강력한 추론과 외부 <span class="text-slate-200">Gemini</span>의 실시간 지능을 결합한 하이브리드 에이전트 프로토콜입니다.
               </p>
             </div>
           </div>
@@ -406,7 +406,7 @@ chmod 700 ~/run-openclaw.sh
                 </h3>
                 <div class="space-y-3 ml-2">
                   <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-700/30">
-                    <p class="text-xs font-bold text-indigo-400 uppercase">Primary &amp; Reasoning: Qwen 32B (YOU)</p>
+                    <p class="text-xs font-bold text-indigo-400 uppercase">Primary &amp; Reasoning: Qwen 3.5 27B (YOU)</p>
                     <p class="text-[11px] text-slate-400 mt-1">"The Architect" &amp; 메인 인터페이스 — 복잡한 로직, 전략 수립 및 로컬 운영 전담.</p>
                   </div>
                   <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700">
@@ -427,7 +427,7 @@ chmod 700 ~/run-openclaw.sh
                   3. 구성 베이스라인 (Memory &amp; Context)
                 </h3>
                 <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside ml-2">
-                  <li><strong>컨텍스트 윈도우</strong>: <code class="text-indigo-300 font-bold">16384</code> 토큰으로 엄격히 제한</li>
+                  <li><strong>컨텍스트 윈도우</strong>: <code class="text-indigo-300 font-bold">20480</code> 토큰으로 엄격히 제한</li>
                   <li><strong>구현 방식</strong>: <code class="text-slate-400">openclaw.json</code> 설정 및 Ollama <code class="text-slate-400">Modelfile</code> (<code class="text-slate-400">num_ctx</code>) 하드코딩</li>
                 </ul>
               </div>
@@ -562,11 +562,11 @@ openclaw dashboard
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 SOUL.md와 IDENTITY.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 1. SOUL.md 생성 (Qwen 32B 중심의 메인 아키텍트 설계 및 방화벽 인지)
+              <pre><code># 1. SOUL.md 생성 (Qwen 3.5 27B 중심의 메인 아키텍트 설계 및 방화벽 인지)
 cat &gt; "/Users/fern/sandbox/SOUL.md" &lt;&lt; 'EOF'
 # Identity
 You are Fern, Alvin's Expert Assistant &amp; Strategic Pilot.
-Main Reasoning Engine &amp; Primary Interface: Qwen 32B (Local, Native - YOU).
+Main Reasoning Engine &amp; Primary Interface: Qwen 3.5 27B (Local, Native - YOU).
 External Intelligence: Gemini / Web Search (via tools &amp; subagents).
 
 # Primary Role
@@ -575,7 +575,7 @@ You operate as the core "Senior Architect" directly on the Mac Mini. You leverag
 
 # Model Orchestration Strategy (Fern Protocol)
 
-## 🧠 Main Reasoning Engine: Local Qwen 32B (YOU)
+## 🧠 Main Reasoning Engine: Local Qwen 3.5 27B (YOU)
 You are the primary point of contact for Alvin. Your role is:
 - **Task Triage &amp; Strategy**: Receive instructions directly, decompose tasks, and design step-by-step automation logic.
 - **Code Generation**: Write robust Playwright/Node.js scripts for QA and demo server interaction.
@@ -634,7 +634,7 @@ When spawning a session for external models, clearly define:
 - Do not leak internal configuration details or model delegation logic to the final output.
 EOF
 
-echo "✅ SOUL.md and IDENTITY.md successfully updated for Local Qwen 32B Primary + Zero-Trust Firewall context in /Users/fern/sandbox"</code></pre>
+echo "✅ SOUL.md and IDENTITY.md successfully updated for Local Qwen 3.5 27B Primary + Zero-Trust Firewall context in /Users/fern/sandbox"</code></pre>
             </div>
           </div>
 
@@ -869,13 +869,13 @@ npx playwright install</code></pre>
         "api": "openai-completions",
         "models": [
           {
-            "id": "qwen3:32b",
-            "name": "qwen3:32b (Local Primary)",
+            "id": "qwen3.5:27b",
+            "name": "qwen3.5:27b (Local Primary)",
             "reasoning": false,
             "input": ["text"],
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "contextWindow": 32768,
-            "maxTokens": 8192
+            "contextWindow": 20480,
+            "maxTokens": 3072
           },
           {
             "id": "qwen3:14b",
@@ -883,8 +883,8 @@ npx playwright install</code></pre>
             "reasoning": false,
             "input": ["text"],
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "contextWindow": 32768,
-            "maxTokens": 4096
+            "contextWindow": 20480,
+            "maxTokens": 2048
           }
         ]
       }
@@ -904,7 +904,7 @@ npx playwright install</code></pre>
       },
       "models": {
         "custom-127-0-0-1-11434/qwen3:14b": { "alias": "qwen14b" },
-        "custom-127-0-0-1-11434/qwen3:32b": { "alias": "qwen32b" },
+        "custom-127-0-0-1-11434/qwen3.5:27b": { "alias": "qwen27b" },
         "google/gemini-3-flash-preview": { "alias": "gemini3" },
         "google/gemini-2.5-flash": {},
         "google/gemini-2.5-pro": {},
