@@ -1242,7 +1242,7 @@ ls -le /Users/Shared | head -n 5</code></pre>
             <p class="text-sm text-slate-400">Fern 계정에서 LaunchAgent를 등록하여 OpenClaw Gateway/Browser를 자동 기동합니다.</p>
             <div class="code-block text-xs mt-3">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code>/Users/fern/Library/LaunchAgents/com.fern.openclaw.plist</code></pre>
+              <pre><code>/Users/fern/Library/LaunchAgents/ai.openclaw.gateway.plist</code></pre>
             </div>
           </div>
         </div>
@@ -1313,7 +1313,7 @@ sudo chmod 700 /Users/alvin /Users/fern
 sudo chmod +a "user:fern deny list,add_file,search,delete,add_subdirectory,writeattr,writeextattr,chown,file_inherit,directory_inherit" /Users/Shared || true
 
 # [2-1/6] GUI LaunchAgent 무력화
-for label in ai.openclaw.gateway com.openclaw.gateway com.clawdbot.gateway bot.molt.gateway; do
+for label in ai.openclaw.gateway com.fern.openclaw com.openclaw.gateway com.clawdbot.gateway bot.molt.gateway; do
   bootout_safe  "gui/${FERN_UID}/${label}"
   disable_safe  "gui/${FERN_UID}/${label}"
 done
@@ -1555,45 +1555,61 @@ LOG_DIR="${SANDBOX_DIR}/logs"
 TMPDIR="${LOG_DIR}/tmp"
 GATEWAY_PORT="18789"
 OPENCLAW_BIN="/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw"
-PLIST_PATH="/Users/fern/Library/LaunchAgents/com.fern.openclaw.plist"
 
+LABEL="ai.openclaw.gateway"
+PLIST_PATH="/Users/fern/Library/LaunchAgents/${LABEL}.plist"
+
+# --------------------------------------------------
+# Sandbox Mount Check
+# --------------------------------------------------
 verify_mount() {
   MOUNT_POINT="/Users/fern/sandbox"
   EXPECTED_VOLUME="FernSandbox"
   DISKUTIL="/usr/sbin/diskutil"
+
   for i in $(seq 1 15); do
     if INFO="$($DISKUTIL info "$MOUNT_POINT" 2>/dev/null)"; then
       VOLUME_NAME="$(echo "$INFO" | awk -F': *' '/Volume Name/ {print $2}')"
       MOUNT_PATH="$(echo "$INFO" | awk -F': *' '/Mount Point/ {print $2}')"
-      if [ "$VOLUME_NAME" = "$EXPECTED_VOLUME" ] && [ "$MOUNT_PATH" = "$MOUNT_POINT" ]; then
+
+      if [ "$VOLUME_NAME" = "$EXPECTED_VOLUME" ] && \
+         [ "$MOUNT_PATH" = "$MOUNT_POINT" ]; then
         return 0
       fi
     fi
     sleep 2
   done
+
   echo "[ERROR] Sandbox mount not ready."
   exit 78
 }
 
+# --------------------------------------------------
+# Cleanup (port 기반 정리)
+# --------------------------------------------------
 cleanup() {
-  pkill -u fern -f "Google Chrome" 2>/dev/null || true
-  pkill -u fern -f "Chromium" 2>/dev/null || true
-  pkill -u fern -f "openclaw gateway" 2>/dev/null || true
-  pkill -u fern -f "openclaw dashboard" 2>/dev/null || true
-  pkill -u fern -f "openclaw relay" 2>/dev/null || true
   PIDS=$(/usr/sbin/lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
   for pid in $PIDS; do
-    if [ "$pid" != "$$" ]; then kill -9 "$pid" 2>/dev/null || true; fi
+    if [ "$pid" != "$$" ]; then
+      kill -9 "$pid" 2>/dev/null || true
+    fi
   done
 }
 
-daemon() {
+# --------------------------------------------------
+# Gateway Entry (launchd에서 호출)
+# --------------------------------------------------
+gateway() {
   verify_mount
   mkdir -p "${LOG_DIR}" "${TMPDIR}"
+
   exec >> "${LOG_DIR}/openclaw-launchd.out" 2>&1
+
   echo "=================================================="
-  echo "🚀 OpenClaw DAEMON START: $(date)"
+  echo "OpenClaw GATEWAY START: $(date)"
   echo "=================================================="
+
+  # launchd minimal PATH 환경이므로 nvm은 내부에서 로딩
   export NVM_DIR="/Users/fern/.nvm"
   if [ -s "$NVM_DIR/nvm.sh" ]; then
     set +u
@@ -1601,67 +1617,125 @@ daemon() {
     set -u
     nvm use 24 >/dev/null 2>&1 || true
   fi
+
   cd "${SANDBOX_DIR}"
+
   cleanup
   sleep 1
+
   if [ ! -x "$OPENCLAW_BIN" ]; then
-    echo "[ERROR] openclaw binary not found."
+    echo "[ERROR] openclaw binary not found at $OPENCLAW_BIN."
     sleep 10
     exit 127
   fi
-  (sleep 3 && "$OPENCLAW_BIN" dashboard) &
+
   exec "$OPENCLAW_BIN" gateway --bind loopback --port "${GATEWAY_PORT}"
 }
 
+# --------------------------------------------------
+# Install LaunchAgent (minimal PATH)
+# --------------------------------------------------
 install_plist() {
   mkdir -p /Users/fern/Library/LaunchAgents
+
   cat > "$PLIST_PATH" << PLIST_EOF
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+ "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key><string>com.fern.openclaw</string>
-    <key>ProgramArguments</key><array><string>/Users/fern/run-openclaw.sh</string><string>daemon</string></array>
-    <key>RunAtLoad</key><true/><key>KeepAlive</key><true/><key>ThrottleInterval</key><integer>10</integer>
-    <key>LimitLoadToSessionType</key><string>Aqua</string>
+
+    <key>Label</key>
+    <string>${LABEL}</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/fern/run-openclaw.sh</string>
+        <string>gateway</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>LimitLoadToSessionType</key>
+    <string>Aqua</string>
+
     <key>EnvironmentVariables</key>
     <dict>
-        <key>PATH</key><string>/Users/fern/.nvm/versions/node/v24.13.1/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>PATH</key>
+        <string>/usr/bin:/bin:/usr/sbin:/sbin</string>
     </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/fern/sandbox/logs/openclaw-launchd.out</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/fern/sandbox/logs/openclaw-launchd.err</string>
+
 </dict>
 </plist>
 PLIST_EOF
 }
 
+# --------------------------------------------------
+# User Commands
+# --------------------------------------------------
 start() {
   UID_FERN=$(id -u)
   install_plist
-  launchctl bootout "gui/${UID_FERN}" "$PLIST_PATH" 2>/dev/null || true
+  launchctl bootout "gui/${UID_FERN}/${LABEL}" 2>/dev/null || true
   sleep 1
   launchctl bootstrap "gui/${UID_FERN}" "$PLIST_PATH"
-  echo "✅ LaunchAgent 시작 완료"
+  echo "LaunchAgent (${LABEL}) started"
 }
 
 stop() {
   UID_FERN=$(id -u)
-  launchctl bootout "gui/${UID_FERN}" "$PLIST_PATH" 2>/dev/null || true
+  launchctl bootout "gui/${UID_FERN}/${LABEL}" 2>/dev/null || true
   sleep 1
   cleanup
-  echo "✅ 완전 종료 완료"
+  echo "Stopped"
 }
 
 status() {
   UID_FERN=$(id -u)
-  echo "=== OpenClaw 상태 ==="
-  if launchctl print "gui/${UID_FERN}/com.fern.openclaw" >/dev/null 2>&1; then echo "🟢 LaunchAgent 활성"; else echo "🔴 LaunchAgent 중지"; fi
-  if lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN >/dev/null 2>&1; then echo "🟢 Gateway LISTEN (${GATEWAY_PORT})"; else echo "🔴 Gateway 닫힘"; fi
+  echo "=== OpenClaw Status ==="
+
+  if launchctl print "gui/${UID_FERN}/${LABEL}" >/dev/null 2>&1; then
+    echo "LaunchAgent: ACTIVE"
+  else
+    echo "LaunchAgent: INACTIVE"
+  fi
+
+  if lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN >/dev/null 2>&1; then
+    echo "Gateway: LISTENING (${GATEWAY_PORT})"
+  else
+    echo "Gateway: CLOSED"
+  fi
 }
 
-restart() { stop; sleep 2; start; }
+restart() {
+  stop
+  sleep 2
+  start
+}
 
 case "$CMD" in
-  start) start ;; stop) stop ;; restart) restart ;; status) status ;; daemon) daemon ;;
-  *) echo "Usage: $0 {start|stop|restart|status}"; exit 1 ;;
+  start) start ;;
+  stop) stop ;;
+  restart) restart ;;
+  status) status ;;
+  gateway) gateway ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
 esac
 RUNNER_EOF
 
