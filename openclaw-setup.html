@@ -1539,13 +1539,6 @@ echo "✅ 인프라 환경 및 Ollama 와치독 구축 완료!"</code></pre>
         <div class="code-block">
           <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
           <pre><code class="text-sm">#!/bin/bash
-# ==============================================================================
-# OpenClaw Agent Launcher (run-openclaw.sh)
-# 용도: 에이전트의 LaunchAgent 기반 구동 및 생존성 관리
-# 위치: /Users/fern/run-openclaw.sh
-# 실행: 에이전트 계정(fern)에서 실행
-# ==============================================================================
-
 set -euo pipefail
 
 CMD="${1:-status}"
@@ -1554,31 +1547,25 @@ SANDBOX_DIR="/Users/fern/sandbox"
 LOG_DIR="${SANDBOX_DIR}/logs"
 TMPDIR="${LOG_DIR}/tmp"
 GATEWAY_PORT="18789"
-
-#/** @description OpenClaw 바이너리(고정 경로). NVM/launchd 환경에서도 흔들리지 않게 절대경로로 둔다. */
 OPENCLAW_BIN="/Users/fern/.nvm/versions/node/v24.13.1/bin/openclaw"
 
-#/** @description LaunchAgent 라벨/경로. openclaw status가 찾는 표준 라벨(ai.openclaw.gateway)과 맞춘다. */
 LABEL="ai.openclaw.gateway"
 PLIST_PATH="/Users/fern/Library/LaunchAgents/${LABEL}.plist"
 
-#/** @description launchd에서 기본 PATH가 너무 짧아서 doctor 경고가 뜬다. 요구 디렉토리를 PATH에 포함한다. */
-REQUIRED_PATH="/Users/fern/.nvm:/Users/fern/.local/bin:/Users/fern/.npm-global/bin:/Users/fern/bin:/Users/fern/.volta/bin:/Users/fern/.asdf/shims:/Users/fern/.bun/bin:/Users/fern/Library/Application Support/fnm/aliases/default/bin:/Users/fern/.fnm/aliases/default/bin:/Users/fern/Library/pnpm:/Users/fern/.local/share/pnpm:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+#/** @description launchd 환경에서 필요한 PATH를 보강한다. */
+REQUIRED_PATH="/Users/fern/.nvm/versions/node/v24.13.1/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-# --------------------------------------------------
-# Sandbox Mount Check
-# --------------------------------------------------
 verify_mount() {
-  #/** @description 샌드박스 APFS 볼륨이 기대한 이름/마운트포인트로 붙었는지 확인한다. */
+  #/** @description 샌드박스 마운트가 준비될 때까지 대기한다. */
   local MOUNT_POINT="/Users/fern/sandbox"
   local EXPECTED_VOLUME="FernSandbox"
   local DISKUTIL="/usr/sbin/diskutil"
 
   for _ in $(seq 1 15); do
     if INFO="$($DISKUTIL info "$MOUNT_POINT" 2>/dev/null)"; then
+      local VOLUME_NAME MOUNT_PATH
       VOLUME_NAME="$(echo "$INFO" | awk -F': *' '/Volume Name/ {print $2}')"
       MOUNT_PATH="$(echo "$INFO" | awk -F': *' '/Mount Point/ {print $2}')"
-
       if [ "$VOLUME_NAME" = "$EXPECTED_VOLUME" ] && [ "$MOUNT_PATH" = "$MOUNT_POINT" ]; then
         return 0
       fi
@@ -1590,58 +1577,22 @@ verify_mount() {
   exit 78
 }
 
-# --------------------------------------------------
-# Cleanup (port 기반 정리)
-# --------------------------------------------------
 cleanup() {
-  #/** @description 게이트웨이 포트(18789)를 점유한 fern 프로세스를 정리한다. (가능하면 TERM→KILL 순서) */
+  #/** @description 18789를 점유한 fern 프로세스에 TERM만 보낸다. (kill -9 금지) */
   local pids
   pids=$(/usr/sbin/lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
-
   for pid in $pids; do
-    if [ "$pid" != "$$" ]; then
-      kill -TERM "$pid" 2>/dev/null || true
-    fi
-  done
-
-  sleep 1
-
-  pids=$(/usr/sbin/lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true)
-  for pid in $pids; do
-    if [ "$pid" != "$$" ]; then
-      kill -KILL "$pid" 2>/dev/null || true
-    fi
+    [ "$pid" != "$$" ] && kill -TERM "$pid" 2>/dev/null || true
   done
 }
 
-# --------------------------------------------------
-# Gateway Entry (launchd에서 호출)
-# --------------------------------------------------
 gateway() {
-  #/** @description launchd가 호출하는 실제 게이트웨이 엔트리포인트. 로그/환경/PATH를 여기서 보강한다. */
+  #/** @description launchd가 호출하는 게이트웨이 엔트리포인트. */
   verify_mount
   mkdir -p "${LOG_DIR}" "${TMPDIR}"
 
-  # launchd가 표준 출력/에러를 파일로도 보내지만, 스크립트 자체 로그가 섞일 수 있어 리다이렉트 유지
-  exec >> "${LOG_DIR}/openclaw-launchd.out" 2>&1
-
-  echo "=================================================="
-  echo "OpenClaw GATEWAY START: $(date)"
-  echo "=================================================="
-
-  #/** @description launchd 기본 PATH가 짧아 doctor 경고 및 플러그인/브라우저 제어 의존성이 깨질 수 있어 보강한다. */
-  export PATH="${REQUIRED_PATH}:${PATH:-/usr/bin:/bin:/usr/sbin:/sbin}"
-
-  #/** @description NVM 환경 변수(필요시). openclaw 바이너리는 절대경로라 nvm 로딩은 선택사항이지만, node/부가도구를 위해 둔다. */
   export HOME="/Users/fern"
-  export NVM_DIR="/Users/fern/.nvm"
-
-  if [ -s "$NVM_DIR/nvm.sh" ]; then
-    set +u
-    . "$NVM_DIR/nvm.sh"
-    set -u
-    nvm use 24 >/dev/null 2>&1 || true
-  fi
+  export PATH="${REQUIRED_PATH}:${PATH:-/usr/bin:/bin:/usr/sbin:/sbin}"
 
   cd "${SANDBOX_DIR}"
 
@@ -1649,30 +1600,23 @@ gateway() {
   sleep 1
 
   if [ ! -x "$OPENCLAW_BIN" ]; then
-    echo "[ERROR] openclaw binary not found at $OPENCLAW_BIN."
-    echo "[HINT] PATH=${PATH}"
-    sleep 10
+    echo "[ERROR] openclaw binary not found at $OPENCLAW_BIN"
     exit 127
   fi
 
-  #/** @description loopback-only로 게이트웨이를 올린다. */
-  exec "$OPENCLAW_BIN" gateway --bind loopback --port "${GATEWAY_PORT}"
+  NODE_BIN="/Users/fern/.nvm/versions/node/v24.13.1/bin/node"
+  exec "$NODE_BIN" "$OPENCLAW_BIN" gateway --bind loopback --port "${GATEWAY_PORT}"
 }
 
-# --------------------------------------------------
-# Install LaunchAgent (PATH 보강)
-# --------------------------------------------------
 install_plist() {
-  #/** @description LaunchAgent plist를 생성/갱신한다. PATH를 REQUIRED_PATH로 넣어 doctor 경고를 제거한다. */
+  #/** @description 정상 XML plist를 생성한다. (깨진 plist 금지) */
   mkdir -p /Users/fern/Library/LaunchAgents
 
-  cat > "$PLIST_PATH" << PLIST_EOF
+  cat > "$PLIST_PATH" <<PLIST_EOF
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
- "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-
   <key>Label</key>
   <string>${LABEL}</string>
 
@@ -1700,8 +1644,6 @@ install_plist() {
     <string>/Users/fern</string>
     <key>PATH</key>
     <string>${REQUIRED_PATH}</string>
-    <key>NVM_DIR</key>
-    <string>/Users/fern/.nvm</string>
   </dict>
 
   <key>StandardOutPath</key>
@@ -1709,52 +1651,47 @@ install_plist() {
 
   <key>StandardErrorPath</key>
   <string>/Users/fern/sandbox/logs/openclaw-launchd.err</string>
-
 </dict>
 </plist>
 PLIST_EOF
 }
 
-# --------------------------------------------------
-# User Commands
-# --------------------------------------------------
 start() {
-  #/** @description plist 갱신 후 LaunchAgent를 부트스트랩으로 올린다. */
-  local UID_FERN
-  UID_FERN=$(id -u)
+  #/** @description LaunchAgent를 갱신 후 로드한다. (fern UID를 명시적으로 사용) */
+  local FERN_UID
+  FERN_UID="$(id -u fern)"
 
   install_plist
-  launchctl bootout "gui/${UID_FERN}/${LABEL}" 2>/dev/null || true
+  launchctl bootout "gui/${FERN_UID}/${LABEL}" 2>/dev/null || true
   sleep 1
-  launchctl bootstrap "gui/${UID_FERN}" "$PLIST_PATH"
+  launchctl bootstrap "gui/${FERN_UID}" "$PLIST_PATH"
   echo "LaunchAgent (${LABEL}) started"
 }
 
 stop() {
-  #/** @description LaunchAgent를 내리고(bootout) 포트 점유 프로세스도 정리한다. */
-  local UID_FERN
-  UID_FERN=$(id -u)
+  #/** @description LaunchAgent를 내리고 포트를 정리한다. */
+  local FERN_UID
+  FERN_UID="$(id -u fern)"
 
-  launchctl bootout "gui/${UID_FERN}/${LABEL}" 2>/dev/null || true
+  launchctl bootout "gui/${FERN_UID}/${LABEL}" 2>/dev/null || true
   sleep 1
   cleanup
   echo "Stopped"
 }
 
 status() {
-  #/** @description LaunchAgent 활성 여부 및 게이트웨이 포트 리슨 여부를 출력한다. */
-  local UID_FERN
-  UID_FERN=$(id -u)
+  #/** @description LaunchAgent/포트 리슨 상태를 출력한다. */
+  local FERN_UID
+  FERN_UID="$(id -u fern)"
 
   echo "=== OpenClaw Status ==="
-
-  if launchctl print "gui/${UID_FERN}/${LABEL}" >/dev/null 2>&1; then
+  if launchctl print "gui/${FERN_UID}/${LABEL}" >/dev/null 2>&1; then
     echo "LaunchAgent: ACTIVE"
   else
     echo "LaunchAgent: INACTIVE"
   fi
 
-  if /usr/sbin/lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN -u fern -t 2>/dev/null || true; then
+  if /usr/sbin/lsof -nP -iTCP:${GATEWAY_PORT} -sTCP:LISTEN >/dev/null 2>&1; then
     echo "Gateway: LISTENING (${GATEWAY_PORT})"
   else
     echo "Gateway: CLOSED"
@@ -1762,7 +1699,7 @@ status() {
 }
 
 restart() {
-  #/** @description stop→start 순서로 재기동한다. */
+  #/** @description stop→start로 재기동한다. */
   stop
   sleep 2
   start
@@ -1779,14 +1716,7 @@ case "$CMD" in
     exit 1
     ;;
 esac
-
-# --------------------------------------------------
-# Execution & Verify
-# --------------------------------------------------
-chmod +x /Users/fern/run-openclaw.sh
-/Users/fern/run-openclaw.sh restart
-openclaw status --deep
-echo "✅ run-openclaw.sh 업데이트 및 재기동 완료!"</code></pre>
+</code></pre>
         </div>
 
         <div class="mt-8 glass p-8 rounded-[2rem] border-2 border-emerald-500/30 shadow-2xl">
