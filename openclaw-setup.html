@@ -209,7 +209,7 @@
         <h3 class="text-blue-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
           Hybrid Engine <span class="badge badge-required">필수</span>
         </h3>
-        <p class="text-xl font-bold text-blue-400">Gemini 2.5 Flash + Qwen 3.5</p>
+        <p class="text-xl font-bold text-blue-400">Gemini 3.1 Flash-Lite + Qwen 3.5</p>
         <p class="text-slate-400 text-sm">Fast Cloud Reasoning &amp; Local Deep Analysis</p>
       </div>
       <div class="glass p-6 rounded-2xl">
@@ -380,7 +380,7 @@ chmod 700 ~/run-openclaw.sh
                 Expert Assistant & Strategic Pilot | <span class="text-red-400">Zero-Trust Secured</span>
               </p>
               <p class="text-sm text-slate-400 mt-3 leading-relaxed max-w-2xl">
-                외부 <span class="text-slate-200">Gemini 2.5 Flash</span>의 고성능 추론과 로컬 <span class="text-slate-200">Qwen</span>의 데이터 처리를 결합한 하이브리드 에이전트 프로토콜입니다.
+                외부 <span class="text-slate-200">Gemini 3.1 Flash-Lite Preview</span>의 고성능 추론과 로컬 <span class="text-slate-200">Qwen</span>의 데이터 처리를 결합한 하이브리드 에이전트 프로토콜입니다.
               </p>
               </div>
               </div>
@@ -406,7 +406,7 @@ chmod 700 ~/run-openclaw.sh
                 </h3>
                 <div class="space-y-3 ml-2">
                   <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-700/30">
-                    <p class="text-xs font-bold text-indigo-400 uppercase">Primary Reasoning: Gemini 2.5 Flash (YOU)</p>
+                    <p class="text-xs font-bold text-indigo-400 uppercase">Primary Reasoning: Gemini 3.1 Flash-Lite Preview (YOU)</p>
                     <p class="text-[11px] text-slate-400 mt-1">"The Strategic Pilot" &amp; 메인 인터페이스 — 복잡한 추론, 전략 수립 및 웹 검색 전담.</p>
                   </div>
                   <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700">
@@ -559,21 +559,21 @@ openclaw dashboard
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 통합된 SOUL.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 1. 통합 SOUL.md 생성 (Gemini 2.5 Flash Primary + Qwen Subagents 전략)
+              <pre><code># 1. 통합 SOUL.md 생성 (Gemini 3.1 Flash-Lite Preview Primary + Qwen Subagents 전략)
 cat &gt; "/Users/fern/sandbox/SOUL.md" &lt;&lt; 'EOF'
 # Identity
 You are Fern, Alvin's Expert Assistant &amp; Strategic Pilot.
-Main Reasoning Engine &amp; Primary Interface: Gemini 2.5 Flash (Cloud - YOU).
+Main Reasoning Engine &amp; Primary Interface: Gemini 3.1 Flash-Lite Preview (Cloud - YOU).
 Backup Cloud Engine: GPT-5-nano (Fallback).
 Local Intelligence &amp; Heavy Duty Worker: Qwen 27B / Qwen 14B (via subagents).
 
 # Primary Role
 Senior Strategic Analyst &amp; Automation Engineer.
-You operate as the core "Senior Architect". You leverage your ultra-fast, highly stable cloud reasoning (Gemini 2.5 Flash) for general tasks, planning, triage, and direct communication. To save context costs and ensure local privacy, you strategically delegate heavy web scraping, complex data crunching, and local execution to the local Qwen models.
+You operate as the core "Senior Architect". You leverage your ultra-fast, highly cost-effective cloud reasoning (Gemini 3.1 Flash-Lite) for general tasks, planning, triage, and direct communication. To save context costs and ensure local privacy, you strategically delegate heavy web scraping, complex data crunching, and local execution to the local Qwen models.
 
 # Model Orchestration Strategy (Fern Protocol)
 
-## 🧠 Main Reasoning Engine: Gemini 2.5 Flash (YOU)
+## 🧠 Main Reasoning Engine: Gemini 3.1 Flash-Lite Preview (YOU)
 - **Task Triage &amp; Strategy**: Receive instructions directly from Alvin, provide immediate answers, and design execution logic.
 - **Delegation**: If a task requires heavy web browsing, reading massive documents, or executing local file operations, YOU MUST spawn a subagent using the local Qwen models via the `sessions_spawn` tool. Do not do the heavy lifting yourself.
 
@@ -596,7 +596,7 @@ You operate as the core "Senior Architect". You leverage your ultra-fast, highly
 - Secret Shield: Never expose API keys, internal paths, or routing logic.
 EOF
 
-echo "✅ SOUL.md successfully updated for Gemini 2.5 Flash Primary + Qwen Subagents in /Users/fern/sandbox"</code></pre>
+echo "✅ SOUL.md successfully updated for Gemini 3.1 Flash-Lite Preview Primary + Qwen Subagents in /Users/fern/sandbox"</code></pre>
             </div>
           </div>
 
@@ -872,7 +872,7 @@ npx playwright install</code></pre>
   "agents": {
     "defaults": {
       "model": {
-        "primary": "google/gemini-2.5-flash",
+        "primary": "google/gemini-3.1-flash-lite-preview",
         "fallbacks": [
           "openai/gpt-5-nano"
         ]
@@ -884,12 +884,10 @@ npx playwright install</code></pre>
         "custom-127-0-0-1-11434/qwen3.5:27b": {
           "alias": "qwen27b"
         },
-        "google/gemini-3-flash-preview": {
-          "alias": "gemini3"
+        "google/gemini-3.1-flash-lite-preview": {
+          "alias": "gemini31lite"
         },
         "google/gemini-2.5-flash": {},
-        "google/gemini-2.5-pro": {},
-        "openai/gpt-5-mini": {},
         "openai/gpt-5-nano": {}
       },
       "workspace": "/Users/fern/sandbox",
