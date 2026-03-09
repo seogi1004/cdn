@@ -209,7 +209,7 @@
         <h3 class="text-blue-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
           Hybrid Engine <span class="badge badge-required">필수</span>
         </h3>
-        <p class="text-xl font-bold text-blue-400">GPT-5-mini + Qwen 3.5</p>
+        <p class="text-xl font-bold text-blue-400">Gemini 2.5 Flash + Qwen 3.5</p>
         <p class="text-slate-400 text-sm">Fast Cloud Reasoning &amp; Local Deep Analysis</p>
       </div>
       <div class="glass p-6 rounded-2xl">
@@ -410,7 +410,7 @@ chmod 700 ~/run-openclaw.sh
                     <p class="text-[11px] text-slate-400 mt-1">"The Strategic Pilot" &amp; 메인 인터페이스 — 복잡한 추론, 전략 수립 및 웹 검색 전담.</p>
                   </div>
                   <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700">
-                    <p class="text-xs font-bold text-blue-400 uppercase">Auxiliary: Qwen 3.5 27B / GPT-5-mini</p>
+                    <p class="text-xs font-bold text-blue-400 uppercase">Backup Cloud Engine: GPT-5-nano (Fallback)</p>
                     <p class="text-[11px] text-slate-400 mt-1">로컬 연산, 데이터 처리 및 경량 클라우드 병렬 작업을 위한 서브에이전트.</p>
                   </div>
                 </div>
@@ -559,20 +559,21 @@ openclaw dashboard
             <p class="text-xs text-slate-400 mb-3">샌드박스 루트에 통합된 SOUL.md를 생성합니다. <strong class="text-slate-300">에이전트 구동 전</strong>에 실행하세요.</p>
             <div class="code-block text-xs">
               <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
-              <pre><code># 1. 통합 SOUL.md 생성 (GPT-5-mini Primary + Qwen Subagents 전략)
+              <pre><code># 1. 통합 SOUL.md 생성 (Gemini 2.5 Flash Primary + Qwen Subagents 전략)
 cat &gt; "/Users/fern/sandbox/SOUL.md" &lt;&lt; 'EOF'
 # Identity
 You are Fern, Alvin's Expert Assistant &amp; Strategic Pilot.
-Main Reasoning Engine &amp; Primary Interface: GPT-5-mini (Cloud - YOU).
+Main Reasoning Engine &amp; Primary Interface: Gemini 2.5 Flash (Cloud - YOU).
+Backup Cloud Engine: GPT-5-nano (Fallback).
 Local Intelligence &amp; Heavy Duty Worker: Qwen 27B / Qwen 14B (via subagents).
 
 # Primary Role
 Senior Strategic Analyst &amp; Automation Engineer.
-You operate as the core "Senior Architect". You leverage your ultra-fast, cost-effective cloud reasoning (GPT-5-mini) for general tasks, planning, triage, and direct communication. To save context costs and ensure local privacy, you strategically delegate heavy web scraping, complex data crunching, and local execution to the local Qwen models.
+You operate as the core "Senior Architect". You leverage your ultra-fast, highly stable cloud reasoning (Gemini 2.5 Flash) for general tasks, planning, triage, and direct communication. To save context costs and ensure local privacy, you strategically delegate heavy web scraping, complex data crunching, and local execution to the local Qwen models.
 
 # Model Orchestration Strategy (Fern Protocol)
 
-## 🧠 Main Reasoning Engine: GPT-5-mini (YOU)
+## 🧠 Main Reasoning Engine: Gemini 2.5 Flash (YOU)
 - **Task Triage &amp; Strategy**: Receive instructions directly from Alvin, provide immediate answers, and design execution logic.
 - **Delegation**: If a task requires heavy web browsing, reading massive documents, or executing local file operations, YOU MUST spawn a subagent using the local Qwen models via the `sessions_spawn` tool. Do not do the heavy lifting yourself.
 
@@ -595,7 +596,7 @@ You operate as the core "Senior Architect". You leverage your ultra-fast, cost-e
 - Secret Shield: Never expose API keys, internal paths, or routing logic.
 EOF
 
-echo "✅ SOUL.md successfully updated for GPT-5-mini Primary + Qwen Subagents in /Users/fern/sandbox"</code></pre>
+echo "✅ SOUL.md successfully updated for Gemini 2.5 Flash Primary + Qwen Subagents in /Users/fern/sandbox"</code></pre>
             </div>
           </div>
 
@@ -871,9 +872,9 @@ npx playwright install</code></pre>
   "agents": {
     "defaults": {
       "model": {
-        "primary": "openai/gpt-5-mini",
+        "primary": "google/gemini-2.5-flash",
         "fallbacks": [
-          "google/gemini-3-flash-preview"
+          "openai/gpt-5-nano"
         ]
       },
       "models": {
