@@ -424,7 +424,7 @@ chmod 700 ~/run-openclaw.sh
                   3. 구성 베이스라인 (Memory &amp; Context)
                 </h3>
                 <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside ml-2">
-                  <li><strong>컨텍스트 윈도우</strong>: <code class="text-indigo-300 font-bold">20480</code> 토큰으로 엄격히 제한</li>
+                  <li><strong>컨텍스트 윈도우</strong>: <code class="text-indigo-300 font-bold">32768</code> 토큰으로 엄격히 제한</li>
                   <li><strong>구현 방식</strong>: <code class="text-slate-400">openclaw.json</code> 설정 및 Ollama <code class="text-slate-400">Modelfile</code> (<code class="text-slate-400">num_ctx</code>) 하드코딩</li>
                 </ul>
               </div>
@@ -836,14 +836,17 @@ npx playwright install</code></pre>
             <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy JSON</button>
             <pre><code>{
   "meta": {
-    "lastTouchedVersion": "2026.2.24",
-    "lastTouchedAt": "2026-02-27T00:40:00.000Z"
+    "lastTouchedVersion": "2026.2.26",
+    "lastTouchedAt": "2026-03-01T04:40:50.700Z"
   },
   "wizard": {
     "lastRunAt": "2026-02-26T00:06:08.478Z",
     "lastRunVersion": "2026.2.24",
     "lastRunCommand": "onboard",
     "lastRunMode": "local"
+  },
+  "logging": {
+    "file": "/Users/fern/.openclaw/logs/openclaw.log"
   },
   "auth": {
     "profiles": {
@@ -867,20 +870,34 @@ npx playwright install</code></pre>
         "models": [
           {
             "id": "qwen3.5:27b",
-            "name": "qwen3.5:27b (Local Insight)",
+            "name": "qwen3.5:27b (Local Primary)",
             "reasoning": false,
-            "input": ["text"],
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "contextWindow": 20480,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 32768,
             "maxTokens": 3072
           },
           {
             "id": "qwen3:14b",
             "name": "qwen3:14b (Local Fast)",
             "reasoning": false,
-            "input": ["text"],
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "contextWindow": 20480,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 32678,
             "maxTokens": 2048
           }
         ]
@@ -889,30 +906,47 @@ npx playwright install</code></pre>
   },
   "agents": {
     "defaults": {
-      "sandbox": { "mode": "off" },
-      "typingMode": "thinking",
-      "typingIntervalSeconds": 6,
       "model": {
         "primary": "google/gemini-2.5-flash",
         "fallbacks": [
-          "google/gemini-2.5-pro",
+          "custom-127-0-0-1-11434/qwen3.5:27b",
+          "custom-127-0-0-1-11434/qwen3:14b",
+          "google/gemini-3-flash-preview",
           "openai/gpt-5-mini"
         ]
       },
       "models": {
-        "custom-127-0-0-1-11434/qwen3:14b": { "alias": "qwen14b" },
-        "custom-127-0-0-1-11434/qwen3.5:27b": { "alias": "qwen27b" },
-        "google/gemini-3-flash-preview": { "alias": "gemini3" },
+        "custom-127-0-0-1-11434/qwen3:14b": {
+          "alias": "qwen14b"
+        },
+        "custom-127-0-0-1-11434/qwen3.5:27b": {
+          "alias": "qwen27b"
+        },
+        "google/gemini-3-flash-preview": {
+          "alias": "gemini3"
+        },
         "google/gemini-2.5-flash": {},
         "google/gemini-2.5-pro": {},
         "openai/gpt-5-mini": {},
         "openai/gpt-5-nano": {}
       },
       "workspace": "/Users/fern/sandbox",
-      "compaction": { "mode": "safeguard", "reserveTokens": 4000 },
-      "maxConcurrent": 1,
-      "subagents": { "maxConcurrent": 2 },
-      "memorySearch": { "enabled": true, "provider": "gemini", "fallback": "none" }
+      "memorySearch": {
+        "enabled": true,
+        "provider": "gemini",
+        "fallback": "none"
+      },
+      "compaction": {
+        "mode": "safeguard",
+        "reserveTokens": 4000
+      },
+      "maxConcurrent": 2,
+      "subagents": {
+        "maxConcurrent": 2
+      },
+      "sandbox": {
+        "mode": "off"
+      }
     }
   },
   "tools": {
@@ -922,24 +956,36 @@ npx playwright install</code></pre>
         "provider": "brave",
         "apiKey": "BSA****************"
       },
-      "fetch": { "enabled": true }
+      "fetch": {
+        "enabled": true
+      }
     }
   },
-  "messages": { "ackReactionScope": "group-mentions" },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
   "commands": {
     "native": "auto",
     "nativeSkills": "auto",
     "restart": true,
     "ownerDisplay": "raw"
   },
-  "session": { "dmScope": "per-channel-peer" },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
   "hooks": {
     "internal": {
       "enabled": true,
       "entries": {
-        "command-logger": { "enabled": true },
-        "session-memory": { "enabled": true },
-        "boot-md": { "enabled": true }
+        "command-logger": {
+          "enabled": true
+        },
+        "session-memory": {
+          "enabled": true
+        },
+        "boot-md": {
+          "enabled": true
+        }
       }
     }
   },
@@ -960,38 +1006,32 @@ npx playwright install</code></pre>
       "mode": "token",
       "token": "507********************************"
     },
-    "tailscale": { "mode": "off", "resetOnExit": false },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
     "nodes": {
-      "denyCommands": [
-        "system.run",
-        "browser.proxy",
-        "canvas.eval",
-        "canvas.snapshot",
-        "canvas.a2ui.push",
-        "canvas.a2ui.pushJSONL",
-        "canvas.a2ui.reset",
-        "location.get",
-        "contacts.search",
-        "calendar.events",
-        "reminders.list",
-        "photos.latest"
-      ]
+      "denyCommands": []
     }
   },
   "skills": {
-    "install": { "nodeManager": "npm" },
+    "install": {
+      "nodeManager": "npm"
+    },
     "entries": {
-      "goplaces": { "apiKey": "AIza**********************" },
+      "goplaces": {
+        "apiKey": "AIza**********************"
+      },
       "playwright": {}
     }
   },
   "plugins": {
     "entries": {
-      "telegram": { "enabled": true },
-      "acpx": { "enabled": true }
+      "telegram": {
+        "enabled": true
+      }
     }
-  },
-  "logging": { "file": "/Users/fern/.openclaw/logs/openclaw.log" }
+  }
 }</code></pre>
           </div>
         </div>
@@ -2537,9 +2577,56 @@ ls -l ~/sandbox/logs/npm-auto-update.log</code></pre>
       <!-- 🦙 Ollama Core Operations -->
       <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500 shadow-xl space-y-6">
         <h2 class="text-2xl font-bold text-blue-400 flex items-center gap-3">🦙 Ollama 핵심 운영</h2>
+
+        <div class="bg-blue-950/20 p-6 rounded-2xl border border-blue-800/40">
+          <h3 class="font-bold text-blue-300 mb-4 flex items-center gap-2">🚀 Alvin 계정 LaunchDaemon 일괄 관리</h3>
+          <p class="text-xs text-slate-400 mb-4 leading-relaxed">Ollama 서버(<code class="text-slate-200">com.alvin.ollama</code>) 및 워치독(<code class="text-slate-200">com.alvin.ollama.watchdog</code>) 데몬의 로드 및 실행 상태를 관리합니다. (root/sudo 권한 필요)</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-black/30 p-4 rounded-xl border border-slate-700/50">
+              <p class="text-[10px] text-blue-300 uppercase font-bold mb-2">기본 로드 & 활성화 (Load & Start)</p>
+              <div class="code-block text-[10px]">
+                <pre><code># [1] Ollama 서버 로드
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.plist
+
+# [2] 워치독 데몬 로드
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.alvin.ollama.watchdog.plist</code></pre>
+              </div>
+            </div>
+            <div class="bg-black/30 p-4 rounded-xl border border-slate-700/50">
+              <p class="text-[10px] text-amber-300 uppercase font-bold mb-2">강제 재시작 (Restart)</p>
+              <div class="code-block text-[10px]">
+                <pre><code># [1] Ollama 서버 강제 재시작
+sudo launchctl kickstart -k system/com.alvin.ollama
+
+# [2] 워치독 데몬 강제 재시작
+sudo launchctl kickstart -k system/com.alvin.ollama.watchdog</code></pre>
+              </div>
+            </div>
+            <div class="bg-black/30 p-4 rounded-xl border border-slate-700/50">
+              <p class="text-[10px] text-emerald-300 uppercase font-bold mb-2">상태 점검 (Status)</p>
+              <div class="code-block text-[10px]">
+                <pre><code># Ollama 서버 상태
+sudo launchctl print system/com.alvin.ollama | grep state
+
+# 워치독 데몬 상태
+sudo launchctl print system/com.alvin.ollama.watchdog | grep state</code></pre>
+              </div>
+            </div>
+            <div class="bg-black/30 p-4 rounded-xl border border-slate-700/50">
+              <p class="text-[10px] text-red-400 uppercase font-bold mb-2">서비스 언로드 (Unload/Stop)</p>
+              <div class="code-block text-[10px]">
+                <pre><code># [1] 워치독 먼저 언로드
+sudo launchctl bootout system/com.alvin.ollama.watchdog
+
+# [2] Ollama 서버 언로드
+sudo launchctl bootout system/com.alvin.ollama</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
         
         <div class="bg-blue-950/20 p-5 rounded-xl border border-blue-800/40">
-          <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">🚀 최종 운영형 LaunchDaemon 설정 (Hardened)</h3>
+          <h3 class="font-bold text-blue-300 mb-2 flex items-center gap-2">🛠️ 최종 운영형 LaunchDaemon 설정 (Hardened)</h3>
           <div class="code-block text-xs">
             <button type="button" class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
             <pre><code># [1] 기존 서비스 중지
@@ -2669,6 +2756,18 @@ tail -f ~/sandbox/logs/npm-auto-update.log
 launchctl list | grep com.fern.npmupdate
 # LaunchAgent 정의
 ls ~/Library/LaunchAgents/com.fern.npmupdate.plist</code></pre>
+            </div>
+          </div>
+          <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700 md:col-span-2">
+            <h3 class="font-bold text-white mb-3 flex items-center gap-2">🧹 로컬 LLM 세션 스토리지 관리</h3>
+            <p class="text-xs text-slate-400 mb-3">Ollama 등 로컬 LLM 연동 시 <code class="text-slate-300">~/.openclaw/agents/sessions</code> 경로에 세션 데이터가 누적되어 디스크 용량을 차지할 수 있습니다. 주기적인 정리가 권장됩니다.</p>
+            <div class="code-block text-xs">
+              <pre><code># 세션 데이터 용량 확인
+du -sh ~/.openclaw/agents/sessions
+# 모든 세션 데이터 삭제 (필요 시)
+rm -rf ~/.openclaw/agents/sessions/*
+# 7일 이상 된 세션만 선별 삭제
+find ~/.openclaw/agents/sessions -type d -mtime +7 -exec rm -rf {} +</code></pre>
             </div>
           </div>
         </div>
