@@ -209,8 +209,8 @@
         <h3 class="text-blue-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
           Hybrid Engine <span class="badge badge-required">필수</span>
         </h3>
-        <p class="text-xl font-bold text-blue-400">Gemini 2.5 Flash + Qwen</p>
-        <p class="text-slate-400 text-sm">High-fidelity Cloud Reasoning &amp; Local Privacy</p>
+        <p class="text-xl font-bold text-blue-400">GPT-5-mini + Qwen 3.5</p>
+        <p class="text-slate-400 text-sm">Fast Cloud Reasoning &amp; Local Deep Analysis</p>
       </div>
       <div class="glass p-6 rounded-2xl">
         <h3 class="text-emerald-400/80 text-xs font-bold uppercase mb-2 tracking-widest flex items-center justify-between">
@@ -907,12 +907,9 @@ npx playwright install</code></pre>
   "agents": {
     "defaults": {
       "model": {
-        "primary": "google/gemini-2.5-flash",
+        "primary": "openai/gpt-5-mini",
         "fallbacks": [
-          "custom-127-0-0-1-11434/qwen3.5:27b",
-          "custom-127-0-0-1-11434/qwen3:14b",
-          "google/gemini-3-flash-preview",
-          "openai/gpt-5-mini"
+          "google/gemini-3-flash-preview"
         ]
       },
       "models": {
@@ -942,7 +939,13 @@ npx playwright install</code></pre>
       },
       "maxConcurrent": 2,
       "subagents": {
-        "maxConcurrent": 2
+        "maxConcurrent": 2,
+        "model": {
+          "primary": "custom-127-0-0-1-11434/qwen3.5:27b",
+          "fallbacks": [
+            "custom-127-0-0-1-11434/qwen3:14b"
+          ]
+        }
       },
       "sandbox": {
         "mode": "off"
