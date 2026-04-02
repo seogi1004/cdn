@@ -681,6 +681,28 @@ document.addEventListener('DOMContentLoaded', function() {
             currentLabel: '13.5억 (매물평균 14.5)',
             note: '고가 · 대출 의존도 높음',
         },
+        {
+            region: '마곡',
+            name: '마곡힐스테이트',
+            size: '84㎡',
+            beta: 0.75,
+            color: '#f59e0b',
+            peak2021: 15.0,
+            current: 14.5,
+            currentLabel: '14.5억 (호가 14.5~14.7)',
+            note: '마곡 준신축 · 직주근접',
+        },
+        {
+            region: '수색뉴타운2',
+            name: 'DMC롯데캐슬더퍼스트',
+            size: '84㎡',
+            beta: 1.15,
+            color: '#8b5cf6',
+            peak2021: 13.0,
+            current: 12.3,
+            currentLabel: '12.3억 (호가 12.35)',
+            note: '수색뉴타운 · 1,192세대',
+        },
     ];
     let selectedAptIdx = 0;
 
@@ -689,6 +711,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const aptHistData = {
         '지축': [5.0, 7.5, 10.5, 12.0, 8.5, 9.8],
         '수색뉴타운': [7.0, 10.0, 13.5, 15.0, 11.0, 13.0],
+        '마곡': [8.0, 11.0, 14.0, 15.0, 11.5, 14.0],
+        '수색뉴타운2': [6.0, 8.5, 11.5, 13.0, 10.0, 12.0],
     };
 
     // 시나리오별 매크로 오프셋
