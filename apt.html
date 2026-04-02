@@ -710,7 +710,7 @@ document.addEventListener('DOMContentLoaded', function() {
             region: '마곡',
             name: '마곡힐스테이트',
             size: '84㎡',
-            beta: 0.75,
+            beta: 0.65, // LG 등 200개 기업 직주근접, 2027 17만명, 매물 품귀
             color: '#f59e0b',
             peak2021: 15.0,
             current: 14.5,
@@ -746,7 +746,7 @@ document.addEventListener('DOMContentLoaded', function() {
             region: '운정',
             name: '운정자이시그니처',
             size: '84㎡',
-            beta: 0.60,
+            beta: 0.65, // GTX-A 개통 but 선반영+조정 중, 인구 2년 3만↑
             color: '#14b8a6',
             peak2021: 7.0,
             current: 6.5,
@@ -758,13 +758,25 @@ document.addEventListener('DOMContentLoaded', function() {
             region: '덕은',
             name: 'DMC디에트르한강',
             size: '84㎡',
-            beta: 0.85,
+            beta: 0.80, // 기업 입주율 95%, 대장홍대선 2030, 국방대 부지 개발
             color: '#0ea5e9',
             peak2021: 11.0,
             current: 10.5,
             currentLabel: '10.5억 (실거래 11.0 신고가, AI 11.47)',
             note: '2020 입주 · 고양 덕은동 · 한강조망 · 대장홍대선 예정',
             builtYear: 2020,
+        },
+        {
+            region: '킨텍스',
+            name: '포레나킨텍스',
+            size: '84㎡',
+            beta: 0.70, // GTX-A 킨텍스역 초역세권(2번출구), 일산 구도심 약세 상쇄
+            color: '#a855f7',
+            peak2021: 10.0,
+            current: 8.5,
+            currentLabel: '8.5억 (실거래 10.0 신고가, AI 4.58 괴리)',
+            note: '2019 입주 · 1,100세대 · GTX-A 킨텍스역 초역세권',
+            builtYear: 2019,
         },
     ];
     let selectedAptIdx = 0;
@@ -780,6 +792,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '수색뉴타운3': [null, null, null, null, 9.5, 10.5], // 2023.07 입주: 분양가 6.5~6.8, 입주 후 10~10.65
         '운정': [null, null, null, null, null, 6.5],          // 2026.03 입주: 분양가 5.3, 프리미엄 ~1.2
         '덕은': [null, null, 7.5, 9.5, 8.5, 10.5],           // 2020 입주: 24.04 신고가 11억, 23.07 9.7억
+        '킨텍스': [null, null, 7.0, 9.0, 7.5, 8.5],          // 2019 입주: 분양가 5.5, 25.10 실거래 10억(신고가)
     };
 
     // 시나리오별 매크로 오프셋
