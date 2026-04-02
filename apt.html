@@ -681,6 +681,7 @@ document.addEventListener('DOMContentLoaded', function() {
             current: 9.5,
             currentLabel: '9.5억 (KB 9.55~10.4)',
             note: '2019 준공 · 852세대 · 3호선 지축역 도보5분 · Alvin 타겟',
+            builtYear: 2019,
         },
         {
             region: '수색뉴타운',
@@ -692,6 +693,7 @@ document.addEventListener('DOMContentLoaded', function() {
             current: 13.5,
             currentLabel: '13.5억 (매물평균 14.5)',
             note: '2023.07 입주 · 1,223세대 · 6호선/경의선 역세권',
+            builtYear: 2023,
         },
         {
             region: '마곡',
@@ -703,6 +705,7 @@ document.addEventListener('DOMContentLoaded', function() {
             current: 14.5,
             currentLabel: '14.5억 (실거래 14.35, 호가 14.7)',
             note: '2017 준공 · 603세대 · 9호선 신방화역 도보6분 · 직주근접',
+            builtYear: 2017,
         },
         {
             region: '수색뉴타운2',
@@ -714,6 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
             current: 12.3,
             currentLabel: '12.3억 (실거래 12.24, 호가 12.35)',
             note: '2020 입주 · 1,192세대 · 수색뉴타운 최대단지',
+            builtYear: 2020,
         },
     ];
     let selectedAptIdx = 0;
@@ -873,6 +877,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const base = apartments[selectedAptIdx].peak2021;
 
         function calcDrop(r, e) {
+            const apt = apartments[selectedAptIdx];
             const rateEff = (r - 4.5) * 4.2;
             const fxEff = ((e - 1400) / 100) * 1.6;
             const raw = rateEff + fxEff * 0.7;
@@ -881,7 +886,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const popPressure = 3;
             const policyPressure = policyLevels[parseInt(policySlider.value)].eff;
             const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
-            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff, 2) * 10) / 10;
+            const ageYears = 2026 - (apt.builtYear || 2020);
+            const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
+            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff, 2) * 10) / 10;
         }
 
         function heatColor(v) {
@@ -1004,8 +1011,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const loanIcon = totalCash >= aptPrice
                 ? '<span class="text-green-400 font-bold">가능</span>'
                 : '<span class="text-red-400">대출 필요</span>';
+            const age = 2026 - (apt.builtYear || 2020);
+            const ageColor = age <= 3 ? '#34d399' : age <= 7 ? '#fbbf24' : '#f87171';
             tr.innerHTML = `
-                <td class="p-2.5"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full shrink-0" style="background:${apt.color}"></div><div><p class="font-bold text-white text-xs">${apt.name}</p><p class="text-[9px] text-gray-500">${apt.region} · ${apt.size}</p></div></div></td>
+                <td class="p-2.5"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full shrink-0" style="background:${apt.color}"></div><div><p class="font-bold text-white text-xs">${apt.name}</p><p class="text-[9px] text-gray-500">${apt.region} · ${apt.size} · <span style="color:${ageColor}">${age}년차</span></p></div></div></td>
                 <td class="p-2.5 text-center"><span class="font-mono font-bold text-xs" style="color:${betaColor}">${apt.beta}</span></td>
                 <td class="p-2.5 text-center text-gray-400">${apt.peak2021}억</td>
                 <td class="p-2.5 text-center text-amber-400">${apt.current}억</td>
@@ -1051,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('aptInfoNote').textContent = apt.note;
         document.getElementById('simPriceLabel').textContent = apt.name + ' 예상가';
 
-        // 8-Factor model
+        // 8-Factor model + 연식 감가
         const rateEff = (rate - 4.5) * 4.2;           // ① 금리
         const fxEff = ((fx - 1400) / 100) * 1.6;      // ② 환율 (macro pressure)
         const oilEff = ((oil - 60) / 40) * 2.5;       // ③ 유가
@@ -1060,11 +1069,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const policyEff = pLevel.eff;                  // ⑥ 정부 정책 (슬라이더 연동)
         const constructionSupport = 15;                // ⑦ 건축비 상방
         const supplyCliff = 8;                         // ⑦ 공급절벽 상방
-        // ⑧ 보유세: 실효세율 상승 → 보유 비용 증가 → 매도 압력 → 가격 하락
-        // 현행 0.15% 대비 초과분을 하락 압력으로 환산 (1%p 상승 ≒ 5% 가격 하락 효과)
+        // ⑧ 보유세
         const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
+        // ⑨ 연식 감가: 연 0.4%p, 5년 이하 신축 프리미엄 -1%p
+        const ageYears = 2026 - (apt.builtYear || 2020);
+        const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
 
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff;
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1282,6 +1293,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function calcPrice8(r, f, o, t, peakPrice) {
         const b = peakPrice || apartments[selectedAptIdx].peak2021;
         const pol = parseInt(policySlider.value);
+        const apt = apartments[selectedAptIdx];
         const rateEff = (r - 4.5) * 4.2;
         const fxEff = ((f - 1400) / 100) * 1.6;
         const oilEff = ((o - 60) / 40) * 2.5;
@@ -1291,7 +1303,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const constructionSupport = 15;
         const supplyCliff = 8;
         const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff;
+        const ageYears = 2026 - (apt.builtYear || 2020);
+        const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
