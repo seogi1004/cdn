@@ -824,7 +824,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const t = tax !== undefined ? tax : parseFloat(document.getElementById('taxSlider').value);
         const s = generateScenario(sc, r, f, o, t);
         const aptLabel = apt.region + ' ' + apt.name;
-        return [
+        const datasets = [
             {label:aptLabel+' (실거래)',data:s.hist,borderColor:apt.color,borderWidth:2,pointRadius:3,pointBackgroundColor:apt.color,fill:false,tension:.35,spanGaps:false},
             {label:aptLabel+' 예측 (14-Factor)',data:s.pred,borderColor:apt.color+'99',borderWidth:2.5,borderDash:[6,4],pointRadius:4,pointBackgroundColor:apt.color+'99',pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.35,spanGaps:false},
             {label:'건축비 하한선 (대체원가)',data:s.constFloor,borderColor:C.amber.h,borderWidth:1.5,borderDash:[2,3],pointRadius:0,fill:false,tension:.3,spanGaps:false},
@@ -832,6 +832,8 @@ document.addEventListener('DOMContentLoaded', function() {
             {type:'bar',label:'A: Alvin 현금 (→매수)',data:s.cashA,backgroundColor:'rgba(59,130,246,.3)',borderColor:C.blue.l,borderWidth:1,borderRadius:4,barPercentage:.25,categoryPercentage:.8},
             {type:'bar',label:'B: Alvin 현금 (대기)',data:s.cashB,backgroundColor:'rgba(16,185,129,.3)',borderColor:C.green.l,borderWidth:1,borderRadius:4,barPercentage:.25,categoryPercentage:.8},
         ];
+        datasets._scenario = s; // 시나리오 원본 데이터 첨부
+        return datasets;
     }
 
     const mainChart=new Chart(document.getElementById('mainChart'),{
@@ -1054,6 +1056,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const apt = apartments[selectedAptIdx];
         const base = apt.peak2021; // 선택된 아파트의 고점
 
+        // generateScenario 결과를 먼저 구해 차트·verdict 양쪽에서 사용
+        const chartData = ds('war', rate, fx, oil, tax);
+        const scenarioResult = chartData._scenario;
+
         // Update policy slider label
         const pLevel = policyLevels[pol];
         policyVal.textContent = pLevel.label;
@@ -1152,8 +1158,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('simTaxMonthly').textContent = '월 ' + monthlyTaxMan.toFixed(1) + '만';
 
         // ═══════ DYNAMIC COMPARISON TABLE ═══════
-        // Scenario A: 2027.04 매수 (전세 만기 시점)
-        const priceA = price; // current slider-driven price
+        // Scenario A: 2027.04 매수 — 차트 예측값(generateScenario)과 통일
+        const priceA = scenarioResult ? scenarioResult.pred[8] : price; // 27.04 시점 차트값
         const dollarA = dollarVal;
         const totalA = totalCash;
         const buyableA = buyable;
@@ -1272,8 +1278,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const pickPrice = preferA ? priceA : priceB;
         const pickTotal = preferA ? totalA : totalB;
         const pickBuyable = preferA ? buyableA : buyableB;
-        // 최저가 예측 (바닥): generateScenario의 finalBottom 기준
-        const bottomEst = Math.round(Math.max(apt.current * (100 - Math.min(dropPct * 0.4, 25)) / 100, base * 0.65) * 10) / 10;
+        // 최저가 예측 (바닥): generateScenario의 pred[9] = 27.12 바닥
+        const bottomEst = scenarioResult ? scenarioResult.pred[9] : Math.round(Math.max(apt.current * 0.8, base * 0.65) * 10) / 10;
         const optimalTiming = preferA ? '2027년 상반기 (전세만기 전후)' : '2028년 하반기~2029년 상반기';
         const bottomTiming = dropPct > 25 ? '2027년 하반기~2028년 상반기' : '2027년 상반기';
 
@@ -1289,7 +1295,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // ═══════ UPDATE MAIN CHART (슬라이더 + 아파트 연동) ═══════
         document.getElementById('mainChartTitle').textContent = apt.region + ' ' + apt.size + ' — 2027 vs 2029 매수';
-        mainChart.data.datasets = ds('war', rate, fx, oil, tax);
+        mainChart.data.datasets = chartData;
         // Y축 범위를 아파트 가격대에 맞게 조정
         const yMax = Math.ceil(apt.peak2021 / 2) * 2 + 2;
         const yMin = Math.max(Math.floor(apt.peak2021 * 0.3), 2);
