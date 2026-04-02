@@ -264,7 +264,7 @@
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">유가 가중치</span><br><span class="text-amber-400 font-bold">2.5×</span></div>
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">보유세 가중치</span><br><span class="text-orange-400 font-bold">5.0×</span></div>
                             </div>
-                            <p class="text-[9px] text-gray-600 mt-2">※ 상방: 대체원가(건축비-토지하락, 동적) · 공급절벽(+8) | 하방: 인구(-4) · 정책(가변) · 보유세(가변) · 가계부채(-4) · 전세축소(-3) · PIR(-2.5) · 연식(가변) | v5.2</p>
+                            <p class="text-[9px] text-gray-600 mt-2">※ 상방: 대체원가(건축비-토지, 동적) · 공급절벽(+8) | 하방: 인구(-4) · 정책(가변) · 가계부채(-4) · 전세축소(-3) · PIR(-2.5) · 비주거부실(-2) · 연식(가변) | v5.3</p>
                         </div>
                     </div>
 
@@ -765,10 +765,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const debtPress  = 1.5;                                        // 가계부채/GDP 105% 구조적 압력
         const jeonsePress = 1.2;                                       // 전세 축소 → 유동성 감소
         const pirPress   = 1.0;                                        // PIR 15~25배: 매수여력 고갈
+        const nonResPress = 0.8;                                       // 비주거 부실 전이: 상가/지산센터 경매급증
         // 상방 지지 (건축비·공급절벽은 추가 하락을 억제)
         const upSupport  = 8;  // 건축비+공급절벽이 추가 하락폭을 줄여줌
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress - upSupport;
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop;
         // 현재가 기준 추가 하락 (최대 35%)
         const clampedDrop = Math.min(extraDropPct, 35);
@@ -892,7 +893,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const constFx  = Math.min(((e - 1350) / 450) * 2, 2);
             const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
             const buildCost = constBase + constOil + constFx + constPF;
-            const landDiscount = 3;
+            const landDiscount = 1.5;
             const constructionSupport = Math.max(buildCost - landDiscount, 4);
             const supplyCliff = 8;
             const popPressure = 4;
@@ -903,7 +904,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const debtEff = 4;
             const jeonseEff = 3;
             const pirEff = 2.5;
-            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff, 2) * 10) / 10;
+            const nonResEff = 2;
+            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff, 2) * 10) / 10;
         }
 
         function heatColor(v) {
@@ -1097,9 +1099,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const constFx  = Math.min(((fx - 1350) / 450) * 2, 2);       // 환율 1350→1800: 0→2
         const constPF  = Math.min(((rate - 4.5) / 4.5) * 2, 2);      // 금리 4.5→9.0: 0→2
         const buildCost = constBase + constOil + constFx + constPF;    // 건축비 부분 (8~16)
-        // 토지비 하락: 분양가의 50%가 토지비, 토지가격 하락 시 대체원가 하한선 약화
-        // 2022~2026 지가 하락 약 5~8% → 대체원가 중 토지 부분 2.5~4%p 감소
-        const landDiscount = 3;                                         // 토지비 하락분 고정 차감
+        // 토지비: 서울 주거용 토지 +4% 상승(2025) but 거래량 -44%(유동성 경색)
+        // 상가/지식산업센터 토지는 폭락 중이나 주거용은 별도 시장
+        // 거래량 급감으로 실거래 신뢰도 낮음 → 소폭 할인만 적용
+        const landDiscount = 1.5;
         const constructionSupport = Math.round(Math.max(buildCost - landDiscount, 4) * 10) / 10;
         const supplyCliff = 8;                         // ⑧ 공급절벽 상방
         // ⑨ 보유세
@@ -1112,11 +1115,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // ⑫ 전세 축소: 월세화 가속 → 전세자금(유동성) 감소 → 매수 수요 위축
         const jeonseEff = 3;
         // ⑬ PIR(소득대비집값): 서울 15~25배 (적정 5~7배의 3배+)
-        // 중위소득 가구가 15년+ 무지출해야 매수 가능 → 구조적 수요 제한
-        // K-HAI 150.9, 소득의 38.8%가 원리금 상환 → 신규 매수여력 고갈
         const pirEff = 2.5;
+        // ⑭ 비주거 부실 전이: 상가 공실 13~20%, 지식산업센터 경매 2배 급증(2025)
+        // PF 부실 → 건설사 도산 → 경기 위축 → 매수 심리 위축
+        // BUT 동시에 신규 착공 감소 → 공급절벽 강화 (상방 효과는 supplyCliff에 포함)
+        // 순효과: 하방 2%p (심리 위축 + 가계자산 축소가 공급 효과보다 큼)
+        const nonResEff = 2;
 
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff;
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1346,7 +1352,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const constFx  = Math.min(((f - 1350) / 450) * 2, 2);
         const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
         const buildCost = constBase + constOil + constFx + constPF;
-        const landDiscount = 3;
+        const landDiscount = 1.5;
         const constructionSupport = Math.round(Math.max(buildCost - landDiscount, 4) * 10) / 10;
         const supplyCliff = 8;
         const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
@@ -1355,7 +1361,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const debtEff = 4;
         const jeonseEff = 3;
         const pirEff = 2.5;
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff;
+        const nonResEff = 2;
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1474,6 +1481,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: '가계부채 105% (고정)', lo: basePrice + 0.48, hi: basePrice - 0.48, color: '#ec4899', fixed: true },
             { name: '전세 축소 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#f472b6', fixed: true },
             { name: 'PIR 15~25배 (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#e879f9', fixed: true },
+            { name: '비주거 부실 전이 (고정)', lo: basePrice + 0.24, hi: basePrice - 0.24, color: '#fb7185', fixed: true },
             { name: '정부 정책 (' + policyLevels[parseInt(policySlider.value)].label + ')',
               lo: basePrice + (policyLevels[2].eff - policyLevels[parseInt(policySlider.value)].eff) * 0.12,
               hi: basePrice - (policyLevels[parseInt(policySlider.value)].eff - policyLevels[0].eff) * 0.12,
