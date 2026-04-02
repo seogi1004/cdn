@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alvin's Real Estate Regression Analysis v4 (2026-2029)</title>
+    <title>Alvin's Real Estate Linear Weighted Model v5 (2026-2029)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
@@ -78,15 +78,15 @@
                     <span class="scenario-badge bg-green-500/20 text-green-400 border border-green-500/30">정부 규제 강화</span>
                 </div>
                 <h1 class="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight mb-2">
-                    부동산 <span class="text-red-400">다변량</span> 회귀분석 — <span class="text-blue-400">2027 vs 2029</span> 매수
+                    부동산 <span class="text-red-400">다변량</span> 선형가중 모델 — <span class="text-blue-400">2027 vs 2029</span> 매수
                 </h1>
                 <p class="text-sm text-gray-500 leading-relaxed max-w-2xl">
-                    전쟁/금리/환율/유가 + <strong class="text-amber-400">건축비(대체원가)</strong> + <strong class="text-purple-400">인구감소/베이비부머</strong> + <strong class="text-green-400">이재명 정부 정책</strong> + <strong class="text-orange-400">보유세(실효세율)</strong> 변수를 통합한 8-Factor 모델. 2027 매수 vs 2029 매수 시나리오를 비교합니다.
+                    전쟁/금리/환율/유가 + <strong class="text-amber-400">건축비(대체원가)</strong> + <strong class="text-purple-400">인구감소/베이비부머</strong> + <strong class="text-green-400">정부 정책</strong> + <strong class="text-orange-400">보유세</strong> + <strong class="text-pink-400">가계부채/PIR/전세축소</strong> + <strong class="text-red-400">비주거 부실</strong> 등 14-Factor 실증연구 기반 선형가중 모델. 2027 매수 vs 2029 매수 시나리오를 비교합니다.
                 </p>
             </div>
             <div class="text-xs text-gray-600 text-right shrink-0">
                 <p>2026.04.02 기준</p>
-                <p>8-Factor LOESS + Policy Regression</p>
+                <p>14-Factor Linear Weighted Model</p>
                 <p class="mt-1 text-gray-500">v4.0</p>
             </div>
         </div>
@@ -257,7 +257,7 @@
                                 <h3 class="text-xs font-bold text-amber-400">가중 팩터 모델 (Weighted Factor Model)</h3>
                                 <span class="text-[8px] bg-amber-500/10 text-amber-400 px-1.5 py-0.5 rounded">현재 적용</span>
                             </div>
-                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">각 변수(금리·환율·유가·보유세 등)에 전문가 추정 가중치를 곱해 합산합니다. 직관적이고 설명이 쉽지만, 가중치가 주관적이라는 한계가 있습니다. 실제 회귀분석과 달리 과거 데이터로 학습한 계수가 아닌 시장 전문가 컨센서스 기반입니다.</p>
+                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">14개 변수에 실증연구 기반 가중치를 적용한 선형가중 모델입니다. 금리 기여도 34~44%(박진백 외 2021 샤플리 분해), 정책 효과 제한적(VAR 분석), 일본 버블 사례 등 학술 연구로 검증된 계수를 사용합니다. 회귀분석이 아닌 전문가 추정 + 실증 보정 하이브리드 방식입니다.</p>
                             <div class="grid grid-cols-4 gap-2 text-[9px]">
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">금리 가중치</span><br><span class="text-red-400 font-bold">4.2×</span></div>
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">환율 가중치</span><br><span class="text-blue-400 font-bold">1.12×</span></div>
@@ -275,7 +275,7 @@
                                 <h3 class="text-xs font-bold text-purple-400">몬테카를로 시뮬레이션 (Monte Carlo Simulation)</h3>
                                 <span class="text-[8px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded">10,000회 샘플링</span>
                             </div>
-                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">슬라이더 중심값에 정규분포 노이즈를 더해 10,000개 시나리오를 생성합니다. 결과는 확률분포로 표현되어 "7억 이하 확률 68%" 같은 해석이 가능합니다. 불확실성을 정량화하는 데 강력한 방법입니다.</p>
+                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">슬라이더 중심값에 정규분포 노이즈를 더해 10,000개 시나리오를 생성합니다. 변수 간 상관관계를 Cholesky 분해로 반영합니다 (금리↔환율 ρ=0.4, 유가↔환율 ρ=0.3, 금리↔유가 ρ=0.2). 결과는 확률분포로 표현되어 불확실성을 정량화합니다.</p>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                                 <div class="bg-black/30 rounded-lg p-3 text-center">
                                     <p class="text-[9px] text-gray-500 mb-1">중앙값 (P50)</p>
@@ -1380,17 +1380,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function runMonteCarlo(rate, fx, oil, tax) {
         const N = 10000;
-        // 변동 범위: 실제 시장 변동성 기반
-        // 금리: ±1.5%p (한은 기준금리 조정폭 참조)
-        // 환율: ±150원 (최근 1년 변동폭 참조)
-        // 유가: ±40$ (전쟁 중 변동성)
-        // 보유세: ±0.3%p (정책 변동 범위)
+        // 변동 범위 + 변수 간 상관계수 반영 (Cholesky 분해)
+        // 상관행렬: 금리-환율 0.4, 유가-환율 0.3, 금리-유가 0.2, 나머지 독립
+        // Cholesky L 행렬 (4x4: rate, fx, oil, tax):
+        //   [1,    0,    0,    0   ]
+        //   [0.4,  0.917,0,    0   ]
+        //   [0.2,  0.240,0.950,0   ]
+        //   [0,    0,    0,    1   ]
+        const L = [
+            [1, 0, 0, 0],
+            [0.4, 0.917, 0, 0],
+            [0.2, 0.240, 0.950, 0],
+            [0, 0, 0, 1]
+        ];
+        const stds = [0.8, 80, 25, 0.15]; // 각 변수의 표준편차
         const prices = [];
         for (let i = 0; i < N; i++) {
-            const r = Math.max(4.5, Math.min(9.0, randNorm(rate, 0.8)));
-            const f = Math.max(1350, Math.min(1800, randNorm(fx, 80)));
-            const o = Math.max(60, Math.min(200, randNorm(oil, 25)));
-            const t = Math.max(0.05, Math.min(3.0, randNorm(tax, 0.15)));
+            // 독립 정규분포 z 생성
+            const z = [randNorm(0,1), randNorm(0,1), randNorm(0,1), randNorm(0,1)];
+            // Cholesky 변환: 상관된 변수 생성
+            const corr = [
+                L[0][0]*z[0],
+                L[1][0]*z[0] + L[1][1]*z[1],
+                L[2][0]*z[0] + L[2][1]*z[1] + L[2][2]*z[2],
+                L[3][3]*z[3]
+            ];
+            const r = Math.max(4.5, Math.min(9.0, rate + stds[0] * corr[0]));
+            const f = Math.max(1350, Math.min(1800, fx + stds[1] * corr[1]));
+            const o = Math.max(60, Math.min(200, oil + stds[2] * corr[2]));
+            const t = Math.max(0.05, Math.min(3.0, tax + stds[3] * corr[3]));
             prices.push(calcPrice8(r, f, o, t));
         }
         prices.sort((a, b) => a - b);
