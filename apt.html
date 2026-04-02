@@ -1250,17 +1250,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalA = totalCash2027;
         const buyableA = totalCash2027 >= priceA;
 
-        // Scenario B: 2029 매수 — 추가 2년간 하락/회복 가정
-        // 2년 추가 시간: 전쟁 종료 가능성, 금리 인하 사이클, but 인구감소 심화
-        const warFade = oil > 120 ? 2.5 : oil > 100 ? 1.5 : 0.5; // 전쟁 불확실성 감소
-        const rateCut2029 = Math.max((rate - 4.5) * 0.3, 0); // 금리 인하 기대 (30%)
-        const popExtra = 1.5; // 인구감소 2년 추가 압박
-        const policyFatigue = -2; // 정책 피로감 (규제 완화 기대)
-        const boomerSell = 3; // 베이비부머 매도 본격화
-        const extra2029 = -warFade - rateCut2029 + popExtra + policyFatigue + boomerSell;
-        const netDrop2029 = Math.max(dropPct + extra2029, -5);
-        const dropPct2029 = Math.min(netDrop2029, 55);
-        const priceB = Math.round(base * (100 - dropPct2029) / 100 * 10) / 10;
+        // Scenario B: 2029 매수 — 차트(generateScenario)의 pred[12] (29.06) 사용
+        const priceB = scenarioResult ? scenarioResult.pred[12] : Math.round(base * 0.75 * 10) / 10;
+        const dropPct2029 = Math.round((1 - priceB / base) * 1000) / 10;
 
         // 2029 자금 — 이미 simCalc 상단에서 계산한 totalCash2029 사용
         const jeonseRisk = 0.3;
