@@ -352,7 +352,7 @@
             <div class="card p-4 sm:p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-5">
                     <div>
-                        <h2 class="text-sm sm:text-lg font-bold" id="mainChartTitle">지축 84㎡ — 2027 vs 2029 매수</h2>
+                        <h2 class="text-sm sm:text-lg font-bold" id="mainChartTitle">센트럴 푸르지오 84㎡ — 2027 vs 2029 매수</h2>
                         <p class="text-[10px] text-gray-500 mt-1 hidden sm:block">14-Factor 선형가중 모델 · 슬라이더로 시나리오 조절</p>
                     </div>
                 </div>
@@ -1126,6 +1126,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // generateScenario 결과를 먼저 구해 차트·verdict 양쪽에서 사용
         const chartData = ds('war', rate, fx, oil, tax);
         const scenarioResult = chartData._scenario;
+        // priceA: 차트·비교표·시뮬레이터 전체에서 동일한 예상가 사용
+        const priceA = scenarioResult ? scenarioResult.pred[8] : price;
 
         // Update policy slider label
         const pLevel = policyLevels[pol];
@@ -1215,7 +1217,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const jeonseRisk2029 = 0.3; // 반전세 전환 시 보증금 삭감
         const totalCash2029 = Math.round((5.8 - jeonseRisk2029 + dollar2029 + yearSaving * 3) * 100) / 100;
 
-        const buyable = totalCash2027 >= price; // simCalc 예상가 기준 (priceA는 아래서 정의)
+        const buyable = totalCash2027 >= priceA; // priceA = 차트 예측값과 동일
 
         // 자산 카드 업데이트
         document.getElementById('assetDollar').textContent = dollarVal.toFixed(2) + '억';
@@ -1231,8 +1233,10 @@ document.addEventListener('DOMContentLoaded', function() {
         taxVal.textContent = tax.toFixed(2) + '%';
         taxVal.style.color = tax >= 1.0 ? '#f87171' : tax >= 0.33 ? '#fbbf24' : '#34d399';
 
-        document.getElementById('simPrice').textContent = price.toFixed(1) + '억';
-        document.getElementById('simDrop').textContent = '고점 대비 -' + dropPct.toFixed(1) + '%';
+        const simDisplayPrice = priceA;
+        const simDisplayDrop = Math.round((1 - simDisplayPrice / base) * 1000) / 10;
+        document.getElementById('simPrice').textContent = simDisplayPrice.toFixed(1) + '억';
+        document.getElementById('simDrop').textContent = '고점 대비 -' + simDisplayDrop.toFixed(1) + '%';
         document.getElementById('simDollar').textContent = dollarVal.toFixed(2) + '억';
         document.getElementById('simTotal').textContent = totalCash.toFixed(2) + '억';
 
@@ -1241,12 +1245,12 @@ document.addEventListener('DOMContentLoaded', function() {
             buyEl.textContent = '가능';
             buyEl.style.color = '#34d399';
         } else {
-            buyEl.textContent = '부족 ' + (price - totalCash).toFixed(1) + '억';
+            buyEl.textContent = '부족 ' + (priceA - totalCash).toFixed(1) + '억';
             buyEl.style.color = '#f87171';
         }
 
         // 연간 보유세 계산 (실효세율 × 시세)
-        const annualTaxWon = price * 1e8 * (tax / 100); // 원 단위
+        const annualTaxWon = simDisplayPrice * 1e8 * (tax / 100); // 원 단위
         const annualTaxMan = Math.round(annualTaxWon / 1e4); // 만원 단위
         const monthlyTaxMan = Math.round(annualTaxMan / 12 * 10) / 10;
         document.getElementById('simTax').textContent = annualTaxMan >= 100 ? Math.round(annualTaxMan / 100) * 100 + '만' : annualTaxMan + '만';
@@ -1254,8 +1258,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('simTaxMonthly').textContent = '월 ' + monthlyTaxMan.toFixed(1) + '만';
 
         // ═══════ DYNAMIC COMPARISON TABLE ═══════
-        // Scenario A: 2027.04 매수 — 차트 예측값(generateScenario)과 통일
-        const priceA = scenarioResult ? scenarioResult.pred[8] : price; // 27.04 시점 차트값
+        // Scenario A: 2027.04 매수 — priceA는 simCalc 상단에서 이미 정의됨
         const dollarA = dollar2027;
         const totalA = totalCash2027;
         const buyableA = totalCash2027 >= priceA;
@@ -1305,7 +1308,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const taxColor = tax >= 1.0 ? 'text-red-400' : tax >= 0.33 ? 'text-amber-400' : 'text-orange-400';
 
         const compRows = [
-            { label: '예상 매수가', a: `<span class="text-white font-bold">${priceA.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${dropPct.toFixed(1)}%)</span>`, b: `<span class="text-white font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${dropPct2029.toFixed(1)}%)</span>` },
+            { label: '예상 매수가', a: `<span class="text-white font-bold">${priceA.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${simDisplayDrop.toFixed(1)}%)</span>`, b: `<span class="text-white font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${dropPct2029.toFixed(1)}%)</span>` },
             { label: 'Alvin 가용자금', a: `<span class="text-green-400 font-bold">${totalA.toFixed(2)}억</span> <span class="text-gray-500">(전세+$+저축1년)</span>`, b: `<span class="${totalB >= 7 ? 'text-green-400' : 'text-amber-400'} font-bold">${totalB.toFixed(2)}억</span> <span class="text-gray-500">(전세-${jeonseRisk}+$+저축3년)</span>` },
             { label: '무대출 매수 가능?', a: buyableA ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceA - totalA).toFixed(1)}억</span>`, b: buyableB ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceB - totalB).toFixed(1)}억</span>` },
             { label: '연간 보유세 (실효 ' + tax.toFixed(2) + '%)', a: `<span class="${taxColor} font-bold">${taxAnnualA}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualA/12)}만)</span>`, b: `<span class="${taxColor} font-bold">${taxAnnualB}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualB/12)}만)</span>` },
@@ -1437,7 +1440,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         // ═══════ UPDATE MAIN CHART (슬라이더 + 아파트 연동) ═══════
-        document.getElementById('mainChartTitle').textContent = apt.region + ' ' + apt.size + ' — 2027 vs 2029 매수';
+        document.getElementById('mainChartTitle').textContent = apt.name + ' ' + apt.size + ' — 2027 vs 2029 매수';
         mainChart.data.datasets = chartData;
         // Y축 범위를 아파트 가격대에 맞게 조정
         const yMax = Math.ceil(apt.peak2021 / 2) * 2 + 2;
