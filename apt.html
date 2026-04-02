@@ -818,8 +818,8 @@ document.addEventListener('DOMContentLoaded', function() {
         escalation: { extraDrop: 1.8,  recoveryRate: 0.01,  label: '전면 확전' },
     };
 
-    function generateScenario(sc, rate, fx, oil, tax) {
-        const apt = apartments[selectedAptIdx];
+    function generateScenario(sc, rate, fx, oil, tax, aptObj) {
+        const apt = aptObj || apartments[selectedAptIdx];
         const peak = apt.peak2021;
         const current = apt.current;
         const offset = scenarioOffsets[sc];
@@ -849,7 +849,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const upSupport = (8 + constOilG + constFxG + constPFG - 1.5 + 8) * SF; // (건축비+공급절벽) * SF
 
         const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress - upSupport;
-        const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop;
+        
+        // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
+        const betaAdj = apt.beta / 0.95;
+        const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop * betaAdj;
         // 현재가 기준 추가 하락 (최대 35%)
         const clampedDrop = Math.min(extraDropPct, 35);
         const bottomPrice = Math.round(current * (100 - clampedDrop) / 100 * 10) / 10;
@@ -954,30 +957,8 @@ document.addEventListener('DOMContentLoaded', function() {
         function calcDrop(r, e) {
             const apt = apartments[selectedAptIdx];
             const oil = parseInt(oilSlider.value);
-            const rateEff = (r - 4.5) * 4.2;
-            const fxEff = ((e - 1400) / 100) * 1.6;
-            const oilEff = ((oil - 60) / 40) * 2.5;
-            const warCostEff = 3;
-            const raw = rateEff + fxEff * 0.7 + oilEff + warCostEff;
-            const constBase = 8;
-            const constOil = Math.min(((oil - 60) / 140) * 4, 4);
-            const constFx  = Math.min(((e - 1350) / 450) * 1, 1);       // 2→1 축소: 매수여력↓ > 자재비↑
-            const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
-            const buildCost = constBase + constOil + constFx + constPF;
-            const landDiscount = 1.5;
-            const constructionSupport = Math.max(buildCost - landDiscount, 4);
-            const supplyCliff = 10; // 8→10 (2023-24 착공급감 → 2026-27 입주절벽 반영)
-            const popPressure = 4;
-            const policyPressure = policyLevels[parseInt(policySlider.value)].eff;
-            const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
-            const ageYears = 2026 - (apt.builtYear || 2020);
-            const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
-            const debtEff = 4;
-            const jeonseEff = 3;
-            const pirEff = 1.5; // 2.5→1.5 (가계부채 4와 부분 중복 인정)
-            const nonResEff = 2;
-            const baseDrop = Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff, -5);
-            return -Math.round(baseDrop * (apt.beta / 0.95) * 10) / 10;
+            const price = calcPrice8(r, e, oil, tax, apt.peak2021, apt);
+            return -Math.round((1 - price / apt.peak2021) * 1000) / 10;
         }
 
         function heatColor(v) {
@@ -1084,8 +1065,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const betaBody = document.getElementById('betaBody');
         betaBody.innerHTML = '';
         const selApt = apartments[selectedAptIdx];
-        const basePrice = calcPrice8(rate, fx, oil, tax, selApt.peak2021);
-        const baseDrop = (1 - basePrice / selApt.peak2021) * 100;
         const dollarVal = Math.round(111000 * fx / 1e8 * 100) / 100;
         const totalCash = Math.round((5.8 + dollarVal) * 100) / 100;
 
@@ -1097,8 +1076,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sortedApts.forEach(apt => {
             const tr = document.createElement('tr');
             tr.className = 'border-b border-gray-800 hover:bg-white/[.02] transition';
-            const aptDrop = baseDrop * (apt.beta / 0.95);
-            const aptPrice = Math.round(apt.peak2021 * (100 - aptDrop) / 100 * 10) / 10;
+            const aptPrice = calcPrice8(rate, fx, oil, tax, apt.peak2021, apt);
             const escPrice = Math.round(aptPrice * 0.9 * 10) / 10;
             const recLow = Math.round(aptPrice * 0.95 * 10) / 10;
             const recHigh = Math.round(aptPrice * 1.15 * 10) / 10;
@@ -1190,12 +1168,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // 순효과: 하방 2%p (심리 위축 + 가계자산 축소가 공급 효과보다 큼)
         const nonResEff = 2;
 
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + warCostEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
-        const totalUp = constructionSupport + supplyCliff;
-        const baseDrop = Math.max(totalDown - totalUp, -5);
-        const betaAdj = apt.beta / 0.95;
-        const dropPct = Math.min(baseDrop * betaAdj, 50);
-        const price = Math.round(base * (100 - dropPct) / 100 * 10) / 10;
+        const price = scenarioResult ? scenarioResult.pred[8] : Math.round(base * 0.8 * 10) / 10;
+        const dropPct = Math.round((1 - price / base) * 1000) / 10;
 
         // ═══════ 가계 현금흐름 계산 ═══════
         // 달러 자산 (미국 단기채 연 4.5% 이자 재투자)
@@ -1498,36 +1472,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 14-Factor 가격 계산 함수 (재사용)
     function calcPrice8(r, f, o, t, peakPrice, aptObj) {
         const apt = aptObj || apartments[selectedAptIdx];
-        const b = peakPrice || apt.peak2021;
-        const pol = parseInt(policySlider.value);
-        const rateEff = (r - 4.5) * 4.2;
-        const fxEff = ((f - 1400) / 100) * 1.6;
-        const oilEff = ((o - 60) / 40) * 2.5;
-        const warCostEff = 3;
-        const popEff = 4;
-        const policyEff = policyLevels[pol].eff;
-        const constBase = 8;
-        const constOil = Math.min(((o - 60) / 140) * 4, 4);
-        const constFx  = Math.min(((f - 1350) / 450) * 1, 1);
-        const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
-        const buildCost = constBase + constOil + constFx + constPF;
-        const landDiscount = 1.5;
-        const constructionSupport = Math.round(Math.max(buildCost - landDiscount, 4) * 10) / 10;
-        const supplyCliff = 10; // 8→10 (2023-24 착공급감 → 2026-27 입주절벽 반영)
-        const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
-        const ageYears = 2026 - (apt.builtYear || 2020);
-        const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
-        const debtEff = 4;
-        const jeonseEff = 3;
-        const pirEff = 1.5; // 2.5→1.5 (가계부채 4와 부분 중복 인정)
-        const nonResEff = 2;
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + warCostEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
-        const totalUp = constructionSupport + supplyCliff;
-        const baseDrop = Math.max(totalDown - totalUp, -5);
-        // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
-        const betaAdj = apt.beta / 0.95;
-        const dropPct = Math.min(baseDrop * betaAdj, 50);
-        return Math.round(b * (100 - dropPct) / 100 * 10) / 10;
+        const scenario = generateScenario('war', r, f, o, t, apt);
+        return scenario.pred[8]; // A안 (2027) 예상가
     }
 
     let mcChartInstance = null;
