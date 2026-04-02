@@ -883,10 +883,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function calcDrop(r, e) {
             const apt = apartments[selectedAptIdx];
+            const oil = parseInt(oilSlider.value);
             const rateEff = (r - 4.5) * 4.2;
             const fxEff = ((e - 1400) / 100) * 1.6;
             const raw = rateEff + fxEff * 0.7;
-            const constructionSupport = 12;
+            const constBase = 8;
+            const constOil = Math.min(((oil - 60) / 140) * 4, 4);
+            const constFx  = Math.min(((e - 1350) / 450) * 2, 2);
+            const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
+            const constructionSupport = constBase + constOil + constFx + constPF;
             const supplyCliff = 8;
             const popPressure = 4;
             const policyPressure = policyLevels[parseInt(policySlider.value)].eff;
@@ -1081,7 +1086,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const sentimentEff = oil > 120 ? 5 : oil > 100 ? 3 : 1; // ④ 전쟁 심리
         const popEff = 4;                              // ⑤ 인구 (3→4, 일본 사례)
         const policyEff = pLevel.eff;                  // ⑥ 정부 정책 (완화4/중립8/강력10)
-        const constructionSupport = 12;                // ⑦ 건축비 상방 (15→12, 일본 보정)
+        // ⑦ 건축비 상방: 유가↑→나프타/시멘트↑, 환율↑→수입자재↑, 금리↑→PF비용↑
+        // 기본 8 + 유가 기여(0~4) + 환율 기여(0~2) + 금리→PF(0~2) = 8~16
+        const constBase = 8;
+        const constOil = Math.min(((oil - 60) / 140) * 4, 4);         // 유가 60→200: 0→4
+        const constFx  = Math.min(((fx - 1350) / 450) * 2, 2);       // 환율 1350→1800: 0→2
+        const constPF  = Math.min(((rate - 4.5) / 4.5) * 2, 2);      // 금리 4.5→9.0: 0→2
+        const constructionSupport = Math.round((constBase + constOil + constFx + constPF) * 10) / 10;
         const supplyCliff = 8;                         // ⑧ 공급절벽 상방
         // ⑨ 보유세
         const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
@@ -1322,14 +1333,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const sentimentEff = o > 120 ? 5 : o > 100 ? 3 : 1;
         const popEff = 4;
         const policyEff = policyLevels[pol].eff;
-        const constructionSupport = 12;
+        const constBase = 8;
+        const constOil = Math.min(((o - 60) / 140) * 4, 4);
+        const constFx  = Math.min(((f - 1350) / 450) * 2, 2);
+        const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
+        const constructionSupport = Math.round((constBase + constOil + constFx + constPF) * 10) / 10;
         const supplyCliff = 8;
         const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
         const debtEff = 4;
         const jeonseEff = 3;
-        const pirEff = 2.5; // PIR 15~25배: 구조적 매수여력 고갈
+        const pirEff = 2.5;
         const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
