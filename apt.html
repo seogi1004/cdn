@@ -1327,13 +1327,13 @@ document.addEventListener('DOMContentLoaded', function() {
         let verdictHTML = '';
         if (preferA && buyableA) {
             verdictHTML = `
-                <p>현재 슬라이더 조건(금리 ${rate.toFixed(1)}%, 환율 ${fx.toLocaleString()}원, 유가 $${oil}, 보유세 ${tax.toFixed(2)}%)에서 <strong class="text-blue-400">${apt.region} ${apt.name}</strong> 예상가는 <strong class="text-white">${priceA.toFixed(1)}억</strong>이며, Alvin 가용자금 <strong class="text-green-400">${totalA.toFixed(2)}억</strong>으로 <strong class="text-green-400">무대출 매수 가능</strong>합니다.</p>
+                <p>현재 슬라이더 조건(금리 ${rate.toFixed(1)}%, 환율 ${fx.toLocaleString()}원, 유가 $${oil}, 보유세 ${tax.toFixed(2)}%)에서 <strong class="text-blue-400">${apt.region} ${apt.name}</strong> 예상가는 <strong class="text-white">${priceA.toFixed(1)}억</strong>이며, <strong class="text-green-400">무대출 매수 가능</strong>합니다.</p>
                 <p>2027.04 전세 만기 시점 매수(A안)가 유리합니다. 전세 보증금을 온전히 회수해 즉시 투입할 수 있고, 베이비부머 매도 본격화 전에 진입하는 전략입니다.${taxHeavy ? ' 다만 보유세 부담이 커 실질 수익률에 유의해야 합니다.' : ''}</p>
                 <p class="text-amber-400">⚠ ${taxWarning}${riskA}에 유의하세요. 건축비 상승(대체원가 ${oil > 100 ? '강' : '중'})이 하방을 받쳐주지만 ${rate >= 7 ? '고금리 환경' : '전쟁 변수'}은 지속 모니터링 필요합니다.</p>
             `;
         } else if (preferA && !buyableA) {
             verdictHTML = `
-                <p>현재 조건에서 A안(2027 매수) 선호이나, 예상가 <strong class="text-white">${priceA.toFixed(1)}억</strong> 대비 가용자금 <strong class="text-amber-400">${totalA.toFixed(2)}억</strong>으로 <strong class="text-red-400">${(priceA - totalA).toFixed(1)}억 부족</strong>합니다.</p>
+                <p>현재 조건에서 A안(2027 매수) 선호이나, 예상가 <strong class="text-white">${priceA.toFixed(1)}억</strong> 기준 <strong class="text-red-400">대출 필요</strong>합니다.</p>
                 <p>달러 매도 타이밍을 환율 ${Math.round(fx * 1.05).toLocaleString()}원+ 구간에서 잡거나, 매수가 협상을 통해 갭을 줄여야 합니다.${taxHeavy ? ' 보유세 ' + tax.toFixed(2) + '% 환경에서는 매수가를 더 낮추는 협상이 중요합니다.' : ''} 또는 B안(2029)으로 추가 하락을 기다리는 것도 방법입니다.</p>
                 <p class="text-amber-400">⚠ ${taxWarning}B안 선택 시 전세 보증금 미반환 리스크(반전세 전환, -${jeonseRisk}억)를 반드시 고려하세요.</p>
             `;
@@ -1406,7 +1406,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         verdictSummary.innerHTML = `
             <p class="text-[10px]"><span class="font-bold" style="color:${pickColor}">추천: ${pick}안 (${preferA ? '2027.04' : '2029'} 매수)</span></p>
-            <p class="text-[10px] text-gray-400">예상가 <span class="text-white font-bold">${pickPrice.toFixed(1)}억</span> · <span class="private" style="display:inline">가용 <span class="text-green-400 font-bold">${pickTotal.toFixed(2)}억</span> · ${pickBuyable ? '<span class="text-green-400">무대출 OK</span>' : '<span class="text-red-400">대출 필요</span>'}</span></p>
+            <p class="text-[10px] text-gray-400">예상가 <span class="text-white font-bold">${pickPrice.toFixed(1)}억</span> · ${pickBuyable ? '<span class="text-green-400">무대출 OK</span>' : '<span class="text-red-400">대출 필요</span>'}</p>
             <div class="mt-2 pt-2 border-t border-gray-700/50 grid grid-cols-2 gap-2 text-[10px]">
                 <div><span class="text-gray-500">최적 매수 시기</span><br><span class="text-blue-400 font-bold">${optimalTiming}</span></div>
                 <div><span class="text-gray-500">예상 바닥가 (${apt.name})</span><br><span class="text-red-400 font-bold">${bottomEst.toFixed(1)}억</span> <span class="text-gray-600">(${bottomTiming})</span></div>
