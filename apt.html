@@ -264,7 +264,7 @@
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">유가 가중치</span><br><span class="text-amber-400 font-bold">2.5×</span></div>
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">보유세 가중치</span><br><span class="text-orange-400 font-bold">5.0×</span></div>
                             </div>
-                            <p class="text-[9px] text-gray-600 mt-2">※ 상방 요인: 건축비(+15) · 공급절벽(+8) | 하방 요인: 인구(-3) · 정책(-12) · 보유세(가변)</p>
+                            <p class="text-[9px] text-gray-600 mt-2">※ 상방 요인: 건축비(+15) · 공급절벽(+8) | 하방 요인: 인구(-3) · 정책(가변) · 보유세(가변) · 가계부채(-2.5) · 연식(가변)</p>
                         </div>
                     </div>
 
@@ -760,10 +760,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const taxPress   = Math.max((tax - 0.15), 0) / 1.0 * 4;    // 보유세 추가 압력
         const popPress   = 2;                                        // 인구감소 기본 압력
         const polPress   = policyLevels[parseInt(policySlider.value)].eff * 0.4; // 정부 정책 압력
+        const debtPress  = 1.5;                                        // 가계부채/GDP 105% 구조적 압력
         // 상방 지지 (건축비·공급절벽은 추가 하락을 억제)
         const upSupport  = 8;  // 건축비+공급절벽이 추가 하락폭을 줄여줌
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress - upSupport;
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop;
         // 현재가 기준 추가 하락 (최대 35%)
         const clampedDrop = Math.min(extraDropPct, 35);
@@ -888,7 +889,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
             const ageYears = 2026 - (apt.builtYear || 2020);
             const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
-            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff, 2) * 10) / 10;
+            const debtEff = 2.5;
+            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff, 2) * 10) / 10;
         }
 
         function heatColor(v) {
@@ -1074,8 +1076,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // ⑨ 연식 감가: 연 0.4%p, 5년 이하 신축 프리미엄 -1%p
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
+        // ⑩ 가계부채: GDP 대비 105% (OECD 평균 66%), 구조적 매수여력 제한
+        // 100% 초과분 * 0.5 = 고정 2.5%p 하방 압력
+        const debtEff = 2.5;
 
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff;
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1305,7 +1310,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff;
+        const debtEff = 2.5; // 가계부채/GDP 105% 고정 압력
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1421,6 +1427,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: '보유세 실효세율', min: 0.05, max: 3.0, unit: '%',
               lo: calcPrice8(rate, fx, oil, 0.05), hi: calcPrice8(rate, fx, oil, 3.0), color: '#fb923c' },
             { name: '인구 효과 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#a78bfa', fixed: true },
+            { name: '가계부채 105% (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#ec4899', fixed: true },
             { name: '정부 정책 (' + policyLevels[parseInt(policySlider.value)].label + ')',
               lo: basePrice + (policyLevels[2].eff - policyLevels[parseInt(policySlider.value)].eff) * 0.12,
               hi: basePrice - (policyLevels[parseInt(policySlider.value)].eff - policyLevels[0].eff) * 0.12,
