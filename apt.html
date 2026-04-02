@@ -37,6 +37,8 @@
         .timeline-item:last-child::before{display:none}
         .timeline-dot{position:absolute;left:0;top:8px;width:12px;height:12px;border-radius:50%;border:2px solid}
         .scenario-badge{font-size:9px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:6px;text-transform:uppercase}
+        .private{filter:blur(8px);transition:filter .3s ease;cursor:pointer;user-select:none}
+        .private:hover,.private.revealed{filter:none}
     </style>
 </head>
 <body class="antialiased">
@@ -220,15 +222,15 @@
                         <p id="simPrice" class="text-base sm:text-xl font-black text-amber-400">7.5억</p>
                         <p id="simDrop" class="text-[9px] text-red-400">고점 대비 -37.5%</p>
                     </div>
-                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center private">
                         <p class="text-[9px] text-gray-500 mb-1">$111K 가치</p>
                         <p id="simDollar" class="text-base sm:text-xl font-black text-blue-400">1.68억</p>
                     </div>
-                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center private">
                         <p class="text-[9px] text-gray-500 mb-1">총 가용자금</p>
                         <p id="simTotal" class="text-base sm:text-xl font-black text-green-400">7.48억</p>
                     </div>
-                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center private">
                         <p class="text-[9px] text-gray-500 mb-1">무대출 매수?</p>
                         <p id="simBuyable" class="text-base sm:text-xl font-black text-green-400">가능</p>
                     </div>
@@ -289,7 +291,7 @@
                                     <p class="text-[9px] text-gray-500 mb-1">비관 (P75)</p>
                                     <p id="mcP75" class="text-lg font-black text-red-400">—</p>
                                 </div>
-                                <div class="bg-black/30 rounded-lg p-3 text-center">
+                                <div class="bg-black/30 rounded-lg p-3 text-center private">
                                     <p class="text-[9px] text-gray-500 mb-1">무대출 매수 확률</p>
                                     <p id="mcBuyProb" class="text-lg font-black text-blue-400">—</p>
                                 </div>
@@ -516,7 +518,7 @@
         <div class="lg:col-span-4 space-y-6">
 
             <!-- Assets -->
-            <div class="card p-5" style="background:linear-gradient(135deg,#0f1a12,#1a2035);">
+            <div class="card p-5 private" style="background:linear-gradient(135deg,#0f1a12,#1a2035);">
                 <h2 class="text-[10px] font-bold text-green-400 uppercase tracking-wider mb-3">Alvin 자산 · 현금흐름</h2>
                 <div class="space-y-2">
                     <div class="flex justify-between items-center py-1">
@@ -1018,6 +1020,7 @@ document.addEventListener('DOMContentLoaded', function() {
         tbody.appendChild(dRow);
 
         const cRow = document.createElement('tr');
+        cRow.className = 'private';
         cRow.innerHTML = '<td class="text-xs p-2 font-semibold text-green-400">총 가용자금</td>';
         exchanges.forEach(e => {
             const v = (5.8 + Math.round(111000 * e / 1e8 * 100) / 100).toFixed(2);
@@ -1102,7 +1105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             betaBody.appendChild(tr);
         });
         const alvinRow = document.createElement('tr');
-        alvinRow.className = 'border-t-2 border-green-500/30';
+        alvinRow.className = 'border-t-2 border-green-500/30 private';
         alvinRow.innerHTML = `
             <td class="p-2.5" colspan="3"><span class="text-green-400 font-bold text-xs">Alvin 가용자금</span></td>
             <td class="p-2.5 text-center text-green-400 font-black">${totalCash.toFixed(2)}억</td>
@@ -1293,8 +1296,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const compRows = [
             { label: '예상 매수가', a: `<span class="text-white font-bold">${priceA.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${(Math.round((1 - priceA / base) * 1000) / 10).toFixed(1)}%)</span>`, b: `<span class="text-white font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${dropPct2029.toFixed(1)}%)</span>` },
-            { label: 'Alvin 가용자금', a: `<span class="text-green-400 font-bold">${totalA.toFixed(2)}억</span> <span class="text-gray-500">(전세+$+저축1년)</span>`, b: `<span class="${totalB >= 7 ? 'text-green-400' : 'text-amber-400'} font-bold">${totalB.toFixed(2)}억</span> <span class="text-gray-500">(전세-${jeonseRisk}+$+저축3년)</span>` },
-            { label: '무대출 매수 가능?', a: buyableA ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceA - totalA).toFixed(1)}억</span>`, b: buyableB ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceB - totalB).toFixed(1)}억</span>` },
+            { label: 'Alvin 가용자금', private: true, a: `<span class="text-green-400 font-bold">${totalA.toFixed(2)}억</span> <span class="text-gray-500">(전세+$+저축1년)</span>`, b: `<span class="${totalB >= 7 ? 'text-green-400' : 'text-amber-400'} font-bold">${totalB.toFixed(2)}억</span> <span class="text-gray-500">(전세-${jeonseRisk}+$+저축3년)</span>` },
+            { label: '무대출 매수 가능?', private: true, a: buyableA ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceA - totalA).toFixed(1)}억</span>`, b: buyableB ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceB - totalB).toFixed(1)}억</span>` },
             { label: '연간 보유세 (실효 ' + tax.toFixed(2) + '%)', a: `<span class="${taxColor} font-bold">${taxAnnualA}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualA/12)}만)</span>`, b: `<span class="${taxColor} font-bold">${taxAnnualB}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualB/12)}만)</span>` },
             { label: '5년 보유세 누적', a: `<span class="${taxColor}">${(taxAnnualA * 5 / 10000).toFixed(2)}억</span> <span class="text-gray-500">(${taxVsOecd})</span>`, b: `<span class="${taxColor}">${(taxAnnualB * 5 / 10000).toFixed(2)}억</span>` },
             { label: '건축비 발 하방 경직성', a: `<span class="text-amber-400">${constFloor}</span>`, b: `<span class="text-amber-400">${constFloorB}</span>` },
@@ -1308,7 +1311,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const compBody = document.getElementById('compBody');
         compBody.innerHTML = compRows.map(r => `
-            <tr class="border-b border-gray-800/50 hover:bg-white/[.02] transition">
+            <tr class="border-b border-gray-800/50 hover:bg-white/[.02] transition ${r.private ? 'private' : ''}">
                 <td class="p-3 text-gray-500 font-medium">${r.label}</td>
                 <td class="p-3 text-center">${r.a}</td>
                 <td class="p-3 text-center">${r.b}</td>
@@ -1398,7 +1401,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         verdictSummary.innerHTML = `
             <p class="text-[10px]"><span class="font-bold" style="color:${pickColor}">추천: ${pick}안 (${preferA ? '2027.04' : '2029'} 매수)</span></p>
-            <p class="text-[10px] text-gray-400">예상가 <span class="text-white font-bold">${pickPrice.toFixed(1)}억</span> · 가용 <span class="text-green-400 font-bold">${pickTotal.toFixed(2)}억</span> · ${pickBuyable ? '<span class="text-green-400">무대출 OK</span>' : '<span class="text-red-400">대출 필요</span>'}</p>
+            <p class="text-[10px] text-gray-400">예상가 <span class="text-white font-bold">${pickPrice.toFixed(1)}억</span> · <span class="private" style="display:inline">가용 <span class="text-green-400 font-bold">${pickTotal.toFixed(2)}억</span> · ${pickBuyable ? '<span class="text-green-400">무대출 OK</span>' : '<span class="text-red-400">대출 필요</span>'}</span></p>
             <div class="mt-2 pt-2 border-t border-gray-700/50 grid grid-cols-2 gap-2 text-[10px]">
                 <div><span class="text-gray-500">최적 매수 시기</span><br><span class="text-blue-400 font-bold">${optimalTiming}</span></div>
                 <div><span class="text-gray-500">예상 바닥가 (${apt.name})</span><br><span class="text-red-400 font-bold">${bottomEst.toFixed(1)}억</span> <span class="text-gray-600">(${bottomTiming})</span></div>
@@ -1592,7 +1595,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('mcSummary').innerHTML = `
             <p><strong class="text-purple-400">10,000회 시뮬레이션 결과:</strong> 평균 <span class="text-white font-bold">${mean}억</span> · 중앙값 <span class="text-white font-bold">${p50.toFixed(1)}억</span></p>
-            <p>80% 신뢰구간: <span class="text-green-400">${p10.toFixed(1)}억</span> ~ <span class="text-red-400">${p90.toFixed(1)}억</span> · Alvin 가용 ${totalCash.toFixed(2)}억으로 무대출 매수 확률 <span class="font-bold ${buyProb >= 50 ? 'text-green-400' : 'text-red-400'}">${buyProb}%</span></p>
+            <p>80% 신뢰구간: <span class="text-green-400">${p10.toFixed(1)}억</span> ~ <span class="text-red-400">${p90.toFixed(1)}억</span> · <span class="private" style="display:inline">Alvin 가용 ${totalCash.toFixed(2)}억으로 무대출 매수 확률 <span class="font-bold ${buyProb >= 50 ? 'text-green-400' : 'text-red-400'}">${buyProb}%</span></span></p>
             <p class="text-[9px] text-gray-600">각 변수에 정규분포 노이즈 적용 (금리 σ=0.8%p, 환율 σ=80원, 유가 σ=$25, 보유세 σ=0.15%p)</p>
         `;
 
@@ -1711,14 +1714,37 @@ document.addEventListener('DOMContentLoaded', function() {
     taxSlider.addEventListener('input', simCalc);
     policySlider.addEventListener('input', simCalc);
 
-    // ═══════ APARTMENT SELECTOR ═══════
+    // ═══════ APARTMENT SELECTOR (동네별 그룹) ═══════
     const aptSelector = document.getElementById('aptSelector');
+    const regionOrder = ['수색뉴타운', '지축', '마곡', '덕은', '킨텍스', '운정'];
+    const groupMap = new Map();
     apartments.forEach((apt, i) => {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = apt.region + ' ' + apt.name + ' ' + apt.size + ' (현재 ' + apt.current + '억)';
-        if (i === selectedAptIdx) opt.selected = true;
-        aptSelector.appendChild(opt);
+        const key = apt.region.replace(/\d+$/, ''); // 수색뉴타운2→수색뉴타운
+        if (!groupMap.has(key)) groupMap.set(key, []);
+        groupMap.get(key).push({ apt, i });
+    });
+    regionOrder.forEach(region => {
+        const items = groupMap.get(region);
+        if (!items) return;
+        if (items.length > 1) {
+            const grp = document.createElement('optgroup');
+            grp.label = region;
+            items.forEach(({ apt, i }) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = apt.name + ' ' + apt.size + ' (현재 ' + apt.current + '억)';
+                if (i === selectedAptIdx) opt.selected = true;
+                grp.appendChild(opt);
+            });
+            aptSelector.appendChild(grp);
+        } else {
+            const { apt, i } = items[0];
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = apt.name + ' ' + apt.size + ' (현재 ' + apt.current + '억)';
+            if (i === selectedAptIdx) opt.selected = true;
+            aptSelector.appendChild(opt);
+        }
     });
     aptSelector.addEventListener('change', () => {
         selectedAptIdx = parseInt(aptSelector.value);
