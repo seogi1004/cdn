@@ -730,6 +730,42 @@ document.addEventListener('DOMContentLoaded', function() {
             note: '2020 입주 · 1,192세대 · 수색뉴타운 최대단지',
             builtYear: 2020,
         },
+        {
+            region: '수색뉴타운3',
+            name: 'DMC SK뷰 아이파크포레',
+            size: '84㎡',
+            beta: 1.25,
+            color: '#06b6d4',
+            peak2021: 11.0,
+            current: 10.5,
+            currentLabel: '10.5억 (실거래 10~10.65, 호가 10.9)',
+            note: '2023.07 입주 · 1,464세대 · 수색13구역 신축',
+            builtYear: 2023,
+        },
+        {
+            region: '운정',
+            name: '운정자이시그니처',
+            size: '84㎡',
+            beta: 0.60,
+            color: '#14b8a6',
+            peak2021: 7.0,
+            current: 6.5,
+            currentLabel: '6.5억 (분양가 5.3+프리미엄 ~1.2)',
+            note: '2026.03 입주 · 988세대 · GTX운정역 800m · 분양권',
+            builtYear: 2026,
+        },
+        {
+            region: '덕은',
+            name: 'DMC디에트르한강',
+            size: '84㎡',
+            beta: 0.85,
+            color: '#0ea5e9',
+            peak2021: 11.0,
+            current: 10.5,
+            currentLabel: '10.5억 (실거래 11.0 신고가, AI 11.47)',
+            note: '2020 입주 · 고양 덕은동 · 한강조망 · 대장홍대선 예정',
+            builtYear: 2020,
+        },
     ];
     let selectedAptIdx = 0;
 
@@ -741,6 +777,9 @@ document.addEventListener('DOMContentLoaded', function() {
         '수색뉴타운': [null, null, 10.5, 15.0, 11.0, 13.5],  // 23.07 입주: 분양권 기준, 입주 후 실거래 13.5
         '마곡': [null, 9.0, 11.0, 15.0, 11.6, 14.5],         // 2017 준공: 20년 11.1, 21.09 최고 15.05, 22.12 저점 11.6, 24.11 실거래 14.35
         '수색뉴타운2': [null, null, 9.0, 13.0, 10.0, 12.3],  // 2020 입주: 21~22 최고 ~13, 25.07 실거래 12.24
+        '수색뉴타운3': [null, null, null, null, 9.5, 10.5], // 2023.07 입주: 분양가 6.5~6.8, 입주 후 10~10.65
+        '운정': [null, null, null, null, null, 6.5],          // 2026.03 입주: 분양가 5.3, 프리미엄 ~1.2
+        '덕은': [null, null, 7.5, 9.5, 8.5, 10.5],           // 2020 입주: 24.04 신고가 11억, 23.07 9.7억
     };
 
     // 시나리오별 매크로 오프셋
