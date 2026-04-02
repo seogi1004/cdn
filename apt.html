@@ -216,28 +216,25 @@
                 </div>
 
                 <!-- Simulation Results -->
-                <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 mb-5">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-5">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center border border-blue-500/20">
+                        <p id="simPriceLabelA" class="text-[9px] text-blue-400 mb-1 font-bold">A안 (2027) 예상가</p>
+                        <p id="simPriceA" class="text-base sm:text-xl font-black text-blue-400">—</p>
+                        <p id="simDropA" class="text-[9px] text-gray-500">—</p>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center border border-green-500/20">
+                        <p id="simPriceLabelB" class="text-[9px] text-green-400 mb-1 font-bold">B안 (2029) 예상가</p>
+                        <p id="simPriceB" class="text-base sm:text-xl font-black text-green-400">—</p>
+                        <p id="simDropB" class="text-[9px] text-gray-500">—</p>
+                    </div>
                     <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
-                        <p id="simPriceLabel" class="text-[9px] text-gray-500 mb-1">예상가</p>
-                        <p id="simPrice" class="text-base sm:text-xl font-black text-amber-400">7.5억</p>
-                        <p id="simDrop" class="text-[9px] text-red-400">고점 대비 -37.5%</p>
-                    </div>
-                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center private">
-                        <p class="text-[9px] text-gray-500 mb-1">$111K 가치</p>
-                        <p id="simDollar" class="text-base sm:text-xl font-black text-blue-400">1.68억</p>
-                    </div>
-                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center private">
-                        <p class="text-[9px] text-gray-500 mb-1">총 가용자금</p>
-                        <p id="simTotal" class="text-base sm:text-xl font-black text-green-400">7.48억</p>
-                    </div>
-                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center private">
                         <p class="text-[9px] text-gray-500 mb-1">무대출 매수?</p>
-                        <p id="simBuyable" class="text-base sm:text-xl font-black text-green-400">가능</p>
+                        <p id="simBuyable" class="text-base sm:text-xl font-black text-green-400">—</p>
                     </div>
                     <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center border border-orange-500/20">
                         <p class="text-[9px] text-gray-500 mb-1">연간 보유세</p>
-                        <p id="simTax" class="text-base sm:text-xl font-black text-orange-400">11만</p>
-                        <p id="simTaxMonthly" class="text-[9px] text-gray-500">월 0.9만</p>
+                        <p id="simTax" class="text-base sm:text-xl font-black text-orange-400">—</p>
+                        <p id="simTaxMonthly" class="text-[9px] text-gray-500">—</p>
                     </div>
                 </div>
 
@@ -517,37 +514,6 @@
         <!-- Right 4 -->
         <div class="lg:col-span-4 space-y-6">
 
-            <!-- Assets -->
-            <div class="card p-5 private" style="background:linear-gradient(135deg,#0f1a12,#1a2035);">
-                <h2 class="text-[10px] font-bold text-green-400 uppercase tracking-wider mb-3">Alvin 자산 · 현금흐름</h2>
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center py-1">
-                        <span class="text-xs text-gray-400">전세 보증금</span><span class="font-bold">5.80억</span>
-                    </div>
-                    <div class="flex justify-between items-center py-1">
-                        <span class="text-xs text-gray-400">달러 $111K (미국 단기채)</span><span class="font-bold text-blue-400" id="assetDollar">1.68억</span>
-                    </div>
-                    <div class="flex justify-between items-center py-1">
-                        <span class="text-xs text-gray-400">월 저축 (맞벌이)</span><span class="text-xs text-amber-400">~255만</span>
-                    </div>
-                    <div class="flex justify-between items-center py-1">
-                        <span class="text-xs text-gray-400">단기채 이자 (연 4.5%)</span><span class="text-xs text-blue-400" id="assetBondInt">~$5K/년</span>
-                    </div>
-                    <div class="border-t border-gray-700/50 pt-2 flex justify-between items-center">
-                        <span class="text-xs text-gray-300 font-semibold">가용 자금 (현재)</span>
-                        <span class="text-xl font-black text-green-400" id="assetTotal">7.48억</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-[9px] text-gray-500">→ 2027.04 예상</span>
-                        <span class="text-sm font-bold text-green-400" id="assetTotal2027">—</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-[9px] text-gray-500">→ 2029.04 예상</span>
-                        <span class="text-sm font-bold text-green-400" id="assetTotal2029">—</span>
-                    </div>
-                </div>
-            </div>
-
             <!-- Government Policy Card -->
             <div class="card p-5" style="background:linear-gradient(135deg,#0f1a16,#1a2035);border-color:rgba(16,185,129,.2);">
                 <h2 class="text-[10px] font-bold text-green-400 uppercase tracking-wider mb-3">이재명 정부 부동산 정책</h2>
@@ -650,6 +616,40 @@
                 <div id="verdictText" class="space-y-2.5 text-[10px] text-gray-400 leading-relaxed"></div>
                 <div id="verdictSummary" class="mt-3 p-3 bg-black/30 rounded-lg border border-blue-500/20 space-y-1"></div>
             </div>
+
+            <!-- Assets (접힘) -->
+            <details class="card" style="background:linear-gradient(135deg,#0f1a12,#1a2035);">
+                <summary class="p-4 cursor-pointer select-none flex items-center justify-between">
+                    <h2 class="text-[10px] font-bold text-green-400 uppercase tracking-wider">Alvin 자산 · 현금흐름</h2>
+                    <span class="text-[9px] text-gray-600">▶</span>
+                </summary>
+                <div class="px-5 pb-5 space-y-2">
+                    <div class="flex justify-between items-center py-1">
+                        <span class="text-xs text-gray-400">전세 보증금</span><span class="font-bold">5.80억</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1">
+                        <span class="text-xs text-gray-400">달러 $111K (미국 단기채)</span><span class="font-bold text-blue-400" id="assetDollar">1.68억</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1">
+                        <span class="text-xs text-gray-400">월 저축 (맞벌이)</span><span class="text-xs text-amber-400">~255만</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1">
+                        <span class="text-xs text-gray-400">단기채 이자 (연 4.5%)</span><span class="text-xs text-blue-400" id="assetBondInt">~$5K/년</span>
+                    </div>
+                    <div class="border-t border-gray-700/50 pt-2 flex justify-between items-center">
+                        <span class="text-xs text-gray-300 font-semibold">가용 자금 (현재)</span>
+                        <span class="text-xl font-black text-green-400" id="assetTotal">7.48억</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[9px] text-gray-500">→ 2027.04 예상</span>
+                        <span class="text-sm font-bold text-green-400" id="assetTotal2027">—</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[9px] text-gray-500">→ 2029.04 예상</span>
+                        <span class="text-sm font-bold text-green-400" id="assetTotal2029">—</span>
+                    </div>
+                </div>
+            </details>
         </div>
     </div>
 
@@ -1078,7 +1078,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const dollarVal = Math.round(111000 * fx / 1e8 * 100) / 100;
         const totalCash = Math.round((5.8 + dollarVal) * 100) / 100;
 
-        apartments.forEach(apt => {
+        const betaRegionOrder = ['수색뉴타운', '지축', '마곡', '덕은', '킨텍스', '운정'];
+        const sortedApts = [...apartments].sort((a, b) => {
+            const ka = a.region.replace(/\d+$/, ''), kb = b.region.replace(/\d+$/, '');
+            return betaRegionOrder.indexOf(ka) - betaRegionOrder.indexOf(kb);
+        });
+        sortedApts.forEach(apt => {
             const tr = document.createElement('tr');
             tr.className = 'border-b border-gray-800 hover:bg-white/[.02] transition';
             const aptDrop = baseDrop * (apt.beta / 0.95);
@@ -1233,8 +1238,7 @@ document.addEventListener('DOMContentLoaded', function() {
         taxVal.textContent = tax.toFixed(2) + '%';
         taxVal.style.color = tax >= 1.0 ? '#f87171' : tax >= 0.33 ? '#fbbf24' : '#34d399';
 
-        document.getElementById('simDollar').textContent = dollarVal.toFixed(2) + '억';
-        document.getElementById('simTotal').textContent = totalCash.toFixed(2) + '억';
+        // simDollar, simTotal 삭제됨 — 자산 정보는 우측 카드에서만 표시
 
         // 연간 보유세 계산 (실효세율 × 시세)
         const annualTaxWon = priceA * 1e8 * (tax / 100); // 원 단위
@@ -1296,8 +1300,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const compRows = [
             { label: '예상 매수가', a: `<span class="text-white font-bold">${priceA.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${(Math.round((1 - priceA / base) * 1000) / 10).toFixed(1)}%)</span>`, b: `<span class="text-white font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${dropPct2029.toFixed(1)}%)</span>` },
-            { label: 'Alvin 가용자금', private: true, a: `<span class="text-green-400 font-bold">${totalA.toFixed(2)}억</span> <span class="text-gray-500">(전세+$+저축1년)</span>`, b: `<span class="${totalB >= 7 ? 'text-green-400' : 'text-amber-400'} font-bold">${totalB.toFixed(2)}억</span> <span class="text-gray-500">(전세-${jeonseRisk}+$+저축3년)</span>` },
-            { label: '무대출 매수 가능?', private: true, a: buyableA ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceA - totalA).toFixed(1)}억</span>`, b: buyableB ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceB - totalB).toFixed(1)}억</span>` },
             { label: '연간 보유세 (실효 ' + tax.toFixed(2) + '%)', a: `<span class="${taxColor} font-bold">${taxAnnualA}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualA/12)}만)</span>`, b: `<span class="${taxColor} font-bold">${taxAnnualB}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualB/12)}만)</span>` },
             { label: '5년 보유세 누적', a: `<span class="${taxColor}">${(taxAnnualA * 5 / 10000).toFixed(2)}억</span> <span class="text-gray-500">(${taxVsOecd})</span>`, b: `<span class="${taxColor}">${(taxAnnualB * 5 / 10000).toFixed(2)}억</span>` },
             { label: '건축비 발 하방 경직성', a: `<span class="text-amber-400">${constFloor}</span>`, b: `<span class="text-amber-400">${constFloorB}</span>` },
@@ -1307,6 +1309,8 @@ document.addEventListener('DOMContentLoaded', function() {
             { label: '전세 보증금 리스크', a: '<span class="text-green-400">만기 회수 → 즉시 투입</span>', b: `<span class="text-amber-400">반전세 전환 · -${jeonseRisk}억 리스크</span>` },
             { label: '매수 후 2029 예상 시세', a: `<span class="text-blue-400 font-bold">${recoveryA.toFixed(1)}억</span>`, b: '<span class="text-gray-500">— (매수 시점)</span>' },
             { label: '최대 리스크', a: `<span class="text-red-400">${riskA}</span>`, b: `<span class="text-red-400">${riskB}</span>` },
+            { label: 'Alvin 가용자금', private: true, a: `<span class="text-green-400 font-bold">${totalA.toFixed(2)}억</span> <span class="text-gray-500">(전세+$+저축1년)</span>`, b: `<span class="${totalB >= 7 ? 'text-green-400' : 'text-amber-400'} font-bold">${totalB.toFixed(2)}억</span> <span class="text-gray-500">(전세-${jeonseRisk}+$+저축3년)</span>` },
+            { label: '무대출 매수 가능?', private: true, a: buyableA ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceA - totalA).toFixed(1)}억</span>`, b: buyableB ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceB - totalB).toFixed(1)}억</span>` },
         ];
 
         const compBody = document.getElementById('compBody');
@@ -1363,18 +1367,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const pickTotal = preferA ? totalA : totalB;
         const pickBuyable = preferA ? buyableA : buyableB;
 
-        // ═══ 시뮬레이터 카드: 추천안 기준으로 예상가 표시 ═══
-        const simDisplayPrice = pickPrice;
-        const simDisplayDrop = Math.round((1 - simDisplayPrice / base) * 1000) / 10;
-        document.getElementById('simPriceLabel').textContent = apt.name + ' 예상가 (' + pick + '안)';
-        document.getElementById('simPrice').textContent = simDisplayPrice.toFixed(1) + '억';
-        document.getElementById('simDrop').textContent = '고점 대비 -' + simDisplayDrop.toFixed(1) + '%';
+        // ═══ 시뮬레이터 카드: A안·B안 예상가 표시 ═══
+        const dropA = Math.round((1 - priceA / base) * 1000) / 10;
+        const dropB = Math.round((1 - priceB / base) * 1000) / 10;
+        document.getElementById('simPriceLabelA').textContent = apt.name + ' A안 (2027)';
+        document.getElementById('simPriceA').textContent = priceA.toFixed(1) + '억';
+        document.getElementById('simDropA').textContent = '고점 대비 -' + dropA.toFixed(1) + '%';
+        document.getElementById('simPriceLabelB').textContent = apt.name + ' B안 (2029)';
+        document.getElementById('simPriceB').textContent = priceB.toFixed(1) + '억';
+        document.getElementById('simDropB').textContent = '고점 대비 -' + dropB.toFixed(1) + '%';
+        // 추천안 강조
+        document.getElementById('simPriceA').style.opacity = preferA ? '1' : '0.4';
+        document.getElementById('simPriceB').style.opacity = preferA ? '0.4' : '1';
         const buyEl = document.getElementById('simBuyable');
         if (pickBuyable) {
-            buyEl.textContent = '가능';
+            buyEl.textContent = pick + '안 가능';
             buyEl.style.color = '#34d399';
         } else {
-            buyEl.textContent = '부족 ' + (simDisplayPrice - pickTotal).toFixed(1) + '억';
+            buyEl.textContent = pick + '안 부족 ' + (pickPrice - pickTotal).toFixed(1) + '억';
             buyEl.style.color = '#f87171';
         }
         // 최저가 예측 (바닥): generateScenario의 pred[9] = 27.12 바닥
