@@ -39,6 +39,8 @@
         .scenario-badge{font-size:9px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:6px;text-transform:uppercase}
         .private{opacity:.08;transition:opacity .3s ease}
         .private:hover{opacity:1}
+        details summary .toggle-icon::after{content:'▶'}
+        details[open] summary .toggle-icon::after{content:'▼'}
     </style>
 </head>
 <body class="antialiased">
@@ -512,7 +514,6 @@
                                 <th class="p-2.5 text-blue-400 font-bold text-center">슬라이더 예측가</th>
                                 <th class="p-2.5 text-red-400 font-normal text-center">전면 확전(-10%)</th>
                                 <th class="p-2.5 text-blue-400 font-normal text-center">회복 시나리오</th>
-                                <th class="p-2.5 text-gray-500 font-normal text-center">무대출 가능?</th>
                             </tr>
                         </thead>
                         <tbody id="betaBody"></tbody>
@@ -632,7 +633,7 @@
             <details class="card" style="background:linear-gradient(135deg,#0f1a12,#1a2035);">
                 <summary class="p-4 cursor-pointer select-none flex items-center justify-between">
                     <h2 class="text-[10px] font-bold text-green-400 uppercase tracking-wider">Alvin 자산 · 현금흐름</h2>
-                    <span class="text-[9px] text-gray-600">▶</span>
+                    <span class="text-[9px] text-gray-600 toggle-icon"></span>
                 </summary>
                 <div class="px-5 pb-5 space-y-2">
                     <div class="flex justify-between items-center py-1">
@@ -1104,9 +1105,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const recLow = Math.round(aptPrice * 0.95 * 10) / 10;
             const recHigh = Math.round(aptPrice * 1.15 * 10) / 10;
             const betaColor = apt.beta >= 1.2 ? '#f87171' : apt.beta >= 1.0 ? '#fbbf24' : '#34d399';
-            const loanIcon = totalCash >= aptPrice
-                ? '<span class="text-green-400 font-bold">가능</span>'
-                : '<span class="text-red-400">대출 필요</span>';
             const age = 2026 - (apt.builtYear || 2020);
             const ageColor = age <= 3 ? '#34d399' : age <= 7 ? '#fbbf24' : '#f87171';
             tr.innerHTML = `
@@ -1117,21 +1115,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td class="p-2.5 text-center text-white font-semibold">${aptPrice.toFixed(1)}억</td>
                 <td class="p-2.5 text-center text-red-400 font-semibold">${escPrice.toFixed(1)}억</td>
                 <td class="p-2.5 text-center text-blue-400 font-semibold">${recLow.toFixed(1)}~${recHigh.toFixed(1)}억</td>
-                <td class="p-2.5 text-center">${loanIcon}</td>
             `;
             betaBody.appendChild(tr);
         });
-        const alvinRow = document.createElement('tr');
-        alvinRow.className = 'border-t-2 border-green-500/30 private';
-        alvinRow.innerHTML = `
-            <td class="p-2.5" colspan="3"><span class="text-green-400 font-bold text-xs">Alvin 가용자금</span></td>
-            <td class="p-2.5 text-center text-green-400 font-black">${totalCash.toFixed(2)}억</td>
-            <td class="p-2.5 text-center text-green-400 font-black">${totalCash.toFixed(2)}억</td>
-            <td class="p-2.5 text-center text-green-400 font-black">${totalCash.toFixed(2)}억</td>
-            <td class="p-2.5 text-center text-green-400 font-black">${totalCash.toFixed(2)}억</td>
-            <td class="p-2.5 text-center"><span class="text-green-400 text-[9px]">현금 100%</span></td>
-        `;
-        betaBody.appendChild(alvinRow);
     }
 
     function simCalc() {
@@ -1321,8 +1307,6 @@ document.addEventListener('DOMContentLoaded', function() {
             { label: '전세 보증금 리스크', a: '<span class="text-green-400">만기 회수 → 즉시 투입</span>', b: `<span class="text-amber-400">반전세 전환 · -${jeonseRisk}억 리스크</span>` },
             { label: '매수 후 2029 예상 시세', a: `<span class="text-blue-400 font-bold">${recoveryA.toFixed(1)}억</span>`, b: '<span class="text-gray-500">— (매수 시점)</span>' },
             { label: '최대 리스크', a: `<span class="text-red-400">${riskA}</span>`, b: `<span class="text-red-400">${riskB}</span>` },
-            { label: 'Alvin 가용자금', private: true, a: `<span class="text-green-400 font-bold">${totalA.toFixed(2)}억</span> <span class="text-gray-500">(전세+$+저축1년)</span>`, b: `<span class="${totalB >= 7 ? 'text-green-400' : 'text-amber-400'} font-bold">${totalB.toFixed(2)}억</span> <span class="text-gray-500">(전세-${jeonseRisk}+$+저축3년)</span>` },
-            { label: '무대출 매수 가능?', private: true, a: buyableA ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceA - totalA).toFixed(1)}억</span>`, b: buyableB ? '<span class="text-green-400 font-bold">✓ 가능</span>' : `<span class="text-red-400 font-bold">✗ 부족 ${(priceB - totalB).toFixed(1)}억</span>` },
         ];
 
         const compBody = document.getElementById('compBody');
