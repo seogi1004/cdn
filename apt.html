@@ -57,14 +57,14 @@
                     <span class="text-sm text-amber-400">건설공사비지수 133.28 역대 최고 · 자재 10~40%↑</span>
                     <span class="text-sm text-blue-400">USD/KRW 1,512 · 주담대 상단 7.0%</span>
                     <span class="text-sm text-purple-400">2026 초고령사회 진입 · 출산율 0.7 세계 최저</span>
-                    <span class="text-sm text-green-400">이재명 정부: 5.9 다주택 양도세 중과 유예 종료 · 최대 82.5%</span>
+                    <span class="text-sm text-green-400">이재명 정부: 양도세 82.5% · 대출차단 · 4.17 만기연장 금지(4.1조 매도압력) · 15억↑ 주담대 4억한도</span>
                     <span class="text-sm text-orange-400">보유세 실효세율 0.15% · OECD 평균의 절반 · 공정시장가액비율 인상 검토</span>
                     <span class="text-sm text-gray-400">DAY 33 — 미-이스라엘 vs 이란 전쟁</span>
                     <span class="text-sm text-red-400">호르무즈 봉쇄 · Brent $105 · 나프타 쇼크</span>
                     <span class="text-sm text-amber-400">건설공사비지수 133.28 역대 최고 · 자재 10~40%↑</span>
                     <span class="text-sm text-blue-400">USD/KRW 1,512 · 주담대 상단 7.0%</span>
                     <span class="text-sm text-purple-400">2026 초고령사회 진입 · 출산율 0.7 세계 최저</span>
-                    <span class="text-sm text-green-400">이재명 정부: 5.9 다주택 양도세 중과 유예 종료 · 최대 82.5%</span>
+                    <span class="text-sm text-green-400">이재명 정부: 양도세 82.5% · 대출차단 · 4.17 만기연장 금지(4.1조 매도압력) · 15억↑ 주담대 4억한도</span>
                     <span class="text-sm text-orange-400">보유세 실효세율 0.15% · OECD 평균의 절반 · 공정시장가액비율 인상 검토</span>
                 </div>
             </div>
@@ -130,8 +130,8 @@
         </div>
         <div class="card stat-card green p-3">
             <p class="text-[9px] uppercase tracking-wider text-gray-500 mb-1">정부 정책 강도</p>
-            <p class="text-xl font-black text-green-400">MAX</p>
-            <p class="text-[9px] text-gray-600 mt-1">5.9 양도세 중과 82.5%</p>
+            <p id="headerPolicyEff" class="text-xl font-black text-red-400">10.0</p>
+            <p class="text-[9px] text-gray-600 mt-1">6개 서브팩터 합산</p>
         </div>
         <div class="card stat-card amber p-3">
             <p class="text-[9px] uppercase tracking-wider text-gray-500 mb-1">보유세 실효세율</p>
@@ -207,13 +207,46 @@
                     </div>
                     <div class="bg-green-500/5 border border-green-500/10 rounded-lg p-4">
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">정부 정책 강도</label>
-                            <span id="policyValue" class="text-sm font-black text-green-400">강력</span>
+                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">정부 정책 (개별 제어)</label>
+                            <span id="policyValue" class="text-sm font-black text-red-400">10.0</span>
                         </div>
-                        <input type="range" id="policySlider" min="0" max="2" step="1" value="2"
-                            class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
-                            style="accent-color:#10b981;background:linear-gradient(to right,#10b981,#f59e0b,#ef4444)">
-                        <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>완화</span><span>중립</span><span>강력(현행)</span></div>
+                        <div class="space-y-1.5" id="policyToggles">
+                            <label class="flex items-center justify-between cursor-pointer group">
+                                <span class="text-[9px] text-gray-400 group-hover:text-gray-200">양도세 82.5% 중과 <span class="text-[8px] text-amber-500">(+0.5 매물잠김 역설)</span></span>
+                                <input type="checkbox" id="polCGT" checked class="pol-toggle accent-green-500">
+                            </label>
+                            <label class="flex items-center justify-between cursor-pointer group">
+                                <span class="text-[9px] text-gray-400 group-hover:text-gray-200">다주택 대출 전면 차단 <span class="text-[8px] text-red-400">(+2.5)</span></span>
+                                <input type="checkbox" id="polLoan" checked class="pol-toggle accent-green-500">
+                            </label>
+                            <label class="flex items-center justify-between cursor-pointer group">
+                                <span class="text-[9px] text-gray-400 group-hover:text-gray-200">투기과열지구 LTV40% <span class="text-[8px] text-gray-500">15억↑ 4억한도 · 25억↑ 2억한도</span> <span class="text-[8px] text-red-400">(+2.0)</span></span>
+                                <input type="checkbox" id="polSpec" checked class="pol-toggle accent-green-500">
+                            </label>
+                            <label class="flex items-center justify-between cursor-pointer group">
+                                <span class="text-[9px] text-gray-400 group-hover:text-gray-200">대출 만기연장 금지 <span class="text-[8px] text-red-400">(+3.0 · 4.1조 매도압력)</span></span>
+                                <input type="checkbox" id="polMaturity" checked class="pol-toggle accent-red-500">
+                            </label>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[9px] text-gray-400">135만호 공급계획 <span class="text-[8px] text-gray-500">(+0~2)</span></span>
+                                <div class="flex items-center gap-1">
+                                    <span id="polSupplyLabel" class="text-[8px] text-gray-500 w-8 text-right">부분</span>
+                                    <input type="range" id="polSupply" min="0" max="2" step="1" value="1" class="w-16 h-1 accent-green-500">
+                                </div>
+                            </div>
+                            <label class="flex items-center justify-between cursor-pointer group">
+                                <span class="text-[9px] text-gray-400 group-hover:text-gray-200">토허제 실거주 의무 <span class="text-[8px] text-gray-500">(+1.0 · 26.12.31 한시)</span></span>
+                                <input type="checkbox" id="polLandPerm" checked class="pol-toggle accent-green-500">
+                            </label>
+                        </div>
+                        <div class="flex justify-between items-center text-[8px] text-gray-600 mt-2 pt-2 border-t border-gray-800/50">
+                            <span>합산 효과: <span id="policySum" class="text-red-400 font-bold">10.0</span> / 12</span>
+                            <div class="flex gap-1">
+                                <button onclick="applyPolicyPreset(0)" class="px-1.5 py-0.5 rounded bg-green-500/10 text-green-400 hover:bg-green-500/20">완화</button>
+                                <button onclick="applyPolicyPreset(1)" class="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 hover:bg-amber-500/20">중립</button>
+                                <button onclick="applyPolicyPreset(2)" class="px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 hover:bg-red-500/20">강력</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -350,7 +383,7 @@
                         <div class="flex items-center gap-1"><div class="w-3 h-2.5 rounded" style="background:rgba(16,185,129,.4)"></div> ~15%</div>
                         <div class="flex items-center gap-1"><div class="w-3 h-2.5 rounded" style="background:rgba(245,158,11,.4)"></div> 15~22%</div>
                         <div class="flex items-center gap-1"><div class="w-3 h-2.5 rounded" style="background:rgba(239,68,68,.4)"></div> 22%+</div>
-                        <span class="ml-2 text-amber-400">※ 건축비 +15% · 정부정책 -15% 반영</span>
+                        <span class="ml-2 text-amber-400">※ 건축비 +15% · 정부정책(6개 서브팩터) 반영</span>
                     </div>
                 </details>
             </div>
@@ -526,37 +559,41 @@
         <!-- Right 4 -->
         <div class="lg:col-span-4 space-y-6">
 
-            <!-- Government Policy Card -->
+            <!-- Government Policy Card (토글 연동) -->
             <div class="card p-5" style="background:linear-gradient(135deg,#0f1a16,#1a2035);border-color:rgba(16,185,129,.2);">
-                <h2 class="text-[10px] font-bold text-green-400 uppercase tracking-wider mb-3">이재명 정부 부동산 정책</h2>
-                <div class="space-y-2.5">
-                    <div class="flex items-start gap-2">
+                <h2 class="text-[10px] font-bold text-green-400 uppercase tracking-wider mb-3">이재명 정부 부동산 정책 <span class="text-gray-600 font-normal">(토글 연동)</span></h2>
+                <div class="space-y-2.5" id="policyCardItems">
+                    <div class="flex items-start gap-2 transition-all duration-300" data-pol="polCGT">
                         <div class="w-1.5 h-1.5 rounded-full bg-red-400 mt-1 shrink-0"></div>
-                        <div class="text-[10px] text-gray-400"><strong class="text-white">5.9 양도세 중과 유예 종료</strong> — 2주택 +20%p, 3주택 +30%p → 최대 82.5%. 장특공제 동시 박탈.</div>
+                        <div class="text-[10px] text-gray-400"><strong class="text-white">5.9 양도세 중과 유예 종료</strong> — 2주택 +20%p, 3주택 +30%p → 최대 82.5%. 장특공제 동시 박탈. <span class="text-amber-500">※ 매물잠김 역설: 거래량 77%↓ but 가격 오히려 상승</span></div>
                     </div>
-                    <div class="flex items-start gap-2">
+                    <div class="flex items-start gap-2 transition-all duration-300" data-pol="polLoan">
                         <div class="w-1.5 h-1.5 rounded-full bg-red-400 mt-1 shrink-0"></div>
-                        <div class="text-[10px] text-gray-400"><strong class="text-white">다주택 대출 전면 차단</strong> — 수도권 다주택자·비실거주 주담대 불가. 갭투자 원천 봉쇄.</div>
+                        <div class="text-[10px] text-gray-400"><strong class="text-white">다주택 대출 전면 차단</strong> (6·27) — 수도권 다주택자·비실거주 주담대 불가. 갭투자 원천 봉쇄.</div>
                     </div>
-                    <div class="flex items-start gap-2">
+                    <div class="flex items-start gap-2 transition-all duration-300" data-pol="polSpec">
                         <div class="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1 shrink-0"></div>
-                        <div class="text-[10px] text-gray-400"><strong class="text-white">서울 전역 토지거래허가구역</strong> — 26.12.31까지. 매수 시 2년 실거주 의무. 대출 6억 상한.</div>
+                        <div class="text-[10px] text-gray-400"><strong class="text-white">투기과열지구 · LTV 40%</strong> (10·15) — 서울 전역+경기 12곳. 스트레스 DSR 3% 가산. <span class="text-amber-400">주담대 상한: 15억↑→4억, 25억↑→2억</span></div>
                     </div>
-                    <div class="flex items-start gap-2">
+                    <div class="flex items-start gap-2 transition-all duration-300" data-pol="polMaturity">
+                        <div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-1 shrink-0"></div>
+                        <div class="text-[10px] text-gray-400"><strong class="text-red-400">4.17 대출 만기연장 금지</strong> (신규) — 다주택자 주담대 만기연장 전면 금지. <span class="text-red-400">4.1조원·1.7만가구 강제 매도 압력.</span> 임차인 거주 시 임대차 종료까지 예외.</div>
+                    </div>
+                    <div class="flex items-start gap-2 transition-all duration-300" data-pol="polSupply">
                         <div class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1 shrink-0"></div>
-                        <div class="text-[10px] text-gray-400"><strong class="text-white">수도권 135만호 공급</strong> — 2030년까지 연 27만 가구. 기본주택(30년 공공임대) 포함.</div>
+                        <div class="text-[10px] text-gray-400"><strong class="text-white">수도권 135만호 공급</strong> (9·7) — 2035년까지. 기본주택(30년 공공임대) 포함. 실현 가능성 불확실.</div>
                     </div>
-                    <div class="flex items-start gap-2">
-                        <div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1 shrink-0"></div>
-                        <div class="text-[10px] text-gray-400"><strong class="text-white">정책 결정 과정 다주택자 배제</strong> — 다주택 공무원, 정책 논의·결재 과정 참여 불가.</div>
+                    <div class="flex items-start gap-2 transition-all duration-300" data-pol="polLandPerm">
+                        <div class="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1 shrink-0"></div>
+                        <div class="text-[10px] text-gray-400"><strong class="text-white">토지거래허가구역 실거주 의무</strong> — 26.12.31까지. 2년 실거주 의무. <span class="text-amber-400">주담대 6억 상한.</span> 4.1 무주택자 매수 시 실거주 유예 완화.</div>
                     </div>
                     <div class="flex items-start gap-2">
                         <div class="w-1.5 h-1.5 rounded-full bg-gray-400 mt-1 shrink-0"></div>
-                        <div class="text-[10px] text-gray-400"><strong class="text-amber-400">보유세 카드 미사용</strong> — 종부세 강화·공시지가 현실화 등 아직 남은 카드. 추가 하락 여력.</div>
+                        <div class="text-[10px] text-gray-400"><strong class="text-amber-400">보유세 카드 미사용</strong> — 종부세 강화·공시지가 현실화율 69→90% 검토 중. 서울 공시가 +18.67%. 종부세 대상 +16.9만가구.</div>
                     </div>
                 </div>
                 <div class="mt-3 p-2 bg-black/30 rounded-lg">
-                    <p class="text-[9px] text-gray-500">여론: 집값 하락 전망 <span class="text-green-400 font-bold">46%</span> vs 상승 29%. 정책 긍정 평가 <span class="text-green-400 font-bold">51%</span>. 강남 3구 주간 가격 <span class="text-red-400 font-bold">하락 전환</span> (3월 초).</p>
+                    <p class="text-[9px] text-gray-500">월세 비중 <span class="text-red-400 font-bold">66.8%</span> 역대 최고 (전세 구조 변화). 정책 긍정 평가 <span class="text-green-400 font-bold">51%</span>. 강남 3구 <span class="text-red-400 font-bold">거래량 77%↓</span> but 가격 상승.</p>
                 </div>
             </div>
 
@@ -683,16 +720,72 @@ document.addEventListener('DOMContentLoaded', function() {
     // ═══════ MAIN CHART ═══════
     const labels=['2016','2018','2020','2021\n(고점)','2023\n(침체)','2025','26.04\n(D+33)','26.10','27.04\n(만기)','27.12','28.06','28.12','29.06','29.12'];
 
-    // ═══════ POLICY LEVELS (hoisted — generateScenario/calcPrice8 등에서 사용) ═══════
-    const policySlider = document.getElementById('policySlider');
+    // ═══════ POLICY SUB-FACTORS (hoisted — generateScenario/simCalc 등에서 사용) ═══════
     const policyVal = document.getElementById('policyValue');
-    // 정책 효과: 실증연구 기반 하향 조정 (VAR: "효과 제한적/단기적")
-    // 특례보금자리론/50년 주담대 효과 6개월 소진, 신생아 대출 시장영향 10~20%
-    const policyLevels = [
-        { label: '완화', color: '#34d399', eff: 3 },   // 규제 완화: 정책대출 확대, 양도세 유예
-        { label: '중립', color: '#fbbf24', eff: 6 },   // 현 수준 유지
-        { label: '강력', color: '#f87171', eff: 10 },   // 양도세 82.5%, 대출차단, 토허제
+    // 개별 정책을 서브 팩터로 분리 (2025.6~2026.4 웹 리서치 기반)
+    // 합산 0~10 스케일 (기존 policyLevels 호환)
+    const policyPresets = [
+        { label: '완화', color: '#34d399', toggles: {polCGT:false, polLoan:false, polSpec:false, polMaturity:false, polSupply:1, polLandPerm:false} },
+        { label: '중립', color: '#fbbf24', toggles: {polCGT:true, polLoan:false, polSpec:true, polMaturity:false, polSupply:1, polLandPerm:true} },
+        { label: '강력', color: '#f87171', toggles: {polCGT:true, polLoan:true, polSpec:true, polMaturity:true, polSupply:1, polLandPerm:true} },
     ];
+    const policySubFactors = [
+        { id: 'polCGT',      label: '양도세 중과',   eff: 0.5, type: 'toggle' },  // 매물잠김 역설: 순하방 제한적
+        { id: 'polLoan',     label: '대출 차단',     eff: 2.5, type: 'toggle' },  // 갭투자 봉쇄, 매수세 직접 차단
+        { id: 'polSpec',     label: '투기과열지구',   eff: 2.0, type: 'toggle' },  // LTV 40%, 스트레스 DSR 3%
+        { id: 'polMaturity', label: '만기연장 금지',  eff: 3.0, type: 'toggle' },  // 4.1조/1.7만가구 강제 매도 (4.17 신규)
+        { id: 'polSupply',   label: '공급계획',       effs: [0, 1, 2], type: 'slider', labels: ['백지화','부분','초과'] },
+        { id: 'polLandPerm', label: '토허제',         eff: 1.0, type: 'toggle' },  // 26.12.31 한시, 일부 완화 중
+    ];
+    function getPolicyEff() {
+        let sum = 0;
+        for (const sf of policySubFactors) {
+            const el = document.getElementById(sf.id);
+            if (sf.type === 'toggle') sum += el.checked ? sf.eff : 0;
+            else sum += sf.effs[parseInt(el.value)];
+        }
+        return Math.min(sum, 12);
+    }
+    function applyPolicyPreset(idx) {
+        const preset = policyPresets[idx];
+        for (const sf of policySubFactors) {
+            const el = document.getElementById(sf.id);
+            if (sf.type === 'toggle') el.checked = preset.toggles[sf.id];
+            else el.value = preset.toggles[sf.id];
+        }
+        updatePolicySum();
+        simCalc();
+    }
+    function updatePolicySum() {
+        const eff = getPolicyEff();
+        const sumEl = document.getElementById('policySum');
+        if (sumEl) sumEl.textContent = eff.toFixed(1);
+        const color = eff >= 8 ? '#f87171' : eff >= 4 ? '#fbbf24' : '#34d399';
+        if (sumEl) sumEl.style.color = color;
+        if (policyVal) { policyVal.textContent = eff.toFixed(1); policyVal.style.color = color; }
+        const headerEff = document.getElementById('headerPolicyEff');
+        if (headerEff) { headerEff.textContent = eff.toFixed(1); headerEff.style.color = color; }
+        // 공급계획 슬라이더 라벨 업데이트
+        const supplyLabel = document.getElementById('polSupplyLabel');
+        const supplyEl = document.getElementById('polSupply');
+        if (supplyLabel && supplyEl) {
+            const labels = ['백지화','부분','초과'];
+            supplyLabel.textContent = labels[parseInt(supplyEl.value)];
+        }
+        // 정책 카드 연동
+        updatePolicyCard();
+    }
+    function updatePolicyCard() {
+        const items = document.querySelectorAll('[data-pol]');
+        items.forEach(item => {
+            const polId = item.getAttribute('data-pol');
+            const el = document.getElementById(polId);
+            if (!el) return;
+            const active = el.type === 'checkbox' ? el.checked : parseInt(el.value) > 0;
+            item.style.opacity = active ? '1' : '0.3';
+            item.style.textDecoration = active ? 'none' : 'line-through';
+        });
+    }
 
     // ═══════ APARTMENTS DATA (hoisted before ds/generateScenario) ═══════
     const apartments = [
@@ -837,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const warCostPress = 3 * SF;                                    // 전쟁 매몰비용 (고정)
         const taxPress   = Math.max((tax - 0.15) / 1.0 * 5, 0) * SF;  // 보유세
         const popPress   = 4 * SF;                                      // 인구감소
-        const polPress   = policyLevels[parseInt(policySlider.value)].eff * SF; // 정부 정책
+        const polPress   = getPolicyEff() * SF; // 정부 정책 (서브팩터 합산)
         const debtPress  = 4 * SF;                                      // 가계부채
         const jeonsePress = 3 * SF;                                     // 전세 축소
         const pirPress   = 2.5 * SF;                                    // PIR
@@ -1101,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const fx = parseInt(fxSlider.value);
         const oil = parseInt(oilSlider.value);
         const tax = parseFloat(taxSlider.value);
-        const pol = parseInt(policySlider.value);
+        const polEff = getPolicyEff();
         const apt = apartments[selectedAptIdx];
         const base = apt.peak2021; // 선택된 아파트의 고점
 
@@ -1112,9 +1205,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const priceA = scenarioResult ? scenarioResult.pred[8] : price;
 
         // Update policy slider label
-        const pLevel = policyLevels[pol];
-        policyVal.textContent = pLevel.label;
-        policyVal.style.color = pLevel.color;
+        // 정책 합산값 라벨 업데이트
+        const polColor = polEff >= 8 ? '#f87171' : polEff >= 4 ? '#fbbf24' : '#34d399';
+        policyVal.textContent = polEff.toFixed(1);
+        policyVal.style.color = polColor;
 
         // Update apt info bar
         document.getElementById('aptInfoName').textContent = apt.region + ' ' + apt.name + ' ' + apt.size;
@@ -1135,7 +1229,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const oilEff = ((oil - 60) / 40) * 2.5;       // ③ 유가 (전쟁 영향 포함)
         const warCostEff = 3;                          // ④ 전쟁 매몰비용: 이미 발생, 재정부담 고정
         const popEff = 4;                              // ⑤ 인구 (3→4, 일본 사례)
-        const policyEff = pLevel.eff;                  // ⑥ 정부 정책 (완화4/중립8/강력10)
+        const policyEff = polEff;                        // ⑥ 정부 정책 (서브팩터 합산)
         // ⑦ 대체원가 상방 = 건축비(자재+PF) + 토지비
         // 분양가 ≒ 토지비(50%) + 건축비(50%)
         // 건축비: 유가↑→나프타/시멘트↑, 환율↑→수입자재↑, 금리↑→PF비용↑ → 상승중
@@ -1242,8 +1336,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const constFloorB = '강 (2년간 추가 상승)';
 
         // 정책 리스크
-        const policyA = '양도세 82.5% · 대출 제한';
-        const policyB = '규제 완화 기대 but 불확실';
+        const activePolicies = policySubFactors
+            .filter(sf => { const el = document.getElementById(sf.id); return sf.type === 'toggle' ? el.checked : parseInt(el.value) > 0; })
+            .map(sf => sf.label);
+        const policyA = activePolicies.length > 0 ? activePolicies.join(' · ') : '규제 완화';
+        const policyB = activePolicies.length >= 4 ? '규제 유지 가능성' : '추가 규제 가능성';
 
         // 베이비부머
         const boomerA = '초기 매도 (약)';
@@ -1608,9 +1705,9 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: '전세 축소 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#f472b6', fixed: true },
             { name: 'PIR 15~25배 (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#e879f9', fixed: true },
             { name: '비주거 부실 전이 (고정)', lo: basePrice + 0.24, hi: basePrice - 0.24, color: '#fb7185', fixed: true },
-            { name: '정부 정책 (' + policyLevels[parseInt(policySlider.value)].label + ')',
-              lo: basePrice + (policyLevels[2].eff - policyLevels[parseInt(policySlider.value)].eff) * 0.12,
-              hi: basePrice - (policyLevels[parseInt(policySlider.value)].eff - policyLevels[0].eff) * 0.12,
+            { name: '정부 정책 (효과 ' + getPolicyEff().toFixed(1) + ')',
+              lo: basePrice + (12 - getPolicyEff()) * 0.12,
+              hi: basePrice - getPolicyEff() * 0.12,
               color: '#34d399', fixed: true },
         ];
 
@@ -1663,7 +1760,8 @@ document.addEventListener('DOMContentLoaded', function() {
     fxSlider.addEventListener('input', simCalc);
     oilSlider.addEventListener('input', simCalc);
     taxSlider.addEventListener('input', simCalc);
-    policySlider.addEventListener('input', simCalc);
+    document.querySelectorAll('.pol-toggle').forEach(el => { el.addEventListener('change', () => { updatePolicySum(); simCalc(); }); });
+    document.getElementById('polSupply').addEventListener('input', () => { updatePolicySum(); simCalc(); });
 
     // ═══════ APARTMENT SELECTOR (동네별 그룹) ═══════
     const aptSelector = document.getElementById('aptSelector');
