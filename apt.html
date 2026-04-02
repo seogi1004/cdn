@@ -912,6 +912,7 @@ document.addEventListener('DOMContentLoaded', function() {
             plugins:{
                 legend:{position:'bottom',labels:{usePointStyle:true,padding:12,font:{size:9}}},
                 tooltip:{backgroundColor:'#1e293b',titleColor:'#f1f5f9',bodyColor:'#94a3b8',borderColor:'#334155',borderWidth:1,padding:10,cornerRadius:8,
+                    filter:item=>!item.dataset.label.includes('Alvin'),
                     callbacks:{label:ctx=>ctx.parsed.y===null?null:`${ctx.dataset.label}: ${ctx.parsed.y}억`}},
                 annotation:{annotations:{
                     warLine:{type:'line',xMin:6,xMax:6,borderColor:'rgba(239,68,68,.35)',borderWidth:2,borderDash:[4,4],
