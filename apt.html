@@ -209,7 +209,7 @@
                         <input type="range" id="policySlider" min="0" max="2" step="1" value="2"
                             class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                             style="accent-color:#10b981;background:linear-gradient(to right,#10b981,#f59e0b,#ef4444)">
-                        <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>완화</span><span>중립</span><span>강력 (현재)</span></div>
+                        <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>완화</span><span>중립</span><span>강력(현행)</span></div>
                     </div>
                 </div>
 
@@ -763,11 +763,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const popPress   = 2;                                        // 인구감소 기본 압력
         const polPress   = policyLevels[parseInt(policySlider.value)].eff * 0.4; // 정부 정책 압력
         const debtPress  = 1.5;                                        // 가계부채/GDP 105% 구조적 압력
+        const jeonsePress = 1.2;                                       // 전세 축소 → 유동성 감소
         const pirPress   = 1.0;                                        // PIR 15~25배: 매수여력 고갈
         // 상방 지지 (건축비·공급절벽은 추가 하락을 억제)
         const upSupport  = 8;  // 건축비+공급절벽이 추가 하락폭을 줄여줌
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress + pirPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress - upSupport;
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop;
         // 현재가 기준 추가 하락 (최대 35%)
         const clampedDrop = Math.min(extraDropPct, 35);
