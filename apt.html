@@ -1375,6 +1375,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const optimalTiming = preferA ? '2027년 상반기 (전세만기 전후)' : '2028년 하반기~2029년 상반기';
         const bottomTiming = dropPct > 25 ? '2027년 하반기~2028년 상반기' : '2027년 상반기';
 
+        // 육아 + 집값방어 종합 추천
+        const recRegions = [];
+        apartments.forEach(a => {
+            const age = 2026 - (a.builtYear || 2020);
+            const score = (1 - a.beta) * 40          // beta 낮을수록 집값 방어 ↑
+                + (age <= 5 ? 15 : age <= 7 ? 10 : 0) // 신축 보너스 (육아 환경)
+                + (a.region === '마곡' ? 10 : 0)       // 대기업 직주근접
+                + (a.region === '지축' ? 8 : 0)        // 젊은층 + 스타필드 + 학군 형성중
+                + (a.region === '운정' ? 7 : 0)        // 영유아 많음 + GTX
+                + (a.region === '덕은' ? 6 : 0)        // 개발호재 + 한강
+                + (a.current <= totalCash2027 ? 10 : 0); // 무대출 매수 가능
+            recRegions.push({ name: a.region + ' ' + a.name, score, beta: a.beta, price: a.current });
+        });
+        recRegions.sort((a, b) => b.score - a.score);
+        const top3 = recRegions.slice(0, 3);
+
         verdictSummary.innerHTML = `
             <p class="text-[10px]"><span class="font-bold" style="color:${pickColor}">추천: ${pick}안 (${preferA ? '2027.04' : '2029'} 매수)</span></p>
             <p class="text-[10px] text-gray-400">예상가 <span class="text-white font-bold">${pickPrice.toFixed(1)}억</span> · 가용 <span class="text-green-400 font-bold">${pickTotal.toFixed(2)}억</span> · ${pickBuyable ? '<span class="text-green-400">무대출 OK</span>' : '<span class="text-red-400">대출 필요</span>'}</p>
@@ -1382,7 +1398,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div><span class="text-gray-500">최적 매수 시기</span><br><span class="text-blue-400 font-bold">${optimalTiming}</span></div>
                 <div><span class="text-gray-500">예상 바닥가 (${apt.name})</span><br><span class="text-red-400 font-bold">${bottomEst.toFixed(1)}억</span> <span class="text-gray-600">(${bottomTiming})</span></div>
             </div>
-            <p class="text-[9px] text-gray-600 mt-1">※ 슬라이더를 조절하여 다양한 시나리오를 탐색하세요</p>
+            <div class="mt-2 pt-2 border-t border-gray-700/50 text-[10px]">
+                <p class="text-gray-500 mb-1.5">육아 + 집값방어 종합 추천 (beta·신축·학군·매수가능 기준)</p>
+                ${top3.map((r, i) => `<p class="${i === 0 ? 'text-green-400 font-bold' : 'text-gray-400'}">
+                    ${i + 1}. ${r.name} <span class="text-gray-500">(beta ${r.beta}, ${r.price}억${r.price <= totalCash2027 ? ', 무대출OK' : ''})</span>
+                </p>`).join('')}
+                <p class="text-[9px] text-gray-600 mt-1">※ 아이를 오래 키울 집 = 신축·젊은 커뮤니티·집값 방어력(낮은 beta) 우선</p>
+            </div>
         `;
 
         // ═══════ UPDATE MAIN CHART (슬라이더 + 아파트 연동) ═══════
