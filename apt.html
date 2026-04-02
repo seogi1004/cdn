@@ -140,31 +140,23 @@
             <div class="card p-6" id="simulatorCard">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
                     <div>
-                        <h2 class="text-lg font-bold mb-1">인터랙티브 시뮬레이터 — 변수를 조절하세요</h2>
+                        <h2 class="text-sm sm:text-lg font-bold mb-1">인터랙티브 시뮬레이터 — 변수를 조절하세요</h2>
                         <p class="text-[10px] text-gray-500">슬라이더 + 아파트 선택으로 전체 대시보드가 실시간 재계산됩니다.</p>
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
+                    <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto">
                         <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">대상 아파트</label>
-                        <select id="aptSelector" class="bg-black/40 border border-blue-500/30 text-white text-xs font-bold rounded-lg px-3 py-2 cursor-pointer focus:border-blue-400 focus:outline-none" style="min-width:200px">
+                        <select id="aptSelector" class="bg-black/40 border border-blue-500/30 text-white text-xs font-bold rounded-lg px-3 py-2 cursor-pointer focus:border-blue-400 focus:outline-none flex-1 sm:flex-none" style="min-width:0;max-width:100%">
                         </select>
                     </div>
                 </div>
 
                 <!-- Selected Apt Info Bar -->
-                <div id="aptInfoBar" class="flex items-center gap-4 mb-4 p-3 bg-black/20 rounded-lg border border-gray-800 text-[10px] flex-wrap">
-                    <span class="text-gray-500">선택:</span>
-                    <span id="aptInfoName" class="text-white font-bold">—</span>
-                    <span class="text-gray-600">|</span>
-                    <span class="text-gray-500">2021 고점:</span>
-                    <span id="aptInfoPeak" class="text-red-400 font-bold">—</span>
-                    <span class="text-gray-600">|</span>
-                    <span class="text-gray-500">현재 호가:</span>
-                    <span id="aptInfoCurrent" class="text-amber-400 font-bold">—</span>
-                    <span class="text-gray-600">|</span>
-                    <span class="text-gray-500">Beta:</span>
-                    <span id="aptInfoBeta" class="text-purple-400 font-bold">—</span>
-                    <span class="text-gray-600">|</span>
-                    <span id="aptInfoNote" class="text-gray-500 italic">—</span>
+                <div id="aptInfoBar" class="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-4 mb-4 p-3 bg-black/20 rounded-lg border border-gray-800 text-[10px]">
+                    <div class="col-span-2 sm:contents"><span class="text-gray-500">선택:</span> <span id="aptInfoName" class="text-white font-bold">—</span></div>
+                    <div><span class="text-gray-500">고점:</span> <span id="aptInfoPeak" class="text-red-400 font-bold">—</span></div>
+                    <div><span class="text-gray-500">현재:</span> <span id="aptInfoCurrent" class="text-amber-400 font-bold">—</span></div>
+                    <div><span class="text-gray-500">Beta:</span> <span id="aptInfoBeta" class="text-purple-400 font-bold">—</span></div>
+                    <div><span id="aptInfoNote" class="text-gray-500 italic">—</span></div>
                 </div>
 
                 <!-- Sliders -->
@@ -212,27 +204,27 @@
                 </div>
 
                 <!-- Simulation Results -->
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
-                    <div class="bg-black/30 rounded-lg p-3 text-center">
+                <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 mb-5">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
                         <p id="simPriceLabel" class="text-[9px] text-gray-500 mb-1">예상가</p>
-                        <p id="simPrice" class="text-xl font-black text-amber-400">7.5억</p>
+                        <p id="simPrice" class="text-base sm:text-xl font-black text-amber-400">7.5억</p>
                         <p id="simDrop" class="text-[9px] text-red-400">고점 대비 -37.5%</p>
                     </div>
-                    <div class="bg-black/30 rounded-lg p-3 text-center">
-                        <p class="text-[9px] text-gray-500 mb-1">Alvin $111K 가치</p>
-                        <p id="simDollar" class="text-xl font-black text-blue-400">1.68억</p>
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
+                        <p class="text-[9px] text-gray-500 mb-1">$111K 가치</p>
+                        <p id="simDollar" class="text-base sm:text-xl font-black text-blue-400">1.68억</p>
                     </div>
-                    <div class="bg-black/30 rounded-lg p-3 text-center">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
                         <p class="text-[9px] text-gray-500 mb-1">총 가용자금</p>
-                        <p id="simTotal" class="text-xl font-black text-green-400">7.48억</p>
+                        <p id="simTotal" class="text-base sm:text-xl font-black text-green-400">7.48억</p>
                     </div>
-                    <div class="bg-black/30 rounded-lg p-3 text-center">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center">
                         <p class="text-[9px] text-gray-500 mb-1">무대출 매수?</p>
-                        <p id="simBuyable" class="text-xl font-black text-green-400">가능</p>
+                        <p id="simBuyable" class="text-base sm:text-xl font-black text-green-400">가능</p>
                     </div>
-                    <div class="bg-black/30 rounded-lg p-3 text-center border border-orange-500/20">
+                    <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center border border-orange-500/20">
                         <p class="text-[9px] text-gray-500 mb-1">연간 보유세</p>
-                        <p id="simTax" class="text-xl font-black text-orange-400">11만</p>
+                        <p id="simTax" class="text-base sm:text-xl font-black text-orange-400">11만</p>
                         <p id="simTaxMonthly" class="text-[9px] text-gray-500">월 0.9만</p>
                     </div>
                 </div>
@@ -347,11 +339,11 @@
         <div class="lg:col-span-8 space-y-6">
 
             <!-- Main Chart -->
-            <div class="card p-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
+            <div class="card p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-5">
                     <div>
-                        <h2 class="text-lg font-bold" id="mainChartTitle">지축 84㎡ — 2027 매수 vs 2029 매수 시나리오</h2>
-                        <p class="text-[10px] text-gray-500 mt-1">8-Factor 모델: 전쟁/금리/환율 + 건축비(상방) + 인구(하방) + 공급절벽(상방) + 보유세(하방)</p>
+                        <h2 class="text-sm sm:text-lg font-bold" id="mainChartTitle">지축 84㎡ — 2027 vs 2029 매수</h2>
+                        <p class="text-[10px] text-gray-500 mt-1 hidden sm:block">8-Factor 모델: 전쟁/금리/환율 + 건축비(상방) + 인구(하방) + 공급절벽(상방) + 보유세(하방)</p>
                     </div>
                     <div class="flex gap-1.5 flex-wrap" id="scenarioTabs">
                         <div class="tab active" data-scenario="war">전쟁 지속</div>
@@ -360,7 +352,7 @@
                     </div>
                 </div>
                 <div class="relative h-[320px] sm:h-[400px] lg:h-[440px] w-full"><canvas id="mainChart"></canvas></div>
-                <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
                         <p class="text-[10px] text-blue-400 font-bold mb-1">시나리오 A: 2027.04 매수</p>
                         <p class="text-[10px] text-gray-400">전세 만기 → 퇴거 → 반전세 이사 → 급매 진입. 하락장 초입 매수. 2029년까지 추가 하락 감내 필요 가능.</p>
@@ -494,8 +486,8 @@
                         <p class="text-[10px] text-gray-500 mt-1">8-Factor 모델 기반 · 슬라이더 변경 시 예측가 자동 재계산. 아파트를 추가하려면 하단 JS 배열에 추가하세요.</p>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs" id="betaTable">
+                <div class="overflow-x-auto -mx-3 px-3" style="-webkit-overflow-scrolling:touch">
+                    <table class="w-full text-xs" style="min-width:640px" id="betaTable">
                         <thead>
                             <tr class="border-b border-gray-700">
                                 <th class="text-left p-2.5 text-gray-500 font-normal">지역 / 아파트</th>
@@ -1210,7 +1202,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         // ═══════ UPDATE MAIN CHART (슬라이더 + 아파트 연동) ═══════
-        document.getElementById('mainChartTitle').textContent = apt.region + ' ' + apt.size + ' — 2027 매수 vs 2029 매수 시나리오';
+        document.getElementById('mainChartTitle').textContent = apt.region + ' ' + apt.size + ' — 2027 vs 2029 매수';
         mainChart.data.datasets = ds(currentScenario, rate, fx, oil, tax);
         // Y축 범위를 아파트 가격대에 맞게 조정
         const yMax = Math.ceil(apt.peak2021 / 2) * 2 + 2;
