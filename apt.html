@@ -1379,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const recRegions = [];
         apartments.forEach(a => {
             const age = 2026 - (a.builtYear || 2020);
-            const estPrice = calcPrice8(rate, fx, oil, tax, a.peak2021);
+            const estPrice = calcPrice8(rate, fx, oil, tax, a.peak2021, a);
             const score = (1 - a.beta) * 40
                 + (age <= 5 ? 15 : age <= 7 ? 10 : 0)
                 + (a.region === '마곡' ? 10 : 0)
@@ -1411,7 +1411,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${(() => {
                     const invRank = [];
                     apartments.forEach(a => {
-                        const estP = calcPrice8(rate, fx, oil, tax, a.peak2021);
+                        const estP = calcPrice8(rate, fx, oil, tax, a.peak2021, a);
                         const discount = Math.round((1 - estP / a.peak2021) * 100); // 예상가 기준 할인율
                         const age = 2026 - (a.builtYear || 2020);
                         const invScore =
@@ -1484,10 +1484,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 14-Factor 가격 계산 함수 (재사용)
-    function calcPrice8(r, f, o, t, peakPrice) {
-        const b = peakPrice || apartments[selectedAptIdx].peak2021;
+    function calcPrice8(r, f, o, t, peakPrice, aptObj) {
+        const apt = aptObj || apartments[selectedAptIdx];
+        const b = peakPrice || apt.peak2021;
         const pol = parseInt(policySlider.value);
-        const apt = apartments[selectedAptIdx];
         const rateEff = (r - 4.5) * 4.2;
         const fxEff = ((f - 1400) / 100) * 1.6;
         const oilEff = ((o - 60) / 40) * 2.5;
