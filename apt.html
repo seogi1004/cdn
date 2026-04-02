@@ -753,21 +753,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const hist = aptHistData[apt.region] || aptHistData['지축'].map(v => Math.round(v * (peak / 12.0) * 10) / 10);
         const histPadded = [...hist, null, null, null, null, null, null, null, null];
 
-        // ── 핵심 로직 변경: "현재가 기준 추가 하락" 방식 ──
-        // Step 1: 슬라이더로 매크로 하락 압력 계산 (% 단위)
-        const ratePress  = Math.max((rate - 4.5), 0) * 2.8;        // 금리 상승 압력
-        const fxPress    = Math.max((fx - 1400), 0) / 100 * 1.8;   // 환율 압력
-        const oilPress   = Math.max((oil - 60), 0) / 40 * 2.0;     // 유가 압력
-        const sentPress  = oil > 120 ? 4 : oil > 100 ? 2 : 0.5;    // 전쟁 심리
-        const taxPress   = Math.max((tax - 0.15), 0) / 1.0 * 4;    // 보유세 추가 압력
-        const popPress   = 2;                                        // 인구감소 기본 압력
-        const polPress   = policyLevels[parseInt(policySlider.value)].eff * 0.4; // 정부 정책 압력
-        const debtPress  = 1.5;                                        // 가계부채/GDP 105% 구조적 압력
-        const jeonsePress = 1.2;                                       // 전세 축소 → 유동성 감소
-        const pirPress   = 1.0;                                        // PIR 15~25배: 매수여력 고갈
-        const nonResPress = 0.8;                                       // 비주거 부실 전이: 상가/지산센터 경매급증
-        // 상방 지지 (건축비·공급절벽은 추가 하락을 억제)
-        const upSupport  = 8;  // 건축비+공급절벽이 추가 하락폭을 줄여줌
+        // ── "현재가 기준 추가 하락" (simCalc 가중치의 ~0.65배 스케일) ──
+        // simCalc은 고점 기준 절대 하락, 여기는 현재가 기준 추가 하락이므로 스케일 축소
+        const SF = 0.65; // simCalc 대비 스케일 팩터
+        const ratePress  = Math.max((rate - 4.5), 0) * 4.2 * SF;       // 금리
+        const fxPress    = ((fx - 1400) / 100) * 1.6 * 0.7 * SF;      // 환율
+        const oilPress   = ((oil - 60) / 40) * 2.5 * SF;               // 유가
+        const sentPress  = (oil > 120 ? 5 : oil > 100 ? 3 : 1) * SF;  // 전쟁 심리
+        const taxPress   = Math.max((tax - 0.15) / 1.0 * 5, 0) * SF;  // 보유세
+        const popPress   = 4 * SF;                                      // 인구감소
+        const polPress   = policyLevels[parseInt(policySlider.value)].eff * SF; // 정부 정책
+        const debtPress  = 4 * SF;                                      // 가계부채
+        const jeonsePress = 3 * SF;                                     // 전세 축소
+        const pirPress   = 2.5 * SF;                                    // PIR
+        const nonResPress = 2 * SF;                                     // 비주거 부실 전이
+        // 상방 지지 (건축비·공급절벽)
+        const constOilG = Math.min(((oil - 60) / 140) * 4, 4);
+        const constFxG  = Math.min(((fx - 1350) / 450) * 1, 1);
+        const constPFG  = Math.min(((rate - 4.5) / 4.5) * 2, 2);
+        const upSupport = (8 + constOilG + constFxG + constPFG - 1.5 + 8) * SF; // (건축비+공급절벽) * SF
 
         const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress - upSupport;
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop;
@@ -887,10 +891,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const oil = parseInt(oilSlider.value);
             const rateEff = (r - 4.5) * 4.2;
             const fxEff = ((e - 1400) / 100) * 1.6;
-            const raw = rateEff + fxEff * 0.7;
+            const oilEff = ((oil - 60) / 40) * 2.5;
+            const sentimentEff = oil > 120 ? 5 : oil > 100 ? 3 : 1;
+            const raw = rateEff + fxEff * 0.7 + oilEff + sentimentEff;
             const constBase = 8;
             const constOil = Math.min(((oil - 60) / 140) * 4, 4);
-            const constFx  = Math.min(((e - 1350) / 450) * 2, 2);
+            const constFx  = Math.min(((e - 1350) / 450) * 1, 1);       // 2→1 축소: 매수여력↓ > 자재비↑
             const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
             const buildCost = constBase + constOil + constFx + constPF;
             const landDiscount = 1.5;
@@ -1096,7 +1102,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 토지비: 2022년 이후 하락세 → 대체원가 하한선 약화
         const constBase = 8;
         const constOil = Math.min(((oil - 60) / 140) * 4, 4);         // 유가 60→200: 0→4
-        const constFx  = Math.min(((fx - 1350) / 450) * 2, 2);       // 환율 1350→1800: 0→2
+        const constFx  = Math.min(((fx - 1350) / 450) * 1, 1);       // 환율: 2→1 축소 (매수여력↓ > 자재비↑)
         const constPF  = Math.min(((rate - 4.5) / 4.5) * 2, 2);      // 금리 4.5→9.0: 0→2
         const buildCost = constBase + constOil + constFx + constPF;    // 건축비 부분 (8~16)
         // 토지비: 서울 주거용 토지 +4% 상승(2025) but 거래량 -44%(유동성 경색)
@@ -1349,7 +1355,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const policyEff = policyLevels[pol].eff;
         const constBase = 8;
         const constOil = Math.min(((o - 60) / 140) * 4, 4);
-        const constFx  = Math.min(((f - 1350) / 450) * 2, 2);
+        const constFx  = Math.min(((f - 1350) / 450) * 1, 1);
         const constPF  = Math.min(((r - 4.5) / 4.5) * 2, 2);
         const buildCost = constBase + constOil + constFx + constPF;
         const landDiscount = 1.5;
