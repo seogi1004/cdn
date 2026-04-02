@@ -160,7 +160,7 @@
                 </div>
 
                 <!-- Sliders -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
                     <div class="bg-red-500/5 border border-red-500/10 rounded-lg p-4">
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">주담대 금리 (상단)</label>
@@ -200,6 +200,16 @@
                             class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                             style="accent-color:#f97316;background:linear-gradient(to right,#10b981,#f97316,#ef4444)">
                         <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>0.05%</span><span>OECD 0.33%</span><span>3.0%</span></div>
+                    </div>
+                    <div class="bg-green-500/5 border border-green-500/10 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">정부 정책 강도</label>
+                            <span id="policyValue" class="text-sm font-black text-green-400">강력</span>
+                        </div>
+                        <input type="range" id="policySlider" min="0" max="2" step="1" value="2"
+                            class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+                            style="accent-color:#10b981;background:linear-gradient(to right,#10b981,#f59e0b,#ef4444)">
+                        <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>완화</span><span>중립</span><span>강력 (현재)</span></div>
                     </div>
                 </div>
 
@@ -735,10 +745,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const sentPress  = oil > 120 ? 4 : oil > 100 ? 2 : 0.5;    // 전쟁 심리
         const taxPress   = Math.max((tax - 0.15), 0) / 1.0 * 4;    // 보유세 추가 압력
         const popPress   = 2;                                        // 인구감소 기본 압력
+        const polPress   = policyLevels[parseInt(policySlider.value)].eff * 0.4; // 정부 정책 압력
         // 상방 지지 (건축비·공급절벽은 추가 하락을 억제)
         const upSupport  = 8;  // 건축비+공급절벽이 추가 하락폭을 줄여줌
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress - upSupport;
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop;
         // 현재가 기준 추가 하락 (최대 35%)
         const clampedDrop = Math.min(extraDropPct, 35);
@@ -858,7 +869,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const constructionSupport = 15;
             const supplyCliff = 8;
             const popPressure = 3;
-            const policyPressure = 12;
+            const policyPressure = policyLevels[parseInt(policySlider.value)].eff;
             const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
             return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff, 2) * 10) / 10;
         }
@@ -954,10 +965,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const fxSlider = document.getElementById('fxSlider');
     const oilSlider = document.getElementById('oilSlider');
     const taxSlider = document.getElementById('taxSlider');
+    const policySlider = document.getElementById('policySlider');
     const rateVal = document.getElementById('rateValue');
     const fxVal = document.getElementById('fxValue');
     const oilVal = document.getElementById('oilValue');
     const taxVal = document.getElementById('taxValue');
+    const policyVal = document.getElementById('policyValue');
+    // 정부 정책 강도: 0=완화, 1=중립, 2=강력
+    const policyLevels = [
+        { label: '완화', color: '#34d399', eff: 4 },   // 규제 완화: 양도세 유예, 대출 풀림
+        { label: '중립', color: '#fbbf24', eff: 8 },   // 현 수준 유지
+        { label: '강력', color: '#f87171', eff: 15 },   // 양도세 82.5%, 대출차단, 토허제
+    ];
 
     let currentMethod = 'weighted'; // hoisted for simCalc access
 
@@ -1013,8 +1032,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const fx = parseInt(fxSlider.value);
         const oil = parseInt(oilSlider.value);
         const tax = parseFloat(taxSlider.value);
+        const pol = parseInt(policySlider.value);
         const apt = apartments[selectedAptIdx];
         const base = apt.peak2021; // 선택된 아파트의 고점
+
+        // Update policy slider label
+        const pLevel = policyLevels[pol];
+        policyVal.textContent = pLevel.label;
+        policyVal.style.color = pLevel.color;
 
         // Update apt info bar
         document.getElementById('aptInfoName').textContent = apt.region + ' ' + apt.name + ' ' + apt.size;
@@ -1030,7 +1055,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const oilEff = ((oil - 60) / 40) * 2.5;       // ③ 유가
         const sentimentEff = oil > 120 ? 5 : oil > 100 ? 3 : 1; // ④ 전쟁 심리
         const popEff = 3;                              // ⑤ 인구
-        const policyEff = 12;                          // ⑥ 정부 정책 (고정 강력)
+        const policyEff = pLevel.eff;                  // ⑥ 정부 정책 (슬라이더 연동)
         const constructionSupport = 15;                // ⑦ 건축비 상방
         const supplyCliff = 8;                         // ⑦ 공급절벽 상방
         // ⑧ 보유세: 실효세율 상승 → 보유 비용 증가 → 매도 압력 → 가격 하락
@@ -1247,12 +1272,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 8-Factor 가격 계산 함수 (재사용)
     function calcPrice8(r, f, o, t, peakPrice) {
         const b = peakPrice || apartments[selectedAptIdx].peak2021;
+        const pol = parseInt(policySlider.value);
         const rateEff = (r - 4.5) * 4.2;
         const fxEff = ((f - 1400) / 100) * 1.6;
         const oilEff = ((o - 60) / 40) * 2.5;
         const sentimentEff = o > 120 ? 5 : o > 100 ? 3 : 1;
         const popEff = 3;
-        const policyEff = 12;
+        const policyEff = policyLevels[pol].eff;
         const constructionSupport = 15;
         const supplyCliff = 8;
         const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
@@ -1424,6 +1450,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fxSlider.addEventListener('input', simCalc);
     oilSlider.addEventListener('input', simCalc);
     taxSlider.addEventListener('input', simCalc);
+    policySlider.addEventListener('input', simCalc);
 
     // ═══════ APARTMENT SELECTOR ═══════
     const aptSelector = document.getElementById('aptSelector');
