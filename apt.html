@@ -264,7 +264,7 @@
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">유가 가중치</span><br><span class="text-amber-400 font-bold">2.5×</span></div>
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">보유세 가중치</span><br><span class="text-orange-400 font-bold">5.0×</span></div>
                             </div>
-                            <p class="text-[9px] text-gray-600 mt-2">※ 상방: 건축비(+12) · 공급절벽(+8) | 하방: 인구(-4) · 정책(가변) · 보유세(가변) · 가계부채(-4) · 전세축소(-3) · 연식(가변) | 실증연구 기반 v5</p>
+                            <p class="text-[9px] text-gray-600 mt-2">※ 상방: 건축비(+12) · 공급절벽(+8) | 하방: 인구(-4) · 정책(가변) · 보유세(가변) · 가계부채(-4) · 전세축소(-3) · PIR(-2.5) · 연식(가변) | v5.1</p>
                         </div>
                     </div>
 
@@ -763,10 +763,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const popPress   = 2;                                        // 인구감소 기본 압력
         const polPress   = policyLevels[parseInt(policySlider.value)].eff * 0.4; // 정부 정책 압력
         const debtPress  = 1.5;                                        // 가계부채/GDP 105% 구조적 압력
+        const pirPress   = 1.0;                                        // PIR 15~25배: 매수여력 고갈
         // 상방 지지 (건축비·공급절벽은 추가 하락을 억제)
         const upSupport  = 8;  // 건축비+공급절벽이 추가 하락폭을 줄여줌
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + sentPress + taxPress + popPress + polPress + debtPress + pirPress - upSupport;
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop;
         // 현재가 기준 추가 하락 (최대 35%)
         const clampedDrop = Math.min(extraDropPct, 35);
@@ -893,7 +894,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
             const debtEff = 4;
             const jeonseEff = 3;
-            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff, 2) * 10) / 10;
+            const pirEff = 2.5;
+            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff, 2) * 10) / 10;
         }
 
         function heatColor(v) {
@@ -1089,8 +1091,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const debtEff = 4;
         // ⑫ 전세 축소: 월세화 가속 → 전세자금(유동성) 감소 → 매수 수요 위축
         const jeonseEff = 3;
+        // ⑬ PIR(소득대비집값): 서울 15~25배 (적정 5~7배의 3배+)
+        // 중위소득 가구가 15년+ 무지출해야 매수 가능 → 구조적 수요 제한
+        // K-HAI 150.9, 소득의 38.8%가 원리금 상환 → 신규 매수여력 고갈
+        const pirEff = 2.5;
 
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff;
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1322,7 +1328,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
         const debtEff = 4;
         const jeonseEff = 3;
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff;
+        const pirEff = 2.5; // PIR 15~25배: 구조적 매수여력 고갈
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1440,6 +1447,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: '인구감소 (고정)', lo: basePrice + 0.48, hi: basePrice - 0.48, color: '#a78bfa', fixed: true },
             { name: '가계부채 105% (고정)', lo: basePrice + 0.48, hi: basePrice - 0.48, color: '#ec4899', fixed: true },
             { name: '전세 축소 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#f472b6', fixed: true },
+            { name: 'PIR 15~25배 (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#e879f9', fixed: true },
             { name: '정부 정책 (' + policyLevels[parseInt(policySlider.value)].label + ')',
               lo: basePrice + (policyLevels[2].eff - policyLevels[parseInt(policySlider.value)].eff) * 0.12,
               hi: basePrice - (policyLevels[parseInt(policySlider.value)].eff - policyLevels[0].eff) * 0.12,
