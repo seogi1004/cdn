@@ -264,7 +264,7 @@
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">유가 가중치</span><br><span class="text-amber-400 font-bold">2.5×</span></div>
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">보유세 가중치</span><br><span class="text-orange-400 font-bold">5.0×</span></div>
                             </div>
-                            <p class="text-[9px] text-gray-600 mt-2">※ 상방 요인: 건축비(+15) · 공급절벽(+8) | 하방 요인: 인구(-3) · 정책(가변) · 보유세(가변) · 가계부채(-2.5) · 연식(가변)</p>
+                            <p class="text-[9px] text-gray-600 mt-2">※ 상방: 건축비(+12) · 공급절벽(+8) | 하방: 인구(-4) · 정책(가변) · 보유세(가변) · 가계부채(-4) · 전세축소(-3) · 연식(가변) | 실증연구 기반 v5</p>
                         </div>
                     </div>
 
@@ -663,10 +663,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // ═══════ POLICY LEVELS (hoisted — generateScenario/calcPrice8 등에서 사용) ═══════
     const policySlider = document.getElementById('policySlider');
     const policyVal = document.getElementById('policyValue');
+    // 정책 효과: 실증연구 기반 하향 조정 (VAR: "효과 제한적/단기적")
+    // 특례보금자리론/50년 주담대 효과 6개월 소진, 신생아 대출 시장영향 10~20%
     const policyLevels = [
-        { label: '완화', color: '#34d399', eff: 4 },
-        { label: '중립', color: '#fbbf24', eff: 8 },
-        { label: '강력', color: '#f87171', eff: 15 },
+        { label: '완화', color: '#34d399', eff: 3 },   // 규제 완화: 정책대출 확대, 양도세 유예
+        { label: '중립', color: '#fbbf24', eff: 6 },   // 현 수준 유지
+        { label: '강력', color: '#f87171', eff: 10 },   // 양도세 82.5%, 대출차단, 토허제
     ];
 
     // ═══════ APARTMENTS DATA (hoisted before ds/generateScenario) ═══════
@@ -882,15 +884,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const rateEff = (r - 4.5) * 4.2;
             const fxEff = ((e - 1400) / 100) * 1.6;
             const raw = rateEff + fxEff * 0.7;
-            const constructionSupport = 15;
+            const constructionSupport = 12;
             const supplyCliff = 8;
-            const popPressure = 3;
+            const popPressure = 4;
             const policyPressure = policyLevels[parseInt(policySlider.value)].eff;
             const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
             const ageYears = 2026 - (apt.builtYear || 2020);
             const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
-            const debtEff = 2.5;
-            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff, 2) * 10) / 10;
+            const debtEff = 4;
+            const jeonseEff = 3;
+            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff, 2) * 10) / 10;
         }
 
         function heatColor(v) {
@@ -1062,25 +1065,32 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('aptInfoNote').textContent = apt.note;
         document.getElementById('simPriceLabel').textContent = apt.name + ' 예상가';
 
-        // 8-Factor model + 연식 감가
-        const rateEff = (rate - 4.5) * 4.2;           // ① 금리
-        const fxEff = ((fx - 1400) / 100) * 1.6;      // ② 환율 (macro pressure)
+        // ═══ 실증연구 기반 가중치 (v5) ═══
+        // 금리: 샤플리 분해 34~44% 기여 (박진백 외 2021) → 4.2× 유지
+        // 정책: VAR 분석 "효과 제한적/단기적", 특례보금자리론 6개월 소진 → 15→10 하향
+        // 가계부채: 한국 GDP 105%(일본 버블 214% 근접), DSR 구조적 제한 → 2.5→4 상향
+        // 건축비: 일본 사례 건축비 높아도 15년 하락. 완전 방어 아님 → 15→12 하향
+        // 인구: 초고령사회+2029 마이너스, 일본 회복 막은 요인 → 3→4 상향
+        // 전세축소: 정부 기조(월세화) + HUG보증 강화 → 매수 유동성 감소 → 고정 3%p
+        const rateEff = (rate - 4.5) * 4.2;           // ① 금리 (34~44% 기여)
+        const fxEff = ((fx - 1400) / 100) * 1.6;      // ② 환율
         const oilEff = ((oil - 60) / 40) * 2.5;       // ③ 유가
         const sentimentEff = oil > 120 ? 5 : oil > 100 ? 3 : 1; // ④ 전쟁 심리
-        const popEff = 3;                              // ⑤ 인구
-        const policyEff = pLevel.eff;                  // ⑥ 정부 정책 (슬라이더 연동)
-        const constructionSupport = 15;                // ⑦ 건축비 상방
-        const supplyCliff = 8;                         // ⑦ 공급절벽 상방
-        // ⑧ 보유세
+        const popEff = 4;                              // ⑤ 인구 (3→4, 일본 사례)
+        const policyEff = pLevel.eff;                  // ⑥ 정부 정책 (완화4/중립8/강력10)
+        const constructionSupport = 12;                // ⑦ 건축비 상방 (15→12, 일본 보정)
+        const supplyCliff = 8;                         // ⑧ 공급절벽 상방
+        // ⑨ 보유세
         const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
-        // ⑨ 연식 감가: 연 0.4%p, 5년 이하 신축 프리미엄 -1%p
+        // ⑩ 연식 감가: 연 0.4%p, 5년 이하 신축 프리미엄 -1%p
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
-        // ⑩ 가계부채: GDP 대비 105% (OECD 평균 66%), 구조적 매수여력 제한
-        // 100% 초과분 * 0.5 = 고정 2.5%p 하방 압력
-        const debtEff = 2.5;
+        // ⑪ 가계부채: GDP 105% (일본 버블 직전 유사), DSR 구조적 매수여력 제한
+        const debtEff = 4;
+        // ⑫ 전세 축소: 월세화 가속 → 전세자금(유동성) 감소 → 매수 수요 위축
+        const jeonseEff = 3;
 
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff;
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1303,15 +1313,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const fxEff = ((f - 1400) / 100) * 1.6;
         const oilEff = ((o - 60) / 40) * 2.5;
         const sentimentEff = o > 120 ? 5 : o > 100 ? 3 : 1;
-        const popEff = 3;
+        const popEff = 4;
         const policyEff = policyLevels[pol].eff;
-        const constructionSupport = 15;
+        const constructionSupport = 12;
         const supplyCliff = 8;
         const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
-        const debtEff = 2.5; // 가계부채/GDP 105% 고정 압력
-        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff;
+        const debtEff = 4;
+        const jeonseEff = 3;
+        const totalDown = rateEff + fxEff * 0.7 + oilEff + sentimentEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff;
         const totalUp = constructionSupport + supplyCliff;
         const netDrop = Math.max(totalDown - totalUp, 2);
         const dropPct = Math.min(netDrop, 50);
@@ -1426,8 +1437,9 @@ document.addEventListener('DOMContentLoaded', function() {
               lo: calcPrice8(rate, fx, 60, tax), hi: calcPrice8(rate, fx, 200, tax), color: '#fbbf24' },
             { name: '보유세 실효세율', min: 0.05, max: 3.0, unit: '%',
               lo: calcPrice8(rate, fx, oil, 0.05), hi: calcPrice8(rate, fx, oil, 3.0), color: '#fb923c' },
-            { name: '인구 효과 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#a78bfa', fixed: true },
-            { name: '가계부채 105% (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#ec4899', fixed: true },
+            { name: '인구감소 (고정)', lo: basePrice + 0.48, hi: basePrice - 0.48, color: '#a78bfa', fixed: true },
+            { name: '가계부채 105% (고정)', lo: basePrice + 0.48, hi: basePrice - 0.48, color: '#ec4899', fixed: true },
+            { name: '전세 축소 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#f472b6', fixed: true },
             { name: '정부 정책 (' + policyLevels[parseInt(policySlider.value)].label + ')',
               lo: basePrice + (policyLevels[2].eff - policyLevels[parseInt(policySlider.value)].eff) * 0.12,
               hi: basePrice - (policyLevels[parseInt(policySlider.value)].eff - policyLevels[0].eff) * 0.12,
