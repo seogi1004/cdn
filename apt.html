@@ -37,8 +37,8 @@
         .timeline-item:last-child::before{display:none}
         .timeline-dot{position:absolute;left:0;top:8px;width:12px;height:12px;border-radius:50%;border:2px solid}
         .scenario-badge{font-size:9px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:6px;text-transform:uppercase}
-        .private{filter:blur(4px);transition:filter .3s ease;cursor:pointer;user-select:none}
-        .private:hover,.private.revealed{filter:none}
+        .private{opacity:.08;transition:opacity .3s ease}
+        .private:hover{opacity:1}
     </style>
 </head>
 <body class="antialiased">
