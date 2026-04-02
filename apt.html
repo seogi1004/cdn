@@ -1161,7 +1161,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const jeonseRisk2029 = 0.3; // 반전세 전환 시 보증금 삭감
         const totalCash2029 = Math.round((5.8 - jeonseRisk2029 + dollar2029 + yearSaving * 3) * 100) / 100;
 
-        const buyable = totalCash2027 >= priceA; // 2027 매수 기준
+        const buyable = totalCash2027 >= price; // simCalc 예상가 기준 (priceA는 아래서 정의)
 
         // 자산 카드 업데이트
         document.getElementById('assetDollar').textContent = dollarVal.toFixed(2) + '억';
