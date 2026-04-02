@@ -1235,6 +1235,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const yMin = Math.max(Math.floor(apt.peak2021 * 0.3), 2);
         mainChart.options.scales.y.max = yMax;
         mainChart.options.scales.y.min = yMin;
+        // annotation 매수 구간 박스를 가격대에 맞게 동적 조정
+        const ann = mainChart.options.plugins.annotation.annotations;
+        const range = yMax - yMin;
+        ann.targetA.yMin = yMin + range * 0.30;
+        ann.targetA.yMax = yMin + range * 0.50;
+        ann.targetB.yMin = yMin + range * 0.15;
+        ann.targetB.yMax = yMin + range * 0.35;
         mainChart.update('active');
 
         renderBetaTable(rate, fx, oil, tax);
@@ -1398,7 +1405,10 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: '보유세 실효세율', min: 0.05, max: 3.0, unit: '%',
               lo: calcPrice8(rate, fx, oil, 0.05), hi: calcPrice8(rate, fx, oil, 3.0), color: '#fb923c' },
             { name: '인구 효과 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#a78bfa', fixed: true },
-            { name: '정부정책 (고정)', lo: basePrice + 1.44, hi: basePrice - 1.44, color: '#34d399', fixed: true },
+            { name: '정부 정책 (' + policyLevels[parseInt(policySlider.value)].label + ')',
+              lo: basePrice + (policyLevels[2].eff - policyLevels[parseInt(policySlider.value)].eff) * 0.12,
+              hi: basePrice - (policyLevels[parseInt(policySlider.value)].eff - policyLevels[0].eff) * 0.12,
+              color: '#34d399', fixed: true },
         ];
 
         // 영향도 = |lo - hi| 로 정렬 (큰 순)
