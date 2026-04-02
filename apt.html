@@ -264,7 +264,7 @@
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">유가 가중치</span><br><span class="text-amber-400 font-bold">2.5×</span></div>
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">보유세 가중치</span><br><span class="text-orange-400 font-bold">5.0×</span></div>
                             </div>
-                            <p class="text-[9px] text-gray-600 mt-2">※ 상방: 대체원가(건축비-토지, 동적) · 공급절벽(+8) | 하방: 인구(-4) · 정책(가변) · 가계부채(-4) · 전세축소(-3) · PIR(-2.5) · 비주거부실(-2) · 연식(가변) | v5.3</p>
+                            <p class="text-[9px] text-gray-600 mt-2">※ 상방: 대체원가(건축비-토지, 동적) · 공급절벽(+10) | 하방: 인구(-4) · 정책(가변) · 가계부채(-4) · 전세축소(-3) · PIR(-1.5) · 비주거부실(-2) · 연식(가변) | v5.4</p>
                         </div>
                     </div>
 
@@ -275,7 +275,7 @@
                                 <h3 class="text-xs font-bold text-purple-400">몬테카를로 시뮬레이션 (Monte Carlo Simulation)</h3>
                                 <span class="text-[8px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded">10,000회 샘플링</span>
                             </div>
-                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">슬라이더 중심값에 정규분포 노이즈를 더해 10,000개 시나리오를 생성합니다. 변수 간 상관관계를 Cholesky 분해로 반영합니다 (금리↔환율 ρ=0.4, 유가↔환율 ρ=0.3, 금리↔유가 ρ=0.2). 결과는 확률분포로 표현되어 불확실성을 정량화합니다.</p>
+                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">슬라이더 중심값에 정규분포 노이즈를 더해 10,000개 시나리오를 생성합니다. 변수 간 상관관계를 Cholesky 분해로 반영합니다 (금리↔환율 ρ=0.55, 유가↔환율 ρ=0.3, 금리↔유가 ρ=0.2). 결과는 확률분포로 표현되어 불확실성을 정량화합니다.</p>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                                 <div class="bg-black/30 rounded-lg p-3 text-center">
                                     <p class="text-[9px] text-gray-500 mb-1">중앙값 (P50)</p>
@@ -885,7 +885,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const buildCost = constBase + constOil + constFx + constPF;
             const landDiscount = 1.5;
             const constructionSupport = Math.max(buildCost - landDiscount, 4);
-            const supplyCliff = 8;
+            const supplyCliff = 10; // 8→10 (2023-24 착공급감 → 2026-27 입주절벽 반영)
             const popPressure = 4;
             const policyPressure = policyLevels[parseInt(policySlider.value)].eff;
             const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
@@ -893,9 +893,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
             const debtEff = 4;
             const jeonseEff = 3;
-            const pirEff = 2.5;
+            const pirEff = 1.5; // 2.5→1.5 (가계부채 4와 부분 중복 인정)
             const nonResEff = 2;
-            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff, 2) * 10) / 10;
+            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff, -5) * 10) / 10;
         }
 
         function heatColor(v) {
@@ -1094,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 거래량 급감으로 실거래 신뢰도 낮음 → 소폭 할인만 적용
         const landDiscount = 1.5;
         const constructionSupport = Math.round(Math.max(buildCost - landDiscount, 4) * 10) / 10;
-        const supplyCliff = 8;                         // ⑧ 공급절벽 상방
+        const supplyCliff = 10; // 8→10 (2023-24 착공급감 → 2026-27 입주절벽 반영)                         // ⑧ 공급절벽 상방
         // ⑨ 보유세
         const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
         // ⑩ 연식 감가: 연 0.4%p, 5년 이하 신축 프리미엄 -1%p
@@ -1105,7 +1105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // ⑫ 전세 축소: 월세화 가속 → 전세자금(유동성) 감소 → 매수 수요 위축
         const jeonseEff = 3;
         // ⑬ PIR(소득대비집값): 서울 15~25배 (적정 5~7배의 3배+)
-        const pirEff = 2.5;
+        const pirEff = 1.5; // 2.5→1.5 (가계부채 4와 부분 중복 인정)
         // ⑭ 비주거 부실 전이: 상가 공실 13~20%, 지식산업센터 경매 2배 급증(2025)
         // PF 부실 → 건설사 도산 → 경기 위축 → 매수 심리 위축
         // BUT 동시에 신규 착공 감소 → 공급절벽 강화 (상방 효과는 supplyCliff에 포함)
@@ -1114,7 +1114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalDown = rateEff + fxEff * 0.7 + oilEff + warCostEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
         const totalUp = constructionSupport + supplyCliff;
-        const netDrop = Math.max(totalDown - totalUp, 2);
+        const netDrop = Math.max(totalDown - totalUp, -5); // 전고점 +5%까지 허용 (인플레이션)
         const dropPct = Math.min(netDrop, 50);
         const price = Math.round(base * (100 - dropPct) / 100 * 10) / 10;
 
@@ -1344,17 +1344,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const buildCost = constBase + constOil + constFx + constPF;
         const landDiscount = 1.5;
         const constructionSupport = Math.round(Math.max(buildCost - landDiscount, 4) * 10) / 10;
-        const supplyCliff = 8;
+        const supplyCliff = 10; // 8→10 (2023-24 착공급감 → 2026-27 입주절벽 반영)
         const taxEff = Math.max((t - 0.15) / 1.0 * 5, 0);
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
         const debtEff = 4;
         const jeonseEff = 3;
-        const pirEff = 2.5;
+        const pirEff = 1.5; // 2.5→1.5 (가계부채 4와 부분 중복 인정)
         const nonResEff = 2;
         const totalDown = rateEff + fxEff * 0.7 + oilEff + warCostEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
         const totalUp = constructionSupport + supplyCliff;
-        const netDrop = Math.max(totalDown - totalUp, 2);
+        const netDrop = Math.max(totalDown - totalUp, -5);
         const dropPct = Math.min(netDrop, 50);
         return Math.round(b * (100 - dropPct) / 100 * 10) / 10;
     }
@@ -1365,16 +1365,16 @@ document.addEventListener('DOMContentLoaded', function() {
     function runMonteCarlo(rate, fx, oil, tax) {
         const N = 10000;
         // 변동 범위 + 변수 간 상관계수 반영 (Cholesky 분해)
-        // 상관행렬: 금리-환율 0.4, 유가-환율 0.3, 금리-유가 0.2, 나머지 독립
+        // 상관행렬: 금리-환율 0.55(전쟁시 동조화), 유가-환율 0.3, 금리-유가 0.2
         // Cholesky L 행렬 (4x4: rate, fx, oil, tax):
-        //   [1,    0,    0,    0   ]
-        //   [0.4,  0.917,0,    0   ]
-        //   [0.2,  0.240,0.950,0   ]
-        //   [0,    0,    0,    1   ]
+        //   [1,     0,     0,     0]
+        //   [0.55,  0.835, 0,     0]  ← √(1-0.55²)=0.835
+        //   [0.2,   0.228, 0.947, 0]  ← (0.3-0.55×0.2)/0.835=0.228, √(1-0.04-0.052)=0.947
+        //   [0,     0,     0,     1]
         const L = [
             [1, 0, 0, 0],
-            [0.4, 0.917, 0, 0],
-            [0.2, 0.240, 0.950, 0],
+            [0.55, 0.835, 0, 0],
+            [0.2, 0.228, 0.947, 0],
             [0, 0, 0, 1]
         ];
         const stds = [0.8, 80, 25, 0.15]; // 각 변수의 표준편차
