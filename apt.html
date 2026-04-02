@@ -659,6 +659,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ═══════ MAIN CHART ═══════
     const labels=['2016','2018','2020','2021\n(고점)','2023\n(침체)','2025','26.04\n(D+33)','26.10','27.04\n(만기)','27.12','28.06','28.12','29.06','29.12'];
+
+    // ═══════ POLICY LEVELS (hoisted — generateScenario/calcPrice8 등에서 사용) ═══════
+    const policySlider = document.getElementById('policySlider');
+    const policyVal = document.getElementById('policyValue');
+    const policyLevels = [
+        { label: '완화', color: '#34d399', eff: 4 },
+        { label: '중립', color: '#fbbf24', eff: 8 },
+        { label: '강력', color: '#f87171', eff: 15 },
+    ];
+
     // ═══════ APARTMENTS DATA (hoisted before ds/generateScenario) ═══════
     const apartments = [
         {
@@ -965,18 +975,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const fxSlider = document.getElementById('fxSlider');
     const oilSlider = document.getElementById('oilSlider');
     const taxSlider = document.getElementById('taxSlider');
-    const policySlider = document.getElementById('policySlider');
     const rateVal = document.getElementById('rateValue');
     const fxVal = document.getElementById('fxValue');
     const oilVal = document.getElementById('oilValue');
     const taxVal = document.getElementById('taxValue');
-    const policyVal = document.getElementById('policyValue');
-    // 정부 정책 강도: 0=완화, 1=중립, 2=강력
-    const policyLevels = [
-        { label: '완화', color: '#34d399', eff: 4 },   // 규제 완화: 양도세 유예, 대출 풀림
-        { label: '중립', color: '#fbbf24', eff: 8 },   // 현 수준 유지
-        { label: '강력', color: '#f87171', eff: 15 },   // 양도세 82.5%, 대출차단, 토허제
-    ];
 
     let currentMethod = 'weighted'; // hoisted for simCalc access
 
