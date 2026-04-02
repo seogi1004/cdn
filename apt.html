@@ -1405,6 +1405,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 </p>`).join('')}
                 <p class="text-[9px] text-gray-600 mt-1">※ 아이를 오래 키울 집 = 신축·젊은 커뮤니티·집값 방어력(낮은 beta) 우선</p>
             </div>
+            <div class="mt-2 pt-2 border-t border-gray-700/50 text-[10px]">
+                <p class="text-gray-500 mb-1.5">투자가치 순위 (할인율·호재·회복력·무대출 기준)</p>
+                ${(() => {
+                    const invRank = [];
+                    apartments.forEach(a => {
+                        const discount = Math.round((1 - a.current / a.peak2021) * 100); // 고점 대비 할인율
+                        const age = 2026 - (a.builtYear || 2020);
+                        const invScore =
+                            discount * 1.5                                      // 할인율 클수록 반등 여지
+                            + (a.beta >= 1.0 ? (a.beta - 1.0) * 20 : 0)       // 고beta = 반등 시 수익률 높음
+                            + (age <= 5 ? 10 : age <= 7 ? 5 : 0)              // 신축 프리미엄
+                            + (a.region === '수색뉴타운' || a.region === '수색뉴타운2' || a.region === '수색뉴타운3' ? 12 : 0) // 수색역세권 46만㎡
+                            + (a.region === '마곡' ? 8 : 0)                    // 대기업 직주근접
+                            + (a.region === '덕은' ? 8 : 0)                    // 대장홍대선 + 기업
+                            + (a.region === '운정' ? 5 : 0)                    // GTX but 선반영
+                            + (a.current <= totalCash2027 ? 8 : 0);            // 무대출 진입 가능
+                        invRank.push({ name: a.region + ' ' + a.name, invScore, discount, beta: a.beta, price: a.current });
+                    });
+                    invRank.sort((a, b) => b.invScore - a.invScore);
+                    return invRank.slice(0, 3).map((r, i) => `<p class="${i === 0 ? 'text-amber-400 font-bold' : 'text-gray-400'}">
+                        ${i + 1}. ${r.name} <span class="text-gray-500">(할인 ${r.discount}%, beta ${r.beta}, ${r.price}억)</span>
+                    </p>`).join('');
+                })()}
+                <p class="text-[9px] text-gray-600 mt-1">※ 투자 = 고점 대비 싸게 사서 반등 수익 극대화 · 육아 추천과 다를 수 있음</p>
+            </div>
         `;
 
         // ═══════ UPDATE MAIN CHART (슬라이더 + 아파트 연동) ═══════
