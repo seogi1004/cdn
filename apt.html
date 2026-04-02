@@ -353,12 +353,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-5">
                     <div>
                         <h2 class="text-sm sm:text-lg font-bold" id="mainChartTitle">지축 84㎡ — 2027 vs 2029 매수</h2>
-                        <p class="text-[10px] text-gray-500 mt-1 hidden sm:block">8-Factor 모델: 전쟁/금리/환율 + 건축비(상방) + 인구(하방) + 공급절벽(상방) + 보유세(하방)</p>
-                    </div>
-                    <div class="flex gap-1.5 flex-wrap" id="scenarioTabs">
-                        <div class="tab active" data-scenario="war">전쟁 지속</div>
-                        <div class="tab" data-scenario="ceasefire">조기 휴전</div>
-                        <div class="tab" data-scenario="escalation">전면 확전</div>
+                        <p class="text-[10px] text-gray-500 mt-1 hidden sm:block">14-Factor 선형가중 모델 · 슬라이더로 시나리오 조절</p>
                     </div>
                 </div>
                 <div class="relative h-[320px] sm:h-[400px] lg:h-[440px] w-full"><canvas id="mainChart"></canvas></div>
@@ -820,9 +815,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return { hist: histPadded, pred, buyA, constFloor, cashA, cashB };
     }
 
-    let currentScenario = 'war';
-
     function ds(sc, rate, fx, oil, tax) {
+        sc = 'war'; // 시나리오 탭 제거 — 슬라이더로 충분
         const apt = apartments[selectedAptIdx];
         const r = rate !== undefined ? rate : parseFloat(document.getElementById('rateSlider').value);
         const f = fx !== undefined ? fx : parseInt(document.getElementById('fxSlider').value);
@@ -870,16 +864,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Scenario tabs (war/ceasefire/escalation)
-    document.querySelectorAll('#scenarioTabs .tab').forEach(t=>{
-        t.addEventListener('click',()=>{
-            document.querySelectorAll('#scenarioTabs .tab').forEach(x=>x.classList.remove('active'));
-            t.classList.add('active');
-            currentScenario = t.dataset.scenario;
-            mainChart.data.datasets=ds(currentScenario);
-            mainChart.update('active');
-        });
-    });
-
     // ═══════ HEATMAP ═══════
     function renderHeatmap(tax) {
         const rates = [5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0];
@@ -1295,7 +1279,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // ═══════ UPDATE MAIN CHART (슬라이더 + 아파트 연동) ═══════
         document.getElementById('mainChartTitle').textContent = apt.region + ' ' + apt.size + ' — 2027 vs 2029 매수';
-        mainChart.data.datasets = ds(currentScenario, rate, fx, oil, tax);
+        mainChart.data.datasets = ds('war', rate, fx, oil, tax);
         // Y축 범위를 아파트 가격대에 맞게 조정
         const yMax = Math.ceil(apt.peak2021 / 2) * 2 + 2;
         const yMin = Math.max(Math.floor(apt.peak2021 * 0.3), 2);
