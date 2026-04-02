@@ -1379,14 +1379,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const recRegions = [];
         apartments.forEach(a => {
             const age = 2026 - (a.builtYear || 2020);
-            const score = (1 - a.beta) * 40          // beta 낮을수록 집값 방어 ↑
-                + (age <= 5 ? 15 : age <= 7 ? 10 : 0) // 신축 보너스 (육아 환경)
-                + (a.region === '마곡' ? 10 : 0)       // 대기업 직주근접
-                + (a.region === '지축' ? 8 : 0)        // 젊은층 + 스타필드 + 학군 형성중
-                + (a.region === '운정' ? 7 : 0)        // 영유아 많음 + GTX
-                + (a.region === '덕은' ? 6 : 0)        // 개발호재 + 한강
-                + (a.current <= totalCash2027 ? 10 : 0); // 무대출 매수 가능
-            recRegions.push({ name: a.region + ' ' + a.name, score, beta: a.beta, price: a.current });
+            const estPrice = calcPrice8(rate, fx, oil, tax, a.peak2021);
+            const score = (1 - a.beta) * 40
+                + (age <= 5 ? 15 : age <= 7 ? 10 : 0)
+                + (a.region === '마곡' ? 10 : 0)
+                + (a.region === '지축' ? 8 : 0)
+                + (a.region === '운정' ? 7 : 0)
+                + (a.region === '덕은' ? 6 : 0)
+                + (estPrice <= totalCash2027 ? 10 : 0); // 예상가 기준 무대출
+            recRegions.push({ name: a.region + ' ' + a.name, score, beta: a.beta, price: a.current, estPrice });
         });
         recRegions.sort((a, b) => b.score - a.score);
         const top3 = recRegions.slice(0, 3);
@@ -1401,7 +1402,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="mt-2 pt-2 border-t border-gray-700/50 text-[10px]">
                 <p class="text-gray-500 mb-1.5">육아 + 집값방어 종합 추천 (beta·신축·학군·매수가능 기준)</p>
                 ${top3.map((r, i) => `<p class="${i === 0 ? 'text-green-400 font-bold' : 'text-gray-400'}">
-                    ${i + 1}. ${r.name} <span class="text-gray-500">(beta ${r.beta}, ${r.price}억${r.price <= totalCash2027 ? ', 무대출OK' : ''})</span>
+                    ${i + 1}. ${r.name} <span class="text-gray-500">(예상 ${r.estPrice.toFixed(1)}억, beta ${r.beta}${r.estPrice <= totalCash2027 ? ', 무대출OK' : ''})</span>
                 </p>`).join('')}
                 <p class="text-[9px] text-gray-600 mt-1">※ 아이를 오래 키울 집 = 신축·젊은 커뮤니티·집값 방어력(낮은 beta) 우선</p>
             </div>
@@ -1410,22 +1411,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${(() => {
                     const invRank = [];
                     apartments.forEach(a => {
-                        const discount = Math.round((1 - a.current / a.peak2021) * 100); // 고점 대비 할인율
+                        const estP = calcPrice8(rate, fx, oil, tax, a.peak2021);
+                        const discount = Math.round((1 - estP / a.peak2021) * 100); // 예상가 기준 할인율
                         const age = 2026 - (a.builtYear || 2020);
                         const invScore =
-                            discount * 1.5                                      // 할인율 클수록 반등 여지
-                            + (a.beta >= 1.0 ? (a.beta - 1.0) * 20 : 0)       // 고beta = 반등 시 수익률 높음
-                            + (age <= 5 ? 10 : age <= 7 ? 5 : 0)              // 신축 프리미엄
-                            + (a.region === '수색뉴타운' || a.region === '수색뉴타운2' || a.region === '수색뉴타운3' ? 12 : 0) // 수색역세권 46만㎡
-                            + (a.region === '마곡' ? 8 : 0)                    // 대기업 직주근접
-                            + (a.region === '덕은' ? 8 : 0)                    // 대장홍대선 + 기업
-                            + (a.region === '운정' ? 5 : 0)                    // GTX but 선반영
-                            + (a.current <= totalCash2027 ? 8 : 0);            // 무대출 진입 가능
-                        invRank.push({ name: a.region + ' ' + a.name, invScore, discount, beta: a.beta, price: a.current });
+                            discount * 1.5
+                            + (a.beta >= 1.0 ? (a.beta - 1.0) * 20 : 0)
+                            + (age <= 5 ? 10 : age <= 7 ? 5 : 0)
+                            + (a.region === '수색뉴타운' || a.region === '수색뉴타운2' || a.region === '수색뉴타운3' ? 12 : 0)
+                            + (a.region === '마곡' ? 8 : 0)
+                            + (a.region === '덕은' ? 8 : 0)
+                            + (a.region === '운정' ? 5 : 0)
+                            + (estP <= totalCash2027 ? 8 : 0);
+                        invRank.push({ name: a.region + ' ' + a.name, invScore, discount, beta: a.beta, estPrice: estP });
                     });
                     invRank.sort((a, b) => b.invScore - a.invScore);
                     return invRank.slice(0, 3).map((r, i) => `<p class="${i === 0 ? 'text-amber-400 font-bold' : 'text-gray-400'}">
-                        ${i + 1}. ${r.name} <span class="text-gray-500">(할인 ${r.discount}%, beta ${r.beta}, ${r.price}억)</span>
+                        ${i + 1}. ${r.name} <span class="text-gray-500">(예상 ${r.estPrice.toFixed(1)}억, 할인 ${r.discount}%, beta ${r.beta}${r.estPrice <= totalCash2027 ? ', 무대출OK' : ''})</span>
                     </p>`).join('');
                 })()}
                 <p class="text-[9px] text-gray-600 mt-1">※ 투자 = 고점 대비 싸게 사서 반등 수익 극대화 · 육아 추천과 다를 수 있음</p>
