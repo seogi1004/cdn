@@ -736,9 +736,9 @@ document.addEventListener('DOMContentLoaded', function() {
             size: '84㎡',
             beta: 1.25,
             color: '#06b6d4',
-            peak2021: 11.0,
+            peak2021: 12.5,
             current: 12.5,
-            currentLabel: '12.5억 (최저호가 12.5)',
+            currentLabel: '12.5억 (최저호가, 2023 입주 후 신고가)',
             note: '2023 · 1,464세대 · 수색13구역 · 수색역세권 46만㎡ 개발 예정',
             builtYear: 2023,
         },
@@ -789,7 +789,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '수색뉴타운': [null, null, 10.5, 15.0, 11.0, 14.2],  // 파인시티자이 최저호가 14.2
         '마곡': [null, 9.0, 11.0, 15.0, 11.6, 16.8],         // 2017 준공: 20년 11.1, 21.09 최고 15.05, 22.12 저점 11.6, 24.11 실거래 14.35
         '수색뉴타운2': [null, null, 9.0, 13.0, 10.0, 12.8],  // 2020 입주: 최저호가 12.8
-        '수색뉴타운3': [null, null, null, null, 9.5, 12.5], // 2023.07 입주: 최저호가 12.5
+        '수색뉴타운3': [null, null, null, null, 9.5, 12.5], // 2023.07 입주: 최저호가 12.5, peak=12.5(신고가)
         '운정': [null, null, null, null, null, 6.9],          // 2026.03 입주: 84A 최저호가 6.9, 96B 7.2
         '덕은': [null, null, 7.5, 9.5, 8.5, 10.5],           // 2020 입주: 24.04 신고가 11억, 23.07 9.7억
         '킨텍스': [null, null, 7.5, 10.5, 8.5, 10.8],         // 2019 입주: 분양가 5.5, 최저호가 10.8, 실거래 평균 11억+
@@ -963,7 +963,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const jeonseEff = 3;
             const pirEff = 1.5; // 2.5→1.5 (가계부채 4와 부분 중복 인정)
             const nonResEff = 2;
-            return -Math.round(Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff, -5) * 10) / 10;
+            const baseDrop = Math.max(raw - constructionSupport - supplyCliff + popPressure + policyPressure + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff, -5);
+            return -Math.round(baseDrop * (apt.beta / 0.95) * 10) / 10;
         }
 
         function heatColor(v) {
@@ -1186,8 +1187,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalDown = rateEff + fxEff * 0.7 + oilEff + warCostEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
         const totalUp = constructionSupport + supplyCliff;
-        const netDrop = Math.max(totalDown - totalUp, -5); // 전고점 +5%까지 허용 (인플레이션)
-        const dropPct = Math.min(netDrop, 50);
+        const baseDrop = Math.max(totalDown - totalUp, -5);
+        const betaAdj = apt.beta / 0.95;
+        const dropPct = Math.min(baseDrop * betaAdj, 50);
         const price = Math.round(base * (100 - dropPct) / 100 * 10) / 10;
 
         // ═══════ 가계 현금흐름 계산 ═══════
@@ -1511,8 +1513,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const nonResEff = 2;
         const totalDown = rateEff + fxEff * 0.7 + oilEff + warCostEff + popEff + policyEff + taxEff + ageEff + debtEff + jeonseEff + pirEff + nonResEff;
         const totalUp = constructionSupport + supplyCliff;
-        const netDrop = Math.max(totalDown - totalUp, -5);
-        const dropPct = Math.min(netDrop, 50);
+        const baseDrop = Math.max(totalDown - totalUp, -5);
+        // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
+        const betaAdj = apt.beta / 0.95;
+        const dropPct = Math.min(baseDrop * betaAdj, 50);
         return Math.round(b * (100 - dropPct) / 100 * 10) / 10;
     }
 
