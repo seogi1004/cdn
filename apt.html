@@ -909,8 +909,6 @@ document.addEventListener('DOMContentLoaded', function() {
             {label:aptLabel+' 예측 (14-Factor)',data:s.pred,borderColor:apt.color+'99',borderWidth:2.5,borderDash:[6,4],pointRadius:4,pointBackgroundColor:apt.color+'99',pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.35,spanGaps:false},
             {label:'건축비 하한선 (대체원가)',data:s.constFloor,borderColor:C.amber.h,borderWidth:1.5,borderDash:[2,3],pointRadius:0,fill:false,tension:.3,spanGaps:false},
             {label:'A: 2027 매수 후 시세',data:s.buyA,borderColor:C.blue.h,borderWidth:2.5,pointRadius:5,pointBackgroundColor:C.blue.h,pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.3,spanGaps:false},
-            {type:'bar',label:'A: Alvin 현금 (→매수)',data:s.cashA,backgroundColor:'rgba(59,130,246,.3)',borderColor:C.blue.l,borderWidth:1,borderRadius:4,barPercentage:.25,categoryPercentage:.8},
-            {type:'bar',label:'B: Alvin 현금 (대기)',data:s.cashB,backgroundColor:'rgba(16,185,129,.3)',borderColor:C.green.l,borderWidth:1,borderRadius:4,barPercentage:.25,categoryPercentage:.8},
         ];
         datasets._scenario = s; // 시나리오 원본 데이터 첨부
         return datasets;
