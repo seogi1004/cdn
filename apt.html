@@ -161,7 +161,7 @@
                 </div>
 
                 <!-- Sliders -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
                     <div class="bg-red-500/5 border border-red-500/10 rounded-lg p-4">
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">주담대 금리 (상단)</label>
@@ -201,6 +201,26 @@
                             class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                             style="accent-color:#f97316;background:linear-gradient(to right,#10b981,#f97316,#ef4444)">
                         <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>0.05%</span><span>OECD 0.33%</span><span>3.0%</span></div>
+                    </div>
+                    <div class="bg-pink-500/5 border border-pink-500/10 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">전세가율</label>
+                            <span id="jeonseRatioValue" class="text-sm font-black text-pink-400">55%</span>
+                        </div>
+                        <input type="range" id="jeonseRatioSlider" min="30" max="75" step="1" value="55"
+                            class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+                            style="accent-color:#ec4899;background:linear-gradient(to right,#ef4444,#ec4899,#10b981)">
+                        <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>30% 역전세</span><span>60% 안정</span><span>75%</span></div>
+                    </div>
+                    <div class="bg-cyan-500/5 border border-cyan-500/10 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">회복률 (반기)</label>
+                            <span id="recoveryRateValue" class="text-sm font-black text-cyan-400">2.5%</span>
+                        </div>
+                        <input type="range" id="recoveryRateSlider" min="0" max="8" step="0.5" value="2.5"
+                            class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+                            style="accent-color:#06b6d4;background:linear-gradient(to right,#ef4444,#06b6d4,#10b981)">
+                        <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>0% 일본형</span><span>4% 평균</span><span>8% V자</span></div>
                     </div>
                 </div>
 
@@ -955,7 +975,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const dsrPress = Math.max((rate - 4.0) * 1.5, 0) * SF;
         // 역전세 투매: 전세가율 60% 미만 시 갭투자자 강제 매도 압력 급증
         const regionKey = apt.region.replace(/\d+$/, '');
-        const jeonseRatio = (regionBeta[regionKey] && regionBeta[regionKey].jeonseRatio) || 55;
+        const jeonseRatioSliderEl = document.getElementById('jeonseRatioSlider');
+        const jeonseRatio = jeonseRatioSliderEl ? parseInt(jeonseRatioSliderEl.value) : ((regionBeta[regionKey] && regionBeta[regionKey].jeonseRatio) || 55);
         const gapSellOffPress = Math.max((60 - jeonseRatio) / 10 * 2.0, 0) * SF;
         // 상방 지지 (건축비·공급절벽)
         const constOilG = Math.min(((oil - 60) / 140) * 4, 4);
@@ -993,7 +1014,8 @@ document.addEventListener('DOMContentLoaded', function() {
         pred[7] = Math.round((current * 0.65 + adjustedBottom * 0.35) * 10) / 10;       // 26.10: 하락 진행
         pred[8] = Math.round((current * 0.25 + adjustedBottom * 0.75) * 10) / 10;       // 27.04: 바닥 근접 (전세 만기)
         pred[9] = adjustedBottom;                                                         // 27.12: 바닥
-        const rr = offset.recoveryRate;
+        const recoverySliderEl = document.getElementById('recoveryRateSlider');
+        const rr = recoverySliderEl ? parseFloat(recoverySliderEl.value) / 100 : offset.recoveryRate;
         pred[10] = Math.round(adjustedBottom * (1 + rr * 1) * 10) / 10;                 // 28.06
         pred[11] = Math.round(adjustedBottom * (1 + rr * 2) * 10) / 10;                 // 28.12
         pred[12] = Math.round(adjustedBottom * (1 + rr * 3) * 10) / 10;                 // 29.06
@@ -1295,7 +1317,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const dsrEff = Math.max((rate - 4.0) * 1.5, 0);
         // ⑯ 역전세 투매: 전세가율 60% 미만 시 갭투자자 강제 매도 압력
         const simRegionKey = apt.region.replace(/\d+$/, '');
-        const simJeonseRatio = (regionBeta[simRegionKey] && regionBeta[simRegionKey].jeonseRatio) || 55;
+        const simJeonseRatio = document.getElementById('jeonseRatioSlider') ? parseInt(document.getElementById('jeonseRatioSlider').value) : 55;
         const gapSellOffEff = Math.max((60 - simJeonseRatio) / 10 * 2.0, 0);
 
         const price = scenarioResult ? scenarioResult.pred[8] : Math.round(base * 0.8 * 10) / 10;
@@ -1581,6 +1603,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // AI 검증용 중간값 저장
         window._lastCalc = {
             rate, fx, oil, tax, polEff,
+            jeonseRatio: document.getElementById('jeonseRatioSlider') ? parseInt(document.getElementById('jeonseRatioSlider').value) : 55,
+            recoveryRate: document.getElementById('recoveryRateSlider') ? parseFloat(document.getElementById('recoveryRateSlider').value) / 100 : 0.025,
             policyDetails: policySubFactors.map(sf => {
                 const el = document.getElementById(sf.id);
                 return { label: sf.label, id: sf.id, type: sf.type,
@@ -1612,6 +1636,8 @@ document.addEventListener('DOMContentLoaded', function() {
 | Brent 유가 | $${c.oil} | $60~$200 |
 | 보유세 실효세율 | ${c.tax.toFixed(2)}% | 0.05~3.0% |
 | 정부 정책 합산 | ${c.polEff.toFixed(1)} | 0~12 |
+| 전세가율 | ${c.jeonseRatio}% | 30~75% |
+| 회복률 (반기) | ${(c.recoveryRate * 100).toFixed(1)}% | 0~8% |
 
 ## 2. 정책 서브팩터 상태
 | 정책 | 상태 | 효과 |
@@ -1935,6 +1961,16 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
     fxSlider.addEventListener('input', simCalc);
     oilSlider.addEventListener('input', simCalc);
     taxSlider.addEventListener('input', simCalc);
+    document.getElementById('jeonseRatioSlider').addEventListener('input', function() {
+        document.getElementById('jeonseRatioValue').textContent = this.value + '%';
+        document.getElementById('jeonseRatioValue').style.color = this.value < 50 ? '#f87171' : this.value < 60 ? '#ec4899' : '#34d399';
+        simCalc();
+    });
+    document.getElementById('recoveryRateSlider').addEventListener('input', function() {
+        document.getElementById('recoveryRateValue').textContent = parseFloat(this.value).toFixed(1) + '%';
+        document.getElementById('recoveryRateValue').style.color = this.value < 1 ? '#f87171' : this.value < 3 ? '#06b6d4' : '#34d399';
+        simCalc();
+    });
     document.querySelectorAll('.pol-toggle').forEach(el => { el.addEventListener('change', () => { updatePolicySum(); simCalc(); }); });
     document.getElementById('polSupply').addEventListener('input', () => { updatePolicySum(); simCalc(); });
 
