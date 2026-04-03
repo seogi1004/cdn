@@ -225,9 +225,9 @@
                     <div class="bg-purple-500/5 border border-purple-500/10 rounded-lg p-4">
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">매수심리지수</label>
-                            <span id="sentimentValue" class="text-sm font-black text-purple-400">85</span>
+                            <span id="sentimentValue" class="text-sm font-black text-purple-400">95</span>
                         </div>
-                        <input type="range" id="sentimentSlider" min="30" max="160" step="1" value="85"
+                        <input type="range" id="sentimentSlider" min="30" max="160" step="1" value="95"
                             class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                             style="accent-color:#8b5cf6;background:linear-gradient(to right,#ef4444,#f59e0b,#10b981)">
                         <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>30 공포</span><span>100 균형</span><span>160 과열</span></div>
@@ -1055,11 +1055,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const jeonseRatioSliderEl = document.getElementById('jeonseRatioSlider');
         const jeonseRatio = jeonseRatioSliderEl ? parseInt(jeonseRatioSliderEl.value) : ((regionBeta[regionKey] && regionBeta[regionKey].jeonseRatio) || 55);
         const gapSellOffPress = Math.max((60 - jeonseRatio) / 10 * 2.0, 0) * SF;
-        // 매수심리지수 (한국부동산원 기준: 0~200, 100=균형)
+        // 매수심리지수 (한국부동산원 매매수급지수 기준: 0~200, 100=균형)
         // 100 미만: 매도우위 → 하방 압력, 100 초과: 매수우위 → 상방 지지
         // 1~2개월 선행지표, 가격 변동과 상관계수 0.7+ (한국일보/부동산원 분석)
+        // 2026.03 최신: 수도권 94.9, 서울 100.0, 경기 100.0 (전월比 -12.4p 급락, CSI 96)
         const sentimentSliderEl = document.getElementById('sentimentSlider');
-        const sentiment = sentimentSliderEl ? parseInt(sentimentSliderEl.value) : 85;
+        const sentiment = sentimentSliderEl ? parseInt(sentimentSliderEl.value) : 95;
         const sentimentPress = (100 - sentiment) / 10 * 1.8 * SF; // 100 기준: 85→+2.7%p 하방, 120→-3.6%p 상방
         // 상방 지지 (건축비·공급절벽)
         const constOilG = Math.min(((oil - 60) / 140) * 4, 4);
@@ -1403,7 +1404,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const simJeonseRatio = document.getElementById('jeonseRatioSlider') ? parseInt(document.getElementById('jeonseRatioSlider').value) : 55;
         const gapSellOffEff = Math.max((60 - simJeonseRatio) / 10 * 2.0, 0);
         // ⑰ 매수심리지수: 한국부동산원 매매수급지수 (0~200, 100=균형, 1~2개월 선행지표)
-        const simSentiment = document.getElementById('sentimentSlider') ? parseInt(document.getElementById('sentimentSlider').value) : 85;
+        // 2026.03: 수도권 94.9, 서울 100, 경기 100 (전월比 -12.4p 급락)
+        const simSentiment = document.getElementById('sentimentSlider') ? parseInt(document.getElementById('sentimentSlider').value) : 95;
         const sentimentEff = (100 - simSentiment) / 10 * 1.8;
 
         // MC를 비교표·verdict 전에 실행하여 lastMcResult 갱신
@@ -1953,7 +1955,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
         const apt = apartments[selectedAptIdx];
         const histVol = calcHistVolatility(apt.region);
         const sentimentEl = document.getElementById('sentimentSlider');
-        const sentimentBase = sentimentEl ? parseInt(sentimentEl.value) : 85;
+        const sentimentBase = sentimentEl ? parseInt(sentimentEl.value) : 95;
         const sentimentStd = 15; // 매수심리 σ=15 (분기 변동폭)
         const prices = [];
         for (let i = 0; i < N; i++) {
