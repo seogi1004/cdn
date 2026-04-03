@@ -165,9 +165,9 @@
                     <div class="bg-red-500/5 border border-red-500/10 rounded-lg p-4">
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">주담대 금리 (상단)</label>
-                            <span id="rateValue" class="text-sm font-black text-red-400">6.5%</span>
+                            <span id="rateValue" class="text-sm font-black text-red-400">7.0%</span>
                         </div>
-                        <input type="range" id="rateSlider" min="4.5" max="9.0" step="0.1" value="6.5"
+                        <input type="range" id="rateSlider" min="4.5" max="9.0" step="0.1" value="7.0"
                             class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                             style="accent-color:#ef4444;background:linear-gradient(to right,#10b981,#f59e0b,#ef4444)">
                         <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>4.5%</span><span>9.0%</span></div>
@@ -1038,11 +1038,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const ratePress  = Math.max((rate - 4.5), 0) * 4.2 * SF;       // 금리
         const fxPress    = ((fx - 1400) / 100) * 1.6 * 0.35 * SF;     // 환율 (직접 경로만, 금리 경유분은 ratePress에서 반영)
         const oilPress   = ((oil - 60) / 40) * 1.2 * SF;               // 유가 (직접 경로만, 인플레→금리 경유분은 ratePress에서 반영)
-        const warCostPress = 3 * SF;                                    // 지정학 리스크 (고정: 재정부담·심리위축)
+        const warCostPress = 5 * SF;                                    // 지정학 리스크 (2026.04: 이란전쟁 5주차, 호르무즈 봉쇄, IEA 역대최대 공급차질)
         const taxPress   = Math.max((tax - 0.15) / 1.0 * 5, -2) * SF;  // 보유세 (인하 시 음수 → 상방 신호)
         const popPress   = 1.5 * SF;                                    // 인구감소 (단기3년: 가구수 증가로 상쇄, 장기 리스크만 반영)
         const polPress   = getPolicyEff() * SF; // 정부 정책 (서브팩터 합산)
-        const debtPress  = 4 * SF;                                      // 가계부채
+        const debtPress  = 5 * SF;                                      // 가계부채 (GDP 89.7%, 2026.04 대출증가 1.5%제한, 다주택 만기연장불허, 전세DSR전면확대)
         const jeonsePress = 3 * SF;                                     // 전세 축소
         const pirPress   = 2.5 * SF;                                    // PIR
         const nonResPress = 2 * SF;                                     // 비주거 부실 전이
@@ -1363,7 +1363,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const rateEff = (rate - 4.5) * 4.2;           // ① 금리 (34~44% 기여)
         const fxEff = ((fx - 1400) / 100) * 0.8;      // ② 환율 (직접 경로만, 금리 경유 이중계산 제거)
         const oilEff = ((oil - 60) / 40) * 1.2;       // ③ 유가 (직접 경로만, 인플레→금리 이중계산 제거)
-        const warCostEff = 3;                          // ④ 지정학 리스크 (고정: 재정부담·심리위축)
+        const warCostEff = 5;                          // ④ 지정학 리스크 (2026.04: 이란전쟁, 호르무즈 봉쇄, 스태그플레이션 경고)
         const popEff = 1.5;                            // ⑤ 인구 (단기3년: 가구수 증가로 상쇄, 장기 구조적 리스크만)
         const policyEff = polEff;                        // ⑥ 정부 정책 (서브팩터 합산)
         // ⑦ 대체원가 상방 = 건축비(자재+PF) + 토지비
@@ -1387,7 +1387,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
         // ⑪ 가계부채: GDP 88.6% (2025, 정부 목표 2030년 80%), DSR 구조적 매수여력 제한
-        const debtEff = 4;
+        const debtEff = 5;
         // ⑫ 전세 축소: 월세화 가속 → 전세자금(유동성) 감소 → 매수 수요 위축
         const jeonseEff = 3;
         // ⑬ PIR(소득대비집값): 경기 8.9배 (2025 Q1, KB기준. 대상 지역: 고양/파주/은평/강서)
@@ -1817,11 +1817,11 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 | ratePress | (${c.rate}-4.5)×4.2×${d.SF} | ${n(d.ratePress)} |
 | fxPress | ((${c.fx}-1400)/100)×1.6×0.35×${d.SF} (직접경로) | ${n(d.fxPress)} |
 | oilPress | ((${c.oil}-60)/40)×1.2×${d.SF} (직접경로) | ${n(d.oilPress)} |
-| warCostPress | 3×${d.SF} (지정학 고정) | ${n(d.warCostPress)} |
+| warCostPress | 5×${d.SF} (이란전쟁·호르무즈봉쇄) | ${n(d.warCostPress)} |
 | taxPress | max((${c.tax}-0.15)/1.0×5,**-2**)×${d.SF} | ${n(d.taxPress)} |
 | popPress | 1.5×${d.SF} (인구감소, 단기3년) | ${n(d.popPress)} |
 | polPress | ${c.polEff.toFixed(1)}×${d.SF} (정책) | ${n(d.polPress)} |
-| debtPress | 4×${d.SF} (가계부채 고정) | ${n(d.debtPress)} |
+| debtPress | 5×${d.SF} (가계부채 GDP89.7%+규제강화) | ${n(d.debtPress)} |
 | jeonsePress | 3×${d.SF} (전세축소 고정) | ${n(d.jeonsePress)} |
 | pirPress | 2.5×${d.SF} (PIR 고정) | ${n(d.pirPress)} |
 | nonResPress | 2×${d.SF} (비주거부실 고정) | ${n(d.nonResPress)} |
@@ -2079,7 +2079,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
             { name: '보유세 실효세율', min: 0.05, max: 3.0, unit: '%',
               lo: calcPrice8(rate, fx, oil, 0.05), hi: calcPrice8(rate, fx, oil, 3.0), color: '#fb923c' },
             { name: '인구감소 (단기3년)', lo: basePrice + 0.18, hi: basePrice - 0.18, color: '#a78bfa', fixed: true },
-            { name: '가계부채 105% (고정)', lo: basePrice + 0.48, hi: basePrice - 0.48, color: '#ec4899', fixed: true },
+            { name: '가계부채 89.7%+규제강화', lo: basePrice + 0.60, hi: basePrice - 0.60, color: '#ec4899', fixed: true },
             { name: '전세 축소 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#f472b6', fixed: true },
             { name: 'PIR 8.9배 (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#e879f9', fixed: true },
             { name: '비주거 부실 전이 (고정)', lo: basePrice + 0.24, hi: basePrice - 0.24, color: '#fb7185', fixed: true },
