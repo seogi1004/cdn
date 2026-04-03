@@ -1681,12 +1681,13 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 - adjustedBottom = finalBottom + support = **${n(d.adjustedBottom)}**
 
 ## 5. 시간축 예상가
+> 단수 처리: Math.round(값 × 10) / 10 (소수점 첫째 자리 **반올림**)
 | 시점 | 공식 | 예상가 |
 |---|---|---|
 | 2026.04 (현재) | current | ${c.apt.current}억 |
 | 2027.04 (A안) | ${c.apt.current}×0.25 + ${n(d.adjustedBottom)}×0.75 | **${c.priceA.toFixed(1)}억** |
 | 2027.12 (바닥) | adjustedBottom | ${n(d.adjustedBottom)}억 |
-| 2029.06 (B안) | ${n(d.finalBottom)}×(1+${d.rr}×3) | **${c.priceB.toFixed(1)}억** |
+| 2029.06 (B안) | ${n(d.adjustedBottom)}×(1+${d.rr}×3) | **${c.priceB.toFixed(1)}억** |
 
 ## 6. 가계 현금흐름
 | 시점 | 가용자금 |
