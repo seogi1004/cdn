@@ -1345,8 +1345,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalB = totalCash2029;
         const buyableB = totalCash2029 >= priceB;
 
-        // 2029 예상 시세 (매수 후 2029 시점)
-        const recoveryA = Math.round(priceA * (1 + 0.08) * 10) / 10;
+        // 2029 예상 시세: A안 매수 후 2029 시점 시세 = 모델의 pred[12] (B안 가격과 동일)
+        const recoveryA = priceB; // 2029년 시세는 매수 시점과 무관하게 모델 예측값 사용
 
         // 건축비 하방 경직성
         const constFloor = oil >= 80 ? '강 (유가→건자재↑)' : '중 (안정세)';
@@ -1383,7 +1383,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { label: '이재명 정부 정책', a: `<span class="text-green-400">${policyA}</span>`, b: `<span class="text-green-400">${policyB}</span>` },
             { label: '베이비부머 매도 압력', a: `<span class="text-purple-400">${boomerA}</span>`, b: `<span class="text-red-400">${boomerB}</span>` },
             { label: '전세 보증금 리스크', a: '<span class="text-green-400">만기 회수 → 즉시 투입</span>', b: `<span class="text-amber-400">반전세 전환 · -${jeonseRisk}억 리스크</span>` },
-            { label: '매수 후 2029 예상 시세', a: `<span class="text-blue-400 font-bold">${recoveryA.toFixed(1)}억</span>`, b: '<span class="text-gray-500">— (매수 시점)</span>' },
+            { label: '2029 예상 시세 (모델)', a: `<span class="text-blue-400 font-bold">${recoveryA.toFixed(1)}억</span> <span class="text-gray-500">(A안 대비 ${priceA > recoveryA ? '-' : '+'}${Math.abs(Math.round((recoveryA/priceA-1)*1000)/10)}%)</span>`, b: `<span class="text-blue-400 font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(매수 시점)</span>` },
             { label: '최대 리스크', a: `<span class="text-red-400">${riskA}</span>`, b: `<span class="text-red-400">${riskB}</span>` },
         ];
 
@@ -1677,7 +1677,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 | 예상가 | ${c.priceA.toFixed(1)}억 (고점 -${c.dropPct.toFixed(1)}%) | ${c.priceB.toFixed(1)}억 (고점 -${c.dropPct2029.toFixed(1)}%) |
 | 무대출 매수 | ${c.buyableA ? '가능' : '불가'} | ${c.buyableB ? '가능' : '불가'} |
 | 연간 보유세 | ${c.taxAnnualA}만원 | ${c.taxAnnualB}만원 |
-| 매수후 2029 시세 | ${c.recoveryA.toFixed(1)}억 (+8%) | — |
+| 2029 예상 시세 | ${c.recoveryA.toFixed(1)}억 | ${c.priceB.toFixed(1)}억 (매수 시점) |
 | 판정 | ${c.preferA ? '★ 유리' : ''} | ${!c.preferA ? '★ 유리' : ''} |
 
 ---
