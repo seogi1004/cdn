@@ -750,7 +750,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return Math.min(sum, 12);
     }
-    function applyPolicyPreset(idx) {
+    window.applyPolicyPreset = function(idx) {
         const preset = policyPresets[idx];
         for (const sf of policySubFactors) {
             const el = document.getElementById(sf.id);
@@ -1561,7 +1561,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ═══════ AI 검증용 마크다운 복사 ═══════
-    function copyModelMarkdown() {
+    window.copyModelMarkdown = function() {
         const c = window._lastCalc;
         if (!c) { alert('슬라이더를 조작한 후 다시 시도하세요.'); return; }
         const d = c.debug;
