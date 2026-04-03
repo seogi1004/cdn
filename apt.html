@@ -1747,6 +1747,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // AI 검증용 중간값 저장
         window._lastCalc = {
             rate, fx, oil, tax, polEff,
+            sentiment: document.getElementById('sentimentSlider') ? parseInt(document.getElementById('sentimentSlider').value) : 95,
             jeonseRatio: document.getElementById('jeonseRatioSlider') ? parseInt(document.getElementById('jeonseRatioSlider').value) : 55,
             recoveryRate: document.getElementById('recoveryRateSlider') ? parseFloat(document.getElementById('recoveryRateSlider').value) / 100 : 0.025,
             policyDetails: policySubFactors.map(sf => {
@@ -1781,6 +1782,7 @@ document.addEventListener('DOMContentLoaded', function() {
 | 보유세 실효세율 | ${c.tax.toFixed(2)}% | 0.05~3.0% |
 | 정부 정책 합산 | ${c.polEff.toFixed(1)} | 0~12 |
 | 전세가율 | ${c.jeonseRatio}% | 30~75% |
+| 매수심리지수 | ${c.sentiment} | 30~160 |
 | 회복률 (반기) | ${(c.recoveryRate * 100).toFixed(1)}% | 0~8% |
 
 ## 2. 정책 서브팩터 상태
