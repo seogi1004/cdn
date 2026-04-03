@@ -161,7 +161,7 @@
                 </div>
 
                 <!-- Sliders -->
-                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
                     <div class="bg-red-500/5 border border-red-500/10 rounded-lg p-4">
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">주담대 금리 (상단)</label>
@@ -221,6 +221,16 @@
                             class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                             style="accent-color:#06b6d4;background:linear-gradient(to right,#ef4444,#06b6d4,#10b981)">
                         <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>0% 일본형</span><span>4% 평균</span><span>8% V자</span></div>
+                    </div>
+                    <div class="bg-purple-500/5 border border-purple-500/10 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">매수심리지수</label>
+                            <span id="sentimentValue" class="text-sm font-black text-purple-400">85</span>
+                        </div>
+                        <input type="range" id="sentimentSlider" min="30" max="160" step="1" value="85"
+                            class="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+                            style="accent-color:#8b5cf6;background:linear-gradient(to right,#ef4444,#f59e0b,#10b981)">
+                        <div class="flex justify-between text-[8px] text-gray-600 mt-1"><span>30 공포</span><span>100 균형</span><span>160 과열</span></div>
                     </div>
                 </div>
 
@@ -1045,6 +1055,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const jeonseRatioSliderEl = document.getElementById('jeonseRatioSlider');
         const jeonseRatio = jeonseRatioSliderEl ? parseInt(jeonseRatioSliderEl.value) : ((regionBeta[regionKey] && regionBeta[regionKey].jeonseRatio) || 55);
         const gapSellOffPress = Math.max((60 - jeonseRatio) / 10 * 2.0, 0) * SF;
+        // 매수심리지수 (한국부동산원 기준: 0~200, 100=균형)
+        // 100 미만: 매도우위 → 하방 압력, 100 초과: 매수우위 → 상방 지지
+        // 1~2개월 선행지표, 가격 변동과 상관계수 0.7+ (한국일보/부동산원 분석)
+        const sentimentSliderEl = document.getElementById('sentimentSlider');
+        const sentiment = sentimentSliderEl ? parseInt(sentimentSliderEl.value) : 85;
+        const sentimentPress = (100 - sentiment) / 10 * 1.8 * SF; // 100 기준: 85→+2.7%p 하방, 120→-3.6%p 상방
         // 상방 지지 (건축비·공급절벽)
         const constOilG = Math.min(((oil - 60) / 140) * 4, 4);
         const constFxG  = Math.min(((fx - 1350) / 450) * 1, 1);
@@ -1054,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const supplyCliff = 8;     // 공급절벽 지수 (2023-24 착공급감 → 2026-27 입주절벽)
         const upSupport = (constBase + constOilG + constFxG + constPFG - landDiscount + supplyCliff) * SF;
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress + agePress + dsrPress + gapSellOffPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress + agePress + dsrPress + gapSellOffPress + sentimentPress - upSupport;
         
         // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
         const betaAdj = apt.beta / 0.95;
@@ -1111,7 +1127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = PRED_START+2; i <= PRED_START+5; i++) cashB[i] = Math.round((totalCash0 + 0.1 - (i - PRED_START - 1) * 0.02) * 100) / 100;
 
         return { hist: histPadded, pred, buyA, constFloor, cashA, cashB,
-            _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, ageYears, agePress, dsrPress, jeonseRatio, gapSellOffPress, constBase, constOilG, constFxG, constPFG, landDiscount, supplyCliff, upSupport, rawExtraDrop, betaAdj, alreadyDropped, extraDropPct, totalDropFromPeak, bottomPrice, absoluteFloor, finalBottom, policyLoanCeiling, policyLiquiditySupport, adjustedBottom, rr } };
+            _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, ageYears, agePress, dsrPress, jeonseRatio, gapSellOffPress, sentiment, sentimentPress, constBase, constOilG, constFxG, constPFG, landDiscount, supplyCliff, upSupport, rawExtraDrop, betaAdj, alreadyDropped, extraDropPct, totalDropFromPeak, bottomPrice, absoluteFloor, finalBottom, policyLoanCeiling, policyLiquiditySupport, adjustedBottom, rr } };
     }
 
     function ds(sc, rate, fx, oil, tax) {
@@ -1386,6 +1402,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const simRegionKey = apt.region.replace(/\d+$/, '');
         const simJeonseRatio = document.getElementById('jeonseRatioSlider') ? parseInt(document.getElementById('jeonseRatioSlider').value) : 55;
         const gapSellOffEff = Math.max((60 - simJeonseRatio) / 10 * 2.0, 0);
+        // ⑰ 매수심리지수: 한국부동산원 매매수급지수 (0~200, 100=균형, 1~2개월 선행지표)
+        const simSentiment = document.getElementById('sentimentSlider') ? parseInt(document.getElementById('sentimentSlider').value) : 85;
+        const sentimentEff = (100 - simSentiment) / 10 * 1.8;
 
         // MC를 비교표·verdict 전에 실행하여 lastMcResult 갱신
         if (currentMethod === 'montecarlo') {
@@ -1805,7 +1824,8 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 | agePress | max(${d.ageYears}×0.4${d.ageYears<=5?'-1':''},0)×${d.SF} (연식${d.ageYears}년) | ${n(d.agePress)} |
 | dsrPress | max((${c.rate}-4.0)×1.5,0)×${d.SF} (스트레스DSR) | ${n(d.dsrPress)} |
 | gapSellOffPress | max((60-${d.jeonseRatio})/10×2.0,0)×${d.SF} (전세가율${d.jeonseRatio}%) | ${n(d.gapSellOffPress)} |
-| **하방 합계** | | **${n(d.ratePress + d.fxPress + d.oilPress + d.warCostPress + d.taxPress + d.popPress + d.polPress + d.debtPress + d.jeonsePress + d.pirPress + d.nonResPress + d.agePress + d.dsrPress + d.gapSellOffPress)}** |
+| sentimentPress | (100-${d.sentiment})/10×1.8×${d.SF} (매수심리${d.sentiment}) | ${n(d.sentimentPress)} |
+| **하방 합계** | | **${n(d.ratePress + d.fxPress + d.oilPress + d.warCostPress + d.taxPress + d.popPress + d.polPress + d.debtPress + d.jeonsePress + d.pirPress + d.nonResPress + d.agePress + d.dsrPress + d.gapSellOffPress + d.sentimentPress)}** |
 
 ### 상방 지지 (건축비 + 공급절벽 + 정책대출)
 | 팩터 | 공식 | 계산값 |
@@ -1932,6 +1952,9 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
         const stds = [0.8, 80, 25, 0.15]; // 각 변수의 표준편차
         const apt = apartments[selectedAptIdx];
         const histVol = calcHistVolatility(apt.region);
+        const sentimentEl = document.getElementById('sentimentSlider');
+        const sentimentBase = sentimentEl ? parseInt(sentimentEl.value) : 85;
+        const sentimentStd = 15; // 매수심리 σ=15 (분기 변동폭)
         const prices = [];
         for (let i = 0; i < N; i++) {
             // 독립 정규분포 z 생성
@@ -1947,11 +1970,16 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
             const f = Math.max(1350, Math.min(1800, fx + stds[1] * corr[1]));
             const o = Math.max(60, Math.min(200, oil + stds[2] * corr[2]));
             const t = Math.max(0.05, Math.min(3.0, tax + stds[3] * corr[3]));
+            // 매수심리지수 노이즈 (독립 — 거시변수와 약한 상관, 단순화)
+            const sNoise = Math.max(30, Math.min(160, sentimentBase + sentimentStd * randNorm(0, 1)));
+            if (sentimentEl) sentimentEl.value = Math.round(sNoise);
             // 실거래 변동성 반영: 16-factor 예측에 역사적 σ 노이즈 추가
             const basePrice = calcPrice8(r, f, o, t);
             const priceNoise = randNorm(0, histVol) * basePrice;
             prices.push(Math.round((basePrice + priceNoise) * 10) / 10);
         }
+        // MC 완료 후 슬라이더 원상 복구
+        if (sentimentEl) sentimentEl.value = sentimentBase;
         prices.sort((a, b) => a - b);
 
         const p10 = prices[Math.floor(N * 0.10)];
@@ -1988,7 +2016,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
         document.getElementById('mcSummary').innerHTML = `
             <p><strong class="text-purple-400">10,000회 시뮬레이션 결과:</strong> 평균 <span class="text-white font-bold">${mean}억</span> · 중앙값 <span class="text-white font-bold">${p50.toFixed(1)}억</span></p>
             <p>80% 신뢰구간: <span class="text-green-400">${p10.toFixed(1)}억</span> ~ <span class="text-red-400">${p90.toFixed(1)}억</span></p>
-            <p class="text-[9px] text-gray-600">각 변수에 정규분포 노이즈 적용 (금리 σ=0.8%p, 환율 σ=80원, 유가 σ=$25, 보유세 σ=0.15%p) · σ_hist = ${(histVol * 100).toFixed(1)}%</p>
+            <p class="text-[9px] text-gray-600">각 변수에 정규분포 노이즈 적용 (금리 σ=0.8%p, 환율 σ=80원, 유가 σ=$25, 보유세 σ=0.15%p, 심리 σ=15) · σ_hist = ${(histVol * 100).toFixed(1)}%</p>
         `;
 
         // MC 결과를 전역에 저장 → simCalc verdict/비교표에서 활용
@@ -2057,6 +2085,10 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
               lo: basePrice + (12 - getPolicyEff()) * 0.12,
               hi: basePrice - getPolicyEff() * 0.12,
               color: '#34d399', fixed: true },
+            { name: '매수심리지수 (' + (document.getElementById('sentimentSlider') ? document.getElementById('sentimentSlider').value : 85) + ')',
+              lo: (() => { const el = document.getElementById('sentimentSlider'); const orig = el ? el.value : 85; if (el) el.value = 160; const p = calcPrice8(rate, fx, oil, tax); if (el) el.value = orig; return p; })(),
+              hi: (() => { const el = document.getElementById('sentimentSlider'); const orig = el ? el.value : 85; if (el) el.value = 30; const p = calcPrice8(rate, fx, oil, tax); if (el) el.value = orig; return p; })(),
+              color: '#c084fc' },
         ];
 
         // 영향도 = |lo - hi| 로 정렬 (큰 순)
@@ -2116,6 +2148,12 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
     document.getElementById('recoveryRateSlider').addEventListener('input', function() {
         document.getElementById('recoveryRateValue').textContent = parseFloat(this.value).toFixed(1) + '%';
         document.getElementById('recoveryRateValue').style.color = this.value < 1 ? '#f87171' : this.value < 3 ? '#06b6d4' : '#34d399';
+        simCalc();
+    });
+    document.getElementById('sentimentSlider').addEventListener('input', function() {
+        const v = parseInt(this.value);
+        document.getElementById('sentimentValue').textContent = v;
+        document.getElementById('sentimentValue').style.color = v < 80 ? '#f87171' : v < 100 ? '#fbbf24' : v < 120 ? '#8b5cf6' : '#34d399';
         simCalc();
     });
     document.querySelectorAll('.pol-toggle').forEach(el => { el.addEventListener('change', () => { updatePolicySum(); simCalc(); }); });
