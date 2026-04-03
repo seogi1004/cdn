@@ -821,6 +821,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '운정':       { beta: 0.74, jeonseRatio: 65, basis: '실증: 운정아이파크 고점9.7→저점6.8(-29.9%). GTX-A 수혜이나 26~27 입주장(이지더원+풍경채+공공) 물량 압력. 수도권 외곽이라 회복 느림' },
         '덕은':       { beta: 0.90, jeonseRatio: 48, basis: '한강조망 프리미엄이나 지식산업센터 입주율 35~56%, 교통섬(마을버스 의존). 대장홍대선 2031 개통 전까지 교통 리스크. 손절 매물 출현' },
         '킨텍스':     { beta: 0.95, jeonseRatio: 55, basis: '고점11.5→저점8.5(-26%) 양호한 편. GTX-A 2번출구 역세권이나 중학교 없음, 원마운트 회생절차, 테크노밸리 공정16%, 라이브시티 2030년 이후. 개발 지연 리스크' },
+        '원흥':       { beta: 0.95, jeonseRatio: 70, basis: '고점8.5→현재7.0(-17.6%) 시장 평균 수준. 3호선 원흥역 역세권, 삼송신도시 인접 실수요 기반. 450세대 소규모라 유동성 낮으나 역세권 수요로 상쇄' },
     };
 
     // ═══════ APARTMENTS DATA (hoisted before ds/generateScenario) ═══════
@@ -933,6 +934,18 @@ document.addEventListener('DOMContentLoaded', function() {
             note: '2019 · 1,100세대 · GTX-A 2번출구 · 중학교無 · 초등1km · 원마운트 회생 · 테크노밸리 공정16% · 라이브시티 2030↑',
             builtYear: 2019,
         },
+        {
+            region: '원흥',
+            name: '삼송원흥역센트럴푸르지오',
+            size: '84㎡',
+            get beta() { return regionBeta['원흥'].beta; },
+            color: '#d946ef',
+            peak2021: 8.5,
+            current: 7.0,
+            currentLabel: '7.0억 (최저호가 7.0, 최고 8.5)',
+            note: '2018 · 450세대 · 3호선 원흥역 역세권 · 삼송신도시 인접 · 소규모 단지',
+            builtYear: 2018,
+        },
     ];
     let selectedAptIdx = 0;
 
@@ -949,6 +962,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '덕은': [null, null, 7.5, 9.5, 8.5, 10.5],           // 2020 입주: 24.04 신고가 11억, 23.07 9.7억
         '덕은2': [null, null, null, null, 7.0, 11.2],        // 2022.12 입주: 분양가 7.0, 26.02 평균 11.59 고점
         '킨텍스': [null, null, 7.5, 10.5, 8.5, 10.8],         // 2019 입주: 분양가 5.5, 최저호가 10.8, 실거래 평균 11억+
+        '원흥': [null, null, 6.0, 8.5, 6.5, 7.0],              // 2018 입주: 고점 8.5, 현재 최저호가 7.0
     };
 
     // 시나리오별 매크로 오프셋
