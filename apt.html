@@ -1333,7 +1333,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const debtEff = 4;
         // ⑫ 전세 축소: 월세화 가속 → 전세자금(유동성) 감소 → 매수 수요 위축
         const jeonseEff = 3;
-        // ⑬ PIR(소득대비집값): 서울 10.6배 (2025 Q3, KB기준. 적정 5~7배의 1.5~2배)
+        // ⑬ PIR(소득대비집값): 경기 8.9배 (2025 Q1, KB기준. 대상 지역: 고양/파주/은평/강서)
         const pirEff = 1.5; // 2.5→1.5 (가계부채 4와 부분 중복 인정)
         // ⑭ 비주거 부실 전이: 상가 공실 13~20%, 지식산업센터 경매 2배 급증(2025)
         // PF 부실 → 건설사 도산 → 경기 위축 → 매수 심리 위축
@@ -1929,7 +1929,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
             { name: '인구감소 (단기3년)', lo: basePrice + 0.18, hi: basePrice - 0.18, color: '#a78bfa', fixed: true },
             { name: '가계부채 105% (고정)', lo: basePrice + 0.48, hi: basePrice - 0.48, color: '#ec4899', fixed: true },
             { name: '전세 축소 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#f472b6', fixed: true },
-            { name: 'PIR 10.6배 (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#e879f9', fixed: true },
+            { name: 'PIR 8.9배 (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#e879f9', fixed: true },
             { name: '비주거 부실 전이 (고정)', lo: basePrice + 0.24, hi: basePrice - 0.24, color: '#fb7185', fixed: true },
             { name: '스트레스 DSR', lo: calcPrice8(4.0, fx, oil, tax), hi: calcPrice8(9.0, fx, oil, tax), color: '#f43f5e' },
             { name: '역전세 투매 (전세가율)', lo: basePrice + 0.12, hi: basePrice - Math.max((60 - ((regionBeta[apartments[selectedAptIdx].region.replace(/\d+$/, '')] || {}).jeonseRatio || 55)) / 10 * 2.0 * 0.12, 0), color: '#be185d', fixed: true },
