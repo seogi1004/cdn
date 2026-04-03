@@ -942,29 +942,35 @@ document.addEventListener('DOMContentLoaded', function() {
         const fxPress    = ((fx - 1400) / 100) * 1.6 * 0.7 * SF;      // 환율
         const oilPress   = ((oil - 60) / 40) * 2.5 * SF;               // 유가
         const warCostPress = 3 * SF;                                    // 지정학 리스크 (고정: 재정부담·심리위축)
-        const taxPress   = Math.max((tax - 0.15) / 1.0 * 5, 0) * SF;  // 보유세
+        const taxPress   = Math.max((tax - 0.15) / 1.0 * 5, -2) * SF;  // 보유세 (인하 시 음수 → 상방 신호)
         const popPress   = 4 * SF;                                      // 인구감소
         const polPress   = getPolicyEff() * SF; // 정부 정책 (서브팩터 합산)
         const debtPress  = 4 * SF;                                      // 가계부채
         const jeonsePress = 3 * SF;                                     // 전세 축소
         const pirPress   = 2.5 * SF;                                    // PIR
         const nonResPress = 2 * SF;                                     // 비주거 부실 전이
+        const ageYears = 2026 - (apt.builtYear || 2020);
+        const agePress = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0) * SF; // 연식 감가 (5년 초과 시 연 0.4%p)
         // 상방 지지 (건축비·공급절벽)
         const constOilG = Math.min(((oil - 60) / 140) * 4, 4);
         const constFxG  = Math.min(((fx - 1350) / 450) * 1, 1);
         const constPFG  = Math.min(((rate - 4.5) / 4.5) * 2, 2);
-        const upSupport = (8 + constOilG + constFxG + constPFG - 1.5 + 8) * SF; // (건축비+공급절벽) * SF
+        const constBase = 8;       // 기본 건축비 상승 지수 (자재+인건비 구조�� 상승)
+        const landDiscount = 1.5;  // 토지��� 하락세 할인 (2022 이후 거래량 감소)
+        const supplyCliff = 8;     // 공급절벽 지수 (2023-24 착공급감 → 2026-27 입주절벽)
+        const upSupport = (constBase + constOilG + constFxG + constPFG - landDiscount + supplyCliff) * SF;
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress + agePress - upSupport;
         
         // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
         const betaAdj = apt.beta / 0.95;
+        const alreadyDropped = Math.round((1 - current / peak) * 100 * 10) / 10; // 고점 대비 이미 하락한 %
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop * betaAdj;
-        // 현재가 기준 추가 하락 (최대 35%)
-        const clampedDrop = Math.min(extraDropPct, 35);
-        const bottomPrice = Math.round(current * (100 - clampedDrop) / 100 * 10) / 10;
+        // 고점 기준 총 하락률 (이미 하락분 + 추가 하락, 최대 35%)
+        const totalDropFromPeak = Math.min(alreadyDropped + extraDropPct, 35);
+        const bottomPrice = Math.round(peak * (100 - totalDropFromPeak) / 100 * 10) / 10;
 
-        // 건축비 발 절대 하한 (대체원가: 고점의 65~75%)
+        // 건축비 발 절대 하한 (대체원가: 고점의 65%)
         const absoluteFloor = Math.round(peak * 0.65 * 10) / 10;
         const finalBottom = Math.max(bottomPrice, absoluteFloor);
 
@@ -1003,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 8; i <= 11; i++) cashB[i] = Math.round((totalCash0 + 0.1 - (i - 7) * 0.02) * 100) / 100;
 
         return { hist: histPadded, pred, buyA, constFloor, cashA, cashB,
-            _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, constOilG, constFxG, constPFG, upSupport, rawExtraDrop, betaAdj, extraDropPct, clampedDrop, bottomPrice, absoluteFloor, finalBottom, rr } };
+            _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, ageYears, agePress, constBase, constOilG, constFxG, constPFG, landDiscount, supplyCliff, upSupport, rawExtraDrop, betaAdj, alreadyDropped, extraDropPct, totalDropFromPeak, bottomPrice, absoluteFloor, finalBottom, rr } };
     }
 
     function ds(sc, rate, fx, oil, tax) {
@@ -1255,9 +1261,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // 거래량 급감으로 실거래 신뢰도 낮음 → 소폭 할인만 적용
         const landDiscount = 1.5;
         const constructionSupport = Math.round(Math.max(buildCost - landDiscount, 4) * 10) / 10;
-        const supplyCliff = 10; // 8→10 (2023-24 착공급감 → 2026-27 입주절벽 반영)                         // ⑧ 공급절벽 상방
+        const supplyCliff = 8;  // 공급절벽 지수 (generateScenario와 통일)   // ⑧ 공급절��� 상방
         // ⑨ 보유세
-        const taxEff = Math.max((tax - 0.15) / 1.0 * 5, 0);
+        const taxEff = Math.max((tax - 0.15) / 1.0 * 5, -2);  // 인하 시 음수 허용 (하한 -2)
         // ⑩ 연식 감가: 연 0.4%p, 5년 이하 신축 프리미엄 -1%p
         const ageYears = 2026 - (apt.builtYear || 2020);
         const ageEff = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0);
@@ -1622,14 +1628,15 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 | fxPress | ((${c.fx}-1400)/100)×1.6×0.7×${d.SF} | ${n(d.fxPress)} |
 | oilPress | ((${c.oil}-60)/40)×2.5×${d.SF} | ${n(d.oilPress)} |
 | warCostPress | 3×${d.SF} (지정학 고정) | ${n(d.warCostPress)} |
-| taxPress | max((${c.tax}-0.15)/1.0×5,0)×${d.SF} | ${n(d.taxPress)} |
+| taxPress | max((${c.tax}-0.15)/1.0×5,**-2**)×${d.SF} | ${n(d.taxPress)} |
 | popPress | 4×${d.SF} (인구감소 고정) | ${n(d.popPress)} |
 | polPress | ${c.polEff.toFixed(1)}×${d.SF} (정책) | ${n(d.polPress)} |
 | debtPress | 4×${d.SF} (가계부채 고정) | ${n(d.debtPress)} |
 | jeonsePress | 3×${d.SF} (전세축소 고정) | ${n(d.jeonsePress)} |
 | pirPress | 2.5×${d.SF} (PIR 고정) | ${n(d.pirPress)} |
 | nonResPress | 2×${d.SF} (비주거부실 고정) | ${n(d.nonResPress)} |
-| **하방 합계** | | **${n(d.ratePress + d.fxPress + d.oilPress + d.warCostPress + d.taxPress + d.popPress + d.polPress + d.debtPress + d.jeonsePress + d.pirPress + d.nonResPress)}** |
+| agePress | max(${d.ageYears}×0.4${d.ageYears<=5?'-1':''},0)×${d.SF} (연식${d.ageYears}년) | ${n(d.agePress)} |
+| **하방 합계** | | **${n(d.ratePress + d.fxPress + d.oilPress + d.warCostPress + d.taxPress + d.popPress + d.polPress + d.debtPress + d.jeonsePress + d.pirPress + d.nonResPress + d.agePress)}** |
 
 ### 상방 지지 (건축비 + 공급절벽)
 | 팩터 | 공식 | 계산값 |
@@ -1637,14 +1644,15 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 | constOilG | min(((${c.oil}-60)/140)×4, 4) | ${n(d.constOilG)} |
 | constFxG | min(((${c.fx}-1350)/450)×1, 1) | ${n(d.constFxG)} |
 | constPFG | min(((${c.rate}-4.5)/4.5)×2, 2) | ${n(d.constPFG)} |
-| upSupport | (8+${n(d.constOilG)}+${n(d.constFxG)}+${n(d.constPFG)}-1.5+8)×${d.SF} | ${n(d.upSupport)} |
+| upSupport | (constBase${d.constBase}+${n(d.constOilG)}+${n(d.constFxG)}+${n(d.constPFG)}-land${d.landDiscount}+supply${d.supplyCliff})×${d.SF} | ${n(d.upSupport)} |
 
-### 순 하락률 계산
+### 순 하락률 계산 (고점 기준 통일)
 - rawExtraDrop = 하방합계 - upSupport = **${n(d.rawExtraDrop)}**
 - betaAdj = ${c.apt.beta} / 0.95 = **${n(d.betaAdj)}**
+- alreadyDropped = (1 - ${c.apt.current}/${c.apt.peak2021}) × 100 = **${n(d.alreadyDropped)}%** (고점 대비 이미 하락)
 - extraDropPct = max(${n(d.rawExtraDrop)}, 0) × 1.0 × ${n(d.betaAdj)} = **${n(d.extraDropPct)}**
-- clampedDrop = min(${n(d.extraDropPct)}, 35) = **${n(d.clampedDrop)}**
-- bottomPrice = ${c.apt.current} × (100 - ${n(d.clampedDrop)}) / 100 = **${n(d.bottomPrice)}**
+- totalDropFromPeak = min(${n(d.alreadyDropped)} + ${n(d.extraDropPct)}, 35) = **${n(d.totalDropFromPeak)}%** (고점 기준 총 하락)
+- bottomPrice = ${c.apt.peak2021} × (100 - ${n(d.totalDropFromPeak)}) / 100 = **${n(d.bottomPrice)}**
 - absoluteFloor = ${c.apt.peak2021} × 0.65 = **${n(d.absoluteFloor)}**
 - finalBottom = max(${n(d.bottomPrice)}, ${n(d.absoluteFloor)}) = **${n(d.finalBottom)}**
 
