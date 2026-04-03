@@ -499,7 +499,6 @@
                                 <th class="p-2.5 text-gray-500 font-normal text-center">2021 고점</th>
                                 <th class="p-2.5 text-amber-400 font-normal text-center">현재 호가</th>
                                 <th class="p-2.5 text-blue-400 font-bold text-center">슬라이더 예측가</th>
-                                <th class="p-2.5 text-red-400 font-normal text-center">추가 하락(-10%)</th>
                                 <th class="p-2.5 text-blue-400 font-normal text-center">회복 시나리오</th>
                             </tr>
                         </thead>
@@ -1167,7 +1166,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const tr = document.createElement('tr');
             tr.className = 'border-b border-gray-800 hover:bg-white/[.02] transition';
             const aptPrice = calcPrice8(rate, fx, oil, tax, apt.peak2021, apt);
-            const escPrice = Math.round(aptPrice * 0.9 * 10) / 10;
             const recLow = Math.round(aptPrice * 0.95 * 10) / 10;
             const recHigh = Math.round(aptPrice * 1.15 * 10) / 10;
             const betaColor = apt.beta >= 1.2 ? '#f87171' : apt.beta >= 1.0 ? '#fbbf24' : '#34d399';
@@ -1179,7 +1177,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td class="p-2.5 text-center text-gray-400">${apt.peak2021}억</td>
                 <td class="p-2.5 text-center text-amber-400">${apt.current}억</td>
                 <td class="p-2.5 text-center text-white font-semibold">${aptPrice.toFixed(1)}억</td>
-                <td class="p-2.5 text-center text-red-400 font-semibold">${escPrice.toFixed(1)}억</td>
                 <td class="p-2.5 text-center text-blue-400 font-semibold">${recLow.toFixed(1)}~${recHigh.toFixed(1)}억</td>
             `;
             betaBody.appendChild(tr);
