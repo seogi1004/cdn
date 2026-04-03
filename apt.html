@@ -1242,7 +1242,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const dollarVal = Math.round(111000 * fx / 1e8 * 100) / 100;
         const totalCash = Math.round((5.8 + dollarVal) * 100) / 100;
 
-        const betaRegionOrder = ['수색뉴타운', '지축', '마곡', '덕은', '킨텍스', '운정'];
+        const betaRegionOrder = ['수색뉴타운', '지축', '마곡', '덕은', '킨텍스', '운정', '원흥'];
         const sortedApts = [...apartments].sort((a, b) => {
             const ka = a.region.replace(/\d+$/, ''), kb = b.region.replace(/\d+$/, '');
             return betaRegionOrder.indexOf(ka) - betaRegionOrder.indexOf(kb);
@@ -2003,7 +2003,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 
     // ═══════ APARTMENT SELECTOR (동네별 그룹) ═══════
     const aptSelector = document.getElementById('aptSelector');
-    const regionOrder = ['수색뉴타운', '지축', '마곡', '덕은', '킨텍스', '운정'];
+    const regionOrder = ['수색뉴타운', '지축', '마곡', '덕은', '킨텍스', '운정', '원흥'];
     const groupMap = new Map();
     apartments.forEach((apt, i) => {
         const key = apt.region.replace(/\d+$/, ''); // 수색뉴타운2→수색뉴타운
@@ -2013,25 +2013,16 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
     regionOrder.forEach(region => {
         const items = groupMap.get(region);
         if (!items) return;
-        if (items.length > 1) {
-            const grp = document.createElement('optgroup');
-            grp.label = region;
-            items.forEach(({ apt, i }) => {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = apt.name + ' ' + apt.size + ' (현재 ' + apt.current + '억)';
-                if (i === selectedAptIdx) opt.selected = true;
-                grp.appendChild(opt);
-            });
-            aptSelector.appendChild(grp);
-        } else {
-            const { apt, i } = items[0];
+        const grp = document.createElement('optgroup');
+        grp.label = region;
+        items.forEach(({ apt, i }) => {
             const opt = document.createElement('option');
             opt.value = i;
             opt.textContent = apt.name + ' ' + apt.size + ' (현재 ' + apt.current + '억)';
             if (i === selectedAptIdx) opt.selected = true;
-            aptSelector.appendChild(opt);
-        }
+            grp.appendChild(opt);
+        });
+        aptSelector.appendChild(grp);
     });
     aptSelector.addEventListener('change', () => {
         selectedAptIdx = parseInt(aptSelector.value);
