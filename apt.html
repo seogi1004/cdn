@@ -488,6 +488,7 @@
                 <div class="flex items-center gap-3 mb-4">
                     <h2 class="text-lg font-bold">시나리오 A vs B — 종합 비교</h2>
                     <span class="text-[9px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider">슬라이더 연동</span>
+                    <span id="methodBadge" class="text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-gray-500/20 text-gray-400">가중 팩터</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-xs" id="comparisonTable">
@@ -742,7 +743,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const C={blue:{l:'#3b82f6',h:'#60a5fa'},green:{l:'#10b981',h:'#34d399'},red:{l:'#ef4444',h:'#f87171'},amber:{l:'#f59e0b',h:'#fbbf24'},purple:{l:'#8b5cf6',h:'#a78bfa'}};
 
     // ═══════ MAIN CHART ═══════
-    const labels=['2016','2018','2020','2021\n(고점)','2023\n(침체)','2025','26.04\n(D+33)','26.10','27.04\n(만기)','27.12','28.06','28.12','29.06','29.12'];
+    // 시계열 기반 동적 라벨 — 과거 실거래 + 미래 예측
+    const histLabels = ['2019H2','2020H1','2021H1','2021H2','2022H1','2022H2','2023H1','2023H2','2024H1','2025H1','2026H1'];
+    const predLabels = ['26.04\n(D+33)','26.10','27.04\n(만기)','27.12','28.06','28.12','29.06','29.12'];
+    const histLabelDisplay = {'2019H2':'2019','2020H1':'2020','2021H1':'2021\n(고점)','2021H2':'21.H2','2022H1':'22.H1','2022H2':'22.H2\n(침체)','2023H1':'23.H1','2023H2':'23.H2','2024H1':'2024','2025H1':'2025','2026H1':'26.03'};
+    const labels = [...histLabels.map(h => histLabelDisplay[h] || h), ...predLabels];
+    const HIST_COUNT = histLabels.length; // number of historical slots
+    const PRED_START = HIST_COUNT; // index where predictions begin
 
     // ═══════ POLICY SUB-FACTORS (hoisted — generateScenario/simCalc 등에서 사용) ═══════
     const policyVal = document.getElementById('policyValue');
@@ -833,8 +840,8 @@ document.addEventListener('DOMContentLoaded', function() {
             get beta() { return regionBeta['지축'].beta; },
             color: '#10b981',
             peak2021: 12.0,
-            current: 10.0,
-            currentLabel: '10.0억 (최저호가 10억, KB 9.55~10.4)',
+            current: 10.4,
+            currentLabel: '10.4억 (MCP 202603 실거래 84㎡ 16F, KB 9.55~10.4)',
             note: '2019 · 852세대 · 3호선 지축역 5분 · 덕양구 15주 연속 상승 · 젊은층 유입',
             builtYear: 2019,
         },
@@ -856,9 +863,9 @@ document.addEventListener('DOMContentLoaded', function() {
             size: '84㎡',
             get beta() { return regionBeta['마곡'].beta; },
             color: '#f59e0b',
-            peak2021: 16.8,
+            peak2021: 15.0,
             current: 16.8,
-            currentLabel: '16.8억 (최저호가, 역대 신고가 경신 중)',
+            currentLabel: '16.8억 (역대 신고가 경신 중, MCP 202212 저점 11.6억 확인)',
             note: '2017 · 603세대 · 9호선 6분 · LG등 200사 17만명 · 매물품귀 · 신고가',
             builtYear: 2017,
         },
@@ -880,9 +887,9 @@ document.addEventListener('DOMContentLoaded', function() {
             size: '84㎡',
             get beta() { return regionBeta['수색뉴타운'].beta; },
             color: '#06b6d4',
-            peak2021: 12.5,
-            current: 12.5,
-            currentLabel: '12.5억 (최저호가, 2023 입주 후 신고가)',
+            peak2021: 13.9,
+            current: 13.9,
+            currentLabel: '13.9억 (MCP 202603 실거래 84㎡ 6F, 2023 입주 후 신고가)',
             note: '2023 · 1,464세대 · 수색13구역 · 수색초/증산초 · 롯데몰+GTX-E 경유 예정',
             builtYear: 2023,
         },
@@ -929,8 +936,8 @@ document.addEventListener('DOMContentLoaded', function() {
             get beta() { return regionBeta['킨텍스'].beta; },
             color: '#a855f7',
             peak2021: 11.5,
-            current: 10.8,
-            currentLabel: '10.8억 (최저호가, 실거래 평균 11억+, A/B타입 갭 큼)',
+            current: 11.6,
+            currentLabel: '11.6억 (MCP 202603 실거래 84㎡ 25F 11.4억·28F 11.85억)',
             note: '2019 · 1,100세대 · GTX-A 2번출구 · 중학교無 · 초등1km · 원마운트 회생 · 테크노밸리 공정16% · 라이브시티 2030↑',
             builtYear: 2019,
         },
@@ -941,8 +948,8 @@ document.addEventListener('DOMContentLoaded', function() {
             get beta() { return regionBeta['원흥'].beta; },
             color: '#d946ef',
             peak2021: 8.5,
-            current: 7.0,
-            currentLabel: '7.0억 (최저호가 7.0, 최고 8.5)',
+            current: 7.83,
+            currentLabel: '7.83억 (MCP 202503 실거래 84㎡ 37F, 91㎡ 8.4억)',
             note: '2018 · 450세대 · 3호선 원흥역 도보3분 · 삼송지구 서측 · 역세권 상권 형성 · GTX-C 2031+ 수혜 기대 · 방송통신대 인접 · 소규모 단지(유동성↓)',
             builtYear: 2018,
         },
@@ -952,17 +959,45 @@ document.addEventListener('DOMContentLoaded', function() {
     // ═══════ DYNAMIC SCENARIO GENERATOR ═══════
     // 기본 실거래 데이터 (아파트별)
     const aptHistData = {
-        // [2016, 2018, 2020, 2021고점, 2023침체, 2025] — 실거래가 기반
-        '지축': [null, null, 8.0, 12.0, 8.5, 10.0],          // 2019 준공: 20.초 6.7→8.5, 21고점 12, 22말 8.5, 현재 KB하한 9.55
-        '수색뉴타운': [null, null, 10.5, 15.0, 11.0, 14.2],  // 파인시티자이 최저호가 14.2
-        '마곡': [null, 9.0, 11.0, 15.0, 11.6, 16.8],         // 2017 준공: 20년 11.1, 21.09 최고 15.05, 22.12 저점 11.6, 24.11 실거래 14.35
-        '수색뉴타운2': [null, null, 9.0, 13.0, 10.0, 12.8],  // 2020 입주: 최저호가 12.8
-        '수색뉴타운3': [null, null, null, null, 9.5, 12.5], // 2023.07 입주: 최저호가 12.5, peak=12.5(신고가)
-        '운정': [null, null, null, null, null, 6.9],          // 2026.03 입주: 84A 최저호가 6.9, 96B 7.2
-        '덕은': [null, null, 7.5, 9.5, 8.5, 11.5],           // 2020 입주: 최저호가 11.5, 신고가 경신 중
-        '덕은2': [null, null, null, null, 7.0, 11.2],        // 2022.12 입주: 분양가 7.0, 26.02 평균 11.59 고점
-        '킨텍스': [null, null, 7.5, 10.5, 8.5, 10.8],         // 2019 입주: 분양가 5.5, 최저호가 10.8, 실거래 평균 11억+
-        '원흥': [null, null, 6.0, 8.5, 6.5, 7.0],              // 2018 입주: 고점 8.5, 현재 최저호가 7.0
+        // {date, price}[] — MCP 실거래가 기반 반기별 시계열 (2026.04 업데이트)
+        '지축': [
+            {date:'2020H1', price:8.0}, {date:'2021H1', price:12.0}, {date:'2022H2', price:9.8},
+            {date:'2024H1', price:8.1}, {date:'2025H1', price:8.0}, {date:'2026H1', price:10.4},
+        ],
+        '수색뉴타운': [
+            {date:'2020H1', price:10.5}, {date:'2021H1', price:15.0}, {date:'2022H2', price:11.0},
+            {date:'2026H1', price:14.2},
+        ],
+        '마곡': [
+            {date:'2019H2', price:9.0}, {date:'2020H1', price:11.0}, {date:'2021H1', price:15.0},
+            {date:'2022H2', price:11.6}, {date:'2026H1', price:16.8},
+        ],
+        '수색뉴타운2': [
+            {date:'2020H1', price:9.0}, {date:'2021H1', price:13.0}, {date:'2022H1', price:12.0},
+            {date:'2022H2', price:10.0}, {date:'2023H1', price:10.4}, {date:'2024H1', price:11.5},
+            {date:'2025H1', price:10.9}, {date:'2026H1', price:12.8},
+        ],
+        '수색뉴타운3': [
+            {date:'2023H1', price:11.5}, {date:'2023H2', price:9.5},
+            {date:'2025H1', price:12.5}, {date:'2026H1', price:13.9},
+        ],
+        '운정': [{date:'2026H1', price:6.9}],
+        '덕은': [
+            {date:'2020H1', price:7.5}, {date:'2021H1', price:9.5}, {date:'2022H2', price:6.83},
+            {date:'2024H1', price:11.3}, {date:'2025H1', price:11.5}, {date:'2026H1', price:11.5},
+        ],
+        '덕은2': [
+            {date:'2022H2', price:7.0}, {date:'2024H1', price:11.4}, {date:'2026H1', price:11.2},
+        ],
+        '킨텍스': [
+            {date:'2020H1', price:7.5}, {date:'2021H1', price:10.5}, {date:'2022H2', price:8.5},
+            {date:'2025H1', price:10.5}, {date:'2026H1', price:11.6},
+        ],
+        '원흥': [
+            {date:'2020H1', price:6.0}, {date:'2021H1', price:8.5}, {date:'2022H1', price:8.0},
+            {date:'2022H2', price:6.75}, {date:'2024H1', price:7.5}, {date:'2025H1', price:7.83},
+            {date:'2026H1', price:7.83},
+        ],
     };
 
     // 시나리오별 매크로 오프셋
@@ -978,9 +1013,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const current = apt.current;
         const offset = scenarioOffsets[sc];
 
-        // 실거래 데이터
-        const hist = aptHistData[apt.region] || aptHistData['지축'].map(v => Math.round(v * (peak / 12.0) * 10) / 10);
-        const histPadded = [...hist, null, null, null, null, null, null, null, null];
+        // 실거래 데이터 — 시계열 기반: aptHistData에서 histLabels 위치에 매핑
+        const histEntries = aptHistData[apt.region] || [];
+        const histArr = histLabels.map(dateKey => {
+            const entry = histEntries.find(e => e.date === dateKey);
+            return entry ? entry.price : null;
+        });
+        // 예측 슬롯 추가
+        const histPadded = [...histArr, ...new Array(predLabels.length).fill(null)];
 
         // ── "현재가 기준 추가 하락" (simCalc 가중치의 ~0.65배 스케일) ──
         // simCalc은 고점 기준 절대 하락, 여기는 현재가 기준 추가 하락이므로 스케일 축소
@@ -1035,40 +1075,40 @@ document.addEventListener('DOMContentLoaded', function() {
             : 0;
         const adjustedBottom = Math.round((finalBottom + policyLiquiditySupport) * 10) / 10;
 
-        // ── 시간축별 예상가 (idx6=26.04 ~ idx13=29.12) ──
-        const pred = new Array(14).fill(null);
-        pred[6] = current;                                                               // 현재
-        pred[7] = Math.round((current * 0.65 + adjustedBottom * 0.35) * 10) / 10;       // 26.10: 하락 진행
-        pred[8] = Math.round((current * 0.25 + adjustedBottom * 0.75) * 10) / 10;       // 27.04: 바닥 근접 (전세 만기)
-        pred[9] = adjustedBottom;                                                         // 27.12: 바닥
+        // ── 시간축별 예상가 (PRED_START=26.04 ~ PRED_START+7=29.12) ──
+        const pred = new Array(labels.length).fill(null);
+        pred[PRED_START] = current;                                                               // 현재
+        pred[PRED_START+1] = Math.round((current * 0.65 + adjustedBottom * 0.35) * 10) / 10;     // 26.10: 하락 진행
+        pred[PRED_START+2] = Math.round((current * 0.25 + adjustedBottom * 0.75) * 10) / 10;     // 27.04: 바닥 근접 (전세 만기)
+        pred[PRED_START+3] = adjustedBottom;                                                       // 27.12: 바닥
         const recoverySliderEl = document.getElementById('recoveryRateSlider');
         const rr = recoverySliderEl ? parseFloat(recoverySliderEl.value) / 100 : offset.recoveryRate;
-        pred[10] = Math.round(adjustedBottom * (1 + rr * 1) * 10) / 10;                 // 28.06
-        pred[11] = Math.round(adjustedBottom * (1 + rr * 2) * 10) / 10;                 // 28.12
-        pred[12] = Math.round(adjustedBottom * (1 + rr * 3) * 10) / 10;                 // 29.06
-        pred[13] = Math.round(adjustedBottom * (1 + rr * 4) * 10) / 10;                 // 29.12
+        pred[PRED_START+4] = Math.round(adjustedBottom * (1 + rr * 1) * 10) / 10;                 // 28.06
+        pred[PRED_START+5] = Math.round(adjustedBottom * (1 + rr * 2) * 10) / 10;                 // 28.12
+        pred[PRED_START+6] = Math.round(adjustedBottom * (1 + rr * 3) * 10) / 10;                 // 29.06
+        pred[PRED_START+7] = Math.round(adjustedBottom * (1 + rr * 4) * 10) / 10;                 // 29.12
 
         // A: 2027.04 매수 후 시세
-        const buyA = new Array(14).fill(null);
-        for (let i = 8; i <= 13; i++) buyA[i] = pred[i];
+        const buyA = new Array(labels.length).fill(null);
+        for (let i = PRED_START+2; i <= PRED_START+7; i++) buyA[i] = pred[i];
 
         // 건축비 하한선 (시각화용 — 대체원가 기반)
-        const constFloor = new Array(14).fill(null);
+        const constFloor = new Array(labels.length).fill(null);
         const floorBase = peak * 0.65;
-        for (let i = 6; i <= 13; i++) constFloor[i] = Math.round((floorBase + (i - 6) * peak * 0.015) * 10) / 10;
+        for (let i = PRED_START; i <= PRED_START+7; i++) constFloor[i] = Math.round((floorBase + (i - PRED_START) * peak * 0.015) * 10) / 10;
 
         // 달러 환산 현금 (슬라이더 환율 반영)
         const dollarVal = Math.round(111000 * fx / 1e8 * 100) / 100;
         const totalCash0 = Math.round((5.8 + dollarVal) * 100) / 100;
 
-        const cashA = new Array(14).fill(null);
-        cashA[6] = totalCash0;
-        cashA[7] = Math.round((totalCash0 + 0.15) * 100) / 100;
+        const cashA = new Array(labels.length).fill(null);
+        cashA[PRED_START] = totalCash0;
+        cashA[PRED_START+1] = Math.round((totalCash0 + 0.15) * 100) / 100;
 
-        const cashB = new Array(14).fill(null);
-        cashB[6] = totalCash0;
-        cashB[7] = Math.round((totalCash0 + 0.15) * 100) / 100;
-        for (let i = 8; i <= 11; i++) cashB[i] = Math.round((totalCash0 + 0.1 - (i - 7) * 0.02) * 100) / 100;
+        const cashB = new Array(labels.length).fill(null);
+        cashB[PRED_START] = totalCash0;
+        cashB[PRED_START+1] = Math.round((totalCash0 + 0.15) * 100) / 100;
+        for (let i = PRED_START+2; i <= PRED_START+5; i++) cashB[i] = Math.round((totalCash0 + 0.1 - (i - PRED_START - 1) * 0.02) * 100) / 100;
 
         return { hist: histPadded, pred, buyA, constFloor, cashA, cashB,
             _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, ageYears, agePress, dsrPress, jeonseRatio, gapSellOffPress, constBase, constOilG, constFxG, constPFG, landDiscount, supplyCliff, upSupport, rawExtraDrop, betaAdj, alreadyDropped, extraDropPct, totalDropFromPeak, bottomPrice, absoluteFloor, finalBottom, policyLoanCeiling, policyLiquiditySupport, adjustedBottom, rr } };
@@ -1084,7 +1124,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const s = generateScenario(sc, r, f, o, t);
         const aptLabel = apt.region + ' ' + apt.name;
         const datasets = [
-            {label:aptLabel+' (실거래)',data:s.hist,borderColor:apt.color,borderWidth:2,pointRadius:3,pointBackgroundColor:apt.color,fill:false,tension:.35,spanGaps:false},
+            {label:aptLabel+' (실거래)',data:s.hist,borderColor:apt.color,borderWidth:2,pointRadius:3,pointBackgroundColor:apt.color,fill:false,tension:.35,spanGaps:true},
             {label:aptLabel+' 예측 (16-Factor)',data:s.pred,borderColor:apt.color+'99',borderWidth:2.5,borderDash:[6,4],pointRadius:4,pointBackgroundColor:apt.color+'99',pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.35,spanGaps:false},
             {label:'건축비 하한선 (대체원가)',data:s.constFloor,borderColor:C.amber.h,borderWidth:1.5,borderDash:[2,3],pointRadius:0,fill:false,tension:.3,spanGaps:false},
             {label:'A: 2027 매수 후 시세',data:s.buyA,borderColor:C.blue.h,borderWidth:2.5,pointRadius:5,pointBackgroundColor:C.blue.h,pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.3,spanGaps:false},
@@ -1104,13 +1144,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     filter:item=>!item.dataset.label.includes('Alvin'),
                     callbacks:{label:ctx=>ctx.parsed.y===null?null:`${ctx.dataset.label}: ${ctx.parsed.y}억`}},
                 annotation:{annotations:{
-                    jeonse:{type:'line',xMin:8,xMax:8,borderColor:'rgba(245,158,11,.35)',borderWidth:1.5,borderDash:[3,3],
+                    jeonse:{type:'line',xMin:PRED_START+2,xMax:PRED_START+2,borderColor:'rgba(245,158,11,.35)',borderWidth:1.5,borderDash:[3,3],
                         label:{display:true,content:'전세만기',position:'end',backgroundColor:'rgba(245,158,11,.75)',color:'#fff',font:{size:9,weight:'bold'},padding:{x:6,y:3},borderRadius:4,yAdjust:8}},
-                    popDecline:{type:'line',xMin:12,xMax:12,borderColor:'rgba(139,92,246,.35)',borderWidth:1.5,borderDash:[3,3],
+                    popDecline:{type:'line',xMin:PRED_START+6,xMax:PRED_START+6,borderColor:'rgba(139,92,246,.35)',borderWidth:1.5,borderDash:[3,3],
                         label:{display:true,content:'인구감소',position:'start',backgroundColor:'rgba(139,92,246,.75)',color:'#fff',font:{size:9,weight:'bold'},padding:{x:6,y:3},borderRadius:4,yAdjust:-8}},
-                    targetA:{type:'box',xMin:7.5,xMax:9,yMin:7,yMax:8.2,backgroundColor:'rgba(59,130,246,.08)',borderColor:'rgba(59,130,246,.35)',borderWidth:2,borderDash:[4,4],
+                    targetA:{type:'box',xMin:PRED_START+1.5,xMax:PRED_START+3,yMin:7,yMax:8.2,backgroundColor:'rgba(59,130,246,.08)',borderColor:'rgba(59,130,246,.35)',borderWidth:2,borderDash:[4,4],
                         label:{display:true,content:'A 매수',position:{x:'center',y:'start'},color:'#93c5fd',font:{size:10,weight:'900'},padding:4}},
-                    targetB:{type:'box',xMin:11,xMax:13,yMin:6,yMax:7.5,backgroundColor:'rgba(16,185,129,.08)',borderColor:'rgba(16,185,129,.35)',borderWidth:2,borderDash:[4,4],
+                    targetB:{type:'box',xMin:PRED_START+5,xMax:PRED_START+7,yMin:6,yMax:7.5,backgroundColor:'rgba(16,185,129,.08)',borderColor:'rgba(16,185,129,.35)',borderWidth:2,borderDash:[4,4],
                         label:{display:true,content:'B 매수',position:{x:'center',y:'start'},color:'#6ee7b7',font:{size:10,weight:'900'},padding:4}},
                 }}
             },
@@ -1281,7 +1321,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const chartData = ds('war', rate, fx, oil, tax);
         const scenarioResult = chartData._scenario;
         // priceA: 차트·비교표·시뮬레이터 전체에서 동일한 예상가 사용
-        const priceA = scenarioResult ? scenarioResult.pred[8] : price;
+        const priceA = scenarioResult ? scenarioResult.pred[PRED_START+2] : price;
 
         // Update policy slider label
         // 정책 합산값 라벨 업데이트
@@ -1347,7 +1387,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const simJeonseRatio = document.getElementById('jeonseRatioSlider') ? parseInt(document.getElementById('jeonseRatioSlider').value) : 55;
         const gapSellOffEff = Math.max((60 - simJeonseRatio) / 10 * 2.0, 0);
 
-        const price = scenarioResult ? scenarioResult.pred[8] : Math.round(base * 0.8 * 10) / 10;
+        // MC를 비교표·verdict 전에 실행하여 lastMcResult 갱신
+        if (currentMethod === 'montecarlo') {
+            runMonteCarlo(rate, fx, oil, tax);
+        } else {
+            lastMcResult = null; // 다른 탭에서는 MC 결과 초기화
+        }
+
+        const price = scenarioResult ? scenarioResult.pred[PRED_START+2] : Math.round(base * 0.8 * 10) / 10;
         const dropPct = Math.round((1 - price / base) * 1000) / 10;
 
         // ═══════ 가계 현금흐름 계산 ═══════
@@ -1402,8 +1449,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalA = totalCash2027;
         const buyableA = totalCash2027 >= priceA;
 
-        // Scenario B: 2029 매수 — 차트(generateScenario)의 pred[12] (29.06) 사용
-        const priceB = scenarioResult ? scenarioResult.pred[12] : Math.round(base * 0.75 * 10) / 10;
+        // Scenario B: 2029 매수 — 차트(generateScenario)의 pred[PRED_START+6] (29.06) 사용
+        const priceB = scenarioResult ? scenarioResult.pred[PRED_START+6] : Math.round(base * 0.75 * 10) / 10;
         const dropPct2029 = Math.round((1 - priceB / base) * 1000) / 10;
 
         // 2029 자금 — 이미 simCalc 상단에서 계산한 totalCash2029 사용
@@ -1412,7 +1459,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalB = totalCash2029;
         const buyableB = totalCash2029 >= priceB;
 
-        // 2029 예상 시세: A안 매수 후 2029 시점 시세 = 모델의 pred[12] (B안 가격과 동일)
+        // 2029 예상 시세: A안 매수 후 2029 시점 시세 = 모델의 pred[PRED_START+6] (B안 가격과 동일)
         const recoveryA = priceB; // 2029년 시세는 매수 시점과 무관하게 모델 예측값 사용
 
         // 건축비 하방 경직성
@@ -1441,8 +1488,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const taxVsOecd = tax < 0.33 ? 'OECD 평균 이하' : tax < 0.83 ? 'OECD 중간' : 'OECD 상위권';
         const taxColor = tax >= 1.0 ? 'text-red-400' : tax >= 0.33 ? 'text-amber-400' : 'text-orange-400';
 
+        // MC 활성 시 확률 기반 비교표, 아닐 때 기존 포인트 추정
+        const mc = (currentMethod === 'montecarlo' && lastMcResult) ? lastMcResult : null;
+        const priceALabel = mc
+            ? `<span class="text-white font-bold">${mc.p50.toFixed(1)}억</span> <span class="text-purple-400 text-[9px]">(80%: ${mc.p10.toFixed(1)}~${mc.p90.toFixed(1)})</span>`
+            : `<span class="text-white font-bold">${priceA.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${(Math.round((1 - priceA / base) * 1000) / 10).toFixed(1)}%)</span>`;
+        const buyableALabel = mc
+            ? `<span class="${mc.buyProb >= 70 ? 'text-green-400' : mc.buyProb >= 40 ? 'text-amber-400' : 'text-red-400'} font-bold">${mc.buyProb}%</span> <span class="text-gray-500">(10,000회)</span>`
+            : (buyableA ? '<span class="text-green-400 font-bold">가능</span>' : '<span class="text-red-400 font-bold">대출 필요</span>');
+
         const compRows = [
-            { label: '예상 매수가', a: `<span class="text-white font-bold">${priceA.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${(Math.round((1 - priceA / base) * 1000) / 10).toFixed(1)}%)</span>`, b: `<span class="text-white font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${dropPct2029.toFixed(1)}%)</span>` },
+            { label: mc ? '예상가 (MC P50)' : '예상 매수가', a: priceALabel, b: `<span class="text-white font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(고점 -${dropPct2029.toFixed(1)}%)</span>` },
+            ...(mc ? [{ label: '무대출 매수 확률', a: buyableALabel, b: '<span class="text-gray-500">—</span>' }] : []),
             { label: '연간 보유세 (실효 ' + tax.toFixed(2) + '%)', a: `<span class="${taxColor} font-bold">${taxAnnualA}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualA/12)}만)</span>`, b: `<span class="${taxColor} font-bold">${taxAnnualB}만원</span> <span class="text-gray-500">(월 ${Math.round(taxAnnualB/12)}만)</span>` },
             { label: '5년 보유세 누적', a: `<span class="${taxColor}">${(taxAnnualA * 5 / 10000).toFixed(2)}억</span> <span class="text-gray-500">(${taxVsOecd})</span>`, b: `<span class="${taxColor}">${(taxAnnualB * 5 / 10000).toFixed(2)}억</span>` },
             { label: '건축비 발 하방 경직성', a: `<span class="text-amber-400">${constFloor}</span>`, b: `<span class="text-amber-400">${constFloorB}</span>` },
@@ -1453,6 +1510,19 @@ document.addEventListener('DOMContentLoaded', function() {
             { label: '2029 예상 시세 (모델)', a: `<span class="text-blue-400 font-bold">${recoveryA.toFixed(1)}억</span> <span class="text-gray-500">(A안 대비 ${priceA > recoveryA ? '-' : '+'}${Math.abs(Math.round((recoveryA/priceA-1)*1000)/10)}%)</span>`, b: `<span class="text-blue-400 font-bold">${priceB.toFixed(1)}억</span> <span class="text-gray-500">(매수 시점)</span>` },
             { label: '최대 리스크', a: `<span class="text-red-400">${riskA}</span>`, b: `<span class="text-red-400">${riskB}</span>` },
         ];
+
+        // 방법론 배지 업데이트
+        const methodBadge = document.getElementById('methodBadge');
+        if (mc) {
+            methodBadge.textContent = '몬테카를로 P50';
+            methodBadge.className = 'text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-purple-500/20 text-purple-400';
+        } else if (currentMethod === 'sensitivity') {
+            methodBadge.textContent = '민감도 분석';
+            methodBadge.className = 'text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-cyan-500/20 text-cyan-400';
+        } else {
+            methodBadge.textContent = '가중 팩터';
+            methodBadge.className = 'text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-gray-500/20 text-gray-400';
+        }
 
         const compBody = document.getElementById('compBody');
         compBody.innerHTML = compRows.map(r => `
@@ -1467,11 +1537,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const verdictText = document.getElementById('verdictText');
         const verdictSummary = document.getElementById('verdictSummary');
 
-        // Decision logic
-        // 보유세 높으면 보유 비용 부담 → B안(더 싼 가격)이 유리해짐
+        // Decision logic — MC 활성 시 확률 기반, 아닐 때 포인트 추정 기반
         const taxPenalty = tax >= 1.0 ? -2 : tax >= 0.5 ? -1 : 0;
         const priceFloor = Math.round(base * 0.65 * 10) / 10; // 대체원가 하한
-        const aAdvantage = (buyableA ? 2 : -3) + (priceA <= priceFloor * 1.1 ? 2 : 0) + (rate < 7 ? 1 : 0) + taxPenalty;
+        // MC 활성 시: 매수 확률 50% 이상이면 buyable 간주
+        const effectiveBuyableA = mc ? (mc.buyProb >= 50) : buyableA;
+        const aAdvantage = (effectiveBuyableA ? 2 : -3) + (priceA <= priceFloor * 1.1 ? 2 : 0) + (rate < 7 ? 1 : 0) + taxPenalty;
         const bAdvantage = (buyableB ? 2 : -3) + (priceB < priceA ? 2 : 0) + (dropPct2029 > dropPct + 3 ? 1 : 0) - 2; // 리스크 패널티
         const preferA = aAdvantage >= bAdvantage;
 
@@ -1480,24 +1551,51 @@ document.addEventListener('DOMContentLoaded', function() {
         const taxHeavy = tax >= 0.5;
 
         let verdictHTML = '';
-        if (preferA && buyableA) {
-            verdictHTML = `
-                <p>현재 슬라이더 조건(금리 ${rate.toFixed(1)}%, 환율 ${fx.toLocaleString()}원, 유가 $${oil}, 보유세 ${tax.toFixed(2)}%)에서 <strong class="text-blue-400">${apt.region} ${apt.name}</strong> 예상가는 <strong class="text-white">${priceA.toFixed(1)}억</strong>이며, <strong class="text-green-400">무대출 매수 가능</strong>합니다.</p>
-                <p>2027.04 전세 만기 시점 매수(A안)가 유리합니다. 전세 보증금을 온전히 회수해 즉시 투입할 수 있고, 베이비부머 매도 본격화 전에 진입하는 전략입니다.${taxHeavy ? ' 다만 보유세 부담이 커 실질 수익률에 유의해야 합니다.' : ''}</p>
-                <p class="text-amber-400">⚠ ${taxWarning}${riskA}에 유의하세요. 건축비 상승(대체원가 ${oil >= 80 ? '강' : '중'})이 하방을 받쳐주지만 ${rate >= 7 ? '고금리 환경' : '경기 변수'}은 지속 모니터링 필요합니다.</p>
-            `;
-        } else if (preferA && !buyableA) {
-            verdictHTML = `
-                <p>현재 조건에서 A안(2027 매수) 선호이나, 예상가 <strong class="text-white">${priceA.toFixed(1)}억</strong> 기준 <strong class="text-red-400">대출 필요</strong>합니다.</p>
-                <p>달러 매도 타이밍을 환율 ${Math.round(fx * 1.05).toLocaleString()}원+ 구간에서 잡거나, 매수가 협상을 통해 갭을 줄여야 합니다.${taxHeavy ? ' 보유세 ' + tax.toFixed(2) + '% 환경에서는 매수가를 더 낮추는 협상이 중요합니다.' : ''} 또는 B안(2029)으로 추가 하락을 기다리는 것도 방법입니다.</p>
-                <p class="text-amber-400">⚠ ${taxWarning}B안 선택 시 전세 보증금 미반환 리스크(반전세 전환, -${jeonseRisk}억)를 반드시 고려하세요.</p>
-            `;
+        if (mc) {
+            // ═══ 몬테카를로 기반 verdict ═══
+            const probColor = mc.buyProb >= 70 ? 'text-green-400' : mc.buyProb >= 40 ? 'text-amber-400' : 'text-red-400';
+            const spreadPct = Math.round((mc.p90 - mc.p10) / mc.p50 * 1000) / 10;
+            if (preferA && mc.buyProb >= 50) {
+                verdictHTML = `
+                    <p><span class="text-purple-400 font-bold">📊 몬테카를로 10,000회</span> — <strong class="text-blue-400">${apt.region} ${apt.name}</strong> 중앙값 <strong class="text-white">${mc.p50.toFixed(1)}억</strong>, 80% 구간 <span class="text-green-400">${mc.p10.toFixed(1)}</span>~<span class="text-red-400">${mc.p90.toFixed(1)}억</span> (불확실성 ±${spreadPct}%)</p>
+                    <p>무대출 매수 확률 <strong class="${probColor}">${mc.buyProb}%</strong> — A안(2027 매수) 유리. ${mc.buyProb >= 70 ? '대부분의 시나리오에서 무대출 매수 가능하므로 적극 검토 권장.' : mc.buyProb >= 50 ? '절반 이상의 시나리오에서 가능하나 환율·금리 변동에 따라 대출이 필요할 수 있습니다.' : '가능하지만 변수 변동 시 대출 필요 가능성이 높습니다.'}</p>
+                    <p class="text-amber-400">⚠ ${taxWarning}P90(비관) ${mc.p90.toFixed(1)}억 시나리오에서는 ${mc.p90 > totalCash2027 ? '대출 ' + (mc.p90 - totalCash2027).toFixed(1) + '억 필요' : '매수 가능'}. ${rate >= 7 ? '고금리 환경' : '경기 변수'} 지속 모니터링.</p>
+                `;
+            } else if (preferA && mc.buyProb < 50) {
+                verdictHTML = `
+                    <p><span class="text-purple-400 font-bold">📊 몬테카를로 10,000회</span> — <strong class="text-blue-400">${apt.region} ${apt.name}</strong> 중앙값 <strong class="text-white">${mc.p50.toFixed(1)}억</strong>, 80% 구간 <span class="text-green-400">${mc.p10.toFixed(1)}</span>~<span class="text-red-400">${mc.p90.toFixed(1)}억</span></p>
+                    <p>무대출 매수 확률 <strong class="${probColor}">${mc.buyProb}%</strong> — A안 선호이나 <strong class="text-red-400">과반 시나리오에서 대출 필요</strong>. 낙관(P10) ${mc.p10.toFixed(1)}억에서는 무대출 가능하지만, 중앙값 기준으로는 자금이 부족합니다.</p>
+                    <p>달러 매도 타이밍(환율 ${Math.round(fx * 1.05).toLocaleString()}원+)을 잡거나, 매수가 협상으로 갭을 줄이세요. 또는 B안(2029) 대기도 방법입니다.</p>
+                    <p class="text-amber-400">⚠ ${taxWarning}B안 선택 시 전세 보증금 리스크(반전세 전환, -${jeonseRisk}억) 고려 필수.</p>
+                `;
+            } else {
+                verdictHTML = `
+                    <p><span class="text-purple-400 font-bold">📊 몬테카를로 10,000회</span> — 중앙값 <strong class="text-white">${mc.p50.toFixed(1)}억</strong>, 80% 구간 ${mc.p10.toFixed(1)}~${mc.p90.toFixed(1)}억 (불확실성 ±${spreadPct}%)</p>
+                    <p><strong class="text-green-400">B안(2029 매수)</strong> 유리. 예상 추가 하락폭 <strong class="text-white">-${(dropPct2029 - dropPct).toFixed(1)}%p</strong>, 진입가 ${priceB.toFixed(1)}억. MC 기준 현재 무대출 확률이 ${mc.buyProb}%로 ${mc.buyProb < 40 ? '낮아 자금 확보 기간이 필요합니다' : '2년 추가 저축으로 확률을 높일 수 있습니다'}.</p>
+                    <p class="text-amber-400">⚠ ${taxWarning}핵심 리스크: ${riskB}. 전세 보증보험 필수.${taxHeavy ? ' 보유세 연 ' + taxAnnualB + '만원 포함 계산.' : ''}</p>
+                `;
+            }
         } else {
-            verdictHTML = `
-                <p>현재 조건(금리 ${rate.toFixed(1)}%, 유가 $${oil}, 보유세 ${tax.toFixed(2)}%)에서는 <strong class="text-green-400">B안(2029 매수)</strong>이 상대적으로 유리합니다. 예상 추가 하락폭 <strong class="text-white">-${(dropPct2029 - dropPct).toFixed(1)}%p</strong>를 감안하면 ${priceB.toFixed(1)}억까지 진입 가능합니다.</p>
-                <p>${taxWarning}다만 2년 대기 기간 중 전세 보증금 리스크(반전세 전환 시 -${jeonseRisk}억), 베이비부머 본격 매도로 인한 가격 변동성 확대에 유의해야 합니다.</p>
-                <p class="text-amber-400">⚠ 핵심 리스크: ${riskB}. 전세 계약 갱신 시 보증보험 필수 가입을 권장합니다.${taxHeavy ? ' 보유세 부담도 연간 ' + taxAnnualB + '만원으로 실질 수익률 계산에 포함하세요.' : ''}</p>
-            `;
+            // ═══ 가중 팩터 / 민감도 기반 verdict (기존) ═══
+            if (preferA && buyableA) {
+                verdictHTML = `
+                    <p>현재 슬라이더 조건(금리 ${rate.toFixed(1)}%, 환율 ${fx.toLocaleString()}원, 유가 $${oil}, 보유세 ${tax.toFixed(2)}%)에서 <strong class="text-blue-400">${apt.region} ${apt.name}</strong> 예상가는 <strong class="text-white">${priceA.toFixed(1)}억</strong>이며, <strong class="text-green-400">무대출 매수 가능</strong>합니다.</p>
+                    <p>2027.04 전세 만기 시점 매수(A안)가 유리합니다. 전세 보증금을 온전히 회수해 즉시 투입할 수 있고, 베이비부머 매도 본격화 전에 진입하는 전략입니다.${taxHeavy ? ' 다만 보유세 부담이 커 실질 수익률에 유의해야 합니다.' : ''}</p>
+                    <p class="text-amber-400">⚠ ${taxWarning}${riskA}에 유의하세요. 건축비 상승(대체원가 ${oil >= 80 ? '강' : '중'})이 하방을 받쳐주지만 ${rate >= 7 ? '고금리 환경' : '경기 변수'}은 지속 모니터링 필요합니다.</p>
+                `;
+            } else if (preferA && !buyableA) {
+                verdictHTML = `
+                    <p>현재 조건에서 A안(2027 매수) 선호이나, 예상가 <strong class="text-white">${priceA.toFixed(1)}억</strong> 기준 <strong class="text-red-400">대출 필요</strong>합니다.</p>
+                    <p>달러 매도 타이밍을 환율 ${Math.round(fx * 1.05).toLocaleString()}원+ 구간에서 잡거나, 매수가 협상을 통해 갭을 줄여야 합니다.${taxHeavy ? ' 보유세 ' + tax.toFixed(2) + '% 환경에서는 매수가를 더 낮추는 협상이 중요합니다.' : ''} 또는 B안(2029)으로 추가 하락을 기다리는 것도 방법입니다.</p>
+                    <p class="text-amber-400">⚠ ${taxWarning}B안 선택 시 전세 보증금 미반환 리스크(반전세 전환, -${jeonseRisk}억)를 반드시 고려하세요.</p>
+                `;
+            } else {
+                verdictHTML = `
+                    <p>현재 조건(금리 ${rate.toFixed(1)}%, 유가 $${oil}, 보유세 ${tax.toFixed(2)}%)에서는 <strong class="text-green-400">B안(2029 매수)</strong>이 상대적으로 유리합니다. 예상 추가 하락폭 <strong class="text-white">-${(dropPct2029 - dropPct).toFixed(1)}%p</strong>를 감안하면 ${priceB.toFixed(1)}억까지 진입 가능합니다.</p>
+                    <p>${taxWarning}다만 2년 대기 기간 중 전세 보증금 리스크(반전세 전환 시 -${jeonseRisk}억), 베이비부머 본격 매도로 인한 가격 변동성 확대에 유의해야 합니다.</p>
+                    <p class="text-amber-400">⚠ 핵심 리스크: ${riskB}. 전세 계약 갱신 시 보증보험 필수 가입을 권장합니다.${taxHeavy ? ' 보유세 부담도 연간 ' + taxAnnualB + '만원으로 실질 수익률 계산에 포함하세요.' : ''}</p>
+                `;
+            }
         }
         verdictText.innerHTML = verdictHTML;
 
@@ -1522,7 +1620,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('simPriceB').style.opacity = preferA ? '0.4' : '1';
 
         // 바닥 예측가
-        const bottomEst = scenarioResult ? scenarioResult.pred[9] : Math.round(Math.max(apt.current * 0.8, base * 0.65) * 10) / 10;
+        const bottomEst = scenarioResult ? scenarioResult.pred[PRED_START+3] : Math.round(Math.max(apt.current * 0.8, base * 0.65) * 10) / 10;
         document.getElementById('simBottom').textContent = bottomEst.toFixed(1) + '억';
         document.getElementById('simBottomTiming').textContent = '2027 하반기 예상';
 
@@ -1620,10 +1718,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         renderBetaTable(rate, fx, oil, tax);
         renderHeatmap(tax);
-        // Run alternative analysis methods if active
-        if (currentMethod === 'montecarlo') {
-            runMonteCarlo(rate, fx, oil, tax);
-        } else if (currentMethod === 'sensitivity') {
+        // Run alternative analysis methods if active (MC는 비교표 전에 이미 실행됨)
+        if (currentMethod === 'sensitivity') {
             runSensitivity(rate, fx, oil, tax);
         }
 
@@ -1797,11 +1893,26 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
     function calcPrice8(r, f, o, t, peakPrice, aptObj) {
         const apt = aptObj || apartments[selectedAptIdx];
         const scenario = generateScenario('war', r, f, o, t, apt);
-        return scenario.pred[8]; // A안 (2027) 예상가
+        return scenario.pred[PRED_START+2]; // A안 (2027.04) 예상가
     }
 
     let mcChartInstance = null;
     let tornadoChartInstance = null;
+    let lastMcResult = null; // MC 결과를 verdict/비교표에 피드백
+
+    // 실거래 시계열에서 반기별 수익률의 표준편차 (연환산) 계산
+    function calcHistVolatility(region) {
+        const entries = aptHistData[region] || aptHistData['지축'];
+        const prices = entries.filter(e => e.price !== null).map(e => e.price);
+        if (prices.length < 3) return 0.15; // 데이터 부족 시 기본 15%
+        const returns = [];
+        for (let i = 1; i < prices.length; i++) {
+            returns.push((prices[i] - prices[i-1]) / prices[i-1]);
+        }
+        const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+        const variance = returns.reduce((a, r) => a + (r - mean) ** 2, 0) / (returns.length - 1);
+        return Math.sqrt(variance); // 반기별 σ
+    }
 
     function runMonteCarlo(rate, fx, oil, tax) {
         const N = 10000;
@@ -1819,6 +1930,8 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
             [0, 0, 0, 1]
         ];
         const stds = [0.8, 80, 25, 0.15]; // 각 변수의 표준편차
+        const apt = apartments[selectedAptIdx];
+        const histVol = calcHistVolatility(apt.region);
         const prices = [];
         for (let i = 0; i < N; i++) {
             // 독립 정규분포 z 생성
@@ -1834,7 +1947,10 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
             const f = Math.max(1350, Math.min(1800, fx + stds[1] * corr[1]));
             const o = Math.max(60, Math.min(200, oil + stds[2] * corr[2]));
             const t = Math.max(0.05, Math.min(3.0, tax + stds[3] * corr[3]));
-            prices.push(calcPrice8(r, f, o, t));
+            // 실거래 변동성 반영: 16-factor 예측에 역사적 σ 노이즈 추가
+            const basePrice = calcPrice8(r, f, o, t);
+            const priceNoise = randNorm(0, histVol) * basePrice;
+            prices.push(Math.round((basePrice + priceNoise) * 10) / 10);
         }
         prices.sort((a, b) => a - b);
 
@@ -1868,11 +1984,15 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
         document.getElementById('mcBuyProb').textContent = buyProb + '%';
         document.getElementById('mcBuyProb').style.color = buyProb >= 70 ? '#34d399' : buyProb >= 40 ? '#fbbf24' : '#f87171';
 
+        // 실거래 변동성 (apt, histVol은 함수 상단에서 이미 선언)
         document.getElementById('mcSummary').innerHTML = `
             <p><strong class="text-purple-400">10,000회 시뮬레이션 결과:</strong> 평균 <span class="text-white font-bold">${mean}억</span> · 중앙값 <span class="text-white font-bold">${p50.toFixed(1)}억</span></p>
             <p>80% 신뢰구간: <span class="text-green-400">${p10.toFixed(1)}억</span> ~ <span class="text-red-400">${p90.toFixed(1)}억</span></p>
-            <p class="text-[9px] text-gray-600">각 변수에 정규분포 노이즈 적용 (금리 σ=0.8%p, 환율 σ=80원, 유가 σ=$25, 보유세 σ=0.15%p)</p>
+            <p class="text-[9px] text-gray-600">각 변수에 정규분포 노이즈 적용 (금리 σ=0.8%p, 환율 σ=80원, 유가 σ=$25, 보유세 σ=0.15%p) · σ_hist = ${(histVol * 100).toFixed(1)}%</p>
         `;
+
+        // MC 결과를 전역에 저장 → simCalc verdict/비교표에서 활용
+        lastMcResult = { p10, p25, p50, p75, p90, mean, buyProb, totalCash, histVol };
 
         // Draw histogram
         const ctx = document.getElementById('mcChart');
