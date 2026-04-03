@@ -795,12 +795,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Beta = 해당 지역의 시장 평균 대비 하락 탄력도. 1.0 = 시장 평균, >1.0 = 변동폭 큼
     // 산출 기준: 2021 고점 → 2023 저점 실거래 하락률을 시장 평균(-17%) 대비 비교
     const regionBeta = {
-        '지축':       { beta: 0.95, basis: '고점12.0→저점8.5(-29%), 2025 10.0 회복. 덕양구 실수요 기반, 3호선 역세권, 변동 시장 평균 수준' },
-        '수색뉴타운':  { beta: 1.20, basis: '2023 신축 입주(파인시티자이/SK뷰). 분양가 대비 프리미엄 형성 후 조정 예상. 서울 내 신축 프리미엄+대출의존도 높아 변동폭 큼. 롯데몰/수색역세권 개발 기대감으로 과열 리스크' },
-        '마곡':       { beta: 0.56, basis: '실증: 고점16.8→저점11.6(-31%)이나 빠르게 회복, 현재 신고가. LG 등 200개사 17만 고용 배후, 매물 품귀. 직주근접+자족도시 특성으로 하방 경직성 매우 강함' },
-        '운정':       { beta: 0.74, basis: '실증: 운정아이파크 고점9.7→저점6.8(-29.9%). GTX-A 수혜이나 26~27 입주장(이지더원+풍경채+공공) 물량 압력. 수도권 외곽이라 회복 느림' },
-        '덕은':       { beta: 0.90, basis: '한강조망 프리미엄이나 지식산업센터 입주율 35~56%, 교통섬(마을버스 의존). 대장홍대선 2031 개통 전까지 교통 리스크. 손절 매물 출현' },
-        '킨텍스':     { beta: 0.95, basis: '고점11.5→저점8.5(-26%) 양호한 편. GTX-A 2번출구 역세권이나 중학교 없음, 원마운트 회생절차, 테크노밸리 공정16%, 라이브시티 2030년 이후. 개발 지연 리스크' },
+        '지축':       { beta: 0.95, jeonseRatio: 55, basis: '고점12.0→저점8.5(-29%), 2025 10.0 회복. 덕양구 실수요 기반, 3호선 역세권, 변동 시장 평균 수준' },
+        '수색뉴타운':  { beta: 1.20, jeonseRatio: 50, basis: '2023 신축 입주(파인시티자이/SK뷰). 분양가 대비 프리미엄 형성 후 조정 예상. 서울 내 신축 프리미엄+대출의존도 높아 변동폭 큼. 롯데몰/수색역세권 개발 기대감으로 과열 리스크' },
+        '마곡':       { beta: 0.56, jeonseRatio: 60, basis: '실증: 고점16.8→저점11.6(-31%)이나 빠르게 회복, 현재 신고가. LG 등 200개사 17만 고용 배후, 매물 품귀. 직주근접+자족도시 특성으로 하방 경직성 매우 강함' },
+        '운정':       { beta: 0.74, jeonseRatio: 65, basis: '실증: 운정아이파크 고점9.7→저점6.8(-29.9%). GTX-A 수혜이나 26~27 입주장(이지더원+풍경채+공공) 물량 압력. 수도권 외곽이라 회복 느림' },
+        '덕은':       { beta: 0.90, jeonseRatio: 48, basis: '한강조망 프리미엄이나 지식산업센터 입주율 35~56%, 교통섬(마을버스 의존). 대장홍대선 2031 개통 전까지 교통 리스크. 손절 매물 출현' },
+        '킨텍스':     { beta: 0.95, jeonseRatio: 55, basis: '고점11.5→저점8.5(-26%) 양호한 편. GTX-A 2번출구 역세권이나 중학교 없음, 원마운트 회생절차, 테크노밸리 공정16%, 라이브시티 2030년 이후. 개발 지연 리스크' },
     };
 
     // ═══════ APARTMENTS DATA (hoisted before ds/generateScenario) ═══════
@@ -951,6 +951,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const nonResPress = 2 * SF;                                     // 비주거 부실 전이
         const ageYears = 2026 - (apt.builtYear || 2020);
         const agePress = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0) * SF; // 연식 감가 (5년 초과 시 연 0.4%p)
+        // 스트레스 DSR: 금리 4% 초과 시 가산금리로 매수여력 강제 축소 (ratePress=금리비용, dsrPress=규제적 한도절삭)
+        const dsrPress = Math.max((rate - 4.0) * 1.5, 0) * SF;
+        // 역전세 투매: 전세가율 60% 미만 시 갭투자자 강제 매도 압력 급증
+        const regionKey = apt.region.replace(/\d+$/, '');
+        const jeonseRatio = (regionBeta[regionKey] && regionBeta[regionKey].jeonseRatio) || 55;
+        const gapSellOffPress = Math.max((60 - jeonseRatio) / 10 * 2.0, 0) * SF;
         // 상방 지지 (건축비·공급절벽)
         const constOilG = Math.min(((oil - 60) / 140) * 4, 4);
         const constFxG  = Math.min(((fx - 1350) / 450) * 1, 1);
@@ -960,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const supplyCliff = 8;     // 공급절벽 지수 (2023-24 착공급감 → 2026-27 입주절벽)
         const upSupport = (constBase + constOilG + constFxG + constPFG - landDiscount + supplyCliff) * SF;
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress + agePress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress + agePress + dsrPress + gapSellOffPress - upSupport;
         
         // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
         const betaAdj = apt.beta / 0.95;
@@ -974,17 +980,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const absoluteFloor = Math.round(peak * 0.65 * 10) / 10;
         const finalBottom = Math.max(bottomPrice, absoluteFloor);
 
+        // 정책대출 지지선: 바닥가 9억 이하 시 신생아특례/디딤돌 수요가 매수 대기선 형성
+        const policyLoanCeiling = 9.0;
+        const policyLiquiditySupport = (finalBottom <= policyLoanCeiling)
+            ? Math.min((policyLoanCeiling - finalBottom) * 0.5, 1.5) * SF
+            : 0;
+        const adjustedBottom = Math.round((finalBottom + policyLiquiditySupport) * 10) / 10;
+
         // ── 시간축별 예상가 (idx6=26.04 ~ idx13=29.12) ──
         const pred = new Array(14).fill(null);
         pred[6] = current;                                                               // 현재
-        pred[7] = Math.round((current * 0.65 + finalBottom * 0.35) * 10) / 10;          // 26.10: 하락 진행
-        pred[8] = Math.round((current * 0.25 + finalBottom * 0.75) * 10) / 10;          // 27.04: 바닥 근접 (전세 만기)
-        pred[9] = finalBottom;                                                            // 27.12: 바닥
+        pred[7] = Math.round((current * 0.65 + adjustedBottom * 0.35) * 10) / 10;       // 26.10: 하락 진행
+        pred[8] = Math.round((current * 0.25 + adjustedBottom * 0.75) * 10) / 10;       // 27.04: 바닥 근접 (전세 만기)
+        pred[9] = adjustedBottom;                                                         // 27.12: 바닥
         const rr = offset.recoveryRate;
-        pred[10] = Math.round(finalBottom * (1 + rr * 1) * 10) / 10;                    // 28.06
-        pred[11] = Math.round(finalBottom * (1 + rr * 2) * 10) / 10;                    // 28.12
-        pred[12] = Math.round(finalBottom * (1 + rr * 3) * 10) / 10;                    // 29.06
-        pred[13] = Math.round(finalBottom * (1 + rr * 4) * 10) / 10;                    // 29.12
+        pred[10] = Math.round(adjustedBottom * (1 + rr * 1) * 10) / 10;                 // 28.06
+        pred[11] = Math.round(adjustedBottom * (1 + rr * 2) * 10) / 10;                 // 28.12
+        pred[12] = Math.round(adjustedBottom * (1 + rr * 3) * 10) / 10;                 // 29.06
+        pred[13] = Math.round(adjustedBottom * (1 + rr * 4) * 10) / 10;                 // 29.12
 
         // A: 2027.04 매수 후 시세
         const buyA = new Array(14).fill(null);
@@ -1009,7 +1022,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 8; i <= 11; i++) cashB[i] = Math.round((totalCash0 + 0.1 - (i - 7) * 0.02) * 100) / 100;
 
         return { hist: histPadded, pred, buyA, constFloor, cashA, cashB,
-            _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, ageYears, agePress, constBase, constOilG, constFxG, constPFG, landDiscount, supplyCliff, upSupport, rawExtraDrop, betaAdj, alreadyDropped, extraDropPct, totalDropFromPeak, bottomPrice, absoluteFloor, finalBottom, rr } };
+            _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, ageYears, agePress, dsrPress, jeonseRatio, gapSellOffPress, constBase, constOilG, constFxG, constPFG, landDiscount, supplyCliff, upSupport, rawExtraDrop, betaAdj, alreadyDropped, extraDropPct, totalDropFromPeak, bottomPrice, absoluteFloor, finalBottom, policyLoanCeiling, policyLiquiditySupport, adjustedBottom, rr } };
     }
 
     function ds(sc, rate, fx, oil, tax) {
@@ -1278,6 +1291,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // BUT 동시에 신규 착공 감소 → 공급절벽 강화 (상방 효과는 supplyCliff에 포함)
         // 순효과: 하방 2%p (심리 위축 + 가계자산 축소가 공급 효과보다 큼)
         const nonResEff = 2;
+        // ⑮ 스트레스 DSR: 금리 4% 초과 시 규제적 한도 절삭 (ratePress=비용, dsrEff=한도)
+        const dsrEff = Math.max((rate - 4.0) * 1.5, 0);
+        // ⑯ 역전세 투매: 전세가율 60% 미만 시 갭투자자 강제 매도 압력
+        const simRegionKey = apt.region.replace(/\d+$/, '');
+        const simJeonseRatio = (regionBeta[simRegionKey] && regionBeta[simRegionKey].jeonseRatio) || 55;
+        const gapSellOffEff = Math.max((60 - simJeonseRatio) / 10 * 2.0, 0);
 
         const price = scenarioResult ? scenarioResult.pred[8] : Math.round(base * 0.8 * 10) / 10;
         const dropPct = Math.round((1 - price / base) * 1000) / 10;
@@ -1636,15 +1655,18 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 | pirPress | 2.5×${d.SF} (PIR 고정) | ${n(d.pirPress)} |
 | nonResPress | 2×${d.SF} (비주거부실 고정) | ${n(d.nonResPress)} |
 | agePress | max(${d.ageYears}×0.4${d.ageYears<=5?'-1':''},0)×${d.SF} (연식${d.ageYears}년) | ${n(d.agePress)} |
-| **하방 합계** | | **${n(d.ratePress + d.fxPress + d.oilPress + d.warCostPress + d.taxPress + d.popPress + d.polPress + d.debtPress + d.jeonsePress + d.pirPress + d.nonResPress + d.agePress)}** |
+| dsrPress | max((${c.rate}-4.0)×1.5,0)×${d.SF} (스트레스DSR) | ${n(d.dsrPress)} |
+| gapSellOffPress | max((60-${d.jeonseRatio})/10×2.0,0)×${d.SF} (전세가율${d.jeonseRatio}%) | ${n(d.gapSellOffPress)} |
+| **하방 합계** | | **${n(d.ratePress + d.fxPress + d.oilPress + d.warCostPress + d.taxPress + d.popPress + d.polPress + d.debtPress + d.jeonsePress + d.pirPress + d.nonResPress + d.agePress + d.dsrPress + d.gapSellOffPress)}** |
 
-### 상방 지지 (건축비 + 공급절벽)
+### 상방 지지 (건축비 + 공급절벽 + 정책대출)
 | 팩터 | 공식 | 계산값 |
 |---|---|---|
 | constOilG | min(((${c.oil}-60)/140)×4, 4) | ${n(d.constOilG)} |
 | constFxG | min(((${c.fx}-1350)/450)×1, 1) | ${n(d.constFxG)} |
 | constPFG | min(((${c.rate}-4.5)/4.5)×2, 2) | ${n(d.constPFG)} |
 | upSupport | (constBase${d.constBase}+${n(d.constOilG)}+${n(d.constFxG)}+${n(d.constPFG)}-land${d.landDiscount}+supply${d.supplyCliff})×${d.SF} | ${n(d.upSupport)} |
+| policyLiquidity | finalBottom≤${d.policyLoanCeiling}? min((${d.policyLoanCeiling}-finalBottom)×0.5,1.5)×${d.SF} | ${n(d.policyLiquiditySupport)} |
 
 ### 순 하락률 계산 (고점 기준 통일)
 - rawExtraDrop = 하방합계 - upSupport = **${n(d.rawExtraDrop)}**
@@ -1655,13 +1677,15 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 - bottomPrice = ${c.apt.peak2021} × (100 - ${n(d.totalDropFromPeak)}) / 100 = **${n(d.bottomPrice)}**
 - absoluteFloor = ${c.apt.peak2021} × 0.65 = **${n(d.absoluteFloor)}**
 - finalBottom = max(${n(d.bottomPrice)}, ${n(d.absoluteFloor)}) = **${n(d.finalBottom)}**
+- policyLiquiditySupport = **${n(d.policyLiquiditySupport)}** (9억 이하 정책대출 지지)
+- adjustedBottom = finalBottom + support = **${n(d.adjustedBottom)}**
 
 ## 5. 시간축 예상가
 | 시점 | 공식 | 예상가 |
 |---|---|---|
 | 2026.04 (현재) | current | ${c.apt.current}억 |
-| 2027.04 (A안) | ${c.apt.current}×0.25 + ${n(d.finalBottom)}×0.75 | **${c.priceA.toFixed(1)}억** |
-| 2027.12 (바닥) | finalBottom | ${n(d.finalBottom)}억 |
+| 2027.04 (A안) | ${c.apt.current}×0.25 + ${n(d.adjustedBottom)}×0.75 | **${c.priceA.toFixed(1)}억** |
+| 2027.12 (바닥) | adjustedBottom | ${n(d.adjustedBottom)}억 |
 | 2029.06 (B안) | ${n(d.finalBottom)}×(1+${d.rr}×3) | **${c.priceB.toFixed(1)}억** |
 
 ## 6. 가계 현금흐름
@@ -1854,6 +1878,8 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
             { name: '전세 축소 (고정)', lo: basePrice + 0.36, hi: basePrice - 0.36, color: '#f472b6', fixed: true },
             { name: 'PIR 15~25배 (고정)', lo: basePrice + 0.30, hi: basePrice - 0.30, color: '#e879f9', fixed: true },
             { name: '비주거 부실 전이 (고정)', lo: basePrice + 0.24, hi: basePrice - 0.24, color: '#fb7185', fixed: true },
+            { name: '스트레스 DSR', lo: calcPrice8(4.0, fx, oil, tax), hi: calcPrice8(9.0, fx, oil, tax), color: '#f43f5e' },
+            { name: '역전세 투매 (전세가율)', lo: basePrice + 0.12, hi: basePrice - Math.max((60 - ((regionBeta[apartments[selectedAptIdx].region.replace(/\\d+$/, '')] || {}).jeonseRatio || 55)) / 10 * 2.0 * 0.12, 0), color: '#be185d', fixed: true },
             { name: '정부 정책 (효과 ' + getPolicyEff().toFixed(1) + ')',
               lo: basePrice + (12 - getPolicyEff()) * 0.12,
               hi: basePrice - getPolicyEff() * 0.12,
