@@ -312,7 +312,7 @@
                                     <p class="text-[9px] text-gray-500 mb-1">비관 (P75)</p>
                                     <p id="mcP75" class="text-lg font-black text-red-400">—</p>
                                 </div>
-                                <div class="bg-black/30 rounded-lg p-3 text-center private">
+                                <div class="bg-black/30 rounded-lg p-3 text-center">
                                     <p class="text-[9px] text-gray-500 mb-1">무대출 매수 확률</p>
                                     <p id="mcBuyProb" class="text-lg font-black text-blue-400">—</p>
                                 </div>
@@ -1843,7 +1843,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 
         document.getElementById('mcSummary').innerHTML = `
             <p><strong class="text-purple-400">10,000회 시뮬레이션 결과:</strong> 평균 <span class="text-white font-bold">${mean}억</span> · 중앙값 <span class="text-white font-bold">${p50.toFixed(1)}억</span></p>
-            <p>80% 신뢰구간: <span class="text-green-400">${p10.toFixed(1)}억</span> ~ <span class="text-red-400">${p90.toFixed(1)}억</span> · <span class="private" style="display:inline">Alvin 가용 ${totalCash.toFixed(2)}억으로 무대출 매수 확률 <span class="font-bold ${buyProb >= 50 ? 'text-green-400' : 'text-red-400'}">${buyProb}%</span></span></p>
+            <p>80% 신뢰구간: <span class="text-green-400">${p10.toFixed(1)}억</span> ~ <span class="text-red-400">${p90.toFixed(1)}억</span></p>
             <p class="text-[9px] text-gray-600">각 변수에 정규분포 노이즈 적용 (금리 σ=0.8%p, 환율 σ=80원, 유가 σ=$25, 보유세 σ=0.15%p)</p>
         `;
 
