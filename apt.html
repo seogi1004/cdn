@@ -1338,7 +1338,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const chartData = ds('war', rate, fx, oil, tax);
         const scenarioResult = chartData._scenario;
         // priceA: 차트·비교표·시뮬레이터 전체에서 동일한 예상가 사용
-        const priceA = scenarioResult ? scenarioResult.pred[PRED_START+2] : price;
+        const priceA = scenarioResult ? scenarioResult.pred[PRED_START+2] : Math.round(base * 0.8 * 10) / 10;
 
         // Update policy slider label
         // 정책 합산값 라벨 업데이트
