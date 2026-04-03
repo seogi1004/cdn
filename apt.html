@@ -205,6 +205,10 @@
                 </div>
 
                 <!-- Simulation Results -->
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[9px] text-gray-600 uppercase tracking-wider font-bold">시뮬레이션 결과</span>
+                    <button id="copyMdBtn" onclick="copyModelMarkdown()" class="text-[9px] px-2 py-1 rounded bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors">📋 AI 검증용 복사</button>
+                </div>
                 <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 mb-5">
                     <div class="bg-black/30 rounded-lg p-2.5 sm:p-3 text-center border border-blue-500/20">
                         <p id="simPriceLabelA" class="text-[9px] text-blue-400 mb-1 font-bold">A안 (2027) 예상가</p>
@@ -986,7 +990,8 @@ document.addEventListener('DOMContentLoaded', function() {
         cashB[7] = Math.round((totalCash0 + 0.15) * 100) / 100;
         for (let i = 8; i <= 11; i++) cashB[i] = Math.round((totalCash0 + 0.1 - (i - 7) * 0.02) * 100) / 100;
 
-        return { hist: histPadded, pred, buyA, constFloor, cashA, cashB };
+        return { hist: histPadded, pred, buyA, constFloor, cashA, cashB,
+            _debug: { SF, ratePress, fxPress, oilPress, warCostPress, taxPress, popPress, polPress, debtPress, jeonsePress, pirPress, nonResPress, constOilG, constFxG, constPFG, upSupport, rawExtraDrop, betaAdj, extraDropPct, clampedDrop, bottomPrice, absoluteFloor, finalBottom, rr } };
     }
 
     function ds(sc, rate, fx, oil, tax) {
@@ -1536,6 +1541,129 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (currentMethod === 'sensitivity') {
             runSensitivity(rate, fx, oil, tax);
         }
+
+        // AI 검증용 중간값 저장
+        window._lastCalc = {
+            rate, fx, oil, tax, polEff,
+            policyDetails: policySubFactors.map(sf => {
+                const el = document.getElementById(sf.id);
+                return { label: sf.label, id: sf.id, type: sf.type,
+                    active: sf.type === 'toggle' ? el.checked : parseInt(el.value) > 0,
+                    eff: sf.type === 'toggle' ? (el.checked ? sf.eff : 0) : sf.effs[parseInt(el.value)] };
+            }),
+            apt: { region: apt.region, name: apt.name, size: apt.size, beta: apt.beta, peak2021: apt.peak2021, current: apt.current, builtYear: apt.builtYear },
+            debug: scenarioResult ? scenarioResult._debug : null,
+            priceA, priceB, dropPct, dropPct2029,
+            totalCash, totalCash2027, totalCash2029,
+            buyableA, buyableB, taxAnnualA, taxAnnualB,
+            recoveryA, preferA,
+        };
+    }
+
+    // ═══════ AI 검증용 마크다운 복사 ═══════
+    function copyModelMarkdown() {
+        const c = window._lastCalc;
+        if (!c) { alert('슬라이더를 조작한 후 다시 시도하세요.'); return; }
+        const d = c.debug;
+        const n = v => typeof v === 'number' ? Math.round(v * 1000) / 1000 : v;
+        const md = `# 아파트 가격 시뮬레이터 검증 요청
+
+## 1. 입력값 (슬라이더)
+| 변수 | 값 | 범위 |
+|---|---|---|
+| 주담대 금리 | ${c.rate.toFixed(1)}% | 4.5~9.0% |
+| USD/KRW 환율 | ${c.fx.toLocaleString()}원 | 1,350~1,800 |
+| Brent 유가 | $${c.oil} | $60~$200 |
+| 보유세 실효세율 | ${c.tax.toFixed(2)}% | 0.05~3.0% |
+| 정부 정책 합산 | ${c.polEff.toFixed(1)} | 0~12 |
+
+## 2. 정책 서브팩터 상태
+| 정책 | 상태 | 효과 |
+|---|---|---|
+${c.policyDetails.map(p => `| ${p.label} | ${p.active ? 'ON' : 'OFF'} | +${p.eff} |`).join('\n')}
+
+## 3. 선택 아파트
+- **${c.apt.region} ${c.apt.name}** ${c.apt.size}
+- 고점: ${c.apt.peak2021}억 / 현재: ${c.apt.current}억 / Beta: ${c.apt.beta} / 준공: ${c.apt.builtYear}년
+
+## 4. generateScenario 계산 과정
+
+### 상수
+- SF (스케일팩터) = ${d.SF}
+- Beta 기준 = 0.95
+- 절대하한선 = 고점 × 0.65
+- 최대하락 클램핑 = 35%
+- 회복률 = ${d.rr} / 반기
+
+### 하방 압력 (×SF ${d.SF})
+| 팩터 | 공식 | 계산값 |
+|---|---|---|
+| ratePress | (${c.rate}-4.5)×4.2×${d.SF} | ${n(d.ratePress)} |
+| fxPress | ((${c.fx}-1400)/100)×1.6×0.7×${d.SF} | ${n(d.fxPress)} |
+| oilPress | ((${c.oil}-60)/40)×2.5×${d.SF} | ${n(d.oilPress)} |
+| warCostPress | 3×${d.SF} (지정학 고정) | ${n(d.warCostPress)} |
+| taxPress | max((${c.tax}-0.15)/1.0×5,0)×${d.SF} | ${n(d.taxPress)} |
+| popPress | 4×${d.SF} (인구감소 고정) | ${n(d.popPress)} |
+| polPress | ${c.polEff.toFixed(1)}×${d.SF} (정책) | ${n(d.polPress)} |
+| debtPress | 4×${d.SF} (가계부채 고정) | ${n(d.debtPress)} |
+| jeonsePress | 3×${d.SF} (전세축소 고정) | ${n(d.jeonsePress)} |
+| pirPress | 2.5×${d.SF} (PIR 고정) | ${n(d.pirPress)} |
+| nonResPress | 2×${d.SF} (비주거부실 고정) | ${n(d.nonResPress)} |
+| **하방 합계** | | **${n(d.ratePress + d.fxPress + d.oilPress + d.warCostPress + d.taxPress + d.popPress + d.polPress + d.debtPress + d.jeonsePress + d.pirPress + d.nonResPress)}** |
+
+### 상방 지지 (건축비 + 공급절벽)
+| 팩터 | 공식 | 계산값 |
+|---|---|---|
+| constOilG | min(((${c.oil}-60)/140)×4, 4) | ${n(d.constOilG)} |
+| constFxG | min(((${c.fx}-1350)/450)×1, 1) | ${n(d.constFxG)} |
+| constPFG | min(((${c.rate}-4.5)/4.5)×2, 2) | ${n(d.constPFG)} |
+| upSupport | (8+${n(d.constOilG)}+${n(d.constFxG)}+${n(d.constPFG)}-1.5+8)×${d.SF} | ${n(d.upSupport)} |
+
+### 순 하락률 계산
+- rawExtraDrop = 하방합계 - upSupport = **${n(d.rawExtraDrop)}**
+- betaAdj = ${c.apt.beta} / 0.95 = **${n(d.betaAdj)}**
+- extraDropPct = max(${n(d.rawExtraDrop)}, 0) × 1.0 × ${n(d.betaAdj)} = **${n(d.extraDropPct)}**
+- clampedDrop = min(${n(d.extraDropPct)}, 35) = **${n(d.clampedDrop)}**
+- bottomPrice = ${c.apt.current} × (100 - ${n(d.clampedDrop)}) / 100 = **${n(d.bottomPrice)}**
+- absoluteFloor = ${c.apt.peak2021} × 0.65 = **${n(d.absoluteFloor)}**
+- finalBottom = max(${n(d.bottomPrice)}, ${n(d.absoluteFloor)}) = **${n(d.finalBottom)}**
+
+## 5. 시간축 예상가
+| 시점 | 공식 | 예상가 |
+|---|---|---|
+| 2026.04 (현재) | current | ${c.apt.current}억 |
+| 2027.04 (A안) | ${c.apt.current}×0.25 + ${n(d.finalBottom)}×0.75 | **${c.priceA.toFixed(1)}억** |
+| 2027.12 (바닥) | finalBottom | ${n(d.finalBottom)}억 |
+| 2029.06 (B안) | ${n(d.finalBottom)}×(1+${d.rr}×3) | **${c.priceB.toFixed(1)}억** |
+
+## 6. 가계 현금흐름
+| 시점 | 가용자금 |
+|---|---|
+| 현재 (2026.04) | ${c.totalCash.toFixed(2)}억 |
+| 2027.04 | ${c.totalCash2027.toFixed(2)}억 |
+| 2029.04 | ${c.totalCash2029.toFixed(2)}억 |
+
+## 7. A안 vs B안 비교
+| 항목 | A안 (2027.04) | B안 (2029.06) |
+|---|---|---|
+| 예상가 | ${c.priceA.toFixed(1)}억 (고점 -${c.dropPct.toFixed(1)}%) | ${c.priceB.toFixed(1)}억 (고점 -${c.dropPct2029.toFixed(1)}%) |
+| 무대출 매수 | ${c.buyableA ? '가능' : '불가'} | ${c.buyableB ? '가능' : '불가'} |
+| 연간 보유세 | ${c.taxAnnualA}만원 | ${c.taxAnnualB}만원 |
+| 매수후 2029 시세 | ${c.recoveryA.toFixed(1)}억 (+8%) | — |
+| 판정 | ${c.preferA ? '★ 유리' : ''} | ${!c.preferA ? '★ 유리' : ''} |
+
+---
+위 계산 과정에 오류가 있는지 검증해주세요.
+각 단계의 중간값이 공식과 일치하는지 확인하고,
+최종 예상가(A안 ${c.priceA.toFixed(1)}억, B안 ${c.priceB.toFixed(1)}억)가 논리적으로 타당한지 판단해주세요.
+`;
+        navigator.clipboard.writeText(md).then(() => {
+            const btn = document.getElementById('copyMdBtn');
+            const orig = btn.textContent;
+            btn.textContent = '✓ 복사됨';
+            btn.classList.add('bg-green-700');
+            setTimeout(() => { btn.textContent = orig; btn.classList.remove('bg-green-700'); }, 2000);
+        });
     }
 
     // ═══════ METHOD TABS ═══════
