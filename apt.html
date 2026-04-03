@@ -863,7 +863,7 @@ document.addEventListener('DOMContentLoaded', function() {
             size: '84㎡',
             get beta() { return regionBeta['마곡'].beta; },
             color: '#f59e0b',
-            peak2021: 15.0,
+            peak2021: 16.8,
             current: 16.8,
             currentLabel: '16.8억 (역대 신고가 경신 중, MCP 202212 저점 11.6억 확인)',
             note: '2017 · 603세대 · 9호선 6분 · LG등 200사 17만명 · 매물품귀 · 신고가',
@@ -1058,7 +1058,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
         const betaAdj = apt.beta / 0.95;
-        const alreadyDropped = Math.round((1 - current / peak) * 100 * 10) / 10; // 고점 대비 이미 하락한 %
+        const alreadyDropped = Math.max(0, Math.round((1 - current / peak) * 100 * 10) / 10); // 고점 대비 이미 하락한 % (신고가 시 0)
         const extraDropPct = Math.max(rawExtraDrop, 0) * offset.extraDrop * betaAdj;
         // 고점 기준 총 하락률 (이미 하락분 + 추가 하락, 최대 35%)
         const totalDropFromPeak = Math.min(alreadyDropped + extraDropPct, 35);
