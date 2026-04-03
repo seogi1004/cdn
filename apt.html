@@ -926,6 +926,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ratePress  = Math.max((rate - 4.5), 0) * 4.2 * SF;       // 금리
         const fxPress    = ((fx - 1400) / 100) * 1.6 * 0.7 * SF;      // 환율
         const oilPress   = ((oil - 60) / 40) * 2.5 * SF;               // 유가
+        const warCostPress = 3 * SF;                                    // 지정학 리스크 (고정: 재정부담·심리위축)
         const taxPress   = Math.max((tax - 0.15) / 1.0 * 5, 0) * SF;  // 보유세
         const popPress   = 4 * SF;                                      // 인구감소
         const polPress   = getPolicyEff() * SF; // 정부 정책 (서브팩터 합산)
@@ -939,7 +940,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const constPFG  = Math.min(((rate - 4.5) / 4.5) * 2, 2);
         const upSupport = (8 + constOilG + constFxG + constPFG - 1.5 + 8) * SF; // (건축비+공급절벽) * SF
 
-        const rawExtraDrop = ratePress + fxPress + oilPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress - upSupport;
+        const rawExtraDrop = ratePress + fxPress + oilPress + warCostPress + taxPress + popPress + polPress + debtPress + jeonsePress + pirPress + nonResPress - upSupport;
         
         // beta 적용: 기준(0.95) 대비 해당 아파트의 하락 탄력도
         const betaAdj = apt.beta / 0.95;
@@ -1223,6 +1224,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const rateEff = (rate - 4.5) * 4.2;           // ① 금리 (34~44% 기여)
         const fxEff = ((fx - 1400) / 100) * 1.6;      // ② 환율
         const oilEff = ((oil - 60) / 40) * 2.5;       // ③ 유가
+        const warCostEff = 3;                          // ④ 지정학 리스크 (고정: 재정부담·심리위축)
         const popEff = 4;                              // ⑤ 인구 (3→4, 일본 사례)
         const policyEff = polEff;                        // ⑥ 정부 정책 (서브팩터 합산)
         // ⑦ 대체원가 상방 = 건축비(자재+PF) + 토지비
