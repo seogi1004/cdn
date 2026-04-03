@@ -82,7 +82,7 @@
                     부동산 <span class="text-red-400">다변량</span> 선형가중 모델 — <span class="text-blue-400">2027 vs 2029</span> 매수
                 </h1>
                 <p class="text-sm text-gray-500 leading-relaxed max-w-2xl">
-                    16개 변수 등 실증연구 기반 선형가중 모델. 2027 매수 vs 2029 매수 시나리오를 비교합니다.
+                    17개 변수 등 실증연구 기반 선형가중 모델. 2027 매수 vs 2029 매수 시나리오를 비교합니다.
                 </p>
             </div>
             <div class="text-xs text-gray-600 text-right shrink-0">
@@ -290,7 +290,7 @@
                                 <h3 class="text-xs font-bold text-amber-400">가중 팩터 모델 (Weighted Factor Model)</h3>
                                 <span class="text-[8px] bg-amber-500/10 text-amber-400 px-1.5 py-0.5 rounded">현재 적용</span>
                             </div>
-                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">16개 변수에 실증연구 기반 가중치를 적용한 선형가중 모델입니다. 금리 기여도 34~44%(박진백 외 2021 샤플리 분해), 정책 효과 제한적(VAR 분석), 일본 버블 사례 등 학술 연구로 검증된 계수를 사용합니다. 회귀분석이 아닌 전문가 추정 + 실증 보정 하이브리드 방식입니다.</p>
+                            <p class="text-[10px] text-gray-500 leading-relaxed mb-3">17개 변수에 실증연구 기반 가중치를 적용한 선형가중 모델입니다. 금리 기여도 34~44%(박진백 외 2021 샤플리 분해), 정책 효과 제한적(VAR 분석), 일본 버블 사례 등 학술 연구로 검증된 계수를 사용합니다. 회귀분석이 아닌 전문가 추정 + 실증 보정 하이브리드 방식입니다.</p>
                             <div class="grid grid-cols-4 gap-2 text-[9px]">
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">금리 가중치</span><br><span class="text-red-400 font-bold">4.2×</span></div>
                                 <div class="bg-black/30 rounded p-2"><span class="text-gray-500">환율 가중치</span><br><span class="text-blue-400 font-bold">1.12×</span></div>
@@ -386,7 +386,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-5">
                     <div>
                         <h2 class="text-sm sm:text-lg font-bold" id="mainChartTitle">센트럴 푸르지오 84㎡ — 2027 vs 2029 매수</h2>
-                        <p class="text-[10px] text-gray-500 mt-1 hidden sm:block">16-Factor 선형가중 모델 · 슬라이더로 시나리오 조절</p>
+                        <p class="text-[10px] text-gray-500 mt-1 hidden sm:block">17-Factor 선형가중 모델 · 슬라이더로 시나리오 조절</p>
                     </div>
                 </div>
                 <div class="relative h-[320px] sm:h-[400px] lg:h-[440px] w-full"><canvas id="mainChart"></canvas></div>
@@ -402,9 +402,9 @@
                 </div>
             </div>
 
-            <!-- 16-Factor Model -->
+            <!-- 17-Factor Model -->
             <div class="card p-6">
-                <h2 class="text-lg font-bold mb-4">16-Factor 선형가중 모델</h2>
+                <h2 class="text-lg font-bold mb-4">17-Factor 선형가중 모델</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Downward -->
                     <div class="bg-red-500/5 border border-red-500/10 rounded-xl p-4">
@@ -522,7 +522,7 @@
                             <h2 class="text-lg font-bold">아파트별 하락 탄력도 (Beta) 비교</h2>
                             <span class="text-[9px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider">슬라이더 연동</span>
                         </div>
-                        <p class="text-[10px] text-gray-500 mt-1">16-Factor 모델 기반 · 슬라이더 변경 시 예측가 자동 재계산. 아파트를 추가하려면 하단 JS 배열에 추가하세요.</p>
+                        <p class="text-[10px] text-gray-500 mt-1">17-Factor 모델 기반 · 슬라이더 변경 시 예측가 자동 재계산. 아파트를 추가하려면 하단 JS 배열에 추가하세요.</p>
                     </div>
                 </div>
                 <div class="overflow-x-auto -mx-3 px-3" style="-webkit-overflow-scrolling:touch">
@@ -1141,7 +1141,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const aptLabel = apt.region + ' ' + apt.name;
         const datasets = [
             {label:aptLabel+' (실거래)',data:s.hist,borderColor:apt.color,borderWidth:2,pointRadius:3,pointBackgroundColor:apt.color,fill:false,tension:.35,spanGaps:true},
-            {label:aptLabel+' 예측 (16-Factor)',data:s.pred,borderColor:apt.color+'99',borderWidth:2.5,borderDash:[6,4],pointRadius:4,pointBackgroundColor:apt.color+'99',pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.35,spanGaps:false},
+            {label:aptLabel+' 예측 (17-Factor)',data:s.pred,borderColor:apt.color+'99',borderWidth:2.5,borderDash:[6,4],pointRadius:4,pointBackgroundColor:apt.color+'99',pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.35,spanGaps:false},
             {label:'건축비 하한선 (대체원가)',data:s.constFloor,borderColor:C.amber.h,borderWidth:1.5,borderDash:[2,3],pointRadius:0,fill:false,tension:.3,spanGaps:false},
             {label:'A: 2027 매수 후 시세',data:s.buyA,borderColor:C.blue.h,borderWidth:2.5,pointRadius:5,pointBackgroundColor:C.blue.h,pointBorderColor:'#0a0e1a',pointBorderWidth:2,fill:false,tension:.3,spanGaps:false},
         ];
@@ -1909,7 +1909,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
         return mean + std * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     }
 
-    // 16-Factor 가격 계산 함수 (재사용)
+    // 17-Factor 가격 계산 함수 (재사용)
     function calcPrice8(r, f, o, t, peakPrice, aptObj) {
         const apt = aptObj || apartments[selectedAptIdx];
         const scenario = generateScenario('war', r, f, o, t, apt);
