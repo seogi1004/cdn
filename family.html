@@ -187,12 +187,12 @@
                 <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 03</span>
                 <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
                     <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
-                    🏡 신검단 명당 TOP 5+1 아파트 입지 심층 진단
+                    🏡 신검단 명당 TOP 5 아파트 입지 심층 진단
                 </h2>
                 <p class="text-xs text-gray-400 mt-1">이편한세상 웰카운티를 필두로 한 핵심 단지들의 세무, 풍수, 시세 변수 대조 가이드</p>
             </div>
 
-            <!-- Horizontal Tab Navigation (6 tabs fully restored) -->
+            <!-- Horizontal Tab Navigation (5 tabs) -->
             <div class="flex overflow-x-auto whitespace-nowrap space-x-2 py-1.5 -mx-4 px-4 md:mx-0 no-scrollbar">
                 <button onclick="selectApt('wellcounty')" id="btn-wellcounty" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-gold-500 border-gold-500/30">
                     💖 웰카운티 (대장주)
@@ -205,9 +205,6 @@
                 </button>
                 <button onclick="selectApt('woomirin')" id="btn-woomirin" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
                     우미린 더 시그니처 (101역)
-                </button>
-                <button onclick="selectApt('yemiji')" id="btn-yemiji" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
-                    예미지 트리플에듀 (복원됨)
                 </button>
                 <button onclick="selectApt('detre')" id="btn-detre" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
                     디에트르 더 힐 (복층)
@@ -319,7 +316,7 @@
             <!-- Abandonment Penalties -->
             <div class="space-y-4">
                 <h3 class="text-sm font-bold text-red-400 flex items-center">
-                    <svg class="w-4.5 h-4.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
                     🚫 청약 당첨 후 단순 변심으로 '당첨 포기' 시 발생하는 페널티
                 </h3>
 
@@ -426,17 +423,6 @@
                 cons: "신검단 단지들 중 실거래가 상단을 형성하고 있어 고금리 장기화 기조에 주담대 이자 부담 예산이 상대적으로 다른 단지 대비 무거워집니다.",
                 advice: "자산의 가격 방어와 완벽한 학원가 환경을 동시에 취할 수 있는 최상의 시그니처 대장주 아파트입니다."
             },
-            yemiji: {
-                title: "검단신도시 예미지 트리플에듀 (원당동)",
-                badge: "⭐ 완벽복원 • 딸아이 평생 통학 명당 • 가성비 1순위",
-                price: "6억 중후반 선",
-                priceNote: "(가장 정직하고 안전한 명당)",
-                metrics: { value: 94, saju: 95, school: 100, rate: 100 },
-                meta: "1,249세대 (평지 대단지) / 기입주 완벽 비과세 정착 / 단지 앞 초·중·고 학세권",
-                pros: "한별초, 원당중, 원당고교가 단지 경계를 삼면으로 완전히 안고 있습니다. 딸아이가 유치원생부터 수능 시험장 들어가는 당일까지 단 한 번의 주거 이동이나 큰 도로 통학의 위험 없이 든든한 20년을 지지해 주는 '명당 학세권'입니다.",
-                cons: "이미 완전한 구축 시세 하향 안정화가 끝났기 때문에 청약이나 웰카운티 마피처럼 수억 단위의 전매 전용 자산 보너스 마진 폭은 상대적으로 낮습니다.",
-                advice: "비이성적인 단기 양도세와 고금리 대출 이자 대납으로 자산을 파괴할 위험이 단 1%도 없으며, 딸아이의 든든한 성장(목기운)과 엄마의 금전적 평온함을 지탱해 줄 최고의 가성비 실리 단지입니다."
-            },
             detre: {
                 title: "검단신도시 디에트르 더 힐 (당하동)",
                 badge: "🔥 아빠 풍수 저격 • 하늘과 다락을 품은 테라스",
@@ -451,7 +437,7 @@
         };
 
         function selectApt(key) {
-            const list = ['wellcounty', 'hillstate', 'prugio', 'woomirin', 'yemiji', 'detre'];
+            const list = ['wellcounty', 'hillstate', 'prugio', 'woomirin', 'detre'];
             list.forEach(item => {
                 const btn = document.getElementById(`btn-${item}`);
                 if (btn) {
@@ -550,9 +536,9 @@
             if (member === 'dad') {
                 text = "🔥 <strong>아빠(병화) 궁합 비책:</strong> 태양의 뜨거운 열기를 지닌 아빠에게는 검단의 풍부한 수기(水)를 머금은 대단지가 필수 풍수입니다. 웰카운티의 넓은 대지와 호수공원(더샵)이 사주 밸런스를 상생으로 이끌어 사업운과 명예운을 영원히 꽃피웁니다.";
             } else if (member === 'mom') {
-                text = "🌾 <strong>엄마(기토) 궁합 비책:</strong> 만물을 품는 옥토 사주인 엄마는 조경 정원이 매우 완벽한 1,000세대 이상의 평지 대단지에서 정서적 회복과 현금 축적을 완성할 수 있습니다. 예미지의 드넓은 평지 마당과 푸르지오 리조트 정원이 엄마에게 최상의 안도감을 선사합니다.";
+                text = "🌾 <strong>엄마(기토) 궁합 비책:</strong> 만물을 품는 옥토 사주인 엄마는 조경 정원이 매우 완벽한 1,000세대 이상의 평지 대단지에서 정서적 회복과 현금 축적을 완성할 수 있습니다. 푸르지오의 드넓은 리조트 정원과 평지 단지 환경이 엄마에게 최상의 안도감을 선사합니다.";
             } else {
-                text = "📚 <strong>딸내미(정화) 교육 비책:</strong> 지혜의 등불 사주를 타고난 아이에겐 배움의 원천인 학업운(木)이 핵심입니다. 단지 경계 삼면에서 초·중·고교가 큰길 없이 삼각 포위해 안심 등하교를 지탱하는 예미지 트리플에듀와 웰카운티가 아이를 명석한 석학으로 키울 명당 성역입니다.";
+                text = "📚 <strong>딸내미(정화) 교육 비책:</strong> 지혜의 등불 사주를 타고난 아이에겐 배움의 원천인 학업운(木)이 핵심입니다. 단지 경계 삼면에서 초·중·고교가 큰길 없이 삼각 포위해 안심 등하교를 지탱하는 웰카운티가 아이를 명석한 석학으로 키울 명당 성역입니다.";
             }
 
             box.innerHTML = text;
