@@ -605,126 +605,21 @@
             <div class="bg-slate-950 p-5 rounded-2xl border border-white/5 space-y-4 text-[11px] text-gray-400 leading-relaxed font-light">
                 <p class="font-semibold text-gold-400 text-xs flex items-center mb-1">
                     <svg class="w-4 h-4 mr-1 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                    학술적 종합 평점 산출 공식 및 아빠의 아파트 인사이트 연식 감가율 연동 기준
+                    종합 평점 산출 기준 및 보정 설명
                 </p>
                 <ul class="list-disc list-inside space-y-2">
-                    <li><strong>종합 평점 공식</strong>: <code>종합 평점 = (생활 인프라 × 0.20) + (교통 편의성 × 0.25) + (학군 × 0.20) + (직주근접 × 0.15) + (정비사업/풍수 × 0.20) − 연식 감가 압력(agePress) × 10</code>
-                        <div class="text-[10px] text-gray-500 pl-4 mt-0.5">아빠의 <strong>아파트 인사이트</strong> 입지 5점수(infrastructure, transport_access, school_district, job_access, redevelopment) 가중 평균치에 연식 감가 압력을 차감한 헤도닉 모형 응용 산식.</div>
-                    </li>
-                    
-                    <!-- 5-factor scoring matrix table -->
-                    <li class="list-none mt-2">
-                        <div class="overflow-x-auto rounded-xl border border-white/5 bg-slate-900/40">
-                            <table class="w-full text-[10px] text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-slate-950 border-b border-white/10 text-gray-400 font-semibold">
-                                        <th class="p-2 whitespace-nowrap">단지명</th>
-                                        <th class="p-2 text-center whitespace-nowrap">생활 인프라 (20%)</th>
-                                        <th class="p-2 text-center whitespace-nowrap">교통 편의성 (25%)</th>
-                                        <th class="p-2 text-center whitespace-nowrap">학군 (20%)</th>
-                                        <th class="p-2 text-center whitespace-nowrap">직주근접 (15%)</th>
-                                        <th class="p-2 text-center whitespace-nowrap">정비/풍수 (20%)</th>
-                                        <th class="p-2 text-center whitespace-nowrap text-gold-400">기본 입지</th>
-                                        <th class="p-2 text-center whitespace-nowrap text-rose-400">연식 감가</th>
-                                        <th class="p-2 text-center whitespace-nowrap text-gold-500 font-bold">종합 평점</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-white/5 text-gray-400 font-light">
-                                    <tr class="hover:bg-white/5">
-                                        <td class="p-2 font-semibold text-slate-200">힐스테이트 신검단</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">95</td>
-                                        <td class="p-2 text-center">80</td>
-                                        <td class="p-2 text-center">85</td>
-                                        <td class="p-2 text-center">92.5</td>
-                                        <td class="p-2 text-center text-gold-400">89.0</td>
-                                        <td class="p-2 text-center text-rose-400">0.0 (0점)</td>
-                                        <td class="p-2 text-center text-gold-500 font-bold">89점</td>
-                                    </tr>
-                                    <tr class="hover:bg-white/5">
-                                        <td class="p-2 font-semibold text-slate-200">디에트르 더 힐</td>
-                                        <td class="p-2 text-center">85</td>
-                                        <td class="p-2 text-center">82</td>
-                                        <td class="p-2 text-center">88</td>
-                                        <td class="p-2 text-center">80</td>
-                                        <td class="p-2 text-center">99.0</td>
-                                        <td class="p-2 text-center text-gold-400">87.0</td>
-                                        <td class="p-2 text-center text-rose-400">15.0 (1.5)</td>
-                                        <td class="p-2 text-center text-gold-500 font-bold">72점</td>
-                                    </tr>
-                                    <tr class="hover:bg-white/5">
-                                        <td class="p-2 font-semibold text-slate-200">우미린 더 시그니처</td>
-                                        <td class="p-2 text-center">95</td>
-                                        <td class="p-2 text-center">95</td>
-                                        <td class="p-2 text-center">98</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">95.0</td>
-                                        <td class="p-2 text-center text-gold-400">95.0</td>
-                                        <td class="p-2 text-center text-rose-400">15.0 (1.5)</td>
-                                        <td class="p-2 text-center text-gold-500 font-bold">80점</td>
-                                    </tr>
-                                    <tr class="hover:bg-white/5">
-                                        <td class="p-2 font-semibold text-slate-200">푸르지오 더 베뉴</td>
-                                        <td class="p-2 text-center">95</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">96</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">99.0</td>
-                                        <td class="p-2 text-center text-gold-400">94.0</td>
-                                        <td class="p-2 text-center text-rose-400">30.0 (3.0)</td>
-                                        <td class="p-2 text-center text-gold-500 font-bold">64점</td>
-                                    </tr>
-                                    <tr class="hover:bg-white/5">
-                                        <td class="p-2 font-semibold text-slate-200">웰카운티 (무피)</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">95</td>
-                                        <td class="p-2 text-center">95</td>
-                                        <td class="p-2 text-center">85</td>
-                                        <td class="p-2 text-center">92.5</td>
-                                        <td class="p-2 text-center text-gold-400">92.0</td>
-                                        <td class="p-2 text-center text-rose-400">0.0 (0점)</td>
-                                        <td class="p-2 text-center text-gold-500 font-bold">92점</td>
-                                    </tr>
-                                    <tr class="hover:bg-white/5">
-                                        <td class="p-2 font-semibold text-slate-200">더샵 22블록 (청약)</td>
-                                        <td class="p-2 text-center">92</td>
-                                        <td class="p-2 text-center">95</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">100.0</td>
-                                        <td class="p-2 text-center text-gold-400">94.0</td>
-                                        <td class="p-2 text-center text-rose-400">0.0 (0점)</td>
-                                        <td class="p-2 text-center text-gold-500 font-bold">94점</td>
-                                    </tr>
-                                    <tr class="hover:bg-white/5">
-                                        <td class="p-2 font-semibold text-slate-200">더샵 23블록 (청약)</td>
-                                        <td class="p-2 text-center">92</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">90</td>
-                                        <td class="p-2 text-center">88.0</td>
-                                        <td class="p-2 text-center text-gold-400">90.0</td>
-                                        <td class="p-2 text-center text-rose-400">0.0 (0점)</td>
-                                        <td class="p-2 text-center text-gold-500 font-bold">90점</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </li>
-
-                    <li><strong>아빠의 아파트 인사이트 연식 감가 압력 공식</strong>: <code>agePress = max(ageYears × 0.5 − (ageYears &lt;= 5 ? 1.0 : 0), 0)</code> (2027년 계약/입주 시점 연식 기준)
+                    <li><strong>종합 평점 산출 개요</strong>: 아빠의 <strong>아파트 인사이트</strong> 핵심 입지 지표(인프라, 교통 편의성, 학군, 직주근접, 정비사업 및 대지/풍수적 가치)와 연식에 따른 가감점, 그리고 취득 시점의 세무/청약 가감점을 종합적으로 반영하여 도출한 평점입니다. <div class="text-[10px] text-gray-500 pl-4 mt-0.5">※ 세부 가중치 및 원본 계산식은 대외비 보안 사항으로 본 문서에서는 생략함</div></li>
+                    <li><strong>연식에 따른 신축/구축 감가 방향성 (2027년 여름 계약 시점 기준)</strong>:
                         <ul class="list-none pl-4 mt-0.5 space-y-0.5 text-gray-500">
-                            <li>- <strong>더샵 22BL / 23BL</strong> (준공 예정): <code>agePress = 0</code> (감가 감점 0점)</li>
-                            <li>- <strong>웰카운티</strong> (1년 차): <code>agePress = 0</code> (감가 감점 0점)</li>
-                            <li>- <strong>힐스테이트</strong> (2년 차): <code>agePress = 0</code> (감가 감점 0점)</li>
-                            <li>- <strong>우미린 / 디에트르</strong> (5년 차): <code>agePress = 1.5</code> (감가 감점 15점)</li>
-                            <li>- <strong>푸르지오</strong> (6년 차): <code>agePress = 3.0</code> (신축 할인 1.0% 소멸로 감가 감점 30점 타격!)</li>
+                            <li>- <strong>더샵 22BL / 23BL / 웰카운티 / 힐스테이트</strong>: 신축 프리미엄이 적용되어 연식 감가가 반영되지 않습니다.</li>
+                            <li>- <strong>우미린 / 디에트르</strong>: 입주 5년 차 준신축으로 연식에 따른 적정 감가가 일부 반영됩니다.</li>
+                            <li>- <strong>푸르지오</strong>: 입주 6년 차에 진입하며 신축 프리미엄이 소멸되어 구축 연식 감가가 본격 반영됩니다.</li>
                         </ul>
                     </li>
-                    <li><strong>세무 리스크 및 청약/매매 보정</strong>:
+                    <li><strong>세무 리스크 및 청약/매매 보정 기준</strong>:
                         <ul class="list-none pl-4 mt-0.5 space-y-0.5 text-gray-500">
-                            <li>- <strong>웰카운티</strong>: 현실적인 소액 프리미엄(P 5천~1억) 거래 시 66% 단기양도세 대납 요구로 실투자금이 급증하므로 <code>14점</code> 감점(최종 78점), 무피/급매 전매 시에는 세무 리스크가 소멸되어 <code>92점</code>으로 평가됩니다.</li>
-                            <li>- <strong>더샵 22BL / 23BL</strong>: 분상제 청약 단지로 세무 리스크가 없으나 22BL(94점)이 23BL(90점) 대비 1호선 초역세권 입지로 우위입니다. <strong>호수 조망 전면동 및 로열층(15층 이상) 당첨 시 가점 +5점(최대 99점/95점)</strong>, <strong>저층/비조망동 당첨 시 감점 -5점(89점/85점)</strong>을 적용합니다.</li>
+                            <li>- <strong>웰카운티</strong>: 일반 프리미엄(P 5천~1억) 거래 시 66% 단기보유 양도세 대납 특약 조건이 적용되어 실취득금이 폭등하므로 추가 감점이 반영되어 <code>78점</code>으로 평가되나, 무피 전매 매물 수렵 성공 시에는 세무 장벽이 소멸되어 신축 본연의 가치인 <code>92점</code>으로 복원됩니다.</li>
+                            <li>- <strong>더샵 22BL / 23BL</strong>: 분상제 청약 단지로 세무 리스크가 없으나 22BL이 1호선 초역세권 입지로 우위입니다. 당첨된 동·층의 조망권(호수공원 정면 뷰 여부) 및 로열층(15층 이상) 여부에 따라 <code>최대 ±5점</code> 내외의 개별 동·층 보정 점수가 가산 또는 감산 적용됩니다.</li>
                         </ul>
                     </li>
                 </ul>
