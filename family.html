@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>우리 세 식구 신검단 20년 대안착 프로젝트</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:ital,wght=0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            50: '#fbf9f4',
+                            100: '#f5efe0',
+                            200: '#eadeca',
+                            500: '#c5a880',
+                            600: '#b0926a',
+                            700: '#957953',
+                        },
+                        slate: {
+                            900: '#0f172a',
+                            950: '#020617'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-shadow {
+            box-shadow: 0 10px 30px -10px rgba(197, 168, 128, 0.15);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans selection:bg-gold-100 selection:text-gold-700 antialiased overflow-x-hidden">
+
+    <!-- Sticky Mobile Header -->
+    <div class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-white/5 px-4 py-3 flex items-center justify-between md:px-8">
+        <div class="flex items-center space-x-2">
+            <span class="text-gold-500 font-serif italic text-base md:text-lg font-bold">Premium Family Report</span>
+            <span class="text-gray-400 text-xs hidden sm:inline-block">| 사랑하는 아내에게</span>
+        </div>
+        <button onclick="shareReport()" class="bg-gold-600 hover:bg-gold-700 text-white text-[11px] font-bold px-3.5 py-2 rounded-xl transition-all duration-200 active:scale-95 flex items-center space-x-1.5 shadow-sm">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 10.748a3.001 3.001 0 110 3.004L14.93 17.03a3 3 0 11.405-1.503l-6.244-3.279zM14.93 7.03l-6.245 3.28a3 3 0 11-.404-1.503l6.244-3.28a3 3 0 11.405 1.503z"></path></svg>
+            <span>카카오톡 공유</span>
+        </button>
+    </div>
+
+    <!-- Hero Header Greeting -->
+    <header class="text-center py-14 px-4 relative overflow-hidden border-b border-white/5 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-gold-700/10 via-slate-950 to-slate-950">
+        <div class="max-w-4xl mx-auto relative z-10 space-y-4">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-gold-600/15 border border-gold-500/20 text-gold-500 text-[10px] font-bold tracking-wider uppercase">
+                Family Security & Proptech Briefing
+            </span>
+            <h1 class="text-2xl md:text-4xl lg:text-5xl font-black tracking-tight leading-snug">
+                우리 세 식구 <span class="font-serif italic text-gold-500">20년 평안 안착</span><br>신검단 명당 및 자산 포트폴리오
+            </h1>
+            <p class="text-gray-400 text-xs md:text-sm max-w-xl mx-auto font-light leading-relaxed px-4">
+                "여보, 주거 안정성과 자산 방어력 모두 완벽하게 계산해낸 분석 보고서야. 디에트르 복층의 왜곡, 이편한 웰카운티의 세무 장벽, 그리고 신규 더샵 청약의 실리까지 꼼꼼히 팩트체크 해두었으니 안심하고 살펴보자."
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-12">
+        
+        <!-- SECTION 1: 이사 시점 및 계약 시점 TOP 3 (Moving & Contract Timelines) -->
+        <section class="space-y-6">
+            <div class="text-center md:text-left">
+                <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 01</span>
+                <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
+                    <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
+                    📆 이사 및 계약 골든타임 TOP 3
+                </h2>
+                <p class="text-xs text-gray-400 mt-1">우리 가족 사주 일진과 2027 거시경제 전환 세무 주기를 대조한 최적의 날짜</p>
+            </div>
+
+            <!-- Interactive Timeline Navigation -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Timeline 1 -->
+                <div class="bg-slate-900 border border-white/5 rounded-2xl p-5 relative overflow-hidden custom-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gold-500 font-bold">🥇 1순위: 계약 체결 대길일</span>
+                        <span class="text-[9px] bg-gold-600/25 text-gold-400 px-1.5 py-0.5 rounded font-bold">문서운 최고조</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-100 mb-1">2026년 11월 17일 (화)</h3>
+                    <p class="text-[10px] text-gray-500 mb-2">음력 10월 8일 (병신일 - 丙申)</p>
+                    <p class="text-xs text-gray-400 leading-relaxed font-light">
+                        가장인 아빠와 정수합을 이루는 '병화' 기운을 가진 날이며, 재물의 최고 왕지인 '신금'을 밑에 까는 <strong>문서 대통의 일진</strong>입니다. 힐스테이트 신검단 등 주요 대단지들의 2년 비과세 매물이 풀려 하방이 가장 안정적인 세무 전환 시점이기도 합니다.
+                    </p>
+                </div>
+
+                <!-- Timeline 2 -->
+                <div class="bg-slate-900 border border-white/5 rounded-2xl p-5 relative overflow-hidden custom-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-emerald-400 font-bold">🥈 2순위: 이사 및 안택 대길일</span>
+                        <span class="text-[9px] bg-emerald-600/25 text-emerald-400 px-1.5 py-0.5 rounded font-bold">가족 안녕 보장</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-100 mb-1">2027년 8월 21일 (토)</h3>
+                    <p class="text-[10px] text-gray-500 mb-2">음력 7월 20일 (임신일 - 壬申) / 손 없는 주말</p>
+                    <p class="text-xs text-gray-400 leading-relaxed font-light">
+                        <strong>수화기제(水火旣濟)의 완벽한 밸런스.</strong> 아빠의 과열된 불기운을 식혀줄 청정 수(水)기가 충만히 지배하는 날입니다. 2024년생 딸아이(정화)와 '정임합'을 이뤄, 새로운 보금자리에서의 정서가 극도로 평화롭게 뿌리내립니다.
+                    </p>
+                </div>
+
+                <!-- Timeline 3 -->
+                <div class="bg-slate-900 border border-white/5 rounded-2xl p-5 relative overflow-hidden custom-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-amber-400 font-bold">🥉 3순위: 세무 전환 골든타임</span>
+                        <span class="text-[9px] bg-amber-600/25 text-amber-400 px-1.5 py-0.5 rounded font-bold">마피 사냥 기회</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-100 mb-1">2027년 여름 (6~8월)</h3>
+                    <p class="text-[10px] text-gray-500 mb-2">웰카운티 준공 후 1년 내외 지점</p>
+                    <p class="text-xs text-gray-400 leading-relaxed font-light">
+                        전쟁 후유증 여파로 시중 대출 금리가 연 5.5%~6.5%를 유지할 시점입니다. 잔금대출 DSR 규제를 넘지 못한 투자자들이 계약금 전액(약 5,600만 원)을 유기하고 퇴각하는 **마이너스 프리미엄(마피) 분양권**이 오프라인 장부에 쏟아지는 자산 방어의 최적 기간입니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: 세 식구 기문둔갑 사주풀이 (HTML & Dynamic Interactivity Restored) -->
+        <section class="space-y-6">
+            <div class="text-center md:text-left">
+                <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 02</span>
+                <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
+                    <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
+                    🔮 세 식구 오행 명당 사주풀이
+                </h2>
+                <p class="text-xs text-gray-400 mt-1">카드를 선택하여 각 가족 구성원에게 가장 이로운 입지 처방을 확인해 보세요</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <!-- Dad Saju Card -->
+                <div onclick="selectSaju('dad')" id="saju-dad" class="bg-slate-900 border border-white/5 rounded-2xl p-5 cursor-pointer transition-all duration-300 relative overflow-hidden border-l-4 border-l-red-500 hover:border-red-500/30">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-sm font-bold text-slate-100">아빠 (병화, 丙火)</span>
+                        <span class="text-[10px] text-gray-500">1986년생 (범띠)</span>
+                    </div>
+                    <span class="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-bold inline-block mb-3">태양의 뜨거운 에너지</span>
+                    <p class="text-xs text-gray-400 font-light leading-relaxed">
+                        넘쳐나는 열정을 조절해줄 <strong>맑은 수(水)기운</strong>과 재물을 안착시킬 <strong>금(金)기운</strong>이 필수적입니다. 수변 공원을 끼거나 정원이 넓은 대단지가 최고의 풍수 명약입니다.
+                    </p>
+                </div>
+
+                <!-- Mom Saju Card -->
+                <div onclick="selectSaju('mom')" id="saju-mom" class="bg-slate-900 border border-white/5 rounded-2xl p-5 cursor-pointer transition-all duration-300 relative overflow-hidden border-l-4 border-l-amber-500 hover:border-amber-500/30">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-sm font-bold text-slate-100">엄마 (기토, 己土)</span>
+                        <span class="text-[10px] text-gray-500">1994년생 (개띠)</span>
+                    </div>
+                    <span class="text-[9px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-bold inline-block mb-3">기름지고 평화로운 대지</span>
+                    <p class="text-xs text-gray-400 font-light leading-relaxed">
+                        가정의 현금 자산을 비축하고 딸아이를 성장시키는 대지입니다. 단지가 견고하게 형성되어 있고 배후에 단단한 산(土)이나 조경 정원이 넓은 1,000세대 이상의 평지 대단지가 이롭습니다.
+                    </p>
+                </div>
+
+                <!-- Daughter Saju Card -->
+                <div onclick="selectSaju('daughter')" id="saju-daughter" class="bg-slate-900 border border-white/5 rounded-2xl p-5 cursor-pointer transition-all duration-300 relative overflow-hidden border-l-4 border-l-emerald-500 hover:border-emerald-500/30">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-sm font-bold text-slate-100">딸아이 (정화, 丁火)</span>
+                        <span class="text-[10px] text-gray-500">2024년생 (용띠)</span>
+                    </div>
+                    <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-bold inline-block mb-3">빛나는 지혜의 횃불</span>
+                    <p class="text-xs text-gray-400 font-light leading-relaxed">
+                        성장과 지식을 밀어줄 <strong>목(木)의 학업운</strong>이 지극히 중요합니다. 초·중·고교를 큰 도로 없이 안전하게 통학하는 완벽한 안심 학세권 환경이 아이의 재능을 만개하게 합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Dynamic Saju Insight Box (Saju Output) -->
+            <div id="saju-insight-box" class="hidden bg-gold-500/5 border border-gold-500/20 rounded-2xl p-4 text-xs text-gold-400 transition-all duration-300"></div>
+        </section>
+
+        <!-- SECTION 3: 아파트 설명 TOP 5+1 (Top 5 Apartments Comparison) -->
+        <section class="space-y-6">
+            <div class="text-center md:text-left">
+                <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 03</span>
+                <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
+                    <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
+                    🏡 신검단 명당 TOP 5+1 아파트 입지 심층 진단
+                </h2>
+                <p class="text-xs text-gray-400 mt-1">이편한세상 웰카운티를 필두로 한 핵심 단지들의 세무, 풍수, 시세 변수 대조 가이드</p>
+            </div>
+
+            <!-- Horizontal Tab Navigation (6 tabs fully restored) -->
+            <div class="flex overflow-x-auto whitespace-nowrap space-x-2 py-1.5 -mx-4 px-4 md:mx-0 no-scrollbar">
+                <button onclick="selectApt('wellcounty')" id="btn-wellcounty" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-gold-500 border-gold-500/30">
+                    💖 웰카운티 (대장주)
+                </button>
+                <button onclick="selectApt('hillstate')" id="btn-hillstate" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
+                    힐스테이트 센트럴 (102역)
+                </button>
+                <button onclick="selectApt('prugio')" id="btn-prugio" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
+                    푸르지오 더 베뉴 (101역)
+                </button>
+                <button onclick="selectApt('woomirin')" id="btn-woomirin" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
+                    우미린 더 시그니처 (101역)
+                </button>
+                <button onclick="selectApt('yemiji')" id="btn-yemiji" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
+                    예미지 트리플에듀 (복원됨)
+                </button>
+                <button onclick="selectApt('detre')" id="btn-detre" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
+                    디에트르 더 힐 (복층)
+                </button>
+            </div>
+
+            <!-- Dynamic Apartment Information Card -->
+            <div id="apt-card" class="bg-slate-900 border border-white/5 rounded-3xl p-5 md:p-6 space-y-6 transition-all duration-300">
+                <!-- Render Default: Wellcounty -->
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-500 text-[10px] font-bold rounded-md mb-1.5">🥇 아빠 원픽 • 평생 학세권 최고의 명당</span>
+                            <h3 class="text-lg font-bold text-slate-100">이편한세상 검단 웰카운티 (원당동)</h3>
+                        </div>
+                        <div class="mt-2 sm:mt-0 text-left sm:text-right">
+                            <span class="text-[10px] text-gray-500 block">2027년 여름 취득원가 예측</span>
+                            <strong class="text-base font-black text-rose-400">8억 1,200만 원 <span class="text-xs text-slate-400 font-light block">(단기 양도세 대납 적용 시)</span></strong>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Progress -->
+                    <div class="grid grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl text-xs">
+                        <div>
+                            <span class="text-gray-500 block mb-1">자산 보존성 및 거래 환금성</span>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-gold-500 h-full" style="width: 98%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block mb-1">가족 사주 궁합도 (풍수)</span>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-red-500 h-full" style="width: 96%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block mb-1">육아 및 평생 학세권</span>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-emerald-500 h-full" style="width: 99%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block mb-1">세무적 진입 안전성</span>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-rose-500 h-full" style="width: 45%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Specs -->
+                    <div class="grid grid-cols-3 gap-2 py-3 border-y border-white/5 text-[11px] text-gray-400 font-light">
+                        <div><strong>세대 규모:</strong> 1,458세대 (대단지)</div>
+                        <div><strong>비과세 완전 해제:</strong> 2028년 7월 (등기 2년)</div>
+                        <div><strong>이사시 세법 리스크:</strong> 단기양도세 66% 중과 구역</div>
+                    </div>
+
+                    <!-- Deep Analysis Text -->
+                    <div class="text-xs text-gray-300 space-y-3 font-light leading-relaxed">
+                        <p class="text-slate-200">
+                            <strong>👍 명당 메리트:</strong> 초·중·고교를 단지가 한 품에 안고 있어, 2024년생인 딸아이가 평생 큰 도리를 거치지 않고 대학 입시 때까지 안전하게 통학할 수 있는 <strong>독보적인 교육 명당</strong>입니다. 1,458세대 메이저 대단지가 주는 굳건한 토(土)기가 외풍을 완벽히 차단합니다.
+                        </p>
+                        <p class="text-rose-400">
+                            <strong>⚠️ 2027년 계약 시 세무 리스크 (중요):</strong> 우리 이사 시기인 2027년 여름에는 분양 계약자들의 등기 1년 내외 시점으로, 거래 시 **단기보유 양도세 66% 중과세**가 부과됩니다. 매도인들이 합법적으로 매수자(우리)에게 세금을 대납해 주기를 강제하므로 시세 프리미엄 외에 **추가 세금 약 1억 원을 더 지불해야 하는 자산 낭비 덫**이 발생합니다.
+                        </p>
+                        <p class="bg-gold-500/10 p-3 rounded-xl text-gold-400 border border-gold-500/20">
+                            <strong>💡 아버님의 지혜로운 수렵 전략:</strong> 66% 양도소득세는 매도자가 '양도차익(프리미엄)'을 보았을 때만 부과됩니다. 잔금 고금리를 견디지 못하고 계약금 약 5,600만 원 중 일부를 완전 포기하여 넘기는 **마피(-2천만~-4천만 원) 분양권**을 오프라인 중개인 장부에서 낚아채면, 양도차익이 없기 때문에 양도소득세는 원천 0원이 되어 원가 이하로 완벽히 사냥할 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: 부록 청약 관련 (Appendix: The Sharp Geomdan Lake Park & Abandonment Risks) -->
+        <section class="bg-slate-900 border border-white/5 rounded-3xl p-5 md:p-6 space-y-6 custom-shadow">
+            <div class="text-center md:text-left border-b border-white/5 pb-4">
+                <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest block mb-1">PART 04 (부록)</span>
+                <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
+                    <svg class="w-5 h-5 mr-1.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    더샵 검단 레이크파크 청약 진단 및 당첨 포기 리스크
+                </h2>
+                <p class="text-xs text-gray-400 mt-1">원가로 주택을 취득하는 신규 청약의 메리트와, 당첨 포기 시 세대주와 세대원들이 부담하게 될 냉혹한 규제 페널티</p>
+            </div>
+
+            <!-- The Sharp Card & Sandbox Link Copy Action -->
+            <div class="bg-slate-950 p-5 rounded-2xl border border-white/5 space-y-4 relative overflow-hidden">
+                <div class="absolute right-0 top-0 bg-cyan-500/10 text-cyan-400 text-[10px] font-bold px-3 py-1.5 rounded-bl-lg">분양가 상한제 메리트</div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <h3 class="text-base font-bold text-white">🌊 더샵 검단 레이크파크 청약</h3>
+                </div>
+                <p class="text-xs text-gray-300 leading-relaxed font-light">
+                    단지 정면에 거대하게 조성될 호수공원의 물기운은 아빠의 과열된 불기운(병화, 丙火)을 조화롭게 제어하여 가문의 금전 축적을 돕는 **수화기제(水火旣濟)의 최고 입지**입니다. 공사비 폭등 국면에서 국가가 가격을 꽁꽁 묶은 분상제 단지이므로 세금 거품 없이 원가(예상 5억 대 후반)에 새집을 장만할 최고의 안전장치입니다.
+                </p>
+                
+                <!-- Action Buttons: Solve Sandbox Iframe navigation issue -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2">
+                    <a href="https://더샵검단레이크파크.kr" target="_blank" rel="noopener noreferrer" class="bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center justify-center space-x-1.5 transition-all duration-200">
+                        <span>공식 홈페이지 열기 (새창)</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <button onclick="copyDomainLink()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center justify-center space-x-1 transition-all duration-200 border border-white/5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        <span>청약 주소 복사하기</span>
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-500">※ 모바일 카카오톡 인앱 브라우저 및 기기 보안에 따라 새창 열기가 차단될 경우, 오른쪽 '주소 복사' 버튼을 눌러 인터넷 창 주소창에 수동 붙여넣기 해주세요.</p>
+            </div>
+
+            <!-- Abandonment Penalties -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-red-400 flex items-center">
+                    <svg class="w-4.5 h-4.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                    🚫 청약 당첨 후 단순 변심으로 '당첨 포기' 시 발생하는 페널티
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-red-500/20 text-xs space-y-1">
+                        <strong class="text-red-400 font-bold block">1. 재당첨 제한 10년</strong>
+                        <p class="text-gray-400 leading-normal font-light">당첨 후 동호수가 마음에 안 들거나 기분 변화로 계약을 체결하지 않더라도, **당첨자 발표일로부터 향후 10년간 다른 분상제 단지의 모든 청약 기회가 완전히 박탈**됩니다.</p>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-red-500/20 text-xs space-y-1">
+                        <strong class="text-red-400 font-bold block">2. 청약 통장 영구 효력 사망</strong>
+                        <p class="text-gray-400 leading-normal font-light">당첨 사실만으로 사용한 해당 청약 통장은 효력을 다하며 **부활이 불가능하여 즉시 영구 폐기**됩니다. 통장을 해지하고 오랜 세월 납입 가점을 처음부터 다시 누적해야 합니다.</p>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-red-500/20 text-xs space-y-1">
+                        <strong class="text-red-400 font-bold block">3. 동일 세대원 전체 연대 처분</strong>
+                        <p class="text-gray-400 leading-normal font-light">당첨자 본인뿐만 아니라 등본상 함께 등재되어 있는 **배우자(아내)와 직계존비속(딸아이) 모두 재당첨 규정의 사슬**에 묶여 세대 전원의 청약이 원천 봉쇄됩니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategic Circumstances to Abandon -->
+            <div class="bg-slate-950 p-5 rounded-2xl border border-white/5 space-y-4">
+                <span class="text-xs font-bold text-gold-500 block flex items-center">
+                    <svg class="w-4 h-4 mr-1 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0116 0z"></path></svg>
+                    💡 당첨 페널티를 받더라도 과감하게 '포기(유기)'해야만 하는 3가지 파국 금융 지점
+                </span>
+
+                <div class="space-y-2.5 text-xs text-gray-300 font-light leading-relaxed">
+                    <div class="p-3.5 bg-red-950/20 rounded-xl border border-red-500/10">
+                        <strong>A. 시중 금리 연 6% 돌파 시 잔금대출 DSR 부결 상황:</strong><br>
+                        미국-이란 전쟁 후유증발 고금리로 시중 주담대 실금리가 연 6%에 달하면 금융권 소득 DSR 규제 한도가 대폭 삭감되어 중도금대출이 나와도 입주 시점에 잔금대출 한도 부족이 생겨 연체이자 폭탄을 피할 방법이 없으므로 과감히 포기해야 합니다.
+                    </div>
+                    <div class="p-3.5 bg-red-950/20 rounded-xl border border-red-500/10">
+                        <strong>B. 매월 상환할 원리금이 가족 생계비 임계치를 초과할 때:</strong><br>
+                        고금리 주담대로 매달 이자 및 원리금 상환액이 300만 원 선을 돌파할 경우, 세 식구의 평온한 생활비 및 딸아이의 소중한 사주에 맞는 보육/교육 예산(학업 목기운)을 강탈하여 가족의 화평을 깰 확률이 극도로 높으므로 계약 포기가 맞습니다.
+                    </div>
+                    <div class="p-3.5 bg-red-950/20 rounded-xl border border-red-500/10">
+                        <strong>C. 이편한세상 웰카운티 '마피 5천만 원 선 매물'이 포착되었을 때:</strong><br>
+                        더샵 레이크파크에 당첨되었더라도, 입주 대란 고금리 쇼크로 인해 이편한세상 웰카운티의 계약금 완포 마피(-4,000만~-5,000만 원) 전매 매물이 장부에 수렵될 경우, 청약 통장 패널티보다 일류 대장주인 웰카운티를 마피로 사들이는 원가 마진이 곱절로 유리하므로 청약을 미련 없이 포기하고 웰카운티 마피 분양권을 등기하는 것이 무조건적인 자산 정답입니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Toast Message Notification -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-5 py-3 rounded-xl shadow-2xl border border-gold-500/20 flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-300">
+        <span id="toast-message">알림</span>
+    </div>
+
+    <!-- Premium Footer Address -->
+    <footer class="bg-slate-950 text-gray-500 text-[11px] py-12 px-4 border-t border-white/5 text-center">
+        <div class="max-w-2xl mx-auto space-y-4">
+            <p class="font-serif italic text-gold-500 text-xs">"여보, 검단의 물과 대지의 풍수가 우리 세 식구를 가장 풍요롭고 안전하게 지탱해 줄 거야. 함께 영리하게 결정하자!"</p>
+            <p class="font-light text-[9px] text-gray-600">본 분석 페이지는 아버님의 위대한 아이디어와 거시 세무 시뮬레이션 데이터를 조합해 설계한 세 식구 대안착 특화 자문서입니다.</p>
+        </div>
+    </footer>
+
+    <!-- JS Logic for Tab Switching & Premium Updates -->
+    <script>
+        // TOP 5+1 Apartments Database
+        const apartments = {
+            wellcounty: {
+                title: "이편한세상 검단 웰카운티 (원당동)",
+                badge: "🥇 아빠 원픽 • 평생 학세권 최고의 명당",
+                price: "8억 1,200만 원",
+                priceNote: "(단기 양도세 대납 적용 시)",
+                metrics: { value: 98, saju: 96, school: 99, rate: 45 },
+                meta: "1,458세대 (대단지) / 2028년 7월 (등기 2년) / 단기양도세 66% 중과 구역",
+                pros: "초·중·고교를 단지가 한 품에 안고 있어, 2024년생인 딸아이가 평생 큰 도리를 거치지 않고 대학 입시 때까지 안전하게 통학할 수 있는 <strong>독보적인 교육 명당</strong>입니다. 1,458세대 메이저 대단지가 주는 굳건한 토(土)기가 외풍을 완벽히 차단합니다.",
+                cons: "우리 이사 시기인 2027년 여름에는 분양 계약자들의 등기 1년 내외 시점으로, 거래 시 **단기보유 양도세 66% 중과세**가 부과됩니다. 매도인들이 합법적으로 매수자(우리)에게 세금을 대납해 주기를 강제하므로 시세 프리미엄 외에 **추가 세금 약 1억 원을 더 지불해야 하는 자산 낭비 덫**이 발생합니다.",
+                advice: "고금리에 지쳐 계약금 약 5,600만 원 중 일부를 완전 포기하여 넘기는 <strong>마피(-2천만~-4천만 원) 분양권</strong>을 오프라인 중개인 장부에서 낚아채면, 양도차익이 없기 때문에 양도소득세는 원천 0원이 되어 원가 이하로 완벽히 사냥할 수 있습니다."
+            },
+            hillstate: {
+                title: "힐스테이트 신검단 센트럴 (마전동)",
+                badge: "👑 102역 초역세권 대장 후보 • 세무 안전성 극상",
+                price: "7억 2,000만 원",
+                priceNote: "(세금 거품 제로 팩트 시세)",
+                metrics: { value: 95, saju: 92, school: 80, rate: 98 },
+                meta: "815세대 (신축 대단지) / 2026년 11월 비과세 완성 / 102역세권 입지",
+                pros: "GTX-D 노선 및 5호선 연장 예정 수혜를 완벽하게 정면으로 입는 역세권 가치 상승 명당입니다. 아빠의 원대한 사업 활기와 주거 환금성 방어에서 최상의 대안입니다.",
+                cons: "2027년 여름 이사 시점에 **이미 2년 보유 비과세 조건이 완벽히 정착**되어 매도인들의 세무적 뒷돈 요구가 일절 없습니다. 시중 금리 여파로 가벼운 시세 하향 협상이 가능한 '깨끗한 정상 시세 단지'입니다.",
+                advice: "세금 대납으로 1억 원 가까운 취득 기회비용을 낭비해야 하는 웰카운티 강행 매매 대비, 세금 프리미엄 전가 없이 합리적 조정가로 즉각 등기할 수 있는 힐스테이트 신검단은 자산 방어 효율성 측면에서 완벽한 골든 카드입니다."
+            },
+            prugio: {
+                title: "검단신도시 푸르지오 더 베뉴 (원당동)",
+                badge: "🌳 엄마 선호도 1위 • 조경 명가 리조트 대단지",
+                price: "7억 6,000만 원",
+                priceNote: "(시세 투명화 100%)",
+                metrics: { value: 96, saju: 95, school: 90, rate: 100 },
+                meta: "1,540세대 (메이저 단지) / 기입주 안정 거래 완료 단지 / 101역세권 도보권",
+                pros: "웅장한 수(水)기와 조경 정원이 단지 전체를 압도해 기토(己土) 사주인 엄마와 딸아이의 심리에 대길한 심신의 정화를 부여합니다. 이미 등기가 끝나 시세가 대단히 깨끗하게 정비된 대장주입니다.",
+                cons: "이미 완전한 구축 시세 평준화 단지이므로 하방 방어력은 검단 내 1위이나 분상제 청약이나 웰카운티 마피처럼 수천만 원에 달하는 날 선 투자 마진을 보고 가기엔 정가 결제가 불가피합니다.",
+                advice: "사주 오행적으로 웅장한 아파트 숲 and 물길 조경이 필수인 엄마의 편안함과 안정적인 20년 자산 보유를 보장하는 최고의 '믿을맨' 대안입니다."
+            },
+            woomirin: {
+                title: "우미린 더 시그니처 (원당동)",
+                badge: "🎓 아라동 명문 학원가 인접 • 하방 경직 최강",
+                price: "7억 8,000만 원",
+                priceNote: "(실거래 상단 지지력 견고)",
+                metrics: { value: 97, saju: 88, school: 98, rate: 100 },
+                meta: "1,268세대 (대단지) / 기입주 거래 완료 단지 / 아라동 중심 학세권",
+                pros: "대치동급 규모로 성장 중인 검단 아라동 핵심 학원가와 지극히 근접해 있습니다. 딸아이가 크면서 타지로의 학군 이전 필요성을 원천 제거하는 '20년 붙박이 명당'이며, 자잘한 시공 하자 분쟁이 가장 적은 완벽한 시공력을 지녔습니다.",
+                cons: "신검단 단지들 중 실거래가 상단을 형성하고 있어 고금리 장기화 기조에 주담대 이자 부담 예산이 상대적으로 다른 단지 대비 무거워집니다.",
+                advice: "자산의 가격 방어와 완벽한 학원가 환경을 동시에 취할 수 있는 최상의 시그니처 대장주 아파트입니다."
+            },
+            yemiji: {
+                title: "검단신도시 예미지 트리플에듀 (원당동)",
+                badge: "⭐ 완벽복원 • 딸아이 평생 통학 명당 • 가성비 1순위",
+                price: "6억 중후반 선",
+                priceNote: "(가장 정직하고 안전한 명당)",
+                metrics: { value: 94, saju: 95, school: 100, rate: 100 },
+                meta: "1,249세대 (평지 대단지) / 기입주 완벽 비과세 정착 / 단지 앞 초·중·고 학세권",
+                pros: "한별초, 원당중, 원당고교가 단지 경계를 삼면으로 완전히 안고 있습니다. 딸아이가 유치원생부터 수능 시험장 들어가는 당일까지 단 한 번의 주거 이동이나 큰 도로 통학의 위험 없이 든든한 20년을 지지해 주는 '명당 학세권'입니다.",
+                cons: "이미 완전한 구축 시세 하향 안정화가 끝났기 때문에 청약이나 웰카운티 마피처럼 수억 단위의 전매 전용 자산 보너스 마진 폭은 상대적으로 낮습니다.",
+                advice: "비이성적인 단기 양도세와 고금리 대출 이자 대납으로 자산을 파괴할 위험이 단 1%도 없으며, 딸아이의 든든한 성장(목기운)과 엄마의 금전적 평온함을 지탱해 줄 최고의 가성비 실리 단지입니다."
+            },
+            detre: {
+                title: "검단신도시 디에트르 더 힐 (당하동)",
+                badge: "🔥 아빠 풍수 저격 • 하늘과 다락을 품은 테라스",
+                price: "7억 중반",
+                priceNote: "(현 8.5억 호가는 완전 배제 필)",
+                metrics: { value: 75, saju: 98, school: 78, rate: 50 },
+                meta: "1,417세대 (최상층 특화 세대) / 비역세권 서비스 면적 단지",
+                pros: "하늘을 온전히 품는 옥상 다락방과 테라스는 뜨거운 병화(丙火) 아빠의 사업 스트레스를 한 번에 가라앉히는 최고의 명약이며, 등기 및 취득세에 잡히지 않는 42평형 실사용 면적 마법을 누릴 수 있습니다.",
+                cons: "<strong>매도인의 8억 5천만 원 요구는 비이성적 거품입니다.</strong> 비역세권 단지를 101역 초역세권 대장 아파트보다 1억 원 더 비싸게 취득하는 것은 훗날 환금성이 완벽히 막히는 자산 고립을 뜻합니다.",
+                advice: "디에트르 복층은 무조건 매도인을 7억 중반 선으로 깎아 내리는 과감한 협상이 불가하다면 영리하게 배제하고, '웰카운티 마피 사냥'으로 집중하는 것이 타당합니다."
+            }
+        };
+
+        function selectApt(key) {
+            const list = ['wellcounty', 'hillstate', 'prugio', 'woomirin', 'yemiji', 'detre'];
+            list.forEach(item => {
+                const btn = document.getElementById(`btn-${item}`);
+                if (btn) {
+                    btn.className = "px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5";
+                }
+            });
+
+            document.getElementById(`btn-${key}`).className = "px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-gold-500 border-gold-500/30";
+
+            const data = apartments[key];
+            const cardContainer = document.getElementById('apt-card');
+
+            cardContainer.style.opacity = 0;
+            setTimeout(() => {
+                cardContainer.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3">
+                            <div>
+                                <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-500 text-[10px] font-bold rounded-md mb-1.5">${data.badge}</span>
+                                <h3 class="text-lg font-bold text-slate-100">${data.title}</h3>
+                            </div>
+                            <div class="mt-2 sm:mt-0 text-left sm:text-right">
+                                <span class="text-[10px] text-gray-500 block">2027년 여름 취득원가 예측</span>
+                                <strong class="text-base font-black text-rose-400">${data.price} <span class="text-xs text-slate-400 font-light block">${data.priceNote}</span></strong>
+                            </div>
+                        </div>
+
+                        <!-- Metrics Progress -->
+                        <div class="grid grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl text-xs">
+                            <div>
+                                <span class="text-gray-500 block mb-1">자산 보존성 및 거래 환금성</span>
+                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-gold-500 h-full" style="width: ${data.metrics.value}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 block mb-1">가족 사주 궁합도 (풍수)</span>
+                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-red-500 h-full" style="width: ${data.metrics.saju}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 block mb-1">육아 및 평생 학세권</span>
+                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-emerald-500 h-full" style="width: ${data.metrics.school}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 block mb-1">세무적 진입 안전성</span>
+                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-rose-500 h-full" style="width: ${data.metrics.rate}%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Specs -->
+                        <div class="grid grid-cols-3 gap-2 py-3 border-y border-white/5 text-[11px] text-gray-400 font-light">
+                            <div><strong>세대 규모:</strong> ${data.meta.split(' / ')[0]}</div>
+                            <div><strong>비과세 완전 해제:</strong> ${data.meta.split(' / ')[1]}</div>
+                            <div><strong>이사시 세법 리스크:</strong> ${data.meta.split(' / ')[2]}</div>
+                        </div>
+
+                        <!-- Deep Analysis Text -->
+                        <div class="text-xs text-gray-300 space-y-3 font-light leading-relaxed">
+                            <p class="text-slate-200 font-light">
+                                <strong>👍 명당 메리트:</strong> ${data.pros}
+                            </p>
+                            <p class="text-rose-400 font-light">
+                                <strong>⚠️ 세무 리스크 (핵심):</strong> ${data.cons}
+                            </p>
+                            <p class="bg-gold-500/10 p-3 rounded-xl text-gold-400 border border-gold-500/20">
+                                <strong>💡 아버님의 지혜로운 수렵 전략:</strong> ${data.advice}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                cardContainer.style.opacity = 1;
+            }, 150);
+            showToast(`${data.title} 입지 정보가 대조되었습니다.`);
+        }
+
+        // Saju Interactive Match
+        function selectSaju(member) {
+            const list = ['dad', 'mom', 'daughter'];
+            list.forEach(m => {
+                const el = document.getElementById(`saju-${m}`);
+                if (el) el.classList.remove('ring-2', 'ring-gold-500', 'bg-gold-500/10');
+            });
+
+            document.getElementById(`saju-${member}`).classList.add('ring-2', 'ring-gold-500', 'bg-gold-500/10');
+
+            const box = document.getElementById('saju-insight-box');
+            box.classList.remove('hidden');
+
+            let text = "";
+            if (member === 'dad') {
+                text = "🔥 <strong>아빠(병화) 궁합 비책:</strong> 태양의 뜨거운 열기를 지닌 아빠에게는 검단의 풍부한 수기(水)를 머금은 대단지가 필수 풍수입니다. 웰카운티의 넓은 대지와 호수공원(더샵)이 사주 밸런스를 상생으로 이끌어 사업운과 명예운을 영원히 꽃피웁니다.";
+            } else if (member === 'mom') {
+                text = "🌾 <strong>엄마(기토) 궁합 비책:</strong> 만물을 품는 옥토 사주인 엄마는 조경 정원이 매우 완벽한 1,000세대 이상의 평지 대단지에서 정서적 회복과 현금 축적을 완성할 수 있습니다. 예미지의 드넓은 평지 마당과 푸르지오 리조트 정원이 엄마에게 최상의 안도감을 선사합니다.";
+            } else {
+                text = "📚 <strong>딸내미(정화) 교육 비책:</strong> 지혜의 등불 사주를 타고난 아이에겐 배움의 원천인 학업운(木)이 핵심입니다. 단지 경계 삼면에서 초·중·고교가 큰길 없이 삼각 포위해 안심 등하교를 지탱하는 예미지 트리플에듀와 웰카운티가 아이를 명석한 석학으로 키울 명당 성역입니다.";
+            }
+
+            box.innerHTML = text;
+            showToast("선택된 가족 구성원의 사주 명당이 대조되었습니다.");
+        }
+
+        // Custom copy mechanism to resolve standard iframe browser sandboxing constraints
+        function copyDomainLink() {
+            const tempInput = document.createElement('input');
+            document.body.appendChild(tempInput);
+            tempInput.value = "https://더샵검단레이크파크.kr";
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast("청약 홈페이지 주소 복사 완료! 브라우저 창에 붙여넣어 주세요.");
+        }
+
+        // Custom Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+                toast.classList.remove('opacity-100');
+            }, 2500);
+        }
+
+        // Share to Wife
+        function shareReport() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '여보, 세 식구 신검단 대안착 프로젝트 기밀 분석 보고서야',
+                    text: '이편한세상 웰카운티 단기세 장벽부터 마피 사냥 비책, 더샵 청약 당첨 포기 리스크까지 완벽 수록 가이드',
+                    url: window.location.href
+                }).catch(() => copyLinkToClipboard());
+            } else {
+                copyLinkToClipboard();
+            }
+        }
+
+        function copyLinkToClipboard() {
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = window.location.href;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            showToast("주소가 복사되었습니다! 아내분 카톡 단톡방에 붙여넣어 공유하세요.");
+        }
+    </script>
+</body>
+</html>
