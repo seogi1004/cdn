@@ -456,18 +456,72 @@
                             </div>
                         </div>
                         
-                        <!-- 조감도 및 동호수 배치도 썸네일 (2열 병렬) -->
-                        <div class="bg-slate-900 p-3.5 rounded-xl border border-cyan-500/10 space-y-2 md:col-span-2">
-                            <span class="text-gray-400 font-bold block text-cyan-400 text-[11px] mb-1">🗺️ 단지 배치도 & 동호수 배치도 (클릭 시 확대)</span>
-                            <div class="grid grid-cols-2 gap-3">
-                                <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_1.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-xl border border-white/5 bg-slate-950 aspect-[16/10] flex items-center justify-center">
-                                    <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_1.jpg" alt="더샵 검단 레이크파크 단지 조감도" class="object-cover w-full h-full opacity-75 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300">
-                                    <span class="absolute inset-0 bg-slate-950/60 group-hover:bg-slate-950/20 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 단지배치도 크게보기</span>
-                                </a>
-                                <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_1_1.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-xl border border-white/5 bg-slate-950 aspect-[16/10] flex items-center justify-center">
-                                    <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_1_1.jpg" alt="더샵 검단 레이크파크 동호수 배치도" class="object-cover w-full h-full opacity-75 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300">
-                                    <span class="absolute inset-0 bg-slate-950/60 group-hover:bg-slate-950/20 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 동호수배치도 크게보기</span>
-                                </a>
+                        <!-- 조감도 및 동호수 배치도 갤러리 (대화형 탭 추가) -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-cyan-500/10 space-y-3 md:col-span-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2">
+                                <span class="text-cyan-400 font-bold text-xs flex items-center">
+                                    <svg class="w-4 h-4 mr-1 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                                    🗺️ 단지 배치도 & 동호수 배치도 갤러리
+                                </span>
+                                <!-- 대화형 탭 버튼 -->
+                                <div class="flex bg-slate-950 p-0.5 rounded-lg border border-white/5 text-[10px] self-start sm:self-auto">
+                                    <button onclick="switchMapTab('layout')" id="tab-btn-layout" class="px-2.5 py-1 rounded bg-cyan-600 text-white font-semibold transition-all">단지배치도/도면 (5장)</button>
+                                    <button onclick="switchMapTab('dongho')" id="tab-btn-dongho" class="px-2.5 py-1 rounded text-slate-400 font-semibold transition-all">동호수배치도 (3장)</button>
+                                </div>
+                            </div>
+
+                            <!-- 단지배치도 / 도면 탭 콘텐츠 -->
+                            <div id="tab-content-layout" class="space-y-2">
+                                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_1.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_1.jpg" alt="단지 조감도 1" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-gray-300 font-medium">조감도 1 (AB22)</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_2.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_2.jpg" alt="단지 조감도 2" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-gray-300 font-medium">조감도 2 (AB23)</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_3.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_3.jpg" alt="단지 도면 3" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-gray-300 font-medium">단지도면 3</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_4.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_4.jpg" alt="단지 도면 4" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-gray-300 font-medium">단지도면 4</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_5.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/layout_img_5.jpg" alt="단지 도면 5" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-gray-300 font-medium">단지도면 5</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                </div>
+                                <div class="text-[9px] text-gray-500 text-right">※ 썸네일 클릭 시 공식 고해상도 도면을 원본(새창)으로 보실 수 있습니다.</div>
+                            </div>
+
+                            <!-- 동호수배치도 탭 콘텐츠 -->
+                            <div id="tab-content-dongho" class="space-y-2 hidden">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_1_1.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_1_1.jpg" alt="AB22블록 동호수배치도" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-cyan-400 font-medium font-semibold">AB22블록 동호수</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_2_1.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_2_1.jpg" alt="AB23블록 동호수배치도 1" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-cyan-400 font-medium font-semibold">AB23블록 (도면 1)</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                    <a href="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_2_2.jpg" target="_blank" rel="noopener noreferrer" class="relative group block overflow-hidden rounded-lg border border-white/5 bg-slate-950 aspect-[4/3]">
+                                        <img src="https://xn--c79an5jhjs4nmongpjhypa161d.kr/resources/img/sub/dongho_img_2_2.jpg" alt="AB23블록 동호수배치도 2" class="object-cover w-full h-full opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                                        <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-1 py-0.5 text-center text-[9px] text-cyan-400 font-medium font-semibold">AB23블록 (도면 2)</div>
+                                        <span class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/0 transition-colors flex items-center justify-center text-[10px] text-white font-bold opacity-0 group-hover:opacity-100">🔍 크게보기</span>
+                                    </a>
+                                </div>
+                                <div class="text-[9px] text-gray-500 text-right">※ 썸네일 클릭 시 공식 고해상도 도면을 원본(새창)으로 보실 수 있습니다.</div>
                             </div>
                         </div>
                     </div>
@@ -769,6 +823,26 @@
             document.execCommand('copy');
             document.body.removeChild(dummy);
             showToast("주소가 복사되었습니다! 아내분 카톡 단톡방에 붙여넣어 공유하세요.");
+        }
+
+        // Switch Map/Dongho Tabs
+        function switchMapTab(tab) {
+            const layoutBtn = document.getElementById('tab-btn-layout');
+            const donghoBtn = document.getElementById('tab-btn-dongho');
+            const layoutContent = document.getElementById('tab-content-layout');
+            const donghoContent = document.getElementById('tab-content-dongho');
+
+            if (tab === 'layout') {
+                layoutBtn.className = "px-2.5 py-1 rounded bg-cyan-600 text-white font-semibold transition-all";
+                donghoBtn.className = "px-2.5 py-1 rounded text-slate-400 font-semibold transition-all";
+                layoutContent.classList.remove('hidden');
+                donghoContent.classList.add('hidden');
+            } else {
+                layoutBtn.className = "px-2.5 py-1 rounded text-slate-400 font-semibold transition-all";
+                donghoBtn.className = "px-2.5 py-1 rounded bg-cyan-600 text-white font-semibold transition-all";
+                layoutContent.classList.add('hidden');
+                donghoContent.classList.remove('hidden');
+            }
         }
     </script>
 </body>
