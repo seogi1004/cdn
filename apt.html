@@ -1047,7 +1047,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const pirPress   = 2.5 * SF;                                    // PIR
         const nonResPress = 2 * SF;                                     // 비주거 부실 전이
         const ageYears = 2026 - (apt.builtYear || 2020);
-        const agePress = Math.max(ageYears * 0.4 - (ageYears <= 5 ? 1 : 0), 0) * SF; // 연식 감가 (5년 초과 시 연 0.4%p)
+        const agePress = Math.max(ageYears * 0.5 - (ageYears <= 5 ? 1 : 0), 0) * SF; // 연식 감가 (5년 초과 시 연 0.5%p)
         // 스트레스 DSR: 금리 4% 초과 시 가산금리로 매수여력 강제 축소 (ratePress=금리비용, dsrPress=규제적 한도절삭)
         const dsrPress = Math.max((rate - 4.0) * 1.5, 0) * SF;
         // 역전세 투매: 전세가율 60% 미만 시 갭투자자 강제 매도 압력 급증
@@ -1825,7 +1825,7 @@ ${Object.entries(regionBeta).map(([r, v]) => '| ' + r + ' | ' + v.beta + ' | ' +
 | jeonsePress | 3×${d.SF} (전세축소 고정) | ${n(d.jeonsePress)} |
 | pirPress | 2.5×${d.SF} (PIR 고정) | ${n(d.pirPress)} |
 | nonResPress | 2×${d.SF} (비주거부실 고정) | ${n(d.nonResPress)} |
-| agePress | max(${d.ageYears}×0.4${d.ageYears<=5?'-1':''},0)×${d.SF} (연식${d.ageYears}년) | ${n(d.agePress)} |
+| agePress | max(${d.ageYears}×0.5${d.ageYears<=5?'-1':''},0)×${d.SF} (연식${d.ageYears}년) | ${n(d.agePress)} |
 | dsrPress | max((${c.rate}-4.0)×1.5,0)×${d.SF} (스트레스DSR) | ${n(d.dsrPress)} |
 | gapSellOffPress | max((60-${d.jeonseRatio})/10×2.0,0)×${d.SF} (전세가율${d.jeonseRatio}%) | ${n(d.gapSellOffPress)} |
 | sentimentPress | (100-${d.sentiment})/10×1.8×${d.SF} (매수심리${d.sentiment}) | ${n(d.sentimentPress)} |
