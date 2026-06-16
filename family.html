@@ -600,6 +600,16 @@
         <!-- Close Area (click outside to close) -->
         <div onclick="closeImageModal()" class="absolute inset-0 cursor-zoom-out"></div>
         
+        <!-- Left Nav Button -->
+        <button id="modal-prev-btn" onclick="navigateModal(-1)" class="absolute left-2 sm:left-4 z-50 text-white/50 hover:text-white bg-slate-900/60 hover:bg-slate-800 p-2 sm:p-3 rounded-full border border-white/5 transition-all text-xl font-bold flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 shadow-2xl focus:outline-none hidden">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+
+        <!-- Right Nav Button -->
+        <button id="modal-next-btn" onclick="navigateModal(1)" class="absolute right-2 sm:right-4 z-50 text-white/50 hover:text-white bg-slate-900/60 hover:bg-slate-800 p-2 sm:p-3 rounded-full border border-white/5 transition-all text-xl font-bold flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 shadow-2xl focus:outline-none hidden">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+
         <!-- Modal Content Box -->
         <div class="relative bg-slate-900 border border-white/10 rounded-2xl p-3 max-w-[95%] max-h-[90%] flex flex-col items-center shadow-2xl transition-all duration-300 scale-95" id="modal-box">
             <!-- Modal Header -->
@@ -625,7 +635,7 @@
             
             <!-- Modal Footer Hint -->
             <div class="text-[10px] text-gray-500 mt-2 text-center w-full">
-                💡 모바일 및 PC 화면에서 손가락 줌인(Zoom-in) 또는 클릭하여 도면을 자유롭게 확대해 보세요.
+                💡 모바일 및 PC 화면에서 좌우 방향키(←, →) 또는 옆의 화살표 버튼을 클릭해 다른 도면도 연속해서 볼 수 있습니다.
             </div>
         </div>
     </div>
@@ -880,26 +890,38 @@
             }
         }
 
+        // Modal image list tracking for navigation
+        let modalImages = [];
+        let currentModalIndex = -1;
+
         // Open Image Modal
         function openImageModal(e, url, title) {
             if (e) e.preventDefault();
             
+            // Find active tab content to get correct context of images
+            const layoutTab = document.getElementById('tab-content-layout');
+            const activeTabContent = layoutTab.classList.contains('hidden')
+                ? document.getElementById('tab-content-dongho')
+                : layoutTab;
+            
+            // Collect all image links inside the active tab container
+            const links = Array.from(activeTabContent.querySelectorAll('a[onclick]'));
+            modalImages = links.map(link => ({
+                url: link.getAttribute('href'),
+                title: link.querySelector('img').getAttribute('alt') || link.textContent.trim()
+            }));
+            
+            // Find current index
+            currentModalIndex = modalImages.findIndex(img => img.url === url);
+            if (currentModalIndex === -1) {
+                modalImages = [{ url, title }];
+                currentModalIndex = 0;
+            }
+            
+            updateModalContent();
+            
             const modal = document.getElementById('image-modal');
-            const modalImg = document.getElementById('modal-image');
-            const modalTitle = document.getElementById('modal-title');
-            const modalOrigin = document.getElementById('modal-origin-link');
-            const modalSpinner = document.getElementById('modal-spinner');
             const modalBox = document.getElementById('modal-box');
-            
-            // Reset state
-            modalSpinner.classList.remove('opacity-0');
-            modalImg.classList.add('opacity-0');
-            modalImg.src = '';
-            
-            // Set properties
-            modalTitle.textContent = title;
-            modalOrigin.href = url;
-            modalImg.src = url;
             
             // Open modal (fade in + scale up)
             modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -909,8 +931,46 @@
                 modalBox.classList.add('scale-100');
             }, 10);
             
-            // Close on Escape key press
-            document.addEventListener('keydown', handleEscapeKey);
+            // Add key listener
+            document.addEventListener('keydown', handleModalKeyDown);
+        }
+
+        // Update Modal Image and Title
+        function updateModalContent() {
+            const modalImg = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalOrigin = document.getElementById('modal-origin-link');
+            const modalSpinner = document.getElementById('modal-spinner');
+            const prevBtn = document.getElementById('modal-prev-btn');
+            const nextBtn = document.getElementById('modal-next-btn');
+            
+            const current = modalImages[currentModalIndex];
+            
+            // Reset spinner and hide image briefly while loading
+            modalSpinner.classList.remove('opacity-0');
+            modalImg.classList.add('opacity-0');
+            modalImg.src = '';
+            
+            // Apply new image data
+            modalTitle.textContent = `${current.title} (${currentModalIndex + 1}/${modalImages.length})`;
+            modalOrigin.href = current.url;
+            modalImg.src = current.url;
+            
+            // Toggle navigation button visibility
+            if (modalImages.length > 1) {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+            } else {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+            }
+        }
+
+        // Navigate through modal images
+        function navigateModal(direction) {
+            if (modalImages.length <= 1) return;
+            currentModalIndex = (currentModalIndex + direction + modalImages.length) % modalImages.length;
+            updateModalContent();
         }
 
         // Close Image Modal
@@ -923,12 +983,17 @@
             modal.classList.add('opacity-0', 'pointer-events-none');
             modal.classList.remove('opacity-100');
             
-            document.removeEventListener('keydown', handleEscapeKey);
+            document.removeEventListener('keydown', handleModalKeyDown);
         }
 
-        function handleEscapeKey(e) {
+        // Keyboard navigation & close handlers
+        function handleModalKeyDown(e) {
             if (e.key === 'Escape') {
                 closeImageModal();
+            } else if (e.key === 'ArrowLeft') {
+                navigateModal(-1);
+            } else if (e.key === 'ArrowRight') {
+                navigateModal(1);
             }
         }
     </script>
