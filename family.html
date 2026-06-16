@@ -196,10 +196,7 @@
 
             <!-- Horizontal Tab Navigation (5 tabs) -->
             <div class="flex overflow-x-auto whitespace-nowrap space-x-2 py-1.5 -mx-4 px-4 md:mx-0 no-scrollbar">
-                <button onclick="selectApt('wellcounty')" id="btn-wellcounty" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-gold-500 border-gold-500/30">
-                    웰카운티 (아라역)
-                </button>
-                <button onclick="selectApt('hillstate')" id="btn-hillstate" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
+                <button onclick="selectApt('hillstate')" id="btn-hillstate" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-gold-500 border-gold-500/30">
                     힐스테이트 센트럴 (중앙역)
                 </button>
                 <button onclick="selectApt('prugio')" id="btn-prugio" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
@@ -211,20 +208,23 @@
                 <button onclick="selectApt('detre')" id="btn-detre" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
                     디에트르 더 힐 (복층)
                 </button>
+                <button onclick="selectApt('wellcounty')" id="btn-wellcounty" class="px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 inline-block bg-slate-900 text-slate-400 border-white/5">
+                    웰카운티 (아라역)
+                </button>
             </div>
 
             <!-- Dynamic Apartment Information Card -->
             <div id="apt-card" class="bg-slate-900 border border-white/5 rounded-3xl p-5 md:p-6 space-y-6 transition-all duration-300">
-                <!-- Render Default: Wellcounty -->
+                <!-- Render Default: Hillstate -->
                 <div class="space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3">
                         <div>
-                            <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-500 text-[10px] font-bold rounded-md mb-1.5">📉 현재 우선순위 최하위 • 높은 세무 장벽 및 추가 비용 리스크</span>
-                            <h3 class="text-lg font-bold text-slate-100">이편한세상 검단 웰카운티 (원당동)</h3>
+                            <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-500 text-[10px] font-bold rounded-md mb-1.5">👑 중앙역 초역세권 대장 후보 • 세무 안전성 극상</span>
+                            <h3 class="text-lg font-bold text-slate-100">힐스테이트 신검단 센트럴 (마전동)</h3>
                         </div>
                         <div class="mt-2 sm:mt-0 text-left sm:text-right">
                             <span class="text-[10px] text-gray-500 block">2027년 여름 취득원가 예측</span>
-                            <strong class="text-base font-black text-rose-400">8억 1,200만 원 <span class="text-xs text-slate-400 font-light block">(단기 양도세 대납 적용 시)</span></strong>
+                            <strong class="text-base font-black text-rose-400">7억 2,000만 원 <span class="text-xs text-slate-400 font-light block">(세금 거품 제로 팩트 시세)</span></strong>
                         </div>
                     </div>
 
@@ -233,46 +233,46 @@
                         <div>
                             <span class="text-gray-500 block mb-1">자산 보존성 및 거래 환금성</span>
                             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gold-500 h-full" style="width: 98%"></div>
+                                <div class="bg-gold-500 h-full" style="width: 95%"></div>
                             </div>
                         </div>
                         <div>
                             <span class="text-gray-500 block mb-1">가족 사주 궁합도 (풍수)</span>
                             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-red-500 h-full" style="width: 96%"></div>
+                                <div class="bg-red-500 h-full" style="width: 92%"></div>
                             </div>
                         </div>
                         <div>
                             <span class="text-gray-500 block mb-1">육아 및 평생 학세권</span>
                             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-emerald-500 h-full" style="width: 99%"></div>
+                                <div class="bg-emerald-500 h-full" style="width: 80%"></div>
                             </div>
                         </div>
                         <div>
                             <span class="text-gray-500 block mb-1">세무적 진입 안전성</span>
                             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-rose-500 h-full" style="width: 45%"></div>
+                                <div class="bg-rose-500 h-full" style="width: 98%"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Specs -->
                     <div class="grid grid-cols-3 gap-2 py-3 border-y border-white/5 text-[11px] text-gray-400 font-light">
-                        <div><strong>세대 규모:</strong> 1,458세대 (대단지)</div>
-                        <div><strong>비과세 완전 해제:</strong> 2028년 7월 (등기 2년)</div>
-                        <div><strong>이사시 세법 리스크:</strong> 단기양도세 66% 중과 구역</div>
+                        <div><strong>세대 규모:</strong> 815세대 (신축 대단지)</div>
+                        <div><strong>비과세 완전 해제:</strong> 2026년 11월 비과세 완성</div>
+                        <div><strong>이사시 세법 리스크:</strong> 중앙역세권 입지</div>
                     </div>
 
                     <!-- Deep Analysis Text -->
                     <div class="text-xs text-gray-300 space-y-3 font-light leading-relaxed">
                         <p class="text-slate-200">
-                            <strong>👍 명당 메리트:</strong> 초·중·고교를 단지가 한 품에 안고 있어, 2024년생인 딸아이가 평생 큰 도리를 거치지 않고 대학 입시 때까지 안전하게 통학할 수 있는 <strong>독보적인 교육 명당</strong>입니다. 1,458세대 메이저 대단지가 주는 굳건한 토(土)기가 외풍을 완벽히 차단합니다.
+                            <strong>👍 명당 메리트:</strong> GTX-D 노선 및 5호선 연장 예정 수혜를 완벽하게 정면으로 입는 역세권 가치 상승 명당입니다. 아빠의 원대한 사업 활기와 주거 환금성 방어에서 최상의 대안입니다.
                         </p>
                         <p class="text-rose-400">
-                            <strong>⚠️ 2027년 계약 시 세무 리스크 (중요):</strong> 우리 이사 시기인 2027년 여름에는 분양 계약자들의 등기 1년 내외 시점으로, 거래 시 <strong>단기보유 양도세 66% 중과세</strong>가 부과됩니다. 매도인들이 합법적으로 매수자(우리)에게 세금을 대납해 주기를 강제하므로 시세 프리미엄 외에 <strong>추가 세금 약 1억 원을 더 지불해야 하는 자산 낭비 덫</strong>이 발생합니다.
+                            <strong>⚠️ 세무 리스크 (핵심):</strong> 2027년 여름 이사 시점에 <strong>이미 2년 보유 비과세 조건이 완벽히 정착</strong>되어 매도인들의 세무적 뒷돈 요구가 일절 없습니다. 시중 금리 여파로 가벼운 시세 하향 협상이 가능한 '깨끗한 정상 시세 단지'입니다.
                         </p>
                         <p class="bg-gold-500/10 p-3 rounded-xl text-gold-400 border border-gold-500/20">
-                            <strong>💡 아버님의 지혜로운 수렵 전략:</strong> 66% 양도소득세는 매도자가 '양도차익(프리미엄)'을 보았을 때만 부과됩니다. 잔금 고금리를 견디지 못하고 계약금 약 5,600만 원 중 일부를 완전 포기하여 넘기는 <strong>마피(-2천만~-4천만 원) 분양권</strong>을 오프라인 중개인 장부에서 낚아채면, 양도차익이 없기 때문에 양도소득세는 원천 0원이 되어 원가 이하로 완벽히 사냥할 수 있습니다.
+                            <strong>💡 아버님의 지혜로운 수렵 전략:</strong> 세금 대납으로 1억 원 가까운 취득 기회비용을 낭비해야 하는 웰카운티 강행 매매 대비, 세금 프리미엄 전가 없이 합리적 조정가로 즉각 등기할 수 있는 힐스테이트 신검단은 자산 방어 효율성 측면에서 완벽한 골든 카드입니다.
                         </p>
                     </div>
                 </div>
@@ -439,7 +439,7 @@
         };
 
         function selectApt(key) {
-            const list = ['wellcounty', 'hillstate', 'prugio', 'woomirin', 'detre'];
+            const list = ['hillstate', 'prugio', 'woomirin', 'detre', 'wellcounty'];
             list.forEach(item => {
                 const btn = document.getElementById(`btn-${item}`);
                 if (btn) {
