@@ -287,7 +287,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3">
                         <div>
                             <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-500 text-[10px] font-bold rounded-md mb-1.5">👑 중앙역 초역세권 대장 후보 • 세무 안전성 극상</span>
-                            <h3 class="text-lg font-bold text-slate-100">힐스테이트 신검단 센트럴 (마전동)</h3>
+                            <h3 class="text-lg font-bold text-slate-100">힐스테이트 검단 웰카운티 (AA16블록)</h3>
                         </div>
                         <div class="mt-2 sm:mt-0 text-left sm:text-right">
                             <span class="text-[10px] text-gray-500 block">2027년 여름 취득원가 예측</span>
@@ -295,52 +295,110 @@
                         </div>
                     </div>
 
-                    <!-- Metrics Progress -->
-                    <div class="grid grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl text-xs">
-                        <div>
-                            <span class="text-gray-500 block mb-1">자산 보존성 및 거래 환금성</span>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gold-500 h-full" style="width: 95%"></div>
+                    <!-- 3-Column Content Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                        
+                        <!-- Column 1: Clickable Mockup Image (lg:col-span-3) -->
+                        <div class="lg:col-span-3 flex flex-col justify-between space-y-2">
+                            <a href="hillstate.jpg" onclick="openImageModal(event, this.href, '힐스테이트 검단 웰카운티 (AA16블록) - 단지 전경')" class="relative group block overflow-hidden rounded-xl border border-white/10 bg-slate-950 aspect-[4/3] lg:aspect-square">
+                                <img src="hillstate.jpg" alt="힐스테이트 검단 웰카운티 (AA16블록) 전경" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                <!-- Zoom Icon Overlay -->
+                                <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <div class="bg-slate-900/90 text-gold-400 p-2 rounded-full border border-gold-500/30 text-xs flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                        </svg>
+                                        <span>확대 보기</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="text-[10px] text-gray-500 text-center flex items-center justify-center space-x-1">
+                                <svg class="w-3 h-3 text-gold-500/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0116 0z"></path>
+                                </svg>
+                                <span>이미지를 클릭하면 큰 화면으로 볼 수 있습니다.</span>
                             </div>
                         </div>
-                        <div>
-                            <span class="text-gray-500 block mb-1">가족 사주 궁합도 (풍수)</span>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-red-500 h-full" style="width: 92%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="text-gray-500 block mb-1">육아 및 평생 학세권</span>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-emerald-500 h-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="text-gray-500 block mb-1">세무적 진입 안전성</span>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-rose-500 h-full" style="width: 98%"></div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Specs -->
-                    <div class="grid grid-cols-3 gap-2 py-3 border-y border-white/5 text-[11px] text-gray-400 font-light">
-                        <div><strong>세대 규모:</strong> 815세대 (신축 대단지)</div>
-                        <div><strong>비과세 완전 해제:</strong> 2026년 11월 비과세 완성</div>
-                        <div><strong>이사시 세법 리스크:</strong> 중앙역세권 입지</div>
-                    </div>
+                        <!-- Column 2: Specs & Metrics (lg:col-span-4) -->
+                        <div class="lg:col-span-4 space-y-3 flex flex-col justify-between">
+                            <!-- Specs List -->
+                            <div class="bg-slate-950/60 border border-white/5 rounded-xl p-3.5 space-y-2.5 text-[11px] text-gray-300 font-light">
+                                <div class="flex items-start justify-between">
+                                    <span class="text-gray-500">🏢 세대 규모</span>
+                                    <span class="font-semibold text-slate-200 text-right">1,535세대 (총 13개동)</span>
+                                </div>
+                                <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                    <span class="text-gray-500">📅 입주 시기</span>
+                                    <span class="font-semibold text-slate-200 text-right">2025년 1월 입주</span>
+                                </div>
+                                <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                    <span class="text-gray-500">🚗 주차 비율</span>
+                                    <span class="font-semibold text-slate-200 text-right">세대당 1.26대 (총 1,940대)</span>
+                                </div>
+                                <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                    <span class="text-gray-500">🚇 지하철역 거리</span>
+                                    <span class="font-semibold text-slate-200 text-right">🚇 신검단중앙역(102역) 초역세권 (도보 약 200m ~ 300m / 3~5분)</span>
+                                </div>
+                            </div>
 
-                    <!-- Deep Analysis Text -->
-                    <div class="text-xs text-gray-300 space-y-3 font-light leading-relaxed">
-                        <p class="text-slate-200">
-                            <strong>👍 명당 메리트:</strong> GTX-D 노선 및 5호선 연장 예정 수혜를 완벽하게 정면으로 입는 역세권 가치 상승 명당입니다. 아빠의 원대한 사업 활기와 주거 환금성 방어에서 최상의 대안입니다.
-                        </p>
-                        <p class="text-rose-400">
-                            <strong>⚠️ 세무 리스크 (핵심):</strong> 2027년 여름 이사 시점에 <strong>이미 2년 보유 비과세 조건이 완벽히 정착</strong>되어 매도인들의 세무적 뒷돈 요구가 일절 없습니다. 시중 금리 여파로 가벼운 시세 하향 협상이 가능한 '깨끗한 정상 시세 단지'입니다.
-                        </p>
-                        <p class="bg-gold-500/10 p-3 rounded-xl text-gold-400 border border-gold-500/20">
-                            <strong>💡 아버님의 지혜로운 수렵 전략:</strong> 세금 대납으로 1억 원 가까운 취득 기회비용을 낭비해야 하는 웰카운티 강행 매매 대비, 세금 프리미엄 전가 없이 합리적 조정가로 즉각 등기할 수 있는 힐스테이트 신검단은 자산 방어 효율성 측면에서 완벽한 골든 카드입니다.
-                        </p>
+                            <!-- Metrics Progress Bars -->
+                            <div class="bg-slate-950/80 p-3.5 rounded-xl text-[10px] space-y-2">
+                                <div>
+                                    <div class="flex justify-between mb-0.5 text-gray-400">
+                                        <span>자산 보존성 및 거래 환금성</span>
+                                        <span class="text-gold-400 font-bold">95%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-gold-500 h-full" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-0.5 text-gray-400">
+                                        <span>가족 사주 궁합도 (풍수)</span>
+                                        <span class="text-red-400 font-bold">92%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-red-500 h-full" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-0.5 text-gray-400">
+                                        <span>육아 및 평생 학세권</span>
+                                        <span class="text-emerald-400 font-bold">80%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-0.5 text-gray-400">
+                                        <span>세무적 진입 안전성</span>
+                                        <span class="text-rose-400 font-bold">98%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-rose-500 h-full" style="width: 98%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 3: Deep Analysis (lg:col-span-5) -->
+                        <div class="lg:col-span-5 text-xs text-gray-300 space-y-2.5 font-light leading-relaxed flex flex-col justify-between">
+                            <p class="bg-slate-950/40 p-2.5 rounded-xl border border-white/5 text-slate-200">
+                                <strong class="text-emerald-400 font-semibold block mb-0.5">👍 명당 메리트</strong>
+                                GTX-D 노선 및 5호선 연장 예정 수혜를 완벽하게 정면으로 입는 역세권 가치 상승 명당입니다. 아빠의 원대한 사업 활기와 주거 환금성 방어에서 최상의 대안입니다.
+                            </p>
+                            <p class="bg-slate-950/40 p-2.5 rounded-xl border border-white/5 text-rose-300">
+                                <strong class="text-rose-400 font-semibold block mb-0.5">⚠️ 세무 리스크 및 단점</strong>
+                                2027년 여름 이사 시점에 <strong>이미 2년 보유 비과세 조건이 완벽히 정착</strong>되어 매도인들의 세무적 뒷돈 요구가 일절 없습니다. 시중 금리 여파로 가벼운 시세 하향 협상이 가능한 '깨끗한 정상 시세 단지'입니다.
+                            </p>
+                            <p class="bg-gold-500/5 p-2.5 rounded-xl text-gold-300 border border-gold-500/15">
+                                <strong class="text-gold-400 font-semibold block mb-0.5">💡 아버님의 지혜로운 수렵 전략</strong>
+                                세금 대납으로 1억 원 가까운 취득 기회비용을 낭비해야 하는 웰카운티 강행 매매 대비, 세금 프리미엄 전가 없이 합리적 조정가로 즉각 등기할 수 있는 힐스테이트 신검단은 자산 방어 효율성 측면에서 완벽한 골든 카드입니다.
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -658,26 +716,46 @@
         // TOP 5 Apartments Database
         const apartments = {
             wellcounty: {
-                title: "이편한세상 검단 웰카운티 (원당동)",
+                title: "이편한세상 검단 웰카운티 (AA10-1블록)",
                 badge: "📉 현재 우선순위 최하위 • 높은 세무 장벽 및 추가 비용 리스크",
                 price: "8억 1,200만 원",
                 priceNote: "(단기 양도세 대납 적용 시)",
                 metrics: { value: 98, saju: 96, school: 99, rate: 45 },
-                meta: "1,458세대 (대단지) / 2028년 7월 (등기 2년) / 단기양도세 66% 중과 구역",
+                specs: {
+                    households: "1,458세대 (총 14개동)",
+                    completion: "2026년 7월 입주 예정",
+                    parking: "세대당 1.29대 (총 1,885대)",
+                    distance: "🚇 검단아라역(101역) 초역세권 (도보 약 250m / 3~4분)"
+                },
+                meta: {
+                    tax: "2028년 7월 비과세 완성 (등기 2년)",
+                    risk: "단기양도세 66% 중과 구역 (매도인 대납 요구로 실투자비 급증)"
+                },
                 pros: "초·중·고교를 단지가 한 품에 안고 있어, 2024년생인 딸아이가 평생 큰 도리를 거치지 않고 대학 입시 때까지 안전하게 통학할 수 있는 <strong>독보적인 교육 명당</strong>입니다. 1,458세대 메이저 대단지가 주는 굳건한 토(土)기가 외풍을 완벽히 차단합니다.",
                 cons: "우리 이사 시기인 2027년 여름에는 분양 계약자들의 등기 1년 내외 시점으로, 거래 시 <strong>단기보유 양도세 66% 중과세</strong>가 부과됩니다. 매도인들이 합법적으로 매수자(우리)에게 세금을 대납해 주기를 강제하므로 시세 프리미엄 외에 <strong>추가 세금 약 1억 원을 더 지불해야 하는 자산 낭비 덫</strong>이 발생합니다.",
-                advice: "고금리에 지쳐 계약금 약 5,600만 원 중 일부를 완전 포기하여 넘기는 <strong>마피(-2천만~-4천만 원) 분양권</strong>을 오프라인 중개인 장부에서 낚아채면, 양도차익이 없기 때문에 양도소득세는 원천 0원이 되어 원가 이하로 완벽히 사냥할 수 있습니다."
+                advice: "고금리에 지쳐 계약금 약 5,600만 원 중 일부를 완전 포기하여 넘기는 <strong>마피(-2천만~-4천만 원) 분양권</strong>을 오프라인 중개인 장부에서 낚아채면, 양도차익이 없기 때문에 양도소득세는 원천 0원이 되어 원가 이하로 완벽히 사냥할 수 있습니다.",
+                image: "wellcounty.jpg"
             },
             hillstate: {
-                title: "힐스테이트 신검단 센트럴 (마전동)",
+                title: "힐스테이트 검단 웰카운티 (AA16블록)",
                 badge: "👑 중앙역 초역세권 대장 후보 • 세무 안전성 극상",
                 price: "7억 2,000만 원",
                 priceNote: "(세금 거품 제로 팩트 시세)",
                 metrics: { value: 95, saju: 92, school: 80, rate: 98 },
-                meta: "815세대 (신축 대단지) / 2026년 11월 비과세 완성 / 중앙역세권 입지",
+                specs: {
+                    households: "1,535세대 (총 13개동)",
+                    completion: "2025년 1월 입주",
+                    parking: "세대당 1.26대 (총 1,940대)",
+                    distance: "🚇 신검단중앙역(102역) 초역세권 (도보 약 200m ~ 300m / 3~5분)"
+                },
+                meta: {
+                    tax: "2027년 1월 비과세 완성 (등기 2년)",
+                    risk: "비과세 완성 상태로 진입 시 세무적 대납 리스크 전무"
+                },
                 pros: "GTX-D 노선 및 5호선 연장 예정 수혜를 완벽하게 정면으로 입는 역세권 가치 상승 명당입니다. 아빠의 원대한 사업 활기와 주거 환금성 방어에서 최상의 대안입니다.",
                 cons: "2027년 여름 이사 시점에 <strong>이미 2년 보유 비과세 조건이 완벽히 정착</strong>되어 매도인들의 세무적 뒷돈 요구가 일절 없습니다. 시중 금리 여파로 가벼운 시세 하향 협상이 가능한 '깨끗한 정상 시세 단지'입니다.",
-                advice: "세금 대납으로 1억 원 가까운 취득 기회비용을 낭비해야 하는 웰카운티 강행 매매 대비, 세금 프리미엄 전가 없이 합리적 조정가로 즉각 등기할 수 있는 힐스테이트 신검단은 자산 방어 효율성 측면에서 완벽한 골든 카드입니다."
+                advice: "세금 대납으로 1억 원 가까운 취득 기회비용을 낭비해야 하는 웰카운티 강행 매매 대비, 세금 프리미엄 전가 없이 합리적 조정가로 즉각 등기할 수 있는 힐스테이트 신검단은 자산 방어 효율성 측면에서 완벽한 골든 카드입니다.",
+                image: "hillstate.jpg"
             },
             prugio: {
                 title: "검단신도시 푸르지오 더 베뉴 (원당동)",
@@ -685,10 +763,20 @@
                 price: "7억 6,000만 원",
                 priceNote: "(시세 투명화 100%)",
                 metrics: { value: 96, saju: 95, school: 90, rate: 100 },
-                meta: "1,540세대 (메이저 단지) / 기입주 안정 거래 완료 단지 / 아라역세권 도보권",
-                pros: "웅장한 수(水)기와 조경 정원이 단지 전체를 압도해 기토(己土) 사주인 엄마와 딸아이의 심리에 대길한 심신의 정화를 부여합니다. 이미 등기가 끝나 시세가 대단히 깨끗하게 정비된 대장주입니다.",
+                specs: {
+                    households: "1,540세대 (총 16개동)",
+                    completion: "2021년 6월 입주",
+                    parking: "세대당 1.41대 (총 2,176대)",
+                    distance: "🚇 검단아라역(101역) 초역세권 (도보 약 300m ~ 500m / 5~7분)"
+                },
+                meta: {
+                    tax: "비과세 완전 해제 단지 (등기완료)",
+                    risk: "기입주 단지로 일반 세율 적용, 추가 양도세 전가 불가능"
+                },
+                pros: "웅장한 수(Water)기와 조경 정원이 단지 전체를 압도해 기토(己土) 사주인 엄마와 딸아이의 심리에 대길한 심신의 정화를 부여합니다. 이미 등기가 끝나 시세가 대단히 깨끗하게 정비된 대장주입니다.",
                 cons: "이미 완전한 구축 시세 평준화 단지이므로 하방 방어력은 검단 내 1위이나 분상제 청약이나 웰카운티 마피처럼 수천만 원에 달하는 날 선 투자 마진을 보고 가기엔 정가 결제가 불가피합니다.",
-                advice: "사주 오행적으로 웅장한 아파트 숲 and 물길 조경이 필수인 엄마의 편안함과 안정적인 20년 자산 보유를 보장하는 최고의 '믿을맨' 대안입니다."
+                advice: "사주 오행적으로 웅장한 아파트 숲과 물길 조경이 필수인 엄마의 편안함과 안정적인 20년 자산 보유를 보장하는 최고의 '믿을맨' 대안입니다.",
+                image: "prugio.jpg"
             },
             woomirin: {
                 title: "우미린 더 시그니처 (원당동)",
@@ -696,10 +784,20 @@
                 price: "7억 8,000만 원",
                 priceNote: "(실거래 상단 지지력 견고)",
                 metrics: { value: 97, saju: 88, school: 98, rate: 100 },
-                meta: "1,268세대 (대단지) / 기입주 거래 완료 단지 / 아라동 중심 학세권",
+                specs: {
+                    households: "1,268세대 (총 13개동)",
+                    completion: "2022년 1월 입주",
+                    parking: "세대당 1.27대 (총 1,614대)",
+                    distance: "🚇 검단아라역(101역) 초역세권 (도보 약 200m ~ 400m / 4~6분)"
+                },
+                meta: {
+                    tax: "비과세 완전 해제 단지 (등기완료)",
+                    risk: "기입주 단지로 일반 세율 적용, 세금 관련 분쟁 요인 없음"
+                },
                 pros: "대치동급 규모로 성장 중인 검단 아라동 핵심 학원가와 지극히 근접해 있습니다. 딸아이가 크면서 타지로의 학군 이전 필요성을 원천 제거하는 '20년 붙박이 명당'이며, 자잘한 시공 하자 분쟁이 가장 적은 완벽한 시공력을 지녔습니다.",
                 cons: "신검단 단지들 중 실거래가 상단을 형성하고 있어 고금리 장기화 기조에 주담대 이자 부담 예산이 상대적으로 다른 단지 대비 무거워집니다.",
-                advice: "자산의 가격 방어와 완벽한 학원가 환경을 동시에 취할 수 있는 최상의 시그니처 대장주 아파트입니다."
+                advice: "자산의 가격 방어와 완벽한 학원가 환경을 동시에 취할 수 있는 최상의 시그니처 대장주 아파트입니다.",
+                image: "woomirin.jpg"
             },
             detre: {
                 title: "검단신도시 디에트르 더 힐 (당하동)",
@@ -707,10 +805,20 @@
                 price: "7억 중반",
                 priceNote: "(현 8.5억 호가는 완전 배제 필)",
                 metrics: { value: 75, saju: 98, school: 78, rate: 50 },
-                meta: "1,417세대 (최상층 특화 세대) / 비역세권 서비스 면적 단지",
-                pros: "하늘을 온전히 품는 옥상 다락방과 테라스는 뜨거운 병화(丙火) 아빠의 사업 스트레스를 한 번에 가라앉히는 최고의 명약이며, 등기 및 취득세에 잡히지 않는 42평형 실사용 면적 마법을 누릴 수 있습니다.",
+                specs: {
+                    households: "1,417세대 (총 20개동)",
+                    completion: "2022년 9월 입주",
+                    parking: "세대당 1.42대 (총 2,019대)",
+                    distance: "🚇 신검단중앙역(102역) 도보 약 800m (고산터널 인도 도보 코스 이용 시 11~12분) / 아라역 도보 약 1.2km"
+                },
+                meta: {
+                    tax: "비과세 완전 해제 단지 (등기완료)",
+                    risk: "복층 희소성 거품 가격 주의 (협상 여부에 따라 결정)"
+                },
+                pros: "하늘을 온전히 품는 옥상 다락방과 테라스는 뜨거운 병화(丙火) 아빠의 사업 스트레스를 한 번에 가라앉히는 최고의 명약이며, 등기 및 취득세에 잡히지 않는 42평형 실사용 면적 마법을 누릴 수 있습니다. <strong>특히 아라역과 중앙역 사이 더블 생활권에 중앙역 방향 고산터널 인도 개통으로 역 접근성이 800m대로 획기적으로 가까워졌습니다.</strong>",
                 cons: "<strong>매도인의 8억 5천만 원 요구는 비이성적 거품입니다.</strong> 비역세권 단지를 아라역 초역세권 대장 아파트보다 1억 원 더 비싸게 취득하는 것은 훗날 환금성이 완벽히 막히는 자산 고립을 뜻합니다.",
-                advice: "디에트르 복층은 무조건 매도인을 7억 중반 선으로 깎아 내리는 과감한 협상이 불가하다면 영리하게 배제하고, '웰카운티 마피 사냥'으로 집중하는 것이 타당합니다."
+                advice: "디에트르 복층은 무조건 매도인을 7억 중반 선으로 깎아 내리는 과감한 협상이 불가하다면 영리하게 배제하고, '웰카운티 마피 사냥'으로 집중하는 것이 타당합니다.",
+                image: "detre.jpg"
             }
         };
 
@@ -732,6 +840,7 @@
             setTimeout(() => {
                 cardContainer.innerHTML = `
                     <div class="space-y-4">
+                        <!-- Card Header -->
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3">
                             <div>
                                 <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-500 text-[10px] font-bold rounded-md mb-1.5">${data.badge}</span>
@@ -743,52 +852,110 @@
                             </div>
                         </div>
 
-                        <!-- Metrics Progress -->
-                        <div class="grid grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl text-xs">
-                            <div>
-                                <span class="text-gray-500 block mb-1">자산 보존성 및 거래 환금성</span>
-                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                    <div class="bg-gold-500 h-full" style="width: ${data.metrics.value}%"></div>
+                        <!-- 3-Column Content Grid -->
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                            
+                            <!-- Column 1: Clickable Mockup Image (lg:col-span-3) -->
+                            <div class="lg:col-span-3 flex flex-col justify-between space-y-2">
+                                <a href="${data.image}" onclick="openImageModal(event, this.href, '${data.title} - 단지 전경')" class="relative group block overflow-hidden rounded-xl border border-white/10 bg-slate-950 aspect-[4/3] lg:aspect-square">
+                                    <img src="${data.image}" alt="${data.title} 전경" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <!-- Zoom Icon Overlay -->
+                                    <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                        <div class="bg-slate-900/90 text-gold-400 p-2 rounded-full border border-gold-500/30 text-xs flex items-center space-x-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                            </svg>
+                                            <span>확대 보기</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="text-[10px] text-gray-500 text-center flex items-center justify-center space-x-1">
+                                    <svg class="w-3 h-3 text-gold-500/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0116 0z"></path>
+                                    </svg>
+                                    <span>이미지를 클릭하면 큰 화면으로 볼 수 있습니다.</span>
                                 </div>
                             </div>
-                            <div>
-                                <span class="text-gray-500 block mb-1">가족 사주 궁합도 (풍수)</span>
-                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                    <div class="bg-red-500 h-full" style="width: ${data.metrics.saju}%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-gray-500 block mb-1">육아 및 평생 학세권</span>
-                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                    <div class="bg-emerald-500 h-full" style="width: ${data.metrics.school}%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-gray-500 block mb-1">세무적 진입 안전성</span>
-                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                    <div class="bg-rose-500 h-full" style="width: ${data.metrics.rate}%"></div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Specs -->
-                        <div class="grid grid-cols-3 gap-2 py-3 border-y border-white/5 text-[11px] text-gray-400 font-light">
-                            <div><strong>세대 규모:</strong> ${data.meta.split(' / ')[0]}</div>
-                            <div><strong>비과세 완전 해제:</strong> ${data.meta.split(' / ')[1]}</div>
-                            <div><strong>이사시 세법 리스크:</strong> ${data.meta.split(' / ')[2]}</div>
-                        </div>
+                            <!-- Column 2: Specs & Metrics (lg:col-span-4) -->
+                            <div class="lg:col-span-4 space-y-3 flex flex-col justify-between">
+                                <!-- Specs List -->
+                                <div class="bg-slate-950/60 border border-white/5 rounded-xl p-3.5 space-y-2.5 text-[11px] text-gray-300 font-light">
+                                    <div class="flex items-start justify-between">
+                                        <span class="text-gray-500">🏢 세대 규모</span>
+                                        <span class="font-semibold text-slate-200 text-right">${data.specs.households}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500">📅 입주 시기</span>
+                                        <span class="font-semibold text-slate-200 text-right">${data.specs.completion}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500">🚗 주차 비율</span>
+                                        <span class="font-semibold text-slate-200 text-right">${data.specs.parking}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500">🚇 지하철역 거리</span>
+                                        <span class="font-semibold text-slate-200 text-right">${data.specs.distance}</span>
+                                    </div>
+                                </div>
 
-                        <!-- Deep Analysis Text -->
-                        <div class="text-xs text-gray-300 space-y-3 font-light leading-relaxed">
-                            <p class="text-slate-200 font-light">
-                                <strong>👍 명당 메리트:</strong> ${data.pros}
-                            </p>
-                            <p class="text-rose-400 font-light">
-                                <strong>⚠️ 세무 리스크 (핵심):</strong> ${data.cons}
-                            </p>
-                            <p class="bg-gold-500/10 p-3 rounded-xl text-gold-400 border border-gold-500/20">
-                                <strong>💡 아버님의 지혜로운 수렵 전략:</strong> ${data.advice}
-                            </p>
+                                <!-- Metrics Progress Bars -->
+                                <div class="bg-slate-950/80 p-3.5 rounded-xl text-[10px] space-y-2">
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>자산 보존성 및 거래 환금성</span>
+                                            <span class="text-gold-400 font-bold">${data.metrics.value}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-gold-500 h-full" style="width: ${data.metrics.value}%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>가족 사주 궁합도 (풍수)</span>
+                                            <span class="text-red-400 font-bold">${data.metrics.saju}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-red-500 h-full" style="width: ${data.metrics.saju}%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>육아 및 평생 학세권</span>
+                                            <span class="text-emerald-400 font-bold">${data.metrics.school}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-emerald-500 h-full" style="width: ${data.metrics.school}%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>세무적 진입 안전성</span>
+                                            <span class="text-rose-400 font-bold">${data.metrics.rate}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-rose-500 h-full" style="width: ${data.metrics.rate}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 3: Deep Analysis (lg:col-span-5) -->
+                            <div class="lg:col-span-5 text-xs text-gray-300 space-y-2.5 font-light leading-relaxed flex flex-col justify-between">
+                                <p class="bg-slate-950/40 p-2.5 rounded-xl border border-white/5 text-slate-200">
+                                    <strong class="text-emerald-400 font-semibold block mb-0.5">👍 명당 메리트</strong>
+                                    ${data.pros}
+                                </p>
+                                <p class="bg-slate-950/40 p-2.5 rounded-xl border border-white/5 text-rose-300">
+                                    <strong class="text-rose-400 font-semibold block mb-0.5">⚠️ 세무 리스크 및 단점</strong>
+                                    ${data.cons}
+                                </p>
+                                <p class="bg-gold-500/5 p-2.5 rounded-xl text-gold-300 border border-gold-500/15">
+                                    <strong class="text-gold-400 font-semibold block mb-0.5">💡 아버님의 지혜로운 수렵 전략</strong>
+                                    ${data.advice}
+                                </p>
+                            </div>
+
                         </div>
                     </div>
                 `;
