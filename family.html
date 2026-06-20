@@ -916,33 +916,10 @@
                         </div>
                     </div>
 
-                    <!-- 3-Column Content Grid -->
+                    <!-- 2-Column Content Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                        
-                        <!-- Column 1: Clickable Mockup Image (lg:col-span-3) -->
-                        <div class="lg:col-span-3 flex flex-col justify-start space-y-2">
-                            <a href="hillstate.jpg" onclick="openImageModal(event, this.href, '힐스테이트 신검단 센트럴 (불로동) - 단지 전경')" class="relative group block overflow-hidden rounded-xl border border-white/10 bg-slate-950 aspect-[4/3] lg:aspect-square">
-                                <img src="hillstate.jpg" alt="힐스테이트 신검단 센트럴 (불로동) 전경" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                                <!-- Zoom Icon Overlay -->
-                                <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <div class="bg-slate-900/90 text-gold-400 p-2 rounded-full border border-gold-500/30 text-xs flex items-center space-x-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
-                                        </svg>
-                                        <span>확대 보기</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="text-[10px] text-gray-500 text-center flex items-center justify-center space-x-1">
-                                <svg class="w-3 h-3 text-gold-500/70 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0116 0z"></path>
-                                </svg>
-                                <span class="break-keep">이미지 클릭 시 확대 보기</span>
-                            </div>
-                        </div>
-
-                        <!-- Column 2: Specs List (lg:col-span-4) -->
-                        <div class="lg:col-span-4">
+                        <!-- Column 1: Specs List (lg:col-span-6) -->
+                        <div class="lg:col-span-6">
                             <!-- Specs List -->
                             <div class="bg-slate-950/60 border border-white/5 rounded-xl p-3.5 space-y-2.5 text-xs lg:text-[11px] text-gray-300 font-light">
                                 <div class="flex items-start justify-between">
@@ -984,8 +961,8 @@
                             </div>
                         </div>
 
-                        <!-- Column 3: Metrics & Deep Analysis (lg:col-span-5) -->
-                        <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                        <!-- Column 2: Metrics & Deep Analysis (lg:col-span-6) -->
+                        <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
                             <!-- Metrics Progress Bars (우측 상단) -->
                             <div class="bg-slate-950/80 p-3.5 rounded-xl text-xs lg:text-[10px] space-y-2">
                                 <div>
@@ -1905,51 +1882,6 @@
         </div>
         </main>
 
-    <!-- Image Zoom Modal Overlay -->
-    <div id="image-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-        <!-- Close Area (click outside to close) -->
-        <div onclick="closeImageModal()" class="absolute inset-0 cursor-zoom-out"></div>
-        
-        <!-- Left Nav Button -->
-        <button id="modal-prev-btn" onclick="navigateModal(-1)" class="absolute left-2 sm:left-4 z-50 text-white/50 hover:text-white bg-slate-900/60 hover:bg-slate-800 p-2 sm:p-3 rounded-full border border-white/5 transition-all text-xl font-bold flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 shadow-2xl focus:outline-none hidden">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
-        </button>
-
-        <!-- Right Nav Button -->
-        <button id="modal-next-btn" onclick="navigateModal(1)" class="absolute right-2 sm:right-4 z-50 text-white/50 hover:text-white bg-slate-900/60 hover:bg-slate-800 p-2 sm:p-3 rounded-full border border-white/5 transition-all text-xl font-bold flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 shadow-2xl focus:outline-none hidden">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-        </button>
-
-        <!-- Modal Content Box -->
-        <div class="relative bg-slate-900 border border-white/10 rounded-2xl p-3 max-w-[95%] max-h-[90%] flex flex-col items-center shadow-2xl transition-all duration-300 scale-95" id="modal-box">
-            <!-- Modal Header -->
-            <div class="w-full flex items-center justify-between pb-2 mb-2 border-b border-white/5">
-                <span id="modal-title" class="text-xs font-bold text-cyan-400">도면 보기</span>
-                <div class="flex items-center space-x-2">
-                    <a id="modal-origin-link" href="#" target="_blank" rel="noopener noreferrer" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-colors flex items-center space-x-1">
-                        <span>원본보기</span>
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                    </a>
-                    <button onclick="closeImageModal()" class="text-gray-400 hover:text-white text-lg font-bold w-6 h-6 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors">&times;</button>
-                </div>
-            </div>
-            
-            <!-- Image Area -->
-            <div class="overflow-auto max-w-full max-h-[75vh] flex items-center justify-center bg-slate-950 rounded-lg relative min-h-[200px] min-w-[200px]">
-                <!-- Loading indicator -->
-                <div id="modal-spinner" class="absolute inset-0 flex items-center justify-center bg-slate-950/80 transition-opacity">
-                    <div class="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
-                </div>
-                <img id="modal-image" src="" alt="확대 도면" class="max-w-full max-h-[75vh] object-contain opacity-0 transition-opacity duration-300" onload="document.getElementById('modal-spinner').classList.add('opacity-0'); document.getElementById('modal-image').classList.remove('opacity-0');">
-            </div>
-            
-            <!-- Modal Footer Hint -->
-            <div class="text-[10px] text-gray-500 mt-2 text-center w-full">
-                💡 모바일 및 PC 화면에서 좌우 방향키(←, →) 또는 옆의 화살표 버튼을 클릭해 다른 도면도 연속해서 볼 수 있습니다.
-            </div>
-        </div>
-    </div>
-
     <!-- Custom Toast Message Notification -->
     <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-5 py-3 rounded-xl shadow-2xl border border-gold-500/20 flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-300">
         <span id="toast-message">알림</span>
@@ -1991,7 +1923,6 @@
                 pros: "초·중·고교를 품은 안심 학세권이며, 101역 초역세권 대단지 입지로 주거 편의성과 자산 가치가 극상인 교육 명당입니다.",
                 cons: "일반 거래 시 66% 단기 양도세 대납 요구로 실투자금이 급증하는 세무 리스크가 존재합니다.",
                 advice: "연체 세대의 무피/소액피 전매 매물 사냥 성공 시 실취득가를 6.1억~6.5억 원 수준으로 낮출 수 있는 1순위 최선책입니다.",
-                image: "wellcounty.jpg"
             },
             hillstate: {
                 title: "힐스테이트 신검단 센트럴 (불로동)",
@@ -2017,7 +1948,6 @@
                 pros: "GTX-D 및 5호선 연장역 초역세권 신축 단지로, 아빠의 사업 활기와 주거 환금성 방어에서 강한 대장 후보입니다.",
                 cons: "거시적 하방 리스크 및 검단 대규모 입주 부담으로 단기 가격 상승은 제약되나, 비과세 도래 시 가격 협상이 용이합니다.",
                 advice: "2027년 1월 비과세 완성 시기(B안, 예상가 8.16억)에 진입하는 것이 1,800만 원 자본 절감 및 대납 리스크가 없는 2순위 정석입니다.",
-                image: "hillstate.jpg"
             },
             prugio: {
                 title: "검단신도시 푸르지오 더 베뉴 (원당동)",
@@ -2043,7 +1973,6 @@
                 pros: "단지 전체를 압도하는 수변/조경 정원이 己土(엄마) 사주와 잘 맞아 정서적 안정과 평온함을 주는 리조트 대장주입니다.",
                 cons: "아라역까지 도보 8~12분 소요되어 다른 대장 단지들 대비 역 접근성이 다소 떨어집니다.",
                 advice: "고점 대비 충분히 하락해 가격 메리트가 확실하며, 2027년 1월 조정기(B안, 예상가 6.49억)에 진입하는 것을 추천합니다.",
-                image: "prugio.jpg"
             },
             detre: {
                 title: "검단신도시 디에트르 더 힐 (당하동)",
@@ -2069,7 +1998,6 @@
                 pros: "🏊 단지 내 실내 수영장을 갖춘 1,417세대 대단지 커뮤니티 프리미엄이 돋보입니다. 탑층 다락(15평)과 전용 테라스(10평) 설계로 실사용 공간이 대단히 넓으며, 고산터널 인도 개통으로 역 접근성이 800m대로 개선되었습니다.",
                 cons: "탑층 결로 및 누수 리스크 사전 점검이 필요하며, 고금리 하에 8억대 진입 시 이자 부담을 확인해야 합니다.",
                 advice: "타워형 C타입 복층의 경우 7.8억~8.0억 선의 합리적인 진입이 가능하므로 예산 조율과 네고를 적극 활용하세요.",
-                image: "detre.jpg"
             },
             lakefore: {
                 title: "제일풍경채 레이크포레 (AA25BL)",
@@ -2095,7 +2023,6 @@
                 pros: "유리난간과 전면 호수공원 영구 조망권 설계가 적용되어 호수 뷰 가치가 완벽하며, 군인공제회 공급분 확보 또는 일반 분양권 매입 시 웰카운티를 대체할 매력적인 대안입니다.",
                 cons: "입주시기가 2029년 7월 예정이라 2027년 전세 만기와 직접 맞지 않습니다. 입주 전 사전점검에서 부실시공·하자·공기 지연 여부를 반드시 확인해야 합니다.",
                 advice: "군인공제회 공급분 전매를 통해 약 5.4억 선(혹은 일반 매입 시 6억 중반대)에 매입한다면 자본 방어 효율은 강하지만, 2027년 이사 문제를 먼저 해결한 뒤 접근해야 하는 1.5순위 중장기 카드입니다.",
-                image: "lakefore.jpg"
             },
             hoban3: {
                 title: "호반써밋 인천검단 3차 (AB13블록)",
@@ -2121,7 +2048,6 @@
                 pros: "세대당 1.41대의 여유로운 주차 공간을 확보하였으며, 아라역 사법타운/넥스트콤플렉스 호재와 인접하여 실거주 인프라가 대단히 우수합니다.",
                 cons: "입주시기가 2026년 11월 예정이라 2027년 전세 만기 이후 실입주 연결은 가능하지만, 잔금일·사전점검·하자 보수 일정 조율이 필수적입니다.",
                 advice: "후분양 분양가(약 5.2억) 기준 전매 P에 따라 실취득원가를 6억 초중반으로 방어할 수 있어 자본 효율성이 매우 높은 1순위 매력 카드입니다.",
-                image: "hoban3.jpg"
             },
             paragon: {
                 title: "검단신도시 파라곤 센트럴파크 (AA2블록)",
@@ -2147,7 +2073,6 @@
                 pros: "해든초등학교를 품은 초품아 단지이며, 세대당 1.42대의 넉넉한 주차 공간과 넓은 광폭 거실 설계(6.1m)로 자녀 양육 및 실거주 만족도가 매우 높습니다.",
                 cons: "연장선인 아라역까지 완벽한 평지는 아니며, 역세권 대장 아파트 대비 도보 이동 시 미세한 경사가 존재합니다.",
                 advice: "이미 입주 2년이 경과하여 비과세 혜택이 적용되는 안정적인 매물들이 출현하고 있으므로, 6.5억 내외에서 네고가 가능한 급매물을 선별 매입하기 좋은 2순위 매력 카드입니다.",
-                image: "paragon.jpg"
             },
             felice: {
                 title: "디에트르 더 펠리체 복층 (AA3블록)",
@@ -2173,7 +2098,6 @@
                 pros: "1,279세대 대단지 메리트와 세대당 1.5대의 독보적으로 여유로운 주차 공간을 자랑합니다. 단지 바로 옆에 해든초가 붙어 있는 초품아이자, 디에트르 특유 of 다락방+야외테라스 설계로 실사용 면적이 45평 이상으로 극대화됩니다.",
                 cons: "실내 수영장을 보유한 1,417세대 규모의 디에트르 더 힐(2차) 대비 단지 내 수영장이 없고 세대수가 1,279세대로 소폭 적으며, 아라역 중심상가까지의 거리(도보 12~15분)가 약간 더 멉니다.",
                 advice: "디에트르 더 힐 복층과 비교 시, 주차 여건(1.50대 vs 1.44대) 및 초등학교 인접성에서는 더 펠리체가 우수하나, 세대수(1,279세대 vs 1,417세대) 및 수영장 등 커뮤니티 인프라 측면에서는 더 힐이 앞섭니다. 임장을 통해 예산과 선호를 조율하십시오.",
-                image: "felice.jpg"
             },
             riverpark: {
                 title: "디에트르 리버파크 복층 (AB10블록)",
@@ -2199,7 +2123,6 @@
                 pros: "디에트르 타 브랜드 단지 대비 복층 세대의 가격 메리트(7억 초중반 진입 가능)가 매우 훌륭합니다. 계양천 수변공원이 바로 앞에 있어 환경이 매우 쾌적하며, 다락과 테라스 서비스 면적이 동일하게 넓습니다.",
                 cons: "102역까지의 도보 이동 거리가 약 15~18분으로 멉니다. 주차 비율이 세대당 1.26대로 펠리체(1.5대)나 더 힐(1.44대)에 비해 다소 빡빡합니다.",
                 advice: "역 거리가 있어 평점은 다소 밀리지만, 예산을 크게 절감하면서 테라스 복층 로망을 실현할 수 있는 가성비 복층 대안입니다. 동파 누수 수리 내역을 철저히 확인한 후 조율하십시오.",
-                image: "riverpark.jpg"
             }
         };
 
@@ -2238,33 +2161,10 @@
                             </div>
                         </div>
 
-                        <!-- 3-Column Content Grid -->
-                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                            
-                            <!-- Column 1: Clickable Mockup Image (lg:col-span-3) -->
-                            <div class="lg:col-span-3 flex flex-col justify-start space-y-2">
-                                <a href="${data.image}" onclick="openImageModal(event, this.href, '${data.title} - 단지 전경')" class="relative group block overflow-hidden rounded-xl border border-white/10 bg-slate-950 aspect-[4/3] lg:aspect-square">
-                                    <img src="${data.image}" alt="${data.title} 전경" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                                    <!-- Zoom Icon Overlay -->
-                                    <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                        <div class="bg-slate-900/90 text-gold-400 p-2 rounded-full border border-gold-500/30 text-xs flex items-center space-x-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
-                                            </svg>
-                                            <span>확대 보기</span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="text-[10px] text-gray-500 text-center flex items-center justify-center space-x-1">
-                                    <svg class="w-3 h-3 text-gold-500/70 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0116 0z"></path>
-                                    </svg>
-                                    <span class="break-keep text-xs lg:text-[10px]">이미지 클릭 시 확대 보기</span>
-                                </div>
-                            </div>
-
-                            <!-- Column 2: Specs List (lg:col-span-4) -->
-                            <div class="lg:col-span-4">
+                    <!-- 2-Column Content Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                        <!-- Column 1: Specs List (lg:col-span-6) -->
+                            <div class="lg:col-span-6">
                                 <!-- Specs List -->
                                 <div class="bg-slate-950/60 border border-white/5 rounded-xl p-3.5 space-y-2.5 text-xs lg:text-[11px] text-gray-300 font-light">
                                     <div class="flex items-start justify-between">
@@ -2306,8 +2206,8 @@
                                 </div>
                             </div>
 
-                            <!-- Column 3: Metrics & Deep Analysis (lg:col-span-5) -->
-                            <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                            <!-- Column 2: Metrics & Deep Analysis (lg:col-span-6) -->
+                            <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
                                 <!-- Metrics Progress Bars (우측 상단) -->
                                 <div class="bg-slate-950/80 p-3.5 rounded-xl text-xs lg:text-[10px] space-y-2">
                                     <div>
@@ -2465,143 +2365,6 @@
             }
         }
 
-        // Modal image list tracking for navigation
-        let modalImages = [];
-        let currentModalIndex = -1;
-        
-        // Touch swipe variables for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        function handleTouchStart(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        }
-
-        function handleTouchEnd(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipeGesture();
-        }
-
-        function handleSwipeGesture() {
-            const swipeThreshold = 50; // min distance in px
-            if (touchEndX < touchStartX - swipeThreshold) {
-                navigateModal(1); // Swiped left -> Next
-            }
-            if (touchEndX > touchStartX + swipeThreshold) {
-                navigateModal(-1); // Swiped right -> Prev
-            }
-        }
-
-        // Open Image Modal
-        function openImageModal(e, url, title) {
-            if (e) e.preventDefault();
-            
-            // Find active tab content to get correct context of images
-            const layoutTab = document.getElementById('tab-content-layout');
-            const activeTabContent = layoutTab.classList.contains('hidden')
-                ? document.getElementById('tab-content-dongho')
-                : layoutTab;
-            
-            // Collect all image links inside the active tab container
-            const links = Array.from(activeTabContent.querySelectorAll('a[onclick]'));
-            modalImages = links.map(link => ({
-                url: link.getAttribute('href'),
-                title: link.querySelector('img').getAttribute('alt') || link.textContent.trim()
-            }));
-            
-            // Find current index
-            currentModalIndex = modalImages.findIndex(img => img.url === url);
-            if (currentModalIndex === -1) {
-                modalImages = [{ url, title }];
-                currentModalIndex = 0;
-            }
-            
-            updateModalContent();
-            
-            const modal = document.getElementById('image-modal');
-            const modalBox = document.getElementById('modal-box');
-            
-            // Open modal (fade in + scale up)
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            modal.classList.add('opacity-100');
-            document.body.classList.add('overflow-hidden');
-            
-            setTimeout(() => {
-                modalBox.classList.remove('scale-95');
-                modalBox.classList.add('scale-100');
-            }, 10);
-            
-            // Add listeners
-            document.addEventListener('keydown', handleModalKeyDown);
-            modal.addEventListener('touchstart', handleTouchStart, { passive: true });
-            modal.addEventListener('touchend', handleTouchEnd, { passive: true });
-        }
-
-        // Update Modal Image and Title
-        function updateModalContent() {
-            const modalImg = document.getElementById('modal-image');
-            const modalTitle = document.getElementById('modal-title');
-            const modalOrigin = document.getElementById('modal-origin-link');
-            const modalSpinner = document.getElementById('modal-spinner');
-            const prevBtn = document.getElementById('modal-prev-btn');
-            const nextBtn = document.getElementById('modal-next-btn');
-            
-            const current = modalImages[currentModalIndex];
-            
-            // Reset spinner and hide image briefly while loading
-            modalSpinner.classList.remove('opacity-0');
-            modalImg.classList.add('opacity-0');
-            modalImg.src = '';
-            
-            // Apply new image data
-            modalTitle.textContent = `${current.title} (${currentModalIndex + 1}/${modalImages.length})`;
-            modalOrigin.href = current.url;
-            modalImg.src = current.url;
-            
-            // Toggle navigation button visibility
-            if (modalImages.length > 1) {
-                prevBtn.classList.remove('hidden');
-                nextBtn.classList.remove('hidden');
-            } else {
-                prevBtn.classList.add('hidden');
-                nextBtn.classList.add('hidden');
-            }
-        }
-
-        // Navigate through modal images
-        function navigateModal(direction) {
-            if (modalImages.length <= 1) return;
-            currentModalIndex = (currentModalIndex + direction + modalImages.length) % modalImages.length;
-            updateModalContent();
-        }
-
-        // Close Image Modal
-        function closeImageModal() {
-            const modal = document.getElementById('image-modal');
-            const modalBox = document.getElementById('modal-box');
-            
-            modalBox.classList.remove('scale-100');
-            modalBox.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            modal.classList.remove('opacity-100');
-            document.body.classList.remove('overflow-hidden');
-            
-            document.removeEventListener('keydown', handleModalKeyDown);
-            modal.removeEventListener('touchstart', handleTouchStart);
-            modal.removeEventListener('touchend', handleTouchEnd);
-        }
-
-        // Keyboard navigation & close handlers
-        function handleModalKeyDown(e) {
-            if (e.key === 'Escape') {
-                closeImageModal();
-            } else if (e.key === 'ArrowLeft') {
-                navigateModal(-1);
-            } else if (e.key === 'ArrowRight') {
-                navigateModal(1);
-            }
-        }
-
         // Refusal Scenarios Data & Logic
         const refusalScenarios = {
             owner: {
@@ -2696,55 +2459,46 @@
         const simulationApts = {
             hillstate: {
                 name: "힐스테이트 센트럴",
-                image: "hillstate.jpg",
                 basePrice: 816000000,
                 desc: "GTX-D 호재 대장역 초역세권 신축의 가치."
             },
             wellcounty: {
                 name: "이편한세상 웰카운티",
-                image: "wellcounty.jpg",
                 basePrice: 760000000,
                 desc: "초·중·고교 학군과 101역 초역세권 입지."
             },
             detre: {
                 name: "디에트르 더 힐 (복층)",
-                image: "detre.jpg",
                 basePrice: 850000000,
                 desc: "🏊 수영장을 품은 1,417세대 대단지. 다락방+넓은 테라스(실사용 45평 효과)."
             },
             lakefore: {
                 name: "제일풍경채 레이크포레",
-                image: "lakefore.jpg",
                 basePrice: 675000000,
                 desc: "검단호수공원 영구조망 및 호수공원역 역세권."
             },
             hoban3: {
                 name: "호반써밋 3차",
-                image: "hoban3.jpg",
                 basePrice: 620000000,
                 desc: "넉넉한 주차(1.41대)와 아라역세권 후분양 단지."
             },
             paragon: {
                 name: "파라곤 센트럴파크",
-                image: "paragon.jpg",
                 basePrice: 660000000,
                 desc: "1,122세대 대단지이자 해든초 초품아, 넉넉한 주차와 6.1m 광폭거실."
             },
             prugio: {
                 name: "푸르지오 더 베뉴",
-                image: "prugio.jpg",
                 basePrice: 649000000,
                 desc: "조경이 아름다운 1540세대 대단지 리조트형 조경."
             },
             felice: {
                 name: "디에트르 더 펠리체 (복층)",
-                image: "felice.jpg",
                 basePrice: 770000000,
                 desc: "1,279세대 대단지 • 주차 1.5대의 초품아 복층 특화 단지(복층세대 전용)."
             },
             riverpark: {
                 name: "디에트르 리버파크 (복층)",
-                image: "riverpark.jpg",
                 basePrice: 720000000,
                 desc: "계양천 수변 가성비 복층. 최상층 다락 테라스(복층세대 전용 • 누수 이력 검증 필수)."
             }
@@ -2904,12 +2658,9 @@
                     <div class="bg-slate-950/80 p-4.5 rounded-xl border border-white/5 space-y-3 flex flex-col justify-between hover:border-gold-500/30 transition-all duration-300">
                         <div class="space-y-2.5">
                             <div class="flex justify-between items-start border-b border-white/5 pb-2">
-                                <div class="flex items-center space-x-2">
-                                    <img src="${apt.image}" class="w-8 h-8 rounded object-cover border border-white/10 flex-shrink-0">
-                                    <div>
-                                        <h4 class="text-xs font-bold text-slate-100">${apt.name}</h4>
-                                        <span class="text-[9px] text-gray-500">${formatManwon(price)}</span>
-                                    </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-100">${apt.name}</h4>
+                                    <span class="text-[9px] text-gray-500">${formatManwon(price)}</span>
                                 </div>
                                 <span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${safetyBadgeClass}">${safetyText}</span>
                             </div>
