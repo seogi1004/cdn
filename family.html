@@ -1028,17 +1028,17 @@
 
                 <!-- Alternative Premium Cards Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Card 1: Jeil Paragon -->
-                    <div class="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-3 flex flex-col justify-between">
+<!-- Card 1: Jeil Lakefore -->
+                    <div class="bg-slate-900 border border-gold-500/20 p-4 rounded-xl space-y-3 flex flex-col justify-between shadow-md">
                         <div>
                             <div class="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
-                                <span class="text-xs text-cyan-400 font-bold">🥇 103역 조망/전매대장</span>
-                                <span class="text-[9px] bg-cyan-600/25 text-cyan-400 px-1.5 py-0.5 rounded font-bold">유리난간 적용</span>
+                                <span class="text-xs text-gold-400 font-bold">👑 군인공제회 회원 직접 청약 (1순위)</span>
+                                <span class="text-[9px] bg-gold-600/25 text-gold-400 px-1.5 py-0.5 rounded font-bold">에어컨 무상 & 유리난간</span>
                             </div>
                             <h4 class="text-sm font-bold text-slate-100 mb-1">제일풍경채 레이크포레 (AA25BL)</h4>
-                            <p class="text-[9px] text-gray-500 mb-2">2026년 10월 준공 예정 • 103역세권</p>
-                            <p class="text-[11px] text-gray-400 leading-relaxed font-light">
-                                <strong>유럽산 시스템 창호와 유리 난간</strong>이 설치되어 전면 호수공원 뷰가 완벽하게 확보됩니다. 특히 <strong>군인공제회 공급분</strong>은 전매제한이 상대적으로 낮아 <strong>전매 전환이 빠르게 가능</strong>한 핵심 단지입니다. 다만 실제 전매 허용일·분양 조건별 차등이 있어 계약 전 사전 확인이 필요합니다.
+                            <p class="text-[9px] text-gray-500 mb-2">2026년 6월 분양 오픈 / 7월 청약 예정 • 103역세권</p>
+                            <p class="text-[11px] text-gray-300 leading-relaxed font-light">
+                                <strong>군인공제회 회원아파트</strong>로서 전면 유리난간과 유럽식 시스템 창호가 적용되어 호수 뷰 가치가 완벽합니다. 특히 군인공제회 청약 시 <strong>원분양가(약 5.4억 선)로 프리미엄 없이(P 0원) 입성</strong>하며, 시스템 에어컨 무상 제공 등이 적용되는 <strong>최선순위(1순위) 청약 핵심 타겟</strong>입니다.
                             </p>
                         </div>
                     </div>
@@ -2196,6 +2196,7 @@
 
         let wellcountyMode = 'normal';
         let detreMode = 'ab';
+        let lakeforeMode = 'mab';
 
         function toggleWellcounty(mode) {
             wellcountyMode = mode;
@@ -2204,6 +2205,11 @@
 
         function toggleDetre(mode) {
             detreMode = mode;
+            calculateFinancing();
+        }
+
+        function toggleLakefore(mode) {
+            lakeforeMode = mode;
             calculateFinancing();
         }
 
@@ -2261,6 +2267,8 @@
                     price = wellcountyMode === 'normal' ? 760000000 : 630000000;
                 } else if (key === 'detre') {
                     price = detreMode === 'ab' ? 850000000 : 780000000;
+                } else if (key === 'lakefore') {
+                    price = lakeforeMode === 'mab' ? 540000000 : 675000000;
                 }
                 
                 const taxRate = getAcquisitionTaxRate(price);
@@ -2378,6 +2386,14 @@
                                     <span class="text-[9px] text-gray-500">타입:</span>
                                     <button onclick="toggleDetre('ab')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${detreMode === 'ab' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">A/B타입</button>
                                     <button onclick="toggleDetre('c')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${detreMode === 'c' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">C타입</button>
+                                </div>
+                            ` : ''}
+                            
+                            ${key === 'lakefore' ? `
+                                <div class="flex items-center space-x-1.5 mt-2 border-t border-white/5 pt-2">
+                                    <span class="text-[9px] text-gray-500">조건:</span>
+                                    <button onclick="toggleLakefore('mab')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${lakeforeMode === 'mab' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">회원청약</button>
+                                    <button onclick="toggleLakefore('normal')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${lakeforeMode === 'normal' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">분양권매입</button>
                                 </div>
                             ` : ''}
                         </div>
