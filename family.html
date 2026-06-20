@@ -1294,6 +1294,98 @@
             </div>
         </section>
 
+        <!-- SECTION 08: 리은이네 자산 포트폴리오 및 자금 조달 시뮬레이션 -->
+        <section class="space-y-6">
+            <div class="text-center md:text-left">
+                <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 08</span>
+                <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
+                    <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
+                    💰 자산 포트폴리오 및 자금 조달 시뮬레이션
+                </h2>
+                <p class="text-xs text-gray-400 mt-1">보유 자산(전세금 5.8억 + 미국단기채 10.5만 달러) 기준 대출 최소화 및 퇴직연금 보존 로드맵</p>
+            </div>
+
+            <div class="bg-slate-900 border border-gold-500/20 rounded-3xl p-5 md:p-6 space-y-6 custom-shadow">
+                <!-- Assets Allocation Summary Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <!-- Jeonse returned -->
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1.5">
+                        <span class="text-gray-400 font-bold">🏠 A. 전세보증금 회수금</span>
+                        <div class="text-base font-black text-slate-200 font-mono">5억 8,000만 원</div>
+                        <p class="text-gray-500 text-[10px] leading-relaxed">퇴거 시 임대인으로부터 반환받는 100% 무위험 원화 유동성 자산입니다.</p>
+                    </div>
+                    <!-- Dollar / T-bill -->
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1.5">
+                        <span class="text-gold-400 font-bold">🇺🇸 B. 달러 및 미국단기채 자산</span>
+                        <div class="text-base font-black text-gold-400 font-mono">105,000 USD <span class="text-xs text-gray-400 font-normal">(약 1.59억 원)</span></div>
+                        <p class="text-gray-500 text-[10px] leading-relaxed">미국 국채 롤링 중으로, 현재 고환율(**1,520.4원**) 반영 시 약 <strong>1억 5,964만 원</strong>의 가치로 즉시 환전 실현이 가능합니다.</p>
+                    </div>
+                    <!-- Retirement Pension -->
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1.5">
+                        <span class="text-emerald-400 font-bold">🛡️ C. 퇴직연금 (보존 자산)</span>
+                        <div class="text-base font-black text-emerald-400">원천 보존 (사용 안함)</div>
+                        <p class="text-gray-500 text-[10px] leading-relaxed">매수 자금에서 완전히 제외하여 노후 대비 및 가족 최후의 안전 방어막으로 그대로 보존합니다.</p>
+                    </div>
+                </div>
+
+                <!-- Financing Simulation Grid for 3 Options -->
+                <div class="space-y-3">
+                    <span class="text-xs font-bold text-gold-500 block flex items-center font-sans">
+                        <svg class="w-4 h-4 mr-1.5 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        💵 가용 현금 7억 4,000만 원 대입 시 단지별 대출 및 월 상환금 시뮬레이션
+                    </span>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans">
+                        <!-- Option 1: Hillstate -->
+                        <div class="bg-slate-950/80 p-4.5 rounded-xl border border-white/5 space-y-3">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span class="text-slate-200 font-bold">힐스테이트 신검단 (8.16억)</span>
+                                <span class="text-[10px] bg-gold-950/40 text-gold-400 px-1.5 py-0.5 rounded border border-gold-500/20 font-bold font-sans">LTV 13.0%</span>
+                            </div>
+                            <div class="space-y-1 text-gray-300 text-[11px]">
+                                <p>• <strong>총 소요 자금:</strong> 약 8.46억 원 <span class="text-[10px] text-gray-500">(부대비용 포함)</span></p>
+                                <p>• <strong>필요 담보대출:</strong> <strong class="text-gold-400 font-mono">1억 600만 원</strong></p>
+                                <p>• <strong>월 원리금 (4.31%, 30년):</strong> <strong class="text-slate-200 font-mono">약 52.4만 원</strong></p>
+                            </div>
+                            <span class="text-[10px] text-emerald-400/90 block font-light leading-relaxed">👉 LTV가 13%에 불과하여 대출 금리가 높더라도 가계부채 상방 압력 및 현금 흐름 타격이 사실상 무시할 수 있는 수준입니다.</span>
+                        </div>
+
+                        <!-- Option 2: Detre -->
+                        <div class="bg-slate-950/80 p-4.5 rounded-xl border border-white/5 space-y-3">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span class="text-slate-200 font-bold">디에트르 더 힐 복층 (8.18억)</span>
+                                <span class="text-[10px] bg-amber-950/40 text-amber-400 px-1.5 py-0.5 rounded border border-amber-500/20 font-bold font-sans">LTV 13.2%</span>
+                            </div>
+                            <div class="space-y-1 text-gray-300 text-[11px]">
+                                <p>• <strong>총 소요 자금:</strong> 약 8.48억 원 <span class="text-[10px] text-gray-500">(부대비용 포함)</span></p>
+                                <p>• <strong>필요 담보대출:</strong> <strong class="text-gold-400 font-mono">1억 800만 원</strong></p>
+                                <p>• <strong>월 원리금 (4.31%, 30년):</strong> <strong class="text-slate-200 font-mono">약 53.4만 원</strong></p>
+                            </div>
+                            <span class="text-[10px] text-emerald-400/90 block font-light leading-relaxed">👉 다락방과 전용 테라스(실사용 45평 효과)의 드넓은 독립 공간을 얻으면서도 1억 선의 안전 대출로 진입이 완료됩니다.</span>
+                        </div>
+
+                        <!-- Option 3: Prugio -->
+                        <div class="bg-slate-950/80 p-4.5 rounded-xl border border-gold-500/20 space-y-3">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span class="text-slate-200 font-bold">푸르지오 더 베뉴 (6.51억)</span>
+                                <span class="text-[10px] bg-emerald-950/40 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20 font-bold font-sans">LTV 0%</span>
+                            </div>
+                            <div class="space-y-1 text-gray-300 text-[11px]">
+                                <p>• <strong>총 소요 자금:</strong> 약 6.75억 원 <span class="text-[10px] text-gray-500">(부대비용 포함)</span></p>
+                                <p>• <strong>필요 담보대출:</strong> <strong class="text-emerald-400 font-mono">0원 (대출 없음)</strong></p>
+                                <p>• <strong>잉여 비상금 보존:</strong> <strong class="text-gold-400 font-mono">약 +6,464만 원</strong></p>
+                            </div>
+                            <span class="text-[10px] text-gold-400 block font-light leading-relaxed">👉 주택 담보대출을 단 1원도 일으키지 않는 완전한 <strong>무대출(Debt-Free) 진입</strong>이며 이사 후에도 비상금 6,500만 원을 추가로 확보합니다.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Currency Risk Tip -->
+                <div class="text-[11px] text-gray-400 bg-slate-950/30 p-3.5 rounded-lg border border-white/5 leading-relaxed font-light font-sans">
+                    💡 <strong>아빠의 고환율 환차익(FX) 활용 조언:</strong> 현재 <strong>1,520원선에 달하는 초고환율</strong> 시점은 달러 단기채를 처분해 원화 실물 자산(부동산)으로 교환하기에 역사적으로 가장 좋은 환전 골든타임입니다. 달러 환차익을 꼭대기에서 실현하여 내 집 마련에 보태는 방식이므로 세무적인 혜택 이상의 통화 방어 효과를 누리게 되며, 퇴직연금은 건드리지 않고 그대로 보존하므로 인생 전반에 걸친 금융 안정성이 완벽하게 보장됩니다.
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Image Zoom Modal Overlay -->
