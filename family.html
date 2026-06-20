@@ -846,6 +846,9 @@
                             <button onclick="selectApt('lakefore')" id="btn-lakefore" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
                                 레이크포레 (호수공원역)
                             </button>
+                            <button onclick="selectApt('hoban3')" id="btn-hoban3" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
+                                호반써밋 3차 (아라역)
+                            </button>
                         </div>
                     </div>
 
@@ -864,6 +867,9 @@
                             </button>
                             <button onclick="selectApt('detre')" id="btn-detre" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
                                 디에트르 더 힐 (복층)
+                            </button>
+                            <button onclick="selectApt('paragon')" id="btn-paragon" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
+                                파라곤 센트럴파크 (아라역)
                             </button>
                         </div>
                     </div>
@@ -1175,13 +1181,13 @@
             </div>
         </section>
         
-        <!-- SECTION 5: 6대 아파트 한눈에 비교 테이블 (6 Apartments Comparison Table) -->
+        <!-- SECTION 5: 8대 아파트 한눈에 비교 테이블 (8 Apartments Comparison Table) -->
         <section class="space-y-6">
             <div class="text-center md:text-left">
                 <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 04-D</span>
                 <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
                     <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
-                    📊 6대 선호 아파트 핵심 비교 매트릭스
+                    📊 8대 선호 아파트 핵심 비교 매트릭스
                 </h2>
                 <p class="text-xs text-gray-400 mt-1">가장 핵심적인 입지 스펙과 장단점, 그리고 취득원가 예측 비교 (우선순위별 정렬)</p>
             </div>
@@ -1251,6 +1257,52 @@
                             <td class="p-2.5 sm:p-4 min-w-[110px] whitespace-normal">
                                 <span class="text-gold-400 font-bold">94점</span><br>
                                 <span class="text-[10px] text-gray-500">✨ 103역 조망 1위</span>
+                            </td>
+                        </tr>
+                        <!-- 1순위: 호반써밋 3차 -->
+                        <tr class="hover:bg-white/5 transition-colors duration-150">
+                            <td class="p-2.5 sm:p-4 font-bold text-slate-100 min-w-[120px] whitespace-normal sticky left-0 bg-slate-900/95 z-10 border-r border-white/10 backdrop-blur-sm">
+                                호반써밋 인천검단 3차<br>
+                                <span class="text-[10px] text-gray-500 font-normal">(AB13BL • 분양권)</span><br>
+                                <span class="inline-block px-1.5 py-0.5 bg-gold-600/10 text-gold-500 text-[9px] font-bold rounded mt-1">🥇 1순위 타겟</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[140px] whitespace-normal">
+                                <strong class="text-rose-400 font-bold">분양 5.2억 / 전매 6.0억 ~ 6.5억</strong><br>
+                                <span class="text-[10px] text-gray-500">(예상 P 반영 실취득원가)</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                🚇 <strong>검단아라역(101역) 역세권</strong><br>
+                                🚗 <strong>세대당 1.41대 주차</strong>. 아라역 사법타운 및 넥스트콤플렉스 호재와 인접하여 실거주 인프라 우수. 후분양 전매 완화 수혜 대상.
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                🚧 <strong>26년 11월 준공</strong>으로 즉시 입주 불가. 전세 갱신권을 통한 입주 타이밍 조율이 필수적입니다.
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[110px] whitespace-normal">
+                                <span class="text-gold-400 font-bold">92점</span><br>
+                                <span class="text-[10px] text-gray-500">🚙 최상급 주차 여유</span>
+                            </td>
+                        </tr>
+                        <!-- 2순위: 파라곤 센트럴파크 -->
+                        <tr class="hover:bg-white/5 transition-colors duration-150">
+                            <td class="p-2.5 sm:p-4 font-bold text-slate-100 min-w-[120px] whitespace-normal sticky left-0 bg-slate-900/95 z-10 border-r border-white/10 backdrop-blur-sm">
+                                검단신도시 파라곤 센트럴파크<br>
+                                <span class="text-[10px] text-gray-500 font-normal">(AA2BL • 기입주)</span><br>
+                                <span class="inline-block px-1.5 py-0.5 bg-amber-600/10 text-amber-500 text-[9px] font-bold rounded mt-1">🥈 2순위 타겟</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[140px] whitespace-normal">
+                                <strong class="text-rose-400 font-bold">6.5억 ~ 7.0억 원</strong><br>
+                                <span class="text-[10px] text-gray-500">(취득원가: 6.6억 ~ 7.1억)</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                🏫 <strong>해든초 초품아 & 6.1m 광폭 거실</strong><br>
+                                🚗 세대당 1.42대 주차 및 단지 앞 대형 공원으로 쾌적한 실거주 환경 구축.
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                ⚠️ 아라역(101역) 도보 이동 시 미세한 경사가 존재하며 개별 연식에 따른 연식 하자를 체크해야 합니다.
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[110px] whitespace-normal">
+                                <span class="text-gold-400 font-bold">88점</span><br>
+                                <span class="text-[10px] text-gray-500">🏫 초품아 1위</span>
                             </td>
                         </tr>
                         <!-- 2순위: 힐스테이트 센트럴 -->
@@ -1732,11 +1784,63 @@
                 cons: "2026년 10월 준공 예정으로 즉시 입주가 불가능하여 전세 갱신권을 통한 시간 레버리지 활용이 필수적입니다.",
                 advice: "군인공제회 공급분 전매를 통해 약 5.4억 선(혹은 일반 매입 시 6억 중반대)에 매입한다면 자본 방어 효율성이 가장 극대화되는 1순위 핵심 카드입니다.",
                 image: "lakefore.jpg"
+            },
+            hoban3: {
+                title: "호반써밋 인천검단 3차 (AB13블록)",
+                badge: "👑 1순위 타겟 • 후분양 신축 & 아라역세권 입지",
+                price: "원분양가 약 5.2억 선 / 예상 실취득가 6.0억 ~ 6.5억 원",
+                priceNote: "(후분양 분양가 및 전매 프리미엄 예상가 반영)",
+                metrics: { value: 92, saju: 90, school: 88, rate: 94 },
+                specs: {
+                    households: "905세대 (총 8개동)",
+                    completion: "2026년 11월 준공 예정 (후분양)",
+                    parking: "세대당 1.41대 (총 1,280대, 매우 넉넉함)",
+                    distance: "🚇 검단아라역(101역) 역세권 (도보 약 8~10분 / 700m)",
+                    builder: "호반산업",
+                    school: "단지 인근 초교 배정 예정 (안심 도보권 학군)",
+                    far_bcr: "용적률 210% / 건폐율 15% 내외",
+                    heating: "지역난방 (열병합)",
+                    recom_type: "84㎡ A타입 (4-Bay 판상형 구조, 호반 특유의 넓은 드레스룸)"
+                },
+                meta: {
+                    tax: "전매제한 및 실거주 의무 조건 검증 필요 (후분양 전매 완화 수혜 대상)",
+                    risk: "준공 예정 시점이 26년 11월로 갱신권 만기 전후 타이밍 매칭 필요"
+                },
+                pros: "세대당 1.41대의 여유로운 주차 공간을 확보하였으며, 아라역 사법타운/넥스트콤플렉스 호재와 인접하여 실거주 인프라가 대단히 우수합니다.",
+                cons: "준공이 26년 11월로 전세 갱신권을 통한 입주 타이밍 레버리지 조율이 필수적입니다.",
+                advice: "후분양 분양가(약 5.2억) 기준 전매 P에 따라 실취득원가를 6억 초중반으로 방어할 수 있어 자본 효율성이 매우 높은 1순위 매력 카드입니다.",
+                image: "hoban3.jpg"
+            },
+            paragon: {
+                title: "검단신도시 파라곤 센트럴파크 (AA2블록)",
+                badge: "🥈 2순위 타겟 • 초품아 & 실거주 인프라 우수",
+                price: "매매 호가 약 6.5억 ~ 7.0억 원 / 예상 실취득가 약 6.6억 ~ 7.1억 원",
+                priceNote: "(입주 2년 경과 비과세 매물 거래 기준)",
+                metrics: { value: 88, saju: 85, school: 95, rate: 86 },
+                specs: {
+                    households: "1,122세대 (총 12개동)",
+                    completion: "2022년 6월 준공 (입주 2년 경과 완료)",
+                    parking: "세대당 1.42대 (총 1,600대, 여유로움)",
+                    distance: "🚇 검단아라역(101역) 역세권 (도보 약 8~10분 / 700m)",
+                    builder: "동양건설산업",
+                    school: "🏫 인천해든초등학교 (단지 바로 앞 초품아 안심 도보 학군)",
+                    far_bcr: "용적률 189% / 건폐율 14%",
+                    heating: "지역난방 (열병합)",
+                    recom_type: "84㎡ 단일 평형 (약 6.1m 광폭 거실 및 넉넉한 대용량 다용도실)"
+                },
+                meta: {
+                    tax: "취득세 일반 세율 적용 (입주 2년 비과세 매칭으로 세무 안정성 우수)",
+                    risk: "2022년 준공 단지로 개별 세대별 결로나 소소한 연식 하자 여부 체크 필요"
+                },
+                pros: "해든초등학교를 품은 초품아 단지이며, 세대당 1.42대의 넉넉한 주차 공간과 넓은 광폭 거실 설계(6.1m)로 자녀 양육 및 실거주 만족도가 매우 높습니다.",
+                cons: "연장선인 아라역까지 완벽한 평지는 아니며, 역세권 대장 아파트 대비 도보 이동 시 미세한 경사가 존재합니다.",
+                advice: "이미 입주 2년이 경과하여 비과세 혜택이 적용되는 안정적인 매물들이 출현하고 있으므로, 6.5억 내외에서 네고가 가능한 급매물을 선별 매입하기 좋은 2순위 매력 카드입니다.",
+                image: "paragon.jpg"
             }
         };
 
         function selectApt(key) {
-            const list = ['hillstate', 'prugio', 'wellcounty', 'detre', 'lakefore'];
+            const list = ['hillstate', 'prugio', 'wellcounty', 'detre', 'lakefore', 'hoban3', 'paragon'];
             list.forEach(item => {
                 const btn = document.getElementById(`btn-${item}`);
                 if (btn) {
@@ -2250,6 +2354,18 @@
                 basePrice: 675000000,
                 desc: "검단호수공원 영구조망 및 호수공원역 역세권."
             },
+            hoban3: {
+                name: "호반써밋 3차",
+                image: "hoban3.jpg",
+                basePrice: 620000000,
+                desc: "넉넉한 주차(1.41대)와 아라역세권 후분양 단지."
+            },
+            paragon: {
+                name: "파라곤 센트럴파크",
+                image: "paragon.jpg",
+                basePrice: 660000000,
+                desc: "1,122세대 대단지이자 해든초 초품아, 넉넉한 주차와 6.1m 광폭거실."
+            },
             prugio: {
                 name: "푸르지오 더 베뉴",
                 image: "prugio.jpg",
@@ -2261,6 +2377,7 @@
         let wellcountyMode = 'normal';
         let detreMode = 'ab';
         let lakeforeMode = 'mab';
+        let hoban3Mode = 'normal';
 
         function toggleWellcounty(mode) {
             wellcountyMode = mode;
@@ -2274,6 +2391,11 @@
 
         function toggleLakefore(mode) {
             lakeforeMode = mode;
+            calculateFinancing();
+        }
+
+        function toggleHoban3(mode) {
+            hoban3Mode = mode;
             calculateFinancing();
         }
 
@@ -2333,6 +2455,8 @@
                     price = detreMode === 'ab' ? 850000000 : 780000000;
                 } else if (key === 'lakefore') {
                     price = lakeforeMode === 'mab' ? 540000000 : 675000000;
+                } else if (key === 'hoban3') {
+                    price = hoban3Mode === 'normal' ? 620000000 : 520000000;
                 }
                 
                 const taxRate = getAcquisitionTaxRate(price);
@@ -2458,6 +2582,14 @@
                                     <span class="text-[9px] text-gray-500">조건:</span>
                                     <button onclick="toggleLakefore('mab')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${lakeforeMode === 'mab' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">회원공급분</button>
                                     <button onclick="toggleLakefore('normal')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${lakeforeMode === 'normal' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">분양권매입</button>
+                                </div>
+                            ` : ''}
+                            
+                            ${key === 'hoban3' ? `
+                                <div class="flex items-center space-x-1.5 mt-2 border-t border-white/5 pt-2">
+                                    <span class="text-[9px] text-gray-500">조건:</span>
+                                    <button onclick="toggleHoban3('normal')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${hoban3Mode === 'normal' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">분양권매입</button>
+                                    <button onclick="toggleHoban3('wupi')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${hoban3Mode === 'wupi' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">무피전매</button>
                                 </div>
                             ` : ''}
                         </div>
