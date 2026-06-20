@@ -874,6 +874,9 @@
                             <button onclick="selectApt('felice')" id="btn-felice" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
                                 디에트르 더 펠리체 (복층)
                             </button>
+                            <button onclick="selectApt('riverpark')" id="btn-riverpark" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
+                                디에트르 리버파크 (복층)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1184,13 +1187,13 @@
             </div>
         </section>
         
-        <!-- SECTION 5: 9대 아파트 한눈에 비교 테이블 (9 Apartments Comparison Table) -->
+        <!-- SECTION 5: 10대 아파트 한눈에 비교 테이블 (10 Apartments Comparison Table) -->
         <section class="space-y-6">
             <div class="text-center md:text-left">
                 <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 04-D</span>
                 <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
                     <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
-                    📊 9대 선호 아파트 핵심 비교 매트릭스
+                    📊 10대 선호 아파트 핵심 비교 매트릭스
                 </h2>
                 <p class="text-xs text-gray-400 mt-1">가장 핵심적인 입지 스펙과 장단점, 그리고 취득원가 예측 비교 (우선순위별 정렬)</p>
             </div>
@@ -1352,6 +1355,29 @@
                             <td class="p-2.5 sm:p-4 min-w-[110px] whitespace-normal">
                                 <span class="text-gold-400 font-bold">85점</span><br>
                                 <span class="text-[10px] text-gray-500">⭐ 역세권/브랜드 1위</span>
+                            </td>
+                        </tr>
+                        <!-- 2순위: 디에트르 리버파크 복층 -->
+                        <tr class="hover:bg-white/5 transition-colors duration-150">
+                            <td class="p-2.5 sm:p-4 font-bold text-slate-100 min-w-[120px] whitespace-normal sticky left-0 bg-slate-900/95 z-10 border-r border-white/10 backdrop-blur-sm">
+                                디에트르 리버파크 복층<br>
+                                <span class="text-[10px] text-gray-500 font-normal">(AB10BL • 기입주)</span><br>
+                                <span class="inline-block px-1.5 py-0.5 bg-amber-600/10 text-amber-500 text-[9px] font-bold rounded mt-1">🥈 2순위 타겟</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[140px] whitespace-normal">
+                                <strong class="text-rose-400 font-bold">7.0억 ~ 7.4억 원</strong><br>
+                                <span class="text-[10px] text-gray-500">(취득원가: 7.1억 ~ 7.5억)</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                🌲 <strong>계양천 수변 인접 & 가성비 복층</strong><br>
+                                🏡 다락방 + 루프탑 테라스 특화설계(실사용 45평). 타 디에트르 대비 저렴한 진입 가격대.
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                ⚠️ 102역 도보 약 15~18분(1.1km)으로 역 거리가 멀고, <strong>23년 1월 스프링클러 배관 동파 누수 이력</strong>이 있어 매수 전 수리 이력 검증 필수.
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[110px] whitespace-normal">
+                                <span class="text-gold-400 font-bold">83점</span><br>
+                                <span class="text-[10px] text-gray-500">🌲 수변 공원권</span>
                             </td>
                         </tr>
                         <!-- 2순위: 디에트르 더 힐 복층 -->
@@ -1888,11 +1914,37 @@
                 cons: "실내 수영장을 보유한 1,417세대 규모의 디에트르 더 힐(2차) 대비 단지 내 수영장이 없고 세대수가 1,279세대로 소폭 적으며, 아라역 중심상가까지의 거리(도보 12~15분)가 약간 더 멉니다.",
                 advice: "디에트르 더 힐 복층과 비교 시, 주차 여건(1.50대 vs 1.44대) 및 초등학교 인접성에서는 더 펠리체가 우수하나, 세대수(1,279세대 vs 1,417세대) 및 수영장 등 커뮤니티 인프라 측면에서는 더 힐이 앞섭니다. 임장을 통해 예산과 선호를 조율하십시오.",
                 image: "felice.jpg"
+            },
+            riverpark: {
+                title: "디에트르 리버파크 복층 (AB10블록)",
+                badge: "🥈 2순위 대안 • 최상층 복층 가성비 & 쾌적한 계양천 수변권",
+                price: "매매 호가 약 7.0억 ~ 7.4억 원 / 예상 실취득가 약 7.1억 ~ 7.5억 원",
+                priceNote: "(최상층 다락방 + 야외 테라스 복층세대 매입 기준)",
+                metrics: { value: 83, saju: 85, school: 80, rate: 82 },
+                specs: {
+                    households: "722세대 (총 7개동)",
+                    completion: "2022년 10월 준공 (입주 2년 경과 완료)",
+                    parking: "세대당 1.26대 (총 913대, 다소 보통 수준)",
+                    distance: "🚇 신검단중앙역(102역) 도보 약 15~18분 (실거리 1.1km / 계양천 남단)",
+                    builder: "대방건설",
+                    school: "🏫 인천이음초등학교 배정 (통학 거리 약 700m 도보권)",
+                    far_bcr: "용적률 177% / 건폐율 13%",
+                    heating: "지역난방 (열병합)",
+                    recom_type: "84㎡ 최상층 다락 복층형 (광폭 거실 + 다락방 + 개인 루프탑 테라스)"
+                },
+                meta: {
+                    tax: "취득세 일반 세율 적용 (2년 비과세 요건 충족 매물 연계)",
+                    risk: "23년 1월 스프링클러 배관 동파로 인한 누수 이력이 있으므로 매수 전 누수 조치 현황 필히 검증"
+                },
+                pros: "디에트르 타 브랜드 단지 대비 복층 세대의 가격 메리트(7억 초중반 진입 가능)가 매우 훌륭합니다. 계양천 수변공원이 바로 앞에 있어 환경이 매우 쾌적하며, 다락과 테라스 서비스 면적이 동일하게 넓습니다.",
+                cons: "102역까지의 도보 이동 거리가 약 15~18분으로 멉니다. 주차 비율이 세대당 1.26대로 펠리체(1.5대)나 더 힐(1.44대)에 비해 다소 빡빡합니다.",
+                advice: "역 거리가 있어 평점은 다소 밀리지만, 예산을 크게 절감하면서 테라스 복층 로망을 실현할 수 있는 가성비 복층 대안입니다. 동파 누수 수리 내역을 철저히 확인한 후 조율하십시오.",
+                image: "riverpark.jpg"
             }
         };
 
         function selectApt(key) {
-            const list = ['hillstate', 'prugio', 'wellcounty', 'detre', 'lakefore', 'hoban3', 'paragon', 'felice'];
+            const list = ['hillstate', 'prugio', 'wellcounty', 'detre', 'lakefore', 'hoban3', 'paragon', 'felice', 'riverpark'];
             list.forEach(item => {
                 const btn = document.getElementById(`btn-${item}`);
                 if (btn) {
@@ -2429,6 +2481,12 @@
                 image: "felice.jpg",
                 basePrice: 770000000,
                 desc: "1,279세대 대단지 및 주차 1.5대의 초품아 복층 특화 단지."
+            },
+            riverpark: {
+                name: "디에트르 리버파크",
+                image: "riverpark.jpg",
+                basePrice: 720000000,
+                desc: "계양천 수변 인접 가성비 복층. 최상층 다락 테라스(동파 누수 이력 검증 필수)."
             }
         };
 
@@ -2437,6 +2495,7 @@
         let lakeforeMode = 'mab';
         let hoban3Mode = 'normal';
         let feliceMode = 'loft';
+        let riverparkMode = 'loft';
 
         function toggleWellcounty(mode) {
             wellcountyMode = mode;
@@ -2460,6 +2519,11 @@
 
         function toggleFelice(mode) {
             feliceMode = mode;
+            calculateFinancing();
+        }
+
+        function toggleRiverpark(mode) {
+            riverparkMode = mode;
             calculateFinancing();
         }
 
@@ -2523,6 +2587,8 @@
                     price = hoban3Mode === 'normal' ? 620000000 : 520000000;
                 } else if (key === 'felice') {
                     price = feliceMode === 'loft' ? 770000000 : 600000000;
+                } else if (key === 'riverpark') {
+                    price = riverparkMode === 'loft' ? 720000000 : 570000000;
                 }
                 
                 const taxRate = getAcquisitionTaxRate(price);
@@ -2664,6 +2730,14 @@
                                     <span class="text-[9px] text-gray-500">타입:</span>
                                     <button onclick="toggleFelice('loft')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${feliceMode === 'loft' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">복층세대</button>
                                     <button onclick="toggleFelice('normal')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${feliceMode === 'normal' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">일반세대</button>
+                                </div>
+                            ` : ''}
+                            
+                            ${key === 'riverpark' ? `
+                                <div class="flex items-center space-x-1.5 mt-2 border-t border-white/5 pt-2">
+                                    <span class="text-[9px] text-gray-500">타입:</span>
+                                    <button onclick="toggleRiverpark('loft')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${riverparkMode === 'loft' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">복층세대</button>
+                                    <button onclick="toggleRiverpark('normal')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${riverparkMode === 'normal' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">일반세대</button>
                                 </div>
                             ` : ''}
                         </div>
