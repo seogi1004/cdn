@@ -871,6 +871,9 @@
                             <button onclick="selectApt('paragon')" id="btn-paragon" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
                                 파라곤 센트럴파크 (아라역)
                             </button>
+                            <button onclick="selectApt('felice')" id="btn-felice" class="px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 bg-slate-900 text-slate-400 border-white/5 hover:text-slate-200">
+                                디에트르 더 펠리체 (복층)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1181,13 +1184,13 @@
             </div>
         </section>
         
-        <!-- SECTION 5: 8대 아파트 한눈에 비교 테이블 (8 Apartments Comparison Table) -->
+        <!-- SECTION 5: 9대 아파트 한눈에 비교 테이블 (9 Apartments Comparison Table) -->
         <section class="space-y-6">
             <div class="text-center md:text-left">
                 <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 04-D</span>
                 <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
                     <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
-                    📊 8대 선호 아파트 핵심 비교 매트릭스
+                    📊 9대 선호 아파트 핵심 비교 매트릭스
                 </h2>
                 <p class="text-xs text-gray-400 mt-1">가장 핵심적인 입지 스펙과 장단점, 그리고 취득원가 예측 비교 (우선순위별 정렬)</p>
             </div>
@@ -1303,6 +1306,29 @@
                             <td class="p-2.5 sm:p-4 min-w-[110px] whitespace-normal">
                                 <span class="text-gold-400 font-bold">88점</span><br>
                                 <span class="text-[10px] text-gray-500">🏫 초품아 1위</span>
+                            </td>
+                        </tr>
+                        <!-- 2순위: 디에트르 더 펠리체 복층 -->
+                        <tr class="hover:bg-white/5 transition-colors duration-150">
+                            <td class="p-2.5 sm:p-4 font-bold text-slate-100 min-w-[120px] whitespace-normal sticky left-0 bg-slate-900/95 z-10 border-r border-white/10 backdrop-blur-sm">
+                                디에트르 더 펠리체 복층<br>
+                                <span class="text-[10px] text-gray-500 font-normal">(AA3BL • 기입주)</span><br>
+                                <span class="inline-block px-1.5 py-0.5 bg-amber-600/10 text-amber-500 text-[9px] font-bold rounded mt-1">🥈 2순위 타겟</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[140px] whitespace-normal">
+                                <strong class="text-rose-400 font-bold">7.4억 ~ 8.0억 원</strong><br>
+                                <span class="text-[10px] text-gray-500">(취득원가: 7.5억 ~ 8.2억)</span>
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                🚗 <strong>주차 1.5대 & 해든초 초품아</strong><br>
+                                🏡 다락방 + 루프탑 테라스 특화설계로 실사용 45평 효과. 대단지(1,279세대) 인프라.
+                            </td>
+                            <td class="p-2.5 sm:p-4 text-xs font-normal leading-relaxed min-w-[220px] whitespace-normal">
+                                ⚠️ 아라역까지의 도보 거리가 다소 존재하며(약 12~15분), 탑층 연식 하자 여부를 사전 검증해야 합니다.
+                            </td>
+                            <td class="p-2.5 sm:p-4 min-w-[110px] whitespace-normal">
+                                <span class="text-gold-400 font-bold">87점</span><br>
+                                <span class="text-[10px] text-gray-500">🚙 주차대수 1위</span>
                             </td>
                         </tr>
                         <!-- 2순위: 힐스테이트 센트럴 -->
@@ -1836,11 +1862,37 @@
                 cons: "연장선인 아라역까지 완벽한 평지는 아니며, 역세권 대장 아파트 대비 도보 이동 시 미세한 경사가 존재합니다.",
                 advice: "이미 입주 2년이 경과하여 비과세 혜택이 적용되는 안정적인 매물들이 출현하고 있으므로, 6.5억 내외에서 네고가 가능한 급매물을 선별 매입하기 좋은 2순위 매력 카드입니다.",
                 image: "paragon.jpg"
+            },
+            felice: {
+                title: "디에트르 더 펠리체 복층 (AA3블록)",
+                badge: "🥈 2순위 타겟 • 대단지(1279세대) & 주차 최고수준(1.5대)",
+                price: "매매 호가 약 7.4억 ~ 8.0억 원 / 예상 실취득가 약 7.5억 ~ 8.2억 원",
+                priceNote: "(최상층 다락방 + 야외 테라스 복층세대 매입 기준)",
+                metrics: { value: 87, saju: 84, school: 92, rate: 85 },
+                specs: {
+                    households: "1,279세대 (총 15개동)",
+                    completion: "2022년 2월 준공 (입주 2년 경과 완료)",
+                    parking: "세대당 1.50대 (총 1,863대, 1단계 단지 중 최고)",
+                    distance: "🚇 검단아라역(101역) 역세권 (도보 약 12~15분 / 900m)",
+                    builder: "대방건설",
+                    school: "🏫 인천해든초등학교 (단지 바로 옆 안심 도보 학군)",
+                    far_bcr: "용적률 182% / 건폐율 13%",
+                    heating: "지역난방 (열병합)",
+                    recom_type: "84㎡ 최상층 다락 복층형 (광폭 거실 + 다락방 + 개인 루프탑 테라스)"
+                },
+                meta: {
+                    tax: "취득세 일반 세율 적용 (2년 비과세 요건 충족 매물 연계)",
+                    risk: "최상층 탑층이므로 결로/누수 정밀 점검 및 겨울철 동파 방지 관리 필요"
+                },
+                pros: "1,279세대 대단지 메리트와 세대당 1.5대의 독보적으로 여유로운 주차 공간을 자랑합니다. 단지 바로 옆에 해든초가 붙어 있는 초품아이자, 디에트르 특유 of 다락방+야외테라스 설계로 실사용 면적이 45평 이상으로 극대화됩니다.",
+                cons: "디에트르 더 힐(3차) 대비 아라역 중심 상업지구까지의 거리가 도보 12~15분으로 다소 길며, 2022년 2월 준공으로 연식이 약간 더 누적되었습니다.",
+                advice: "디에트르 더 힐 복층과 비교 시 주차 및 대단지 조건에서 더 우세하나 역 거리가 약간 더 깁니다. 7억 중반대에서 테라스 특화 세대 급매가 나온다면 실거주와 자녀 통학 안정성 면에서 훌륭한 2순위 대안이 됩니다.",
+                image: "felice.jpg"
             }
         };
 
         function selectApt(key) {
-            const list = ['hillstate', 'prugio', 'wellcounty', 'detre', 'lakefore', 'hoban3', 'paragon'];
+            const list = ['hillstate', 'prugio', 'wellcounty', 'detre', 'lakefore', 'hoban3', 'paragon', 'felice'];
             list.forEach(item => {
                 const btn = document.getElementById(`btn-${item}`);
                 if (btn) {
@@ -2371,6 +2423,12 @@
                 image: "prugio.jpg",
                 basePrice: 649000000,
                 desc: "조경이 아름다운 1540세대 대단지 리조트형 조경."
+            },
+            felice: {
+                name: "디에트르 더 펠리체",
+                image: "felice.jpg",
+                basePrice: 770000000,
+                desc: "1,279세대 대단지 및 주차 1.5대의 초품아 복층 특화 단지."
             }
         };
 
@@ -2378,6 +2436,7 @@
         let detreMode = 'ab';
         let lakeforeMode = 'mab';
         let hoban3Mode = 'normal';
+        let feliceMode = 'loft';
 
         function toggleWellcounty(mode) {
             wellcountyMode = mode;
@@ -2396,6 +2455,11 @@
 
         function toggleHoban3(mode) {
             hoban3Mode = mode;
+            calculateFinancing();
+        }
+
+        function toggleFelice(mode) {
+            feliceMode = mode;
             calculateFinancing();
         }
 
@@ -2457,6 +2521,8 @@
                     price = lakeforeMode === 'mab' ? 540000000 : 675000000;
                 } else if (key === 'hoban3') {
                     price = hoban3Mode === 'normal' ? 620000000 : 520000000;
+                } else if (key === 'felice') {
+                    price = feliceMode === 'loft' ? 770000000 : 600000000;
                 }
                 
                 const taxRate = getAcquisitionTaxRate(price);
@@ -2590,6 +2656,14 @@
                                     <span class="text-[9px] text-gray-500">조건:</span>
                                     <button onclick="toggleHoban3('normal')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${hoban3Mode === 'normal' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">분양권매입</button>
                                     <button onclick="toggleHoban3('wupi')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${hoban3Mode === 'wupi' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">무피전매</button>
+                                </div>
+                            ` : ''}
+                            
+                            ${key === 'felice' ? `
+                                <div class="flex items-center space-x-1.5 mt-2 border-t border-white/5 pt-2">
+                                    <span class="text-[9px] text-gray-500">타입:</span>
+                                    <button onclick="toggleFelice('loft')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${feliceMode === 'loft' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">복층세대</button>
+                                    <button onclick="toggleFelice('normal')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition-colors ${feliceMode === 'normal' ? 'bg-gold-600/20 text-gold-400 border-gold-500/30' : 'bg-slate-900 text-slate-500 border-white/5 hover:text-slate-300'}">일반세대</button>
                                 </div>
                             ` : ''}
                         </div>
