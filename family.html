@@ -213,14 +213,18 @@
         
         /* Inactive button states background overrides (fixing black background bug) */
         [id^="btn-ref-"]:not(.bg-gold-600), 
-        [onclick^="selectApt"]:not(.bg-gold-600) {
+        [id^="btn-dup-"]:not(.bg-gold-600), 
+        [onclick^="selectApt"]:not(.bg-gold-600),
+        [onclick^="selectDuplex"]:not(.bg-gold-600) {
             background-color: #fafaf9 !important; /* light warm cream background */
             color: #4b5563 !important; /* soft dark gray text */
             border-color: rgba(15, 23, 42, 0.12) !important;
         }
         
         [id^="btn-ref-"]:not(.bg-gold-600):hover, 
-        [onclick^="selectApt"]:not(.bg-gold-600):hover {
+        [id^="btn-dup-"]:not(.bg-gold-600):hover, 
+        [onclick^="selectApt"]:not(.bg-gold-600):hover,
+        [onclick^="selectDuplex"]:not(.bg-gold-600):hover {
             background-color: #f4f3f0 !important; /* warm gray hover background */
             border-color: rgba(149, 121, 83, 0.35) !important;
             color: #957953 !important;
@@ -2006,8 +2010,8 @@
                                 <thead>
                                     <tr class="border-b border-white/10 text-gold-500 font-bold text-center">
                                         <th class="py-2.5 px-3 text-left w-[140px]">비교 항목</th>
-                                        <th class="py-2.5 px-3 bg-gold-500/5">🥇 더 힐 (2차)</th>
-                                        <th class="py-2.5 px-3 bg-cyan-500/5">🚗 더 펠리체 (1차)</th>
+                                        <th class="py-2.5 px-3 bg-gold-500/5">🥇 1순위: 더 힐 (2차)</th>
+                                        <th class="py-2.5 px-3 bg-cyan-500/5">🥈 2순위: 더 펠리체 (1차)</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-white/5">
@@ -2159,7 +2163,7 @@
                         <div class="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-gold-500/20 p-5 space-y-4 hover:border-gold-500/40 transition-all duration-300">
                             <div class="flex justify-between items-start border-b border-white/5 pb-3">
                                 <div>
-                                    <span class="inline-block px-2 py-0.5 bg-gold-600/10 text-gold-500 text-[9px] font-bold rounded mb-1">🥇 디에트르 대장</span>
+                                    <span class="inline-block px-2 py-0.5 bg-gold-600/10 text-gold-500 text-[9px] font-bold rounded mb-1">🥇 1순위: 프리미엄 대장</span>
                                     <h3 class="text-sm font-bold text-slate-100">디에트르 더 힐 복층 (2차)</h3>
                                     <span class="text-[10px] text-gray-500">당하동 • 1,417세대</span>
                                 </div>
@@ -2182,7 +2186,7 @@
                         <div class="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/5 p-5 space-y-4 hover:border-gold-500/30 transition-all duration-300">
                             <div class="flex justify-between items-start border-b border-white/5 pb-3">
                                 <div>
-                                    <span class="inline-block px-2 py-0.5 bg-cyan-600/10 text-cyan-400 text-[9px] font-bold rounded mb-1">🚗 주차 & 학군 대장</span>
+                                    <span class="inline-block px-2 py-0.5 bg-cyan-600/10 text-cyan-400 text-[9px] font-bold rounded mb-1">🥈 2순위: 주차 & 학군 대장</span>
                                     <h3 class="text-sm font-bold text-slate-100">디에트르 더 펠리체 복층 (1차)</h3>
                                     <span class="text-[10px] text-gray-500">당하동 • 1,279세대</span>
                                 </div>
@@ -2544,7 +2548,7 @@
             },
             detre: {
                 title: "검단신도시 디에트르 더 힐 (당하동)",
-                badge: "💖 엄마 선호 1위 • 하늘과 다락을 품은 복층 테라스",
+                badge: "🥇 1순위 타겟 • 하늘과 다락을 품은 복층 테라스 (엄마 선호 1위)",
                 price: "7.8억 ~ 8.5억 원 (26년 11월) / 7.7억 ~ 8.4억 원 (27년 1월)",
                 priceNote: "(C타입 실거래 호가 7.8억 ~ A/B타입 8.5억 반영)",
                 metrics: { value: 87, saju: 98, school: 78, rate: 85 },
