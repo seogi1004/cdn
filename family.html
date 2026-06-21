@@ -99,6 +99,108 @@
             border-color: rgba(197, 168, 128, 0.3) !important;
         }
 
+        /* Executive summary section styling */
+        section.bg-slate-900\/80 {
+            background-color: #ffffff !important;
+            background: radial-gradient(circle at bottom left, rgba(197, 168, 128, 0.05), #ffffff, #ffffff) !important;
+            border-color: rgba(197, 168, 128, 0.35) !important;
+        }
+
+        /* Premium Input & Dropdown styling in Light Theme */
+        input[type="number"], select {
+            background-color: #ffffff !important;
+            border: 1px solid rgba(15, 23, 42, 0.15) !important;
+            color: #856434 !important;
+            border-radius: 6px !important;
+            padding: 4px 8px !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+        input[type="number"]:focus, select:focus {
+            border-color: #957953 !important;
+            box-shadow: 0 0 0 3px rgba(149, 121, 83, 0.15) !important;
+            outline: none !important;
+        }
+
+        /* Custom range slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0 !important; /* light gray track */
+            border-radius: 8px;
+            height: 6px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #957953 !important; /* gold thumb */
+            cursor: pointer;
+            transition: transform 0.1s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Active selection styling for radio button cards in Sonpi calculator */
+        .bg-slate-950\/40, .bg-slate-950\/60 {
+            background-color: #ffffff !important;
+            border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        }
+        label:has(input[type="radio"]:checked) {
+            border-color: rgba(149, 121, 83, 0.5) !important;
+            background-color: rgba(149, 121, 83, 0.04) !important;
+        }
+
+        /* Dynamic results card styling inside Financing Simulator */
+        #loan-simulation-results > div {
+            background-color: #ffffff !important;
+            border: 1px solid rgba(15, 23, 42, 0.08) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02) !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        #loan-simulation-results > div:hover {
+            border-color: rgba(149, 121, 83, 0.35) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(149, 121, 83, 0.06), 0 4px 6px -2px rgba(149, 121, 83, 0.03) !important;
+        }
+
+        /* Saju Interactive Cards hover and transition effects */
+        #saju-dad, #saju-mom, #saju-daughter {
+            background-color: #ffffff !important;
+            border-color: rgba(15, 23, 42, 0.06) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        #saju-dad:hover {
+            transform: translateY(-2px);
+            border-color: rgba(239, 68, 68, 0.3) !important;
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.05), 0 4px 6px -2px rgba(239, 68, 68, 0.02) !important;
+        }
+        #saju-mom:hover {
+            transform: translateY(-2px);
+            border-color: rgba(245, 158, 11, 0.3) !important;
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.05), 0 4px 6px -2px rgba(245, 158, 11, 0.02) !important;
+        }
+        #saju-daughter:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.3) !important;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.05), 0 4px 6px -2px rgba(59, 130, 246, 0.02) !important;
+        }
+
+        /* Interactive controls and tab buttons transitions */
+        [id^="btn-ref-"], [onclick^="selectApt"] {
+            transition: all 0.2s ease-in-out !important;
+        }
+        [id^="btn-ref-"]:hover, [onclick^="selectApt"]:hover {
+            border-color: rgba(149, 121, 83, 0.35) !important;
+            color: #957953 !important;
+        }
+
         /* Print Stylesheet */
         @media print {
             html, body {
