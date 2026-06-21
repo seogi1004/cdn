@@ -372,6 +372,9 @@
                 <button onclick="setActiveTab('tab-apartments')" id="btn-tab-apartments" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500">
                     단지별 분석
                 </button>
+                <button onclick="setActiveTab('tab-duplex')" id="btn-tab-duplex" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500">
+                    복층 아파트
+                </button>
                 <button onclick="setActiveTab('tab-moving')" id="btn-tab-moving" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500">
                     이사 & 명리
                 </button>
@@ -1281,7 +1284,7 @@
                     <div class="space-y-2">
                         <span class="text-[10px] text-amber-500 font-bold tracking-wider uppercase flex items-center">
                             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>
-                            🥈 2순위 타겟 (등기 2년 비과세 및 기입주 아파트)
+                            🥈 2순위 타겟 (등기 2년 비과세 및 기입주 일반 아파트)
                         </span>
                         <div class="flex flex-wrap gap-2">
                             <button onclick="selectApt('hillstate')" id="btn-hillstate" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-gold-600 hover:bg-gold-700 text-white border-gold-600 shadow-sm">
@@ -1290,14 +1293,8 @@
                             <button onclick="selectApt('prugio')" id="btn-prugio" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200">
                                 푸르지오 더 베뉴 (아라역)
                             </button>
-                            <button onclick="selectApt('detre')" id="btn-detre" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200">
-                                디에트르 더 힐 (복층)
-                            </button>
                             <button onclick="selectApt('paragon')" id="btn-paragon" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200">
-                                파라곤 센트럴파크 (아라역)
-                            </button>
-                            <button onclick="selectApt('felice')" id="btn-felice" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200">
-                                디에트르 더 펠리체 (복층)
+                                Paragon 센트럴파크 (아라역)
                             </button>
                         </div>
                     </div>
@@ -1991,6 +1988,47 @@
         </div>
         </div> <!-- Close TAB 3: tab-apartments -->
 
+        <!-- TAB 4: 복층 아파트 -->
+        <div id="tab-duplex" class="tab-panel space-y-12 hidden">
+            <!-- ========================================== -->
+            <!-- CHAPTER: 신검단 복층 특화 아파트 심층 진단 -->
+            <!-- ========================================== -->
+            <div id="chapter-duplex" class="space-y-12">
+                <div class="space-y-2 text-center md:text-left">
+                    <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">DUPLEX SPECIAL</span>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">신검단 복층 특화 아파트 심층 진단 (디에트르)</h2>
+                    <p class="text-xs text-gray-400 max-w-2xl font-light">와이프분 원픽인 탑층 복층형 테라스 매물을 비교 분석합니다. 디에트르 더 힐(2차)과 디에트르 더 펠리체(1차)의 공간 가치, 서비스 면적, 거동 및 자산성을 상세 대조합니다.</p>
+                </div>
+
+                <section class="space-y-6">
+                    <div class="text-center md:text-left">
+                        <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 04-D</span>
+                        <h2 class="text-xl font-bold text-slate-100 flex items-center justify-center md:justify-start">
+                            <span class="w-1.5 h-4 bg-gold-500 rounded mr-2 inline-block"></span>
+                            🏢 복층 특화 단지 선택
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">분석할 복층 단지를 선택하세요</p>
+                    </div>
+
+                    <div class="space-y-4 bg-slate-950/40 p-4 rounded-2xl border border-white/5">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="selectDuplex('detre')" id="btn-dup-detre" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-gold-600 hover:bg-gold-700 text-white border-gold-600 shadow-sm">
+                                디에트르 더 힐 (복층)
+                            </button>
+                            <button onclick="selectDuplex('felice')" id="btn-dup-felice" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200">
+                                디에트르 더 펠리체 (복층)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Duplex Info Card -->
+                    <div id="duplex-card" class="bg-slate-900 border border-white/5 rounded-3xl p-5 md:p-6 space-y-6 transition-all duration-300">
+                        <!-- Default: Rendered via JS -->
+                    </div>
+                </section>
+            </div>
+        </div>
+
         <!-- TAB 4: 이사 & 명리 -->
         <div id="tab-moving" class="tab-panel space-y-12 hidden">
             <!-- ========================================== -->
@@ -2621,6 +2659,170 @@
             showToast(`${data.title} 입지 정보가 대조되었습니다.`);
         }
 
+        function selectDuplex(key) {
+            const list = ['detre', 'felice'];
+            list.forEach(item => {
+                const btn = document.getElementById(`btn-dup-${item}`);
+                if (btn) {
+                    btn.className = "px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200";
+                }
+            });
+
+            const selectedBtn = document.getElementById(`btn-dup-${key}`);
+            if (selectedBtn) {
+                selectedBtn.className = "px-3.5 py-2 rounded-xl text-xs font-bold border transition-all duration-200 bg-gold-600 hover:bg-gold-700 text-white border-gold-600 shadow-sm";
+                selectedBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+
+            const data = apartments[key];
+            const cardContainer = document.getElementById('duplex-card');
+
+            cardContainer.style.opacity = 0;
+            setTimeout(() => {
+                cardContainer.innerHTML = `
+                    <div class="space-y-4">
+                        <!-- Card Header -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3">
+                            <div>
+                                <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-500 text-[10px] font-bold rounded-md mb-1.5">${data.badge}</span>
+                                <h3 class="text-lg font-bold text-slate-100">${data.title}</h3>
+                            </div>
+                            <div class="mt-2 sm:mt-0 text-left sm:text-right">
+                                <span class="text-[10px] text-gray-500 block">2027년 4월 말 만기 전후 취득원가 예측</span>
+                                <strong class="text-sm sm:text-base font-black text-rose-400">${data.price} <span class="text-xs text-slate-400 font-light block">${data.priceNote}</span></strong>
+                            </div>
+                        </div>
+
+                    <!-- 2-Column Content Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                        <!-- Column 1: Specs List -->
+                            <div class="lg:col-span-6">
+                                <div class="bg-slate-950/60 border border-white/5 rounded-xl p-3.5 space-y-2.5 text-xs lg:text-[11px] text-gray-300 font-light">
+                                    <div class="flex items-start justify-between">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🏢 세대 규모</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.households}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">📅 입주 시기</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.completion}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🚗 주차 비율</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.parking}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🚇 지하철역 거리</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.distance}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🏗️ 시공사</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.builder}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🏫 배정 학교</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.school}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">📐 용적률/건폐율</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.far_bcr}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🔥 난방 방식</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.heating}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">✨ 추천 타입(84)</span>
+                                        <span class="font-semibold text-gold-400 text-right flex-1 ml-2 break-keep font-medium">${data.specs.recom_type}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">📦 세대창고 여부</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.storage || '지하 세대창고 없음 (일반 세대 내 팬트리/드레스룸 수납)'}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🏌️ 골프 시설</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.golf || '실내 GDR연습장 & 스크린 골프룸'}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🗣️ 커뮤니티 특화</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.community || '피트니스, 실내 골프연습장, 독서실, 어린이집'}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">🔑 분양권 전매</span>
+                                        <span class="font-semibold text-slate-200 text-right flex-1 ml-2 break-keep">${data.specs.resale || '정보 없음'}</span>
+                                    </div>
+                                    <div class="flex items-start justify-between border-t border-white/5 pt-2">
+                                        <span class="text-gray-500 w-[100px] flex-shrink-0">⚖️ 양도세 비과세</span>
+                                        <span class="font-semibold text-gold-500 text-right flex-1 ml-2 break-keep">${data.specs.taxExemption || '정보 없음'}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2: Metrics & Deep Analysis -->
+                            <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
+                                <!-- Metrics Progress Bars -->
+                                <div class="bg-slate-950/80 p-3.5 rounded-xl text-xs lg:text-[10px] space-y-2">
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>자산 보존성 및 거래 환금성</span>
+                                            <span class="text-gold-400 font-bold">${data.metrics.value}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-gold-500 h-full" style="width: ${data.metrics.value}%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>가족 사주 궁합도 (풍수)</span>
+                                            <span class="text-red-400 font-bold">${data.metrics.saju}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-red-500 h-full" style="width: ${data.metrics.saju}%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>육아 및 평생 학세권</span>
+                                            <span class="text-emerald-400 font-bold">${data.metrics.school}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-emerald-50 h-full" style="width: ${data.metrics.school}%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5 text-gray-400">
+                                            <span>세무적 진입 안전성</span>
+                                            <span class="text-rose-400 font-bold">${data.metrics.rate}%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-rose-500 h-full" style="width: ${data.metrics.rate}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Deep Analysis -->
+                                <div class="text-xs lg:text-[11px] text-slate-300 space-y-2 font-normal leading-normal">
+                                    <div class="bg-emerald-950/40 p-2.5 rounded-xl border border-emerald-500/20 border-l-[3px] border-l-emerald-500 backdrop-blur-sm text-slate-200 shadow-sm shadow-emerald-900/10">
+                                        <strong class="text-emerald-400 font-bold block mb-0.5 text-xs lg:text-[10px]">👍 명당 메리트</strong>
+                                        ${data.pros}
+                                    </div>
+                                    <div class="bg-rose-950/40 p-2.5 rounded-xl border border-rose-500/20 border-l-[3px] border-l-rose-500 backdrop-blur-sm text-rose-200/95 shadow-sm shadow-rose-900/10">
+                                        <strong class="text-rose-400 font-bold block mb-0.5 text-xs lg:text-[10px]">⚠️ 세무 리스크 및 단점</strong>
+                                        ${data.cons}
+                                    </div>
+                                    <div class="bg-amber-950/30 p-2.5 rounded-xl border border-gold-500/25 border-l-[3px] border-l-gold-500 backdrop-blur-sm text-gold-200/95 shadow-sm shadow-amber-900/10">
+                                        <strong class="text-gold-400 font-bold block mb-0.5 text-xs lg:text-[10px]">💡 아버님의 지혜로운 수렵 전략</strong>
+                                        ${data.advice}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cardContainer.style.opacity = 1;
+            }, 150);
+            showToast(`${data.title} 입지 정보가 대조되었습니다.`);
+        }
+
         // Saju Interactive Match
         function selectSaju(member) {
             const list = ['dad', 'mom', 'daughter'];
@@ -3134,6 +3336,7 @@
             // Initial render
             calculateFinancing();
             selectRefusalScenario('owner');
+            selectDuplex('detre');
 
             // Render all apartments for print view dynamically
             const printAptsContainer = document.getElementById('all-apts-print-view');
