@@ -73,6 +73,11 @@
         [class*="border-gold-500/"] {
             border-color: rgba(176, 146, 106, 0.25) !important;
         }
+        
+        /* Active button text color overrides to prevent low contrast on gold backgrounds */
+        .bg-gold-600, .bg-gold-700, [class*="bg-gold-600"], [class*="bg-gold-700"] {
+            color: #ffffff !important;
+        }
 
         /* High contrast overrides for all text classes to guarantee readability on Light Theme */
         [class*="text-slate-100"], [class*="text-gray-100"] { color: #0f172a !important; } /* dark slate-900 */
@@ -2479,7 +2484,7 @@
             },
             family: {
                 title: "② 자녀(결혼한 따님) 실거주 통보 시 대응전략",
-                legality: "2026년 전세법(주택임대차보호법) 기준으로도 직계비속(딸 등 자녀)의 실거주는 합법적인 계약갱신 거절 사유입니다(법 제6조의3 제1항 제8호). 단, 실제 자녀 가족이 이사하여 살아야 유효하며, 직계비속이 아닌 '사위 단독' 거주는 실거주 거절 사유로 불인정됩니다. 대법원 판례에 따라 실거주 의사의 진정성(자녀의 이사 사유, 기존 거주지 정리 등)을 임대인 측이 명확히 입증해야 합니다.",
+                legality: "2026년 전세법 기준으로도 직계비속(딸 등 자녀)의 실거주는 합법적인 계약갱신 거절 사유입니다(법 제6조의3 제1항 제8호). 단, 실제 딸 가족이 동반 이사해야 하며 직계비속이 아닌 '사위 단독 거주'는 인정되지 않습니다. 대법원 판례상 실거주 진정성 입증 책임은 임대인에게 있습니다. ⚠️ 세무 주의 (증여세 리스크): 부모(임대인)-자녀(임차인) 간의 전세 계약은 국세청에서 편법 증여(무상 대여 등)로 우선 의심하여 세무 조사 및 증여세를 부과할 확률이 높습니다. 이를 회피하고 실제 계약으로 온전히 인정받으려면 ① 실제 보증금이 확실히 계좌로 오고 간 금융 증빙이 필수이며, ② 따님의 독자적인 전세보증금 자금 출처(소득, 자본 형성 과정) 소명이 가능해야 하고, ③ 주변 시장 가격 대비 30%를 초과하는 현저한 저가/고가 계약을 피해야 합니다.",
                 action: "따님의 실거주 증빙(이사 일정, 자녀 전학 등)을 요구하여 허위 주장을 걸러내십시오. 실거주 통보를 인정하되 갱신권 포기 대가로 이사비 및 중개 수수료 등의 지원 명목으로 합의금(500만 ~ 1,000만 원 선)을 조율하는 '위로금 협상'이 자산 방어에 강력히 추천됩니다. 거절 후 2년 내에 제3자 재임대/매도 시, 퇴거 후 전입세대 열람 등을 통해 허위임이 입증되면 손해배상 청구가 가능합니다.",
                 template: "[리은이네 갱신 협의]
 임대인님, 안녕하십니까. 전세 계약갱신요구권을 행사하고자 연락드렸습니다. 따님 가족분들의 실제 거주 입주로 인한 갱신 거절 의사는 확인하였습니다. 다만 저희 가정도 자녀(리은이) 보육 및 이사 일정, 자금 마련 기간이 필요한 상황입니다. 임대차법상 원만한 조기 퇴거 조율에 동의하는 조건으로 이사 실비 및 복비 지원 등 상생을 위한 위로금 조율을 부탁드립니다."
@@ -2531,11 +2536,11 @@
                             <span class="text-[10px] text-cyan-400 font-bold block mb-0.5">🎯 리은이네 자산방어 액션플랜</span>
                             <p class="leading-relaxed text-gray-300">${data.action}</p>
                         </div>
-                        <div class="bg-slate-950 p-3 rounded-lg border border-white/5 relative group mt-2.5">
-                            <span class="text-[9px] text-gold-500 font-bold block mb-1">💬 아내/남편 공유용 추천 문자 메시지</span>
-                            <pre id="text-template-refusal" class="whitespace-pre-wrap text-[11px] text-slate-300 leading-normal font-mono break-all pr-12">${data.template}</pre>
-                            <button onclick="copyRefusalTemplate()" class="absolute top-3 right-3 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-[10px] px-2.5 py-1 rounded-lg border border-slate-200 transition-all duration-200 flex items-center space-x-1 shadow-sm">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        <div class="bg-gold-50/50 p-4 rounded-xl border border-gold-200/40 relative group mt-2.5">
+                            <span class="text-[9px] text-gold-600 font-extrabold block mb-1.5">💬 아내/남편 공유용 추천 문자 메시지</span>
+                            <pre id="text-template-refusal" class="whitespace-pre-wrap text-[11px] text-slate-200 leading-normal font-mono break-all pr-12">${data.template}</pre>
+                            <button onclick="copyRefusalTemplate()" class="absolute top-3 right-3 bg-white hover:bg-gold-50 text-gold-600 hover:text-gold-700 text-[10px] px-2.5 py-1.5 rounded-lg border border-gold-200/50 transition-all duration-200 flex items-center space-x-1 shadow-sm font-bold active:scale-95">
+                                <svg class="w-3.5 h-3.5 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                                 <span>복사</span>
                             </button>
                         </div>
@@ -3020,8 +3025,8 @@
                                     <p class="leading-relaxed font-light text-slate-800">${data.action}</p>
                                 </div>
                             </div>
-                            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
-                                <span class="text-[9px] text-gold-700 font-bold block mb-1">💬 아내/남편 공유용 추천 문자 메시지</span>
+                            <div class="bg-gold-50/40 p-3.5 rounded-xl border border-gold-200/30 text-xs">
+                                <span class="text-[9px] text-gold-700 font-extrabold block mb-1">💬 아내/남편 공유용 추천 문자 메시지</span>
                                 <pre class="whitespace-pre-wrap font-mono text-slate-800 leading-normal">${data.template}</pre>
                             </div>
                         </div>
