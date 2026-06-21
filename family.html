@@ -240,6 +240,11 @@
                 display: none !important;
             }
             
+            /* Print all tab panels sequentially */
+            .tab-panel {
+                display: block !important;
+            }
+            
             main {
                 max-width: 100% !important;
                 padding: 0 !important;
@@ -344,111 +349,351 @@
     <!-- Main Container -->
     <main class="max-w-4xl mx-auto px-4 py-8 space-y-12">
         
-        
-        <!-- SECTION EX: 실전 종합 대시보드 & 요약 로드맵 (Summary Dashboard) -->
-        <section class="bg-slate-900/80 border-2 border-gold-500/30 rounded-3xl p-6 md:p-8 space-y-6 custom-shadow relative overflow-hidden bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-gold-700/10 via-slate-900 to-slate-900">
-            <div class="absolute right-0 top-0 bg-gold-600/10 text-gold-500 text-[10px] font-extrabold px-4 py-1.5 rounded-bl-xl border-l border-b border-gold-500/20 uppercase tracking-widest">
-                Executive Strategy Brief
+        <!-- Tab Navigation Bar -->
+        <div class="no-print mb-8 sticky top-[53px] z-40 bg-slate-950/95 backdrop-blur-md py-2 border-b border-white/5">
+            <div class="flex space-x-1 bg-slate-900/40 p-1.5 rounded-2xl overflow-x-auto no-scrollbar md:justify-center border border-white/5">
+                <button onclick="setActiveTab('tab-dashboard')" id="btn-tab-dashboard" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 bg-gold-600 text-white">
+                    종합 의견
+                </button>
+                <button onclick="setActiveTab('tab-lease')" id="btn-tab-lease" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500">
+                    전세 대응 전략
+                </button>
+                <button onclick="setActiveTab('tab-apartments')" id="btn-tab-apartments" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500">
+                    단지별 분석
+                </button>
+                <button onclick="setActiveTab('tab-moving')" id="btn-tab-moving" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500">
+                    이사 & 명리
+                </button>
+                <button onclick="setActiveTab('tab-calculators')" id="btn-tab-calculators" class="tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500">
+                    모의 계산기
+                </button>
             </div>
-            
-            <div class="space-y-2">
-                <span class="text-gold-500 font-extrabold text-xs tracking-widest block uppercase">Overview & Navigation</span>
-                <h2 class="text-2xl font-black text-slate-100 flex items-center">
-                    <span class="w-2 h-5 bg-gold-500 rounded mr-2.5 inline-block"></span>
-                    🎯 리은이네 대안착 실전 종합 대시보드
-                </h2>
-                <p class="text-xs text-gray-400 leading-relaxed font-light">
-                    "여보, 복잡한 입지 분석과 수많은 시뮬레이션 중에서 우리 가족에게 가장 이로운 핵심 의사결정 경로를 한눈에 볼 수 있도록 요약했어. 각 챕터 링크를 누르면 상세 보고서로 바로 이동해."
-                </p>
-            </div>
+        </div>
 
-            <!-- Current Status Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <!-- Situation -->
-                <div class="bg-slate-950/80 p-4 rounded-xl border border-white/5 space-y-1.5">
-                    <span class="text-gray-400 font-bold flex items-center">
-                        <span class="mr-1.5">🏢</span> 1. 현재 임대차 상황
-                    </span>
-                    <p class="text-slate-200 leading-relaxed font-light">
-                        • <strong>전세금:</strong> 5억 8,000만 원 반환 예정<br>
-                        • <strong>만기일:</strong> 2027년 4월 말<br>
-                        • <strong>집주인 동향:</strong> 고양시 가좌마을 본인 주택 이사 확정 (★해당 주택 인테리어 공사 완료, 이사 준비 끝)
+        <!-- TAB 1: 종합 의견 & 대시보드 -->
+        <div id="tab-dashboard" class="tab-panel space-y-12">
+            <!-- SECTION EX: 실전 종합 대시보드 & 요약 로드맵 (Summary Dashboard) -->
+            <section class="bg-slate-900/80 border-2 border-gold-500/30 rounded-3xl p-6 md:p-8 space-y-6 custom-shadow relative overflow-hidden bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-gold-700/10 via-slate-900 to-slate-900">
+                <div class="absolute right-0 top-0 bg-gold-600/10 text-gold-500 text-[10px] font-extrabold px-4 py-1.5 rounded-bl-xl border-l border-b border-gold-500/20 uppercase tracking-widest">
+                    Executive Strategy Brief
+                </div>
+                
+                <div class="space-y-2">
+                    <span class="text-gold-500 font-extrabold text-xs tracking-widest block uppercase">Overview & Navigation</span>
+                    <h2 class="text-2xl font-black text-slate-100 flex items-center">
+                        <span class="w-2 h-5 bg-gold-500 rounded mr-2.5 inline-block"></span>
+                        🎯 리은이네 대안착 실전 종합 대시보
+                    </h2>
+                    <p class="text-xs text-gray-400 leading-relaxed font-light">
+                        "여보, 복잡한 입지 분석과 수많은 시뮬레이션 중에서 우리 가족에게 가장 이로운 핵심 의사결정 경로를 한눈에 볼 수 있도록 요약했어. 각 탭을 누르거나 아래 인덱스를 클릭해 상세 내용을 볼 수 있어."
                     </p>
                 </div>
-                <!-- Financing -->
-                <div class="bg-slate-950/80 p-4 rounded-xl border border-white/5 space-y-1.5">
-                    <span class="text-gold-400 font-bold flex items-center">
-                        <span class="mr-1.5">🇺🇸</span> 2. 가용 자본 포트폴리오
+
+                <!-- Current Status Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <!-- Situation -->
+                    <div class="bg-slate-950/80 p-4 rounded-xl border border-white/5 space-y-1.5">
+                        <span class="text-gray-400 font-bold flex items-center">
+                            <span class="mr-1.5">🏢</span> 1. 현재 임대차 상황
+                        </span>
+                        <p class="text-slate-200 leading-relaxed font-light">
+                            • <strong>전세금:</strong> 5억 8,000만 원 반환 예정<br>
+                            • <strong>만기일:</strong> 2027년 4월 말<br>
+                            • <strong>집주인 동향:</strong> 고양시 가좌마을 본인 주택 이사 확정 (★해당 주택 인테리어 공사 완료, 이사 준비 끝)
+                        </p>
+                    </div>
+                    <!-- Financing -->
+                    <div class="bg-slate-950/80 p-4 rounded-xl border border-white/5 space-y-1.5">
+                        <span class="text-gold-400 font-bold flex items-center">
+                            <span class="mr-1.5">🇺🇸</span> 2. 가용 자본 포트폴리오
+                        </span>
+                        <p class="text-slate-200 leading-relaxed font-light">
+                            • <strong>가용 현금:</strong> 총 7억 5,600만 원 확보 (청약통장 포함)<br>
+                            • <strong>세부:</strong> 전세금 5.8억 + 미국단기채 1.59억 (10.5만 달러, 환율 1,520원 기준) + 청약통장 1,600만 원<br>
+                            • <strong>퇴직연금:</strong> 비상금/노후용 원칙적 보존
+                        </p>
+                    </div>
+                    <!-- Tax & Target Complex -->
+                    <div class="bg-slate-950/80 p-4 rounded-xl border border-white/5 space-y-1.5">
+                        <span class="text-rose-400 font-bold flex items-center">
+                            <span class="mr-1.5">⚠️</span> 3. 자산 방어 매수 우선순위
+                        </span>
+                        <p class="text-slate-200 leading-relaxed font-light">
+                        • <strong>1순위 (2026~2027년 입주 연계 신축):</strong> 2026년~2027년 입주 연계가 가능한 신축 분양권 <strong>무피 또는 최대 5,000만 원 프리미엄(5천피)</strong>을 최우선으로 봅니다. (2029년 입주 예정인 레이크포레는 3순위 중장기 대안으로 갱신권 연장과 연계해 추적합니다.)<br>
+                        • <strong>2순위 (내년 비과세 완성 단지):</strong> 힐스테이트 신검단 센트럴처럼 <strong>내년(2027년) 입주 2년이 완성되어 양도세 비과세(감면) 혜택</strong>이 돌아오는 아파트를 노려 대납 리스크가 전혀 없는 정식 매입
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ultimate Roadmap Action Box -->
+                <div class="bg-gold-600/10 border border-gold-500/25 p-4.5 rounded-2xl space-y-2">
+                    <span class="text-xs font-bold text-gold-400 block flex items-center">
+                        🚀 리은이네 자산 방어 매수 우선순위 및 행동 로드맵
                     </span>
-                    <p class="text-slate-200 leading-relaxed font-light">
-                        • <strong>가용 현금:</strong> 총 7억 5,600만 원 확보 (청약통장 포함)<br>
-                        • <strong>세부:</strong> 전세금 5.8억 + 미국단기채 1.59억 (10.5만 달러, 환율 1,520원 기준) + 청약통장 1,600만 원<br>
-                        • <strong>퇴직연금:</strong> 비상금/노후용 원칙적 보존
+                    <p class="text-xs text-gray-300 leading-relaxed font-light">
+                        <strong>[매수 우선순위]</strong><br>
+                        • <strong class="text-gold-400">1순위:</strong> 2026~2027년 입주 연계 신축 (웰카운티, 호반써밋 3차) 위주로 매물을 좁힙니다. (2028~2029년 입주 예정인 레이크포레 등은 제외)<br>
+                        • <strong class="text-gold-400">2순위:</strong> 2년 이상 기입주(힐스테이트/푸르지오) 비과세 매물을 우선 매칭해 손해 리스크를 낮춥니다.<br>
+                        <strong>[실전 행동 로드맵]</strong><br>
+                        현 전세 계약갱신권 적극 청구 (2026년 10월 30일 개시) ➔ 임대인 실거주 거절 시 합의 위로금(이사비/복비) 협상 또는 3개월 퇴거 예고 유연성을 확보해 시간 벌기 ➔ 2027년 1월 ~ 2027년 중순 신검단 입주장 공급 쇼크 최저점에 <strong>2027년 실제 입주 가능 여부</strong>를 기준으로 우선순위별 매물 사냥!
                     </p>
                 </div>
-                <!-- Tax & Target Complex -->
-                <div class="bg-slate-950/80 p-4 rounded-xl border border-white/5 space-y-1.5">
-                    <span class="text-rose-400 font-bold flex items-center">
-                        <span class="mr-1.5">⚠️</span> 3. 자산 방어 매수 우선순위
-                    </span>
-                    <p class="text-slate-200 leading-relaxed font-light">
-                    • <strong>1순위 (2026~2027년 입주 연계 신축):</strong> 2026년~2027년 입주 연계가 가능한 신축 분양권 <strong>무피 또는 최대 5,000만 원 프리미엄(5천피)</strong>을 최우선으로 봅니다. (2029년 입주 예정인 레이크포레는 3순위 중장기 대안으로 갱신권 연장과 연계해 추적합니다.)<br>
-                    • <strong>2순위 (내년 비과세 완성 단지):</strong> 힐스테이트 신검단 센트럴처럼 <strong>내년(2027년) 입주 2년이 완성되어 양도세 비과세(감면) 혜택</strong>이 돌아오는 아파트를 노려 대납 리스크가 전혀 없는 정식 매입
-                    </p>
+
+                <!-- Quick Navigation Index -->
+                <div class="border-t border-white/5 pt-4">
+                    <span class="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-2 text-center md:text-left">Quick Report Chapters Index</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-center">
+                        <button onclick="setActiveTab('tab-lease')" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
+                            <span class="text-sm mb-0.5">🛡️</span>
+                            <span>01. 전세만기 & 갱신</span>
+                        </button>
+                        <button onclick="setActiveTab('tab-calculators')" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
+                            <span class="text-sm mb-0.5">💵</span>
+                            <span>02. 자산 & 대출</span>
+                        </button>
+                        <button onclick="setActiveTab('tab-calculators')" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
+                            <span class="text-sm mb-0.5">🧮</span>
+                            <span>03. 양도세 & 손피</span>
+                        </button>
+                        <button onclick="setActiveTab('tab-apartments')" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
+                            <span class="text-sm mb-0.5">🏡</span>
+                            <span>04. 아파트 진단</span>
+                        </button>
+                        <button onclick="setActiveTab('tab-moving')" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
+                            <span class="text-sm mb-0.5">🔮</span>
+                            <span>05. 명당 & 길일</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Ultimate Roadmap Action Box -->
-            <div class="bg-gold-600/10 border border-gold-500/25 p-4.5 rounded-2xl space-y-2">
-                <span class="text-xs font-bold text-gold-400 block flex items-center">
-                    🚀 리은이네 자산 방어 매수 우선순위 및 행동 로드맵
-                </span>
-                <p class="text-xs text-gray-300 leading-relaxed font-light">
-                    <strong>[매수 우선순위]</strong><br>
-                    • <strong class="text-gold-400">1순위:</strong> 2026~2027년 입주 연계 신축 (웰카운티, 호반써밋 3차) 위주로 매물을 좁힙니다. (2028~2029년 입주 예정인 레이크포레 등은 제외)<br>
-                    • <strong class="text-gold-400">2순위:</strong> 2년 이상 기입주(힐스테이트/푸르지오) 비과세 매물을 우선 매칭해 손해 리스크를 낮춥니다.<br>
-                    <strong>[실전 행동 로드맵]</strong><br>
-                    현 전세 계약갱신권 적극 청구 (2026년 10월 30일 개시) ➔ 임대인 실거주 거절 시 합의 위로금(이사비/복비) 협상 또는 3개월 퇴거 예고 유연성을 확보해 시간 벌기 ➔ 2027년 1월 ~ 2027년 중순 신검단 입주장 공급 쇼크 최저점에 <strong>2027년 실제 입주 가능 여부</strong>를 기준으로 우선순위별 매물 사냥!
-                </p>
-            </div>
-
-            <!-- Quick Navigation Index -->
-            <div class="border-t border-white/5 pt-4">
-                <span class="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-2 text-center md:text-left">Quick Report Chapters Index</span>
-                <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-center">
-                    <a href="#chapter-01" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
-                        <span class="text-sm mb-0.5">🛡️</span>
-                        <span>01. 전세만기 & 갱신</span>
-                    </a>
-                    <a href="#chapter-02" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
-                        <span class="text-sm mb-0.5">💵</span>
-                        <span>02. 자산 & 대출</span>
-                    </a>
-                    <a href="#chapter-03" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
-                        <span class="text-sm mb-0.5">🧮</span>
-                        <span>03. 양도세 & 손피</span>
-                    </a>
-                    <a href="#chapter-04" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
-                        <span class="text-sm mb-0.5">🏡</span>
-                        <span>04. 아파트 진단</span>
-                    </a>
-                    <a href="#chapter-05" class="px-2 py-2 rounded bg-slate-950 border border-white/5 hover:border-gold-500/30 text-[11px] font-bold text-slate-300 hover:text-gold-400 transition-colors flex flex-col justify-center items-center">
-                        <span class="text-sm mb-0.5">🔮</span>
-                        <span>05. 명당 & 길일</span>
-                    </a>
+            <!-- SECTION 5-E: 리은이네 대안착 종합 자문 의견 (Comprehensive Family Consultation) (Moved to Tab 1) -->
+            <section class="space-y-6 bg-slate-900/40 p-6 md:p-8 rounded-3xl border border-white/5 custom-shadow mt-8">
+                <div class="text-center md:text-left border-b border-white/5 pb-4">
+                    <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 05-E</span>
+                    <h2 class="text-xl md:text-2xl font-black text-slate-100 font-serif italic flex items-center justify-center md:justify-start">
+                        <span class="w-1.5 h-5 bg-gold-500 rounded mr-2.5 inline-block"></span>
+                        🔮 리은이네 대안착 & 자산 수렵 종합 의견
+                    </h2>
+                    <p class="text-xs text-gray-400 mt-1">아버님의 자산방어 전략과 가족의 사주명리학적 흐름을 조합한 객관적 주거 로드맵 평가</p>
                 </div>
-            </div>
-        </section>
 
-        <!-- ========================================== -->
-        <!-- CHAPTER 01: 전세 만기 대응 및 계약갱신권 실전 로드맵 -->
-        <!-- ========================================== -->
-        <div id="chapter-01" class="space-y-12 border-t border-white/10 pt-12">
-            <div class="space-y-2 text-center md:text-left">
-                <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 01</span>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">전세 만기 대응 및 계약갱신권 실전 로드맵</h2>
-                <p class="text-xs text-gray-400 max-w-2xl font-light">2027년 4월 말 전세 만기를 대비하여 계약갱신요구권을 효과적으로 행사하고, 집주인의 실거주 거절 가능성에 대처하는 실전 방어 및 네고 시나리오입니다.</p>
-            </div>
+                <!-- 1. 객관적 거동성 및 내집마련 가능성 평가 -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center">
+                        <span class="w-1 h-3.5 bg-gold-600 rounded mr-2 inline-block"></span>
+                        💡 객관적 평가: 우리는 과연 '싸고 좋은 곳'으로 안착할 수 있는가?
+                    </h3>
+                    <div class="bg-slate-950/60 rounded-2xl p-4.5 text-xs text-gray-300 font-light leading-relaxed space-y-3">
+                        <p>
+                            <strong>📈 거시경제 환경과 자금력 우위의 조합:</strong> 2026년 하반기 거시경제는 고물가 고착화에 대응한 한국은행의 <strong>기준금리 인상 가능성(연내 추가 인상 전망)</strong>과 <strong>스트레스 DSR 3단계 본격 시행</strong>이라는 강력한 가계대출 규제 압박을 받고 있습니다. 대다수 영끌 매수세가 높은 주담대 금리와 한도 축소로 인해 주저하는 시기이지만, 리은이네는 대출 의존도가 지극히 낮은 <strong>자체 가용 예산(약 7.56억 원)</strong>을 확보하고 있어 경쟁에서 절대적 우위를 점합니다. 현 포레나 집주인의 가좌마을 실거주 블러핑(5.8억 반환 자금 압박과 허위 실거주 손해배상 소송 리스크)을 법적으로 방어하면서, 자금 유동성을 움켜쥐고 있는 우리에게 최고의 협상 권력이 쥐어져 있습니다.
+                        </p>
+                        <p>
+                            <strong>🏗️ 로컬 공급 쇼크와 중장기 공급 부족의 비대칭성 공략:</strong> 착공 감소 여파로 수도권 전세가 상승 압박(건설산업연구원 하반기 전세가 5.0% 상승 전망)이 지속되고 있습니다. 반면, 신검단 지역은 <strong>2026년 하반기(웰카운티, 호반3차)~2027년 상반기</strong>에 걸쳐 대규모 신축 아파트들이 일시에 쏟아지는 <strong>'국지적 공급 폭탄(입주장)'</strong> 국면을 맞이합니다. 금리 인상 압박 속에서 잔금 대출 기한을 맞추지 못해 애타는 분양권 계약자들의 무피·마피 던지기 물량이 대거 출현할 수밖에 없으며, 이는 수도권 전세가가 하방을 강하게 지탱하는 구조 속에서 <strong>인생에 단 한 번뿐인 '안전마진 저점 사냥 골든타임'</strong>을 선사합니다.
+                        </p>
+                        <p>
+                            <strong>📅 이사 골든 이어(Golden Year) - 왜 2027년이 최적의 대안착 해인가?:</strong> 본 보고서의 핵심 타겟인 웰카운티(27년 8월 전후), 힐스테이트(27년 1~4월), 호반3차(27년 4~5월) 등 1~2순위 주요 아파트의 <strong>최적 이사 및 입주 시점이 모두 2027년에 밀집</strong>되어 있습니다. 이는 현재 거주하시는 킨텍스포레나의 전세 계약 만기(27년 4월 말)와 시기적으로 한 치의 오차도 없이 일치할 뿐만 아니라, 명리학적으로도 가족 3인의 조화가 가장 안정되는 안택 길일들이 집중적으로 펼쳐지는 해입니다. 따라서 자금 흐름, 임대차 만기, 세무적 비과세 타이밍까지 모든 조건이 하나로 귀결되는 <strong>2027년은 리은이네가 신검단에 대안착할 '약속된 골든 이어'</strong>입니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 1-B. 이사 시점 3개년(2027-2029) 부동산 vs 명리 입체 대조분석 -->
+                <div class="space-y-4 mt-6">
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center">
+                        <span class="w-1 h-3.5 bg-cyan-600 rounded mr-2 inline-block"></span>
+                        📊 이사 시점 3개년(2027~2029) 부동산 변동률 및 명리학적 종합 비교
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <!-- 2027년 -->
+                        <div class="bg-slate-950/60 rounded-2xl p-5 border border-gold-500/20 space-y-3">
+                            <div class="flex items-center justify-between border-b border-white/5 pb-2">
+                                <strong class="text-slate-100 text-[13px] font-bold">📅 2027년 (丁未年 - 정미년)</strong>
+                                <span class="px-2 py-0.5 bg-gold-600/10 text-gold-500 text-[9px] font-bold rounded">★ 대안착 골든이어 (최상)</span>
+                            </div>
+                            <div class="space-y-2 text-xs font-light leading-relaxed">
+                                <p>
+                                    📈 <strong>집값 변동률 전망 [최저가 바닥]</strong>:<br>
+                                    신검단 10,000세대 이상의 입주장 공급 폭탄 여파가 바닥을 치는 <strong>하방 최저점 시기</strong>입니다. 주택 금리 인상 압박과 대출 규제로 한계 세대의 투매가 집중되어 <strong>인생 최저가로 매입이 가능한 골든타임</strong>입니다.
+                                </p>
+                                <p>
+                                    🔮 <strong>사주명리학적 풀이 [조후의 축복]</strong>:<br>
+                                    丁(정화 - 따뜻한 불)과 未(미토 - 온기를 머금은 여름 흙)의 해입니다. 겨울 태생으로 한랭하게 얼어붙은 <strong>엄마(己土)의 己丑 사주를 정화(丁火)가 따뜻하게 녹여주는(화생토, 火生土) 최상의 조후 보완의 해</strong>입니다. 을목(아빠)과 경금(딸)의 안정성 역시 단단한 未土의 뿌리를 얻어, 온 가족의 심신 안정과 문서 운(문서 합)이 가장 강하게 발복하는 평안 대길년입니다.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 2028년 -->
+                        <div class="bg-slate-950/60 rounded-2xl p-5 border border-white/5 space-y-3">
+                            <div class="flex items-center justify-between border-b border-white/5 pb-2">
+                                <strong class="text-slate-100 text-[13px] font-bold">📅 2028년 (戊申年 - 무신년)</strong>
+                                <span class="px-2 py-0.5 bg-slate-800 text-slate-400 text-[9px] font-bold rounded">보통 (대기세)</span>
+                            </div>
+                            <div class="space-y-2 text-xs font-light leading-relaxed">
+                                <p>
+                                    📈 <strong>집값 변동률 전망 [상승세 전환]</strong>:<br>
+                                    입주 물량 소화가 끝나고 2024~25년 착공 급감에 따른 수도권 전체의 <strong>만성적 공급 부족 여파가 폭발하는 시기</strong>입니다. 매수 대기자들이 추격 매수로 돌아서며 집값이 저점 대비 크게 반등(상승세 완연)하여 2027년 대비 매입 단가가 높습니다.
+                                </p>
+                                <p>
+                                    🔮 <strong>사주명리학적 풀이 [오행의 메마름]</strong>:<br>
+                                    戊(무토 - 메마른 광산)와 申(신금 - 건조한 쇠)의 해입니다. 사주가 전반적으로 매우 건조해지는 조열(燥熱) 현상이 발생합니다. 여름생 <strong>아빠(乙木)에게는 너무 메마른 무토(戊土) 산과 잎을 자르는 강한 신금(申金)의 칼날이 가해져 스트레스와 건강운이 다소 불안</strong>해지며, 온 가족의 심리적 융화가 뻑뻑해지는 시기입니다.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 2029년 -->
+                        <div class="bg-slate-950/60 rounded-2xl p-5 border border-white/5 space-y-3">
+                            <div class="flex items-center justify-between border-b border-white/5 pb-2">
+                                <strong class="text-slate-100 text-[13px] font-bold">📅 2029년 (己酉년 - 기유년)</strong>
+                                <span class="px-2 py-0.5 bg-rose-600/10 text-rose-500 text-[9px] font-bold rounded">⚠️ 비추천 (상극 대립)</span>
+                            </div>
+                            <div class="space-y-2 text-xs font-light leading-relaxed">
+                                <p>
+                                    📈 <strong>집값 변동률 전망 [고점/인프라 반영]</strong>:<br>
+                                    검단아라역 신설 노선 개통과 중심상업지구(넥스트콤플렉스) 완성 시점과 맞물려 입지 가치가 완전히 분양가에 반영된 <strong>고점 가격대</strong>입니다. 저점 대비 최소 1억~1.5억 원 이상의 추가 프리미엄 지출이 불가피합니다.
+                                </p>
+                                <p>
+                                    🔮 <strong>사주명리학적 풀이 [을유 상극 충돌]</strong>:<br>
+                                    己(기토 - 넓은 논밭)와 酉(유금 - 날카로운 가위/바늘)의 해입니다. 酉(금)의 기운이 지지에서 극도로 날카로워져, <strong>초목인 아빠의 을목(乙木)을 날카롭게 쳐내는 '을유 상극(乙酉 相剋) 및 편관(칠살) 충격'</strong>이 발생하는 매우 흉한 기운입니다. 가장의 사업/건강적 흔들림이나 돌발 변수 리스크가 최고조에 달하므로, 이 시기의 큰 문서 취득이나 주거 이동은 절대 피해야 합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 재밌는 수치적 지표 매트릭스 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                    <!-- Card 1 -->
+                    <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-gold-400 font-bold uppercase tracking-wider">🎯 저점 사냥 성공률</span>
+                            <span class="text-lg font-black text-gold-400 font-mono">92%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-gold-500 h-full" style="width: 92%"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-light leading-normal">입주장 폭락기와 연체 분양권 급매 사냥 타이밍 정밀 매칭</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-rose-400 font-bold uppercase tracking-wider">🛡️ 현재 전세금 방어율</span>
+                            <span class="text-lg font-black text-rose-400 font-mono">98%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-rose-500 h-full" style="width: 98%"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-light leading-normal">집주인 가좌마을 인테리어 스모킹건 및 편법 증여 탈세 압박 카드 활용</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">💸 세무 중과세 회피력</span>
+                            <span class="text-lg font-black text-cyan-400 font-mono">95%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-cyan-500 h-full" style="width: 95%"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-light leading-normal">양도세 77% 구간 회피, 등기 전 전매(66%) 또는 등기 2년 비과세 설계</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">👨‍👩‍👧 가족 평안 정착도</span>
+                            <span class="text-lg font-black text-emerald-400 font-mono">99%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full" style="width: 99%"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-light leading-normal">을경합(부녀)과 토생금(모녀) 등 가족 사주 시너지 극대화 안착</p>
+                    </div>
+                </div>
+
+                <!-- 3. 사주명리학적 통합 분석 -->
+                <div class="space-y-4 mt-6">
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center">
+                        <span class="w-1 h-3.5 bg-emerald-500 rounded mr-2 inline-block"></span>
+                        🔮 명리학적 총평: 3인 사주의 오행 흐름과 명당 매칭
+                    </h3>
+                    <div class="bg-slate-950/60 rounded-2xl p-4.5 text-xs text-gray-300 font-light leading-relaxed space-y-3">
+                        <p>
+                            • <strong>아빠 (乙木 일간, 여름생):</strong> 맹렬한 여름 태양 아래 서 있는 을목(초목)의 형상으로, 뜨거운 기운을 식혀줄 시원한 <strong>수(水)의 기운</strong>이 생명수 역할을 합니다. 신검단의 푸르지오 등 계양천 수변 조망이 열린 입지는 아빠의 심신을 안정시키고 자산운을 크게 개화시키는 최고의 수(水) 보완처입니다.
+                        </p>
+                        <p>
+                            • <strong>엄마 (己土 일간, 겨울생):</strong> 추운 겨울날 얼어붙은 대지(己丑)로, 땅을 녹여 만물을 키워낼 따뜻한 <strong>화(火)의 기운</strong>이 필수적입니다. 일조량이 극대화된 정남향/남동향 배치와 온화하고 평탄한 대단지(웰카운티, 힐스테이트 등)는 겨울 己土 대지에 따뜻한 태양을 비춰주는 상생의 형상을 띱니다.
+                        </p>
+                        <p>
+                            • <strong>딸아이 (庚金 일간, 봄생):</strong> 새싹이 돋는 봄철의 단단한 원석(庚金) 사주로, 맑은 수(水) 기운을 통해 녹을 닦아내고 지혜를 널리 퍼뜨려야 학업과 인덕이 뻗어나갑니다. 유해 시설이 전혀 차단되고 자연 친화적인 단지이면서, 통학 스트레스가 극소화된 <strong>초품아 입지(웰카운티, 파라곤)</strong>가 아이의 맑은 금수(金水) 식상 흐름을 완벽하게 보호해 줍니다.
+                        </p>
+                        <p>
+                            • <strong>명리적 종합</strong>: 아빠의 <strong>을목(乙木)</strong>과 딸의 <strong>경금(庚金)</strong>이 천간에서 <strong>을경합(乙庚合)</strong>을 이루어 아빠의 헌신적 자녀 보육이 큰 성취로 이어지며, 엄마의 <strong>기토(己土)</strong>가 딸의 <strong>경금(庚金)</strong>을 대지로서 포근하게 보살피는 <strong>토생금(土生金)</strong>의 완벽한 상생 구조를 갖추고 있습니다. 따라서 교육 여건이 가장 뛰어나며 수변과 평탄한 입지를 고루 갖춘 <strong>이편한세상 검단 웰카운티</strong>나, 사주 온화성이 뛰어난 <strong>힐스테이트 센트럴</strong>에 정착하는 것이 가족 사주 오행의 순환을 완성하는 정답이 될 것입니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 4. 리은이네 대안착 실전 Top 3 아파트 및 이사 시점 -->
+                <div class="space-y-4 mt-6 border-t border-white/5 pt-6">
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center">
+                        <span class="w-1 h-3.5 bg-gold-600 rounded mr-2 inline-block"></span>
+                        🎯 실전 권고: 리은이네 대안착 최적 Top 3 아파트 & 이사 시점
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <!-- Top 1: Wellcounty -->
+                        <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-gold-500/20 relative space-y-2">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="px-2 py-0.5 bg-gold-600 text-white font-bold rounded text-[9px]">🥇 1순위</span>
+                                <strong class="text-slate-100 text-[12px] font-bold">이편한세상 웰카운티</strong>
+                            </div>
+                            <p class="text-slate-300 font-light leading-relaxed">
+                                • <strong>추천도: ★★★★★ (98% - 교육 및 초역세권 대장 입지)</strong><br>
+                                • <strong>권장 이사 시점: 2027년 8월 전후</strong><br>
+                                • <strong>매수 최적 시기: 2026년 10월 13일 이후</strong><br>
+                                • <strong>전략</strong>: 26년 7월 입주장에 잔금 부담으로 쏟아지는 무피/소액피 물량을 10월 13일 전매제한 해제 시점 전후로 사냥합니다. 27년 4월 포레나 계약 만기 직후 이사하거나 단기 이관 후 27년 8월 안택(이사길일)에 맞춰 진입합니다.
+                            </p>
+                        </div>
+
+                        <!-- Top 2: Hillstate -->
+                        <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-white/5 relative space-y-2">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="px-2 py-0.5 bg-amber-600 text-white font-bold rounded text-[9px]">🥈 2순위</span>
+                                <strong class="text-slate-100 text-[12px] font-bold">힐스테이트 센트럴</strong>
+                            </div>
+                            <p class="text-slate-300 font-light leading-relaxed">
+                                • <strong>추천도: ★★★★☆ (90% - 매도자 비과세 해제 활용 차선책)</strong><br>
+                                • <strong>권장 이사 시점: 2027년 1월 ~ 4월 사이</strong><br>
+                                • <strong>매수 최적 시기: 2027년 1월 초순</strong><br>
+                                • <strong>전략</strong>: 매도자의 등기 후 2년 비과세가 도래하는 2027년 1월에 맞춰 매수하여 매도인의 양도세 대납 요구 없이 가장 깨끗한 급매물로 매입합니다. 27년 4월 전세 만기일에 직매칭하여 다이렉트 이사가 가능한 정공법입니다.
+                            </p>
+                        </div>
+
+                        <!-- Top 3: Lakefore -->
+                        <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-white/5 relative space-y-2">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="px-2 py-0.5 bg-slate-600 text-white font-bold rounded text-[9px]">🥉 3순위</span>
+                                <strong class="text-slate-100 text-[12px] font-bold">제일풍경채 레이크포레</strong>
+                            </div>
+                            <p class="text-slate-300 font-light leading-relaxed">
+                                • <strong>추천도: ★★★★☆ (88% - 호수공원 영구조망 및 중장기 대안)</strong><br>
+                                • <strong>권장 이사 시점: 2029년 7월 전후 (준공 시점)</strong><br>
+                                • <strong>매수 최적 시기: 2027년 여름 (양도세율 인하 및 준공 전후)</strong><br>
+                                • <strong>전략</strong>: 현 전세집을 2년 계약갱신요구권으로 2029년 4월까지 연장해 거주하며, 2029년 7월 준공·입주 시점에 맞추어 이주하는 장기 플랜입니다. 계약 즉시 전매가 가능한 군인공제회 공급분 확보 또는 취득 1년 경과로 양도세가 66%로 인하되는 시점의 급매물을 사냥합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: 전세 만기 대응 및 계약갱신권 실전 로드맵 -->
+        <div id="tab-lease" class="tab-panel space-y-12 hidden">
+            <!-- ========================================== -->
+            <!-- CHAPTER 01: 전세 만기 대응 및 계약갱신권 실전 로드맵 -->
+            <!-- ========================================== -->
+            <div id="chapter-01" class="space-y-12">
+                <div class="space-y-2 text-center md:text-left">
+                    <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 01</span>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">전세 만기 대응 및 계약갱신권 실전 로드맵</h2>
+                    <p class="text-xs text-gray-400 max-w-2xl font-light">2027년 4월 말 전세 만기를 대비하여 계약갱신요구권을 효과적으로 행사하고, 집주인의 실거주 거절 가능성에 대처하는 실전 방어 및 네고 시나리오입니다.</p>
+                </div>
 <!-- SECTION 1-C: 전세 만기 시나리오 시뮬레이션 (April 2027 Expiry & Renewal Strategy) -->
         <section class="space-y-6">
             <div class="text-center md:text-left">
@@ -716,16 +961,22 @@
             <div id="all-refusal-scenarios-print-view" class="hidden print:block space-y-6 mt-8 page-break-before-always">
                 <!-- Javascript will populate this with all 4 refusal scenarios -->
             </div>
-        </div>
-        <!-- ========================================== -->
-        <!-- CHAPTER 02: 자산 포트폴리오 및 실시간 자금 조달 시뮬레이션 -->
-        <!-- ========================================== -->
-        <div id="chapter-02" class="space-y-12 border-t border-white/10 pt-12">
-            <div class="space-y-2 text-center md:text-left">
-                <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 02</span>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">자산 포트폴리오 및 실시간 자금 조달 시뮬레이션</h2>
-                <p class="text-xs text-gray-400 max-w-2xl font-light">전세금 회수와 미국 단기채 환전으로 확보된 7.4억 원 자금에 청약통장 1,600만 원을 더한 범위(약 9억)에서, 단지별 주담대 금리와 거시 금리 역발상 투자 비책을 시뮬레이션합니다.</p>
-            </div>
+            </div> <!-- Close div from line 801 -->
+        </section> <!-- Close SECTION 07 -->
+        </div> <!-- Close chapter-01 -->
+        </div> <!-- Close TAB 2: tab-lease -->
+
+        <!-- TAB 5: 모의 계산기 -->
+        <div id="tab-calculators" class="tab-panel space-y-12 hidden">
+            <!-- ========================================== -->
+            <!-- CHAPTER 02: 자산 포트폴리오 및 실시간 자금 조달 시뮬레이션 -->
+            <!-- ========================================== -->
+            <div id="chapter-02" class="space-y-12">
+                <div class="space-y-2 text-center md:text-left">
+                    <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 02</span>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">자산 포트폴리오 및 실시간 자금 조달 시뮬레이션</h2>
+                    <p class="text-xs text-gray-400 max-w-2xl font-light">전세금 회수와 미국 단기채 환전으로 확보된 7.4억 원 자금에 청약통장 1,600만 원을 더한 범위(약 9억)에서, 단지별 주담대 금리와 거시 금리 역발상 투자 비책을 시뮬레이션합니다.</p>
+                </div>
 <!-- SECTION 08: 리은이네 자산 포트폴리오 및 자금 조달 시뮬레이션 -->
         <section class="space-y-6">
             <div class="text-center md:text-left">
@@ -1109,16 +1360,20 @@
             </div>
         </section>
 
+        </div> <!-- Close chapter-03 -->
+        </div> <!-- Close TAB 5: tab-calculators -->
+
+        <!-- TAB 3: 단지별 분석 -->
+        <div id="tab-apartments" class="tab-panel space-y-12 hidden">
+            <!-- ========================================== -->
+            <!-- CHAPTER 04: 신검단 타겟 단지 심층 진단 및 비교 매트릭스 -->
+            <!-- ========================================== -->
+            <div id="chapter-04" class="space-y-12">
+                <div class="space-y-2 text-center md:text-left">
+                    <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 04</span>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">신검단 타겟 단지 심층 진단 및 비교 매트릭스</h2>
+                    <p class="text-xs text-gray-400 max-w-2xl font-light">선호 1·2·3순위 주요 단지 상세 스펙 비교와 전세 만기 연장에 매칭되는 2년 비과세 타겟 단지 분석, 8대 단지 평점 매트릭스를 종합 진단합니다.</p>
                 </div>
-        <!-- ========================================== -->
-        <!-- CHAPTER 04: 신검단 타겟 단지 심층 진단 및 비교 매트릭스 -->
-        <!-- ========================================== -->
-        <div id="chapter-04" class="space-y-12 border-t border-white/10 pt-12">
-            <div class="space-y-2 text-center md:text-left">
-                <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 04</span>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">신검단 타겟 단지 심층 진단 및 비교 매트릭스</h2>
-                <p class="text-xs text-gray-400 max-w-2xl font-light">선호 1·2·3순위 주요 단지 상세 스펙 비교와 전세 만기 연장에 매칭되는 2년 비과세 타겟 단지 분석, 8대 단지 평점 매트릭스를 종합 진단합니다.</p>
-            </div>
 <!-- SECTION 3: 아파트 설명 TOP 5 (Top 5 Apartments Comparison) -->
         <section class="space-y-6">
             <div class="text-center md:text-left">
@@ -1835,6 +2090,7 @@
                         실내 수영장은 없으나, 세대당 1.50대의 강력한 주차 능력과 단지 바로 옆에 안전하게 위치한 초등학교 학군이 초등 자녀 양육에 큰 강점입니다.
                     </div>
                 </div>
+            </div> <!-- Close grid-cols-2 from line 2047 -->
 
             <!-- 결론 요약 박스 -->
             <div class="bg-slate-950 p-5 rounded-2xl border border-white/5 space-y-3 text-[11px] text-gray-300 leading-relaxed">
@@ -1852,20 +2108,27 @@
                         초등학생 자녀의 찻길 없는 <strong>해든초 안심 등하교</strong>와 저녁 시간 늦은 퇴근 시 <strong>1.50대의 넓은 주차 공간</strong>을 최우선 시 하신다면 <strong>디에트르 더 펠리체(1차) 복층</strong>을 매입하시는 것이 현명합니다.
                     </div>
                 </div>
+            </div>
+        </section> <!-- Close SECTION 6 -->
+
             <!-- Print Only View: All Apartment Detailed Cards -->
             <div id="all-apts-print-view" class="hidden print:block space-y-8 mt-12 page-break-before-always">
                 <!-- Javascript will populate this with all 9 apartments -->
             </div>
         </div>
-        <!-- ========================================== -->
-        <!-- CHAPTER 05: 명리학적 이전 타당성 및 사주/안택 길일 -->
-        <!-- ========================================== -->
-        <div id="chapter-05" class="space-y-12 border-t border-white/10 pt-12">
-            <div class="space-y-2 text-center md:text-left">
-                <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 05</span>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">명리학적 이전 타당성 및 사주/안택 길일</h2>
-                <p class="text-xs text-gray-400 max-w-2xl font-light">킨텍스, 운정 대비 신검단 이전의 오행 경향과 가족 3인 사주 균형을 함께 읽고, 2027년 계약/입주 시점의 실행 후보를 1차 필터링한 기준으로 제시합니다. (절대 규범이 아니라 판단 보조용)</p>
-            </div>
+        </div> <!-- Close TAB 3: tab-apartments -->
+
+        <!-- TAB 4: 이사 & 명리 -->
+        <div id="tab-moving" class="tab-panel space-y-12 hidden">
+            <!-- ========================================== -->
+            <!-- CHAPTER 05: 명리학적 이전 타당성 및 사주/안택 길일 -->
+            <!-- ========================================== -->
+            <div id="chapter-05" class="space-y-12">
+                <div class="space-y-2 text-center md:text-left">
+                    <span class="px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-gold-500 bg-gold-600/15 border border-gold-500/20 rounded-full inline-block">CHAPTER 05</span>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-100 font-serif italic">명리학적 이전 타당성 및 사주/안택 길일</h2>
+                    <p class="text-xs text-gray-400 max-w-2xl font-light">킨텍스, 운정 대비 신검단 이전의 오행 경향과 가족 3인 사주 균형을 함께 읽고, 2027년 계약/입주 시점의 실행 후보를 1차 필터링한 기준으로 제시합니다. (절대 규범이 아니라 판단 보조용)</p>
+                </div>
 <!-- SECTION 00: 킨텍스에서 신검단 이전 타당성 & 운정 GTX 비교 -->
         <section class="space-y-6">
             <div class="text-center md:text-left">
@@ -2018,317 +2281,7 @@
             </div>
         </section>
         
-        <!-- SECTION 5-E: 리은이네 대안착 종합 자문 의견 (Comprehensive Family Consultation) -->
-        <section class="space-y-6 bg-slate-900/40 p-6 md:p-8 rounded-3xl border border-white/5 custom-shadow mt-8">
-            <div class="text-center md:text-left border-b border-white/5 pb-4">
-                <span class="text-gold-500 font-bold text-xs uppercase tracking-widest block mb-1">PART 05-E</span>
-                <h2 class="text-xl md:text-2xl font-black text-slate-100 font-serif italic flex items-center justify-center md:justify-start">
-                    <span class="w-1.5 h-5 bg-gold-500 rounded mr-2.5 inline-block"></span>
-                    🔮 리은이네 대안착 & 자산 수렵 종합 의견
-                </h2>
-                <p class="text-xs text-gray-400 mt-1">아버님의 자산방어 전략과 가족의 사주명리학적 흐름을 조합한 객관적 주거 로드맵 평가</p>
-            </div>
-
-            <!-- 1. 객관적 거동성 및 내집마련 가능성 평가 -->
-            <div class="space-y-4">
-                <h3 class="text-sm font-bold text-slate-200 flex items-center">
-                    <span class="w-1 h-3.5 bg-gold-600 rounded mr-2 inline-block"></span>
-                    💡 객관적 평가: 우리는 과연 '싸고 좋은 곳'으로 안착할 수 있는가?
-                </h3>
-                <div class="bg-slate-950/60 rounded-2xl p-4.5 text-xs text-gray-300 font-light leading-relaxed space-y-3">
-                    <p>
-                        <strong>📈 거시경제 환경과 자금력 우위의 조합:</strong> 2026년 하반기 거시경제는 고물가 고착화에 대응한 한국은행의 <strong>기준금리 인상 가능성(연내 추가 인상 전망)</strong>과 <strong>스트레스 DSR 3단계 본격 시행</strong>이라는 강력한 가계대출 규제 압박을 받고 있습니다. 대다수 영끌 매수세가 높은 주담대 금리와 한도 축소로 인해 주저하는 시기이지만, 리은이네는 대출 의존도가 지극히 낮은 <strong>자체 가용 예산(약 7.56억 원)</strong>을 확보하고 있어 경쟁에서 절대적 우위를 점합니다. 현 포레나 집주인의 가좌마을 실거주 블러핑(5.8억 반환 자금 압박과 허위 실거주 손해배상 소송 리스크)을 법적으로 방어하면서, 자금 유동성을 움켜쥐고 있는 우리에게 최고의 협상 권력이 쥐어져 있습니다.
-                    </p>
-                    <p>
-                        <strong>🏗️ 로컬 공급 쇼크와 중장기 공급 부족의 비대칭성 공략:</strong> 착공 감소 여파로 수도권 전반은 중장기적 주택 공급 부족에 시달리며 전세가격 상승 압박(건설산업연구원 하반기 전세가 5.0% 상승 전망)이 지속되고 있습니다. 반면, 신검단 지역은 <strong>2026년 하반기(웰카운티, 호반3차)~2027년 상반기</strong>에 걸쳐 대규모 신축 아파트들이 일시에 쏟아지는 <strong>'국지적 공급 폭탄(입주장)'</strong> 국면을 맞이합니다. 금리 인상 압박 속에서 잔금 대출 기한을 맞추지 못해 애타는 분양권 계약자들의 무피·마피 던지기 물량이 대거 출현할 수밖에 없으며, 이는 수도권 전세가가 하방을 강하게 지탱하는 구조 속에서 <strong>인생에 단 한 번뿐인 '안전마진 저점 사냥 골든타임'</strong>을 선사합니다.
-                    </p>
-                    <p>
-                        <strong>📅 이사 골든 이어(Golden Year) - 왜 2027년이 최적의 대안착 해인가?:</strong> 본 보고서의 핵심 타겟인 웰카운티(27년 8월 전후), 힐스테이트(27년 1~4월), 호반3차(27년 4~5월) 등 1~2순위 주요 아파트의 <strong>최적 이사 및 입주 시점이 모두 2027년에 밀집</strong>되어 있습니다. 이는 현재 거주하시는 킨텍스포레나의 전세 계약 만기(27년 4월 말)와 시기적으로 한 치의 오차도 없이 일치할 뿐만 아니라, 명리학적으로도 가족 3인의 조화가 가장 안정되는 안택 길일들이 집중적으로 펼쳐지는 해입니다. 따라서 자금 흐름, 임대차 만기, 세무적 비과세 타이밍까지 모든 조건이 하나로 귀결되는 <strong>2027년은 리은이네가 신검단에 대안착할 '약속된 골든 이어'</strong>입니다.
-                    </p>
-                </div>
-            </div>
-
-            <!-- 1-B. 이사 시점 3개년(2027-2029) 부동산 vs 명리 입체 대조분석 -->
-            <div class="space-y-4 mt-6">
-                <h3 class="text-sm font-bold text-slate-200 flex items-center">
-                    <span class="w-1 h-3.5 bg-cyan-600 rounded mr-2 inline-block"></span>
-                    📊 이사 시점 3개년(2027~2029) 부동산 변동률 및 명리학적 종합 비교
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <!-- 2027년 -->
-                    <div class="bg-slate-950/60 rounded-2xl p-5 border border-gold-500/20 space-y-3">
-                        <div class="flex items-center justify-between border-b border-white/5 pb-2">
-                            <strong class="text-slate-100 text-[13px] font-bold">📅 2027년 (丁未年 - 정미년)</strong>
-                            <span class="px-2 py-0.5 bg-gold-600/10 text-gold-500 text-[9px] font-bold rounded">★ 대안착 골든이어 (최상)</span>
-                        </div>
-                        <div class="space-y-2 text-xs font-light leading-relaxed">
-                            <p>
-                                📈 <strong>집값 변동률 전망 [최저가 바닥]</strong>:<br>
-                                신검단 10,000세대 이상의 입주장 공급 폭탄 여파가 바닥을 치는 <strong>하방 최저점 시기</strong>입니다. 주택 금리 인상 압박과 대출 규제로 한계 세대의 투매가 집중되어 <strong>인생 최저가로 매입이 가능한 골든타임</strong>입니다.
-                            </p>
-                            <p>
-                                🔮 <strong>사주명리학적 풀이 [조후의 축복]</strong>:<br>
-                                丁(정화 - 따뜻한 불)과 未(미토 - 온기를 머금은 여름 흙)의 해입니다. 겨울 태생으로 한랭하게 얼어붙은 <strong>엄마(己土)의 己丑 사주를 정화(丁火)가 따뜻하게 녹여주는(화생토, 火生土) 최상의 조후 보완의 해</strong>입니다. 을목(아빠)과 경금(딸)의 안정성 역시 단단한 未土의 뿌리를 얻어, 온 가족의 심신 안정과 문서 운(문서 합)이 가장 강하게 발복하는 평안 대길년입니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 2028년 -->
-                    <div class="bg-slate-950/60 rounded-2xl p-5 border border-white/5 space-y-3">
-                        <div class="flex items-center justify-between border-b border-white/5 pb-2">
-                            <strong class="text-slate-100 text-[13px] font-bold">📅 2028년 (戊申年 - 무신년)</strong>
-                            <span class="px-2 py-0.5 bg-slate-800 text-slate-400 text-[9px] font-bold rounded">보통 (대기세)</span>
-                        </div>
-                        <div class="space-y-2 text-xs font-light leading-relaxed">
-                            <p>
-                                📈 <strong>집값 변동률 전망 [상승세 전환]</strong>:<br>
-                                입주 물량 소화가 끝나고 2024~25년 착공 급감에 따른 수도권 전체의 <strong>만성적 공급 부족 여파가 폭발하는 시기</strong>입니다. 매수 대기자들이 추격 매수로 돌아서며 집값이 저점 대비 크게 반등(상승세 완연)하여 2027년 대비 매입 단가가 높습니다.
-                            </p>
-                            <p>
-                                🔮 <strong>사주명리학적 풀이 [오행의 메마름]</strong>:<br>
-                                戊(무토 - 메마른 광산)와 申(신금 - 건조한 쇠)의 해입니다. 사주가 전반적으로 매우 건조해지는 조열(燥熱) 현상이 발생합니다. 여름생 <strong>아빠(乙木)에게는 너무 메마른 무토(戊土) 산과 잎을 자르는 강한 신금(申金)의 칼날이 가해져 스트레스와 건강운이 다소 불안</strong>해지며, 온 가족의 심리적 융화가 뻑뻑해지는 시기입니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 2029년 -->
-                    <div class="bg-slate-950/60 rounded-2xl p-5 border border-white/5 space-y-3">
-                        <div class="flex items-center justify-between border-b border-white/5 pb-2">
-                            <strong class="text-slate-100 text-[13px] font-bold">📅 2029년 (己酉년 - 기유년)</strong>
-                            <span class="px-2 py-0.5 bg-rose-600/10 text-rose-500 text-[9px] font-bold rounded">⚠️ 비추천 (상극 대립)</span>
-                        </div>
-                        <div class="space-y-2 text-xs font-light leading-relaxed">
-                            <p>
-                                📈 <strong>집값 변동률 전망 [고점/인프라 반영]</strong>:<br>
-                                검단아라역 신설 노선 개통과 중심상업지구(넥스트콤플렉스) 완성 시점과 맞물려 입지 가치가 완전히 분양가에 반영된 <strong>고점 가격대</strong>입니다. 저점 대비 최소 1억~1.5억 원 이상의 추가 프리미엄 지출이 불가피합니다.
-                            </p>
-                            <p>
-                                🔮 <strong>사주명리학적 풀이 [을유 상극 충돌]</strong>:<br>
-                                己(기토 - 넓은 논밭)와 酉(유금 - 날카로운 가위/바늘)의 해입니다. 酉(금)의 기운이 지지에서 극도로 날카로워져, <strong>초목인 아빠의 을목(乙木)을 날카롭게 쳐내는 '을유 상극(乙酉 相剋) 및 편관(칠살) 충격'</strong>이 발생하는 매우 흉한 기운입니다. 가장의 사업/건강적 흔들림이나 돌발 변수 리스크가 최고조에 달하므로, 이 시기의 큰 문서 취득이나 주거 이동은 절대 피해야 합니다.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. 재밌는 수치적 지표 매트릭스 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                <!-- Card 1 -->
-                <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] text-gold-400 font-bold uppercase tracking-wider">🎯 저점 사냥 성공률</span>
-                        <span class="text-lg font-black text-gold-400 font-mono">92%</span>
-                    </div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-gold-500 h-full" style="width: 92%"></div>
-                    </div>
-                    <p class="text-[10px] text-gray-400 font-light leading-normal">입주장 폭락기와 연체 분양권 급매 사냥 타이밍 정밀 매칭</p>
-                </div>
-                <!-- Card 2 -->
-                <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] text-rose-400 font-bold uppercase tracking-wider">🛡️ 현재 전세금 방어율</span>
-                        <span class="text-lg font-black text-rose-400 font-mono">98%</span>
-                    </div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-rose-500 h-full" style="width: 98%"></div>
-                    </div>
-                    <p class="text-[10px] text-gray-400 font-light leading-normal">집주인 가좌마을 인테리어 스모킹건 및 편법 증여 탈세 압박 카드 활용</p>
-                </div>
-                <!-- Card 3 -->
-                <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">💸 세무 중과세 회피력</span>
-                        <span class="text-lg font-black text-cyan-400 font-mono">95%</span>
-                    </div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-cyan-500 h-full" style="width: 95%"></div>
-                    </div>
-                    <p class="text-[10px] text-gray-400 font-light leading-normal">양도세 77% 구간 회피, 등기 전 전매(66%) 또는 등기 2년 비과세 설계</p>
-                </div>
-                <!-- Card 4 -->
-                <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 space-y-2 relative overflow-hidden">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">👨‍👩‍👧 가족 평안 정착도</span>
-                        <span class="text-lg font-black text-emerald-400 font-mono">99%</span>
-                    </div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-emerald-500 h-full" style="width: 99%"></div>
-                    </div>
-                    <p class="text-[10px] text-gray-400 font-light leading-normal">을경합(부녀)과 토생금(모녀) 등 가족 사주 시너지 극대화 안착</p>
-                </div>
-            </div>
-
-            <!-- 3. 사주명리학적 통합 분석 -->
-            <div class="space-y-4 mt-6">
-                <h3 class="text-sm font-bold text-slate-200 flex items-center">
-                    <span class="w-1 h-3.5 bg-emerald-500 rounded mr-2 inline-block"></span>
-                    🔮 명리학적 총평: 3인 사주의 오행 흐름과 명당 매칭
-                </h3>
-                <div class="bg-slate-950/60 rounded-2xl p-4.5 text-xs text-gray-300 font-light leading-relaxed space-y-3">
-                    <p>
-                        • <strong>아빠 (乙木 일간, 여름생):</strong> 맹렬한 여름 태양 아래 서 있는 을목(초목)의 형상으로, 뜨거운 기운을 식혀줄 시원한 <strong>수(水)의 기운</strong>이 생명수 역할을 합니다. 신검단의 푸르지오 등 계양천 수변 조망이 열린 입지는 아빠의 심신을 안정시키고 자산운을 크게 개화시키는 최고의 수(水) 보완처입니다.
-                    </p>
-                    <p>
-                        • <strong>엄마 (己土 일간, 겨울생):</strong> 추운 겨울날 얼어붙은 대지(己丑)로, 땅을 녹여 만물을 키워낼 따뜻한 <strong>화(火)의 기운</strong>이 필수적입니다. 일조량이 극대화된 정남향/남동향 배치와 온화하고 평탄한 대단지(웰카운티, 힐스테이트 등)는 겨울 己土 대지에 따뜻한 태양을 비춰주는 상생의 형상을 띱니다.
-                    </p>
-                    <p>
-                        • <strong>딸아이 (庚金 일간, 봄생):</strong> 새싹이 돋는 봄철의 단단한 원석(庚金) 사주로, 맑은 수(水) 기운을 통해 녹을 닦아내고 지혜를 널리 퍼뜨려야 학업과 인덕이 뻗어나갑니다. 유해 시설이 전혀 차단되고 자연 친화적인 단지이면서, 통학 스트레스가 극소화된 <strong>초품아 입지(웰카운티, 파라곤)</strong>가 아이의 맑은 금수(金水) 식상 흐름을 완벽하게 보호해 줍니다.
-                    </p>
-                    <p>
-                        • <strong>명리적 종합</strong>: 아빠의 <strong>을목(乙木)</strong>과 딸의 <strong>경금(庚金)</strong>이 천간에서 <strong>을경합(乙庚合)</strong>을 이루어 아빠의 헌신적 자녀 보육이 큰 성취로 이어지며, 엄마의 <strong>기토(己土)</strong>가 딸의 <strong>경금(庚金)</strong>을 대지로서 포근하게 보살피는 <strong>토생금(土生金)</strong>의 완벽한 상생 구조를 갖추고 있습니다. 따라서 교육 여건이 가장 뛰어나며 수변과 평탄한 입지를 고루 갖춘 <strong>이편한세상 검단 웰카운티</strong>나, 사주 온화성이 뛰어난 <strong>힐스테이트 센트럴</strong>에 정착하는 것이 가족 사주 오행의 순환을 완성하는 정답이 될 것입니다.
-                    </p>
-                </div>
-            </div>
-
-            <!-- 1-C. 2027년 이사 사계절별(봄·여름·가을·겨울) 입체 대조분석 -->
-            <div class="space-y-4 mt-6">
-                <h3 class="text-sm font-bold text-slate-200 flex items-center">
-                    <span class="w-1 h-3.5 bg-amber-500 rounded mr-2 inline-block"></span>
-                    📅 2027년 이사 타이밍: 사계절별(봄·여름·가을·겨울) 명리·거시·세무 입체 분석
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- 봄 (Spring) -->
-                    <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-white/5 space-y-3 relative overflow-hidden">
-                        <div class="absolute right-0 top-0 bg-emerald-500/10 text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">추천: ★★★★★</div>
-                        <div class="flex items-center space-x-2 border-b border-white/5 pb-2">
-                            <span class="text-emerald-400 font-bold text-sm">🌸 봄 (3월~5월)</span>
-                        </div>
-                        <div class="space-y-2.5 text-[11px] font-light leading-relaxed">
-                            <p>
-                                🔮 <strong>명리학적 흐름</strong>:<br>
-                                寅·卯·辰 목(木) 기운이 세력을 얻습니다. 여름생 <strong>아빠(乙木)</strong>에게 비견/겁재의 든든한 조력이 생겨 자산 운의 기반을 넓히고, <strong>엄마(己土)</strong>는 관성의 압박이 오나 未土(정미년 지지)의 단단한 조력으로 이를 거뜬히 자산 문서로 치환할 힘을 얻습니다.
-                            </p>
-                            <p>
-                                📈 <strong>거시 및 로컬 공급</strong>:<br>
-                                26년 12월 준공된 <strong>호반써밋 3차 입주 지정 기간(보통 3개월)이 종료되는 27년 3월 말 전후</strong>입니다. 잔금 연체 리스크에 몰린 매도인들이 던지는 <strong>급매물 및 무피/마피 매물이 최절정</strong>에 이르는 최고의 매수자 우위 구간입니다.
-                            </p>
-                            <p>
-                                💸 <strong>세무 및 전매제한</strong>:<br>
-                                <strong>힐스테이트 신검단 센트럴</strong>의 2년 실거주/보유 비과세(27년 1월 도래)가 완성된 직후입니다. 매수자가 양도세를 1원도 대납(손피)할 필요가 없는 <strong>가장 깨끗한 비과세 급매물</strong>이 시장에 풍부하게 공급됩니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 여름 (Summer) -->
-                    <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-gold-500/20 space-y-3 relative overflow-hidden">
-                        <div class="absolute right-0 top-0 bg-gold-600/25 text-gold-400 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">추천: ★★★★★</div>
-                        <div class="flex items-center space-x-2 border-b border-white/5 pb-2">
-                            <span class="text-gold-400 font-bold text-sm">☀️ 여름 (6월~8월)</span>
-                        </div>
-                        <div class="space-y-2.5 text-[11px] font-light leading-relaxed">
-                            <p>
-                                🔮 <strong>명리학적 흐름</strong>:<br>
-                                巳·午·未의 강력한 화·토(火·土) 열기가 지배합니다. 겨울 태생으로 한랭하게 얼어붙은 <strong>엄마(己丑 일주)의 땅을 따뜻하게 녹여주는 조후 해결의 최절정기(가장 이상적인 이사/안택 타이밍)</strong>입니다. 아빠(乙木)의 열기를 식히기 위해 계양천 수변 조망(웰카운티 등) 단지 선택이 권장됩니다.
-                            </p>
-                            <p>
-                                📈 <strong>거시 및 로컬 공급</strong>:<br>
-                                신검단 대장주인 <strong>이편한세상 검단 웰카운티(2026년 7월 준공)의 입주 후 1년이 도래</strong>합니다. 준공 후 1년이 지나 양도세율이 인하되는 시점의 급매물 및 로컬 역전세 매물이 소화되는 시기입니다.
-                            </p>
-                            <p>
-                                💸 <strong>세무 및 전매제한</strong>:<br>
-                                웰카운티 취득일로부터 1년이 지나 <strong>양도소득세율이 77%에서 66%로 인하되는 시점</strong>입니다. 불가피하게 손피(프리미엄 대납) 거래를 진행하더라도, 봄철 대비 <strong>매수자가 부담해야 할 세금 대납액이 약 1,500만~2,000만 원가량 대폭 축소</strong>되어 실취득 부담이 경감됩니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 가을 (Autumn) -->
-                    <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-white/5 space-y-3 relative overflow-hidden">
-                        <div class="absolute right-0 top-0 bg-cyan-600/15 text-cyan-400 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">추천: ★★★★☆</div>
-                        <div class="flex items-center space-x-2 border-b border-white/5 pb-2">
-                            <span class="text-cyan-400 font-bold text-sm">🍁 가을 (9월~11월)</span>
-                        </div>
-                        <div class="space-y-2.5 text-[11px] font-light leading-relaxed">
-                            <p>
-                                🔮 <strong>명리학적 흐름</strong>:<br>
-                                申·酉·戌의 금(金) 기운이 수확의 계절을 엽니다. 원석 사주인 <strong>딸아이(庚金)</strong>에게 학업 집중도와 자기 주도적 발복 기운을 주며, 여름의 뜨거운 열기가 식으면서 <strong>아빠(乙木)</strong> 역시 관성(금)과의 균형을 찾아 사업/자산 관리에 최고의 냉철함과 안정감을 되찾습니다.
-                            </p>
-                            <p>
-                                📈 <strong>거시 및 로컬 공급</strong>:<br>
-                                봄·여름에 쏟아졌던 입주장 물량이 서서히 소화되고 정리되는 후반부 국면입니다. 잔여 분양권을 미처 처분하지 못해 다급해진 매도자들이 연체 이자를 면하기 위해 <strong>마지막 가격 절충(네고)을 파격적으로 수용</strong>하는 '끝물 사냥' 시기입니다.
-                            </p>
-                            <p>
-                                💸 <strong>세무 및 전매제한</strong>:<br>
-                                웰카운티 등 분양권 단지의 <strong>66% 단기세율이 세무적으로 가장 안정적으로 적용</strong>되는 안착기입니다. 세액 계산 완료 후 양도세 복수 대납 리스크 없이 가장 깨끗하게 명의이전 등기 절차를 마무리할 수 있습니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 겨울 (Winter) -->
-                    <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-white/5 space-y-3 relative overflow-hidden">
-                        <div class="absolute right-0 top-0 bg-rose-600/10 text-rose-400 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">추천: ★★★☆☆</div>
-                        <div class="flex items-center space-x-2 border-b border-white/5 pb-2">
-                            <span class="text-rose-400 font-bold text-sm">❄️ 겨울 (12월~2월)</span>
-                        </div>
-                        <div class="space-y-2.5 text-[11px] font-light leading-relaxed">
-                            <p>
-                                🔮 <strong>명리학적 흐름</strong>:<br>
-                                亥·子·丑의 차가운 물(水)과 겨울 한기가 지배합니다. 정미년의 따뜻한 불씨(丁火)가 한기를 방어하나, 차가운 겨울 己丑 대지인 <strong>엄마(己土)에게는 음기가 다시 누적되는 시기</strong>로 주거 이동 시 가족의 면역력 저하나 이동 스트레스에 따른 심리적 불안이 다소 상승할 수 있어 주의가 요구됩니다.
-                            </p>
-                            <p>
-                                📈 <strong>거시 및 로컬 공급</strong>:<br>
-                                2027년 대단지 입주 물량이 거의 모두 소화되어 신축 급매 매물이 자취를 감춥니다. 2028년 수도권 만성 공급 부족으로 인한 가격 상승 전환기를 눈앞에 두고 <strong>매도인들이 호가를 다시 높이고 매물을 거두어들이는 매수자 불리 국면</strong>으로 전환됩니다.
-                            </p>
-                            <p>
-                                💸 <strong>세무 및 전매제한</strong>:<br>
-                                신축 분양권 거래 시장이 사실상 종결되고 등기 매물 위주로 재편됩니다. 매입 단가 자체가 상승하여 초기 예산(7.56억) 내에서 대장 단지 로얄동 매입을 위한 가격 협상력이 크게 약화됩니다.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. 리은이네 대안착 실전 Top 3 아파트 및 이사 시점 -->
-            <div class="space-y-4 mt-6 border-t border-white/5 pt-6">
-                <h3 class="text-sm font-bold text-slate-200 flex items-center">
-                    <span class="w-1 h-3.5 bg-gold-600 rounded mr-2 inline-block"></span>
-                    🎯 실전 권고: 리은이네 대안착 최적 Top 3 아파트 & 이사 시점
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                    <!-- Top 1: Wellcounty -->
-                    <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-gold-500/20 relative space-y-2">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="px-2 py-0.5 bg-gold-600 text-white font-bold rounded text-[9px]">🥇 1순위</span>
-                            <strong class="text-slate-100 text-[12px] font-bold">이편한세상 웰카운티</strong>
-                        </div>
-                        <p class="text-slate-300 font-light leading-relaxed">
-                            • <strong>추천도: ★★★★★ (98% - 교육 및 초역세권 대장 입지)</strong><br>
-                            • <strong>권장 이사 시점: 2027년 8월 전후</strong><br>
-                            • <strong>매수 최적 시기: 2026년 10월 13일 이후</strong><br>
-                            • <strong>전략</strong>: 26년 7월 입주장에 잔금 부담으로 쏟아지는 무피/소액피 물량을 10월 13일 전매제한 해제 시점 전후로 사냥합니다. 27년 4월 포레나 계약 만기 직후 이사하거나 단기 이관 후 27년 8월 안택(이사길일)에 맞춰 진입합니다.
-                        </p>
-                    </div>
-
-                    <!-- Top 2: Hillstate -->
-                    <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-white/5 relative space-y-2">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="px-2 py-0.5 bg-amber-600 text-white font-bold rounded text-[9px]">🥈 2순위</span>
-                            <strong class="text-slate-100 text-[12px] font-bold">힐스테이트 센트럴</strong>
-                        </div>
-                        <p class="text-slate-300 font-light leading-relaxed">
-                            • <strong>추천도: ★★★★☆ (90% - 매도자 비과세 해제 활용 차선책)</strong><br>
-                            • <strong>권장 이사 시점: 2027년 1월 ~ 4월 사이</strong><br>
-                            • <strong>매수 최적 시기: 2027년 1월 초순</strong><br>
-                            • <strong>전략</strong>: 매도자의 등기 후 2년 비과세가 도래하는 2027년 1월에 맞춰 매수하여 매도인의 양도세 대납 요구 없이 가장 깨끗한 급매물로 매입합니다. 27년 4월 전세 만기일에 직매칭하여 다이렉트 이사가 가능한 정공법입니다.
-                        </p>
-                    </div>
-
-                    <!-- Top 3: Lakefore -->
-                    <div class="bg-slate-950/60 rounded-2xl p-4.5 border border-white/5 relative space-y-2">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="px-2 py-0.5 bg-slate-600 text-white font-bold rounded text-[9px]">🥉 3순위</span>
-                            <strong class="text-slate-100 text-[12px] font-bold">제일풍경채 레이크포레</strong>
-                        </div>
-                        <p class="text-slate-300 font-light leading-relaxed">
-                            • <strong>추천도: ★★★★☆ (88% - 호수공원 영구조망 및 중장기 대안)</strong><br>
-                            • <strong>권장 이사 시점: 2029년 7월 전후 (준공 시점)</strong><br>
-                            • <strong>매수 최적 시기: 2027년 여름 (양도세율 인하 및 준공 전후)</strong><br>
-                            • <strong>전략</strong>: 현 전세집을 2년 계약갱신요구권으로 2029년 4월까지 연장해 거주하며, 2029년 7월 준공·입주 시점에 맞추어 이주하는 장기 플랜입니다. 계약 즉시 전매가 가능한 군인공제회 공급분 확보 또는 취득 1년 경과로 양도세가 66%로 인하되는 시점의 급매물을 사냥합니다.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div> <!-- Close TAB 4: tab-moving -->
         
         </div>
         </main>
@@ -2348,6 +2301,55 @@
 
     <!-- JS Logic for Tab Switching & Premium Updates -->
     <script>
+        // Tab switching logic
+        function setActiveTab(tabId, updateHash = true) {
+            // Hide all tab panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            
+            // Show selected tab panel
+            const activePanel = document.getElementById(tabId);
+            if (activePanel) {
+                activePanel.classList.remove('hidden');
+            }
+            
+            // Reset all tab button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 text-slate-400 bg-slate-900/50 hover:bg-slate-900/80 hover:text-gold-500";
+            });
+            
+            // Highlight selected tab button
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn whitespace-nowrap px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-200 bg-gold-600 text-white";
+            }
+            
+            // Save tab state in URL hash
+            if (updateHash) {
+                history.replaceState(null, null, '#' + tabId);
+                
+                // Smooth scroll to the top of main container if needed
+                const mainEl = document.querySelector('main');
+                if (mainEl && window.scrollY > mainEl.offsetTop) {
+                    window.scrollTo({
+                        top: mainEl.offsetTop - 60,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        }
+
+        // Handle page load and navigation
+        window.addEventListener('DOMContentLoaded', () => {
+            let defaultTab = 'tab-dashboard';
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash) && document.getElementById(hash).classList.contains('tab-panel')) {
+                defaultTab = hash;
+            }
+            setActiveTab(defaultTab, false);
+        });
+
         // TOP 5 Apartments Database
         const apartments = {
             wellcounty: {
