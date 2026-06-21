@@ -28,8 +28,15 @@
                             700: '#957953',
                         },
                         slate: {
-                            900: '#0f172a',
-                            950: '#020617'
+                            950: '#fafaf9',  /* main background (light cream) */
+                            900: '#ffffff',  /* card background (pure white) */
+                            850: '#f4f3f0',  /* light headers or hover background */
+                            800: '#e5e7eb',  /* slider track (light gray) */
+                            100: '#0f172a',  /* primary text */
+                            200: '#1e293b',  /* secondary body text */
+                            300: '#334155',  /* tertiary text */
+                            400: '#475569',  /* captions and details */
+                            500: '#64748b',  /* muted captions */
                         }
                     },
                     spacing: {
@@ -48,10 +55,136 @@
             scroll-behavior: smooth;
         }
         .custom-shadow {
-            box-shadow: 0 10px 30px -10px rgba(197, 168, 128, 0.15);
+            box-shadow: 0 10px 30px -10px rgba(197, 168, 128, 0.1);
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Light Theme Overrides & Global Fixes */
+        body {
+            background-color: #fafaf9 !important;
+            color: #1e293b !important;
+        }
+        
+        /* Adjust semi-transparent borders for light theme */
+        [class*="border-white/"], [class*="border-white/5"], [class*="border-white/10"], [class*="border-white/20"] {
+            border-color: rgba(15, 23, 42, 0.08) !important;
+        }
+        [class*="border-gold-500/"] {
+            border-color: rgba(176, 146, 106, 0.25) !important;
+        }
+
+        /* High contrast adjustments for Light Theme text colors */
+        .text-gold-400 { color: #b0926a !important; }
+        .text-gold-500 { color: #957953 !important; }
+        .text-emerald-400 { color: #059669 !important; }
+        .text-rose-400 { color: #dc2626 !important; }
+        .text-red-400 { color: #dc2626 !important; }
+        .text-amber-400 { color: #d97706 !important; }
+        .text-cyan-400 { color: #0891b2 !important; }
+        .text-blue-400 { color: #2563eb !important; }
+
+        /* Pop out styling for toast notifications in light theme */
+        #toast {
+            background-color: #1e293b !important;
+            color: #f5efe0 !important;
+            border-color: rgba(197, 168, 128, 0.3) !important;
+        }
+
+        /* Print Stylesheet */
+        @media print {
+            html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 10pt !important;
+                line-height: 1.4 !important;
+            }
+            /* Hide elements not needed in print format */
+            .sticky, 
+            button, 
+            nav, 
+            #toast, 
+            .no-print,
+            [onclick*="shareReport"],
+            [onclick*="selectApt"],
+            [onclick*="selectSaju"],
+            [onclick*="selectRefusalScenario"],
+            .flex-wrap,
+            #btn-wellcounty, #btn-hoban3, #btn-lakefore, #btn-hillstate, #btn-prugio, #btn-detre, #btn-paragon, #btn-felice, #btn-riverpark,
+            #apt-card, 
+            #refusal-result-box {
+                display: none !important;
+            }
+            
+            main {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
+            section, .bg-slate-900, .bg-slate-950, .bg-slate-900/80 {
+                background: #ffffff !important;
+                border: 1px solid #d1d5db !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+                border-radius: 12px !important;
+                padding: 15px !important;
+                margin-bottom: 20px !important;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                page-break-after: avoid !important;
+                color: #000000 !important;
+            }
+            
+            p, span, li, td, th, strong {
+                color: #111827 !important;
+            }
+            
+            pre, code {
+                white-space: pre-wrap !important;
+                background-color: #f3f4f6 !important;
+                border: 1px solid #e5e7eb !important;
+                color: #1f2937 !important;
+                padding: 8px !important;
+                border-radius: 6px !important;
+            }
+            
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            th, td {
+                border: 1px solid #e5e7eb !important;
+                padding: 8px 12px !important;
+                font-size: 9pt !important;
+            }
+            th {
+                background-color: #f3f4f6 !important;
+                font-weight: bold !important;
+                color: #111827 !important;
+            }
+            
+            /* Print inputs cleanly showing current values */
+            input[type="text"], input[type="number"], select {
+                border: none !important;
+                border-bottom: 1px solid #d1d5db !important;
+                background: transparent !important;
+                color: #000000 !important;
+                padding: 0 !important;
+                font-weight: bold !important;
+                width: auto !important;
+            }
+            input[type="range"] {
+                display: none !important;
+            }
+
+            /* Show print view sections */
+            #all-apts-print-view,
+            #all-refusal-scenarios-print-view {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans selection:bg-gold-100 selection:text-gold-700 antialiased overflow-x-hidden">
@@ -423,10 +556,11 @@
                 <div class="bg-gold-600/10 border border-gold-500/20 p-4 rounded-xl text-xs leading-relaxed text-gray-300 font-light font-sans">
                     📅 <strong>아빠의 주택임대차 행동 가이드:</strong> 만기일이 <strong>2027년 4월 말</strong>이므로 법적 청구 가능 개시일은 만기 6개월 전인 <strong class="text-gold-500 font-bold">2026년 10월 30일</strong>입니다. 집주인이 매도 움직임을 보이거나 따님 전입 계획을 숨길 가능성이 있으면, <strong>10월 30일 전후로 갱신요구 통지</strong>(문자·이메일 등 수신기록 보관 가능 수단)를 보내 두고, 임대인의 거절 사유 대응으로 협상 지렛대를 확보해 두십시오.
                 </div>
+            <!-- Print Only View: All Refusal Scenarios -->
+            <div id="all-refusal-scenarios-print-view" class="hidden print:block space-y-6 mt-8 page-break-before-always">
+                <!-- Javascript will populate this with all 4 refusal scenarios -->
             </div>
-        </section>
-
-                </div>
+        </div>
         <!-- ========================================== -->
         <!-- CHAPTER 02: 자산 포트폴리오 및 실시간 자금 조달 시뮬레이션 -->
         <!-- ========================================== -->
@@ -1620,10 +1754,11 @@
                         자산 보존의 효율성을 높이면서 계양천 산책을 선호하고, <strong>가장 합리적인 가격대</strong>에 복층을 입성하길 원한다면, <strong>디에트르 리버파크(3차) 복층</strong>(누수 보수 이력 조율 전제)이 훌륭한 전략 카드가 됩니다.
                     </div>
                 </div>
+            <!-- Print Only View: All Apartment Detailed Cards -->
+            <div id="all-apts-print-view" class="hidden print:block space-y-8 mt-12 page-break-before-always">
+                <!-- Javascript will populate this with all 9 apartments -->
             </div>
-        </section>
-
-                </div>
+        </div>
         <!-- ========================================== -->
         <!-- CHAPTER 05: 명리학적 이전 타당성 및 사주/안택 길일 -->
         <!-- ========================================== -->
@@ -2778,6 +2913,99 @@
             // Initial render
             calculateFinancing();
             selectRefusalScenario('owner');
+
+            // Render all apartments for print view dynamically
+            const printAptsContainer = document.getElementById('all-apts-print-view');
+            if (printAptsContainer) {
+                let printHtml = `<h2 class="text-xl font-bold text-slate-900 border-b-2 border-gold-500 pb-2 mb-6 font-serif italic flex items-center">
+                    <span class="w-1.5 h-4 bg-gold-600 rounded mr-2 inline-block"></span>
+                    🏡 신검단 타겟 아파트 개별 심층 진단 리포트 (임장/출력용)
+                </h2>`;
+                const list = ['wellcounty', 'hillstate', 'prugio', 'detre', 'lakefore', 'hoban3', 'paragon', 'felice', 'riverpark'];
+                list.forEach(key => {
+                    const data = apartments[key];
+                    printHtml += `
+                        <div class="bg-white border border-slate-300 rounded-2xl p-5 space-y-4 page-break-inside-avoid shadow-sm mb-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3">
+                                <div>
+                                    <span class="inline-block px-2.5 py-0.5 bg-gold-600/10 text-gold-700 text-[10px] font-bold rounded-md mb-1.5">${data.badge}</span>
+                                    <h3 class="text-lg font-bold text-slate-900">${data.title}</h3>
+                                </div>
+                                <div class="mt-2 sm:mt-0 text-left sm:text-right">
+                                    <span class="text-[10px] text-slate-500 block">2027년 4월 말 만기 전후 취득원가 예측</span>
+                                    <strong class="text-sm sm:text-base font-black text-rose-600">${data.price} <span class="text-xs text-slate-500 font-light block">${data.priceNote}</span></strong>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs text-slate-700">
+                                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2.5 font-light">
+                                    <div class="flex justify-between"><span class="text-slate-500">🏢 세대 규모</span><span class="font-semibold text-slate-900">${data.specs.households}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">📅 입주 시기</span><span class="font-semibold text-slate-900">${data.specs.completion}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">🚗 주차 비율</span><span class="font-semibold text-slate-900">${data.specs.parking}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">🚇 지하철역 거리</span><span class="font-semibold text-slate-900">${data.specs.distance}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">🏗️ 시공사</span><span class="font-semibold text-slate-900">${data.specs.builder}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">🏫 배정 학교</span><span class="font-semibold text-slate-900">${data.specs.school}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">📐 용적률/건폐율</span><span class="font-semibold text-slate-900">${data.specs.far_bcr}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">🔥 난방 방식</span><span class="font-semibold text-slate-900">${data.specs.heating}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">✨ 추천 타입(84)</span><span class="font-semibold text-gold-700 font-medium">${data.specs.recom_type}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">📦 세대창고 여부</span><span class="font-semibold text-slate-900">${data.specs.storage || '지하 세대창고 없음'}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">🏌️ 골프 시설</span><span class="font-semibold text-slate-900">${data.specs.golf || '실내 GDR연습장 & 스크린 골프룸'}</span></div>
+                                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">🗣️ 커뮤니티 특화</span><span class="font-semibold text-slate-900">${data.specs.community || '피트니스, 실내 골프연습장, 독서실, 어린이집'}</span></div>
+                                </div>
+                                <div class="space-y-3 font-normal leading-normal">
+                                    <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl border-l-[3px] border-l-emerald-600 text-slate-800">
+                                        <strong class="text-emerald-700 font-bold block mb-0.5 text-xs">👍 명당 메리트</strong>
+                                        ${data.pros}
+                                    </div>
+                                    <div class="bg-rose-50 border border-rose-200 p-2.5 rounded-xl border-l-[3px] border-l-rose-600 text-slate-800">
+                                        <strong class="text-rose-700 font-bold block mb-0.5 text-xs">⚠️ 세무 리스크 및 단점</strong>
+                                        ${data.cons}
+                                    </div>
+                                    <div class="bg-amber-50 border border-gold-300 p-2.5 rounded-xl border-l-[3px] border-l-gold-600 text-slate-800">
+                                        <strong class="text-gold-700 font-bold block mb-0.5 text-xs">💡 아버님의 지혜로운 수렵 전략</strong>
+                                        ${data.advice}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                printAptsContainer.innerHTML = printHtml;
+            }
+
+            // Render all refusal scenarios for print view dynamically
+            const printScenariosContainer = document.getElementById('all-refusal-scenarios-print-view');
+            if (printScenariosContainer) {
+                let scenariosHtml = `<h2 class="text-xl font-bold text-slate-900 border-b-2 border-gold-500 pb-2 mb-6 font-serif italic flex items-center">
+                    <span class="w-1.5 h-4 bg-gold-600 rounded mr-2 inline-block"></span>
+                    🛡️ 전세 계약갱신요구권 전략 및 실거주 거절 대응 시나리오 (임장/출력용)
+                </h2>`;
+                for (const key in refusalScenarios) {
+                    const data = refusalScenarios[key];
+                    scenariosHtml += `
+                        <div class="bg-white border border-slate-300 rounded-2xl p-5 space-y-3 page-break-inside-avoid mb-6">
+                            <h4 class="text-sm font-bold text-slate-900 border-b border-slate-200 pb-1.5 flex items-center">
+                                <span class="w-1.5 h-3.5 bg-gold-600 rounded mr-2 inline-block"></span>
+                                ${data.title}
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+                                <div>
+                                    <span class="text-[10px] text-amber-700 font-bold block mb-0.5">⚖️ 법적 타당성 검증</span>
+                                    <p class="leading-relaxed font-light text-slate-800">${data.legality}</p>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-cyan-700 font-bold block mb-0.5">🎯 리은이네 자산방어 액션플랜</span>
+                                    <p class="leading-relaxed font-light text-slate-800">${data.action}</p>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+                                <span class="text-[9px] text-gold-700 font-bold block mb-1">💬 아내/남편 공유용 추천 문자 메시지</span>
+                                <pre class="whitespace-pre-wrap font-mono text-slate-800 leading-normal">${data.template}</pre>
+                            </div>
+                        </div>
+                    `;
+                }
+                printScenariosContainer.innerHTML = scenariosHtml;
+            }
         });
     </script>
 </body>
