@@ -210,7 +210,18 @@
         [id^="btn-ref-"], [onclick^="selectApt"] {
             transition: all 0.2s ease-in-out !important;
         }
-        [id^="btn-ref-"]:not(.bg-gold-600):hover, [onclick^="selectApt"]:not(.bg-gold-600):hover {
+        
+        /* Inactive button states background overrides (fixing black background bug) */
+        [id^="btn-ref-"]:not(.bg-gold-600), 
+        [onclick^="selectApt"]:not(.bg-gold-600) {
+            background-color: #fafaf9 !important; /* light warm cream background */
+            color: #4b5563 !important; /* soft dark gray text */
+            border-color: rgba(15, 23, 42, 0.12) !important;
+        }
+        
+        [id^="btn-ref-"]:not(.bg-gold-600):hover, 
+        [onclick^="selectApt"]:not(.bg-gold-600):hover {
+            background-color: #f4f3f0 !important; /* warm gray hover background */
             border-color: rgba(149, 121, 83, 0.35) !important;
             color: #957953 !important;
         }
