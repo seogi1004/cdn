@@ -2003,8 +2003,8 @@
             wellcounty: {
                 title: "이편한세상 검단 웰카운티 (AA10-1블록)",
                 badge: "👑 아빠 선호 1위 • 초·중·고학군 & 초역세권 교육 명당",
-                price: "일반 P 5천~1억: 7.2억 ~ 8.0억 원 (무피 전매 시: 6.1억 ~ 6.5억 원)",
-                priceNote: "(현실적 프리미엄 전매 시나리오 반영)",
+                price: "최대 P 5천(5천피) 기준: 7.05억 ~ 7.25억 원 (무피 전매 시: 6.1억 ~ 6.5억 원)",
+                priceNote: "(양도세 부담 방어를 위한 최대 P 5천만 원 제한 시나리오)",
                 metrics: { value: 98, saju: 96, school: 99, rate: 85 },
                 specs: {
                     households: "1,458세대 (총 14개동)",
@@ -2112,8 +2112,8 @@
             lakefore: {
                 title: "제일풍경채 레이크포레 (AA25BL)",
                 badge: "🥇 1.5순위 타겟 • 2029년 7월 입주 예정 호수 영구 조망권 대안",
-                price: "군인공제회 공급분 약 5.4억 / 일반 전매 약 6.75억 원",
-                priceNote: "(군인공제회 공급가격 및 프리미엄 반영 기준)",
+                price: "군인공제회 공급분 약 5.4억 / 일반 전매(5천피) 약 6.4억 원",
+                priceNote: "(최대 프리미엄 5천만 원 제한 및 세금대납 합산가)",
                 metrics: { value: 94, saju: 90, school: 85, rate: 95 },
                 specs: {
                     households: "1,162세대 규모 예정",
@@ -2556,7 +2556,7 @@
             },
             wellcounty: {
                 name: "이편한세상 웰카운티",
-                basePrice: 760000000,
+                basePrice: 710000000,
                 desc: "초·중·고교 학군과 101역 초역세권 입지."
             },
             detre: {
@@ -2566,7 +2566,7 @@
             },
             lakefore: {
                 name: "제일풍경채 레이크포레",
-                basePrice: 675000000,
+                basePrice: 640000000,
                 desc: "검단호수공원 영구조망 및 호수공원역 역세권."
             },
             hoban3: {
@@ -2673,11 +2673,11 @@
                 let price = apt.basePrice;
                 
                 if (key === 'wellcounty') {
-                    price = wellcountyMode === 'normal' ? 760000000 : 630000000;
+                    price = wellcountyMode === 'normal' ? 710000000 : 630000000;
                 } else if (key === 'detre') {
                     price = detreMode === 'ab' ? 850000000 : 780000000;
                 } else if (key === 'lakefore') {
-                    price = lakeforeMode === 'mab' ? 540000000 : 675000000;
+                    price = lakeforeMode === 'mab' ? 540000000 : 640000000;
                 } else if (key === 'hoban3') {
                     price = hoban3Mode === 'normal' ? 620000000 : 520000000;
                 } else if (key === 'felice') {
