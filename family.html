@@ -74,15 +74,23 @@
             border-color: rgba(176, 146, 106, 0.25) !important;
         }
 
-        /* High contrast adjustments for Light Theme text colors */
-        .text-gold-400 { color: #b0926a !important; }
-        .text-gold-500 { color: #957953 !important; }
-        .text-emerald-400 { color: #059669 !important; }
-        .text-rose-400 { color: #dc2626 !important; }
-        .text-red-400 { color: #dc2626 !important; }
-        .text-amber-400 { color: #d97706 !important; }
-        .text-cyan-400 { color: #0891b2 !important; }
-        .text-blue-400 { color: #2563eb !important; }
+        /* High contrast overrides for all text classes to guarantee readability on Light Theme */
+        [class*="text-slate-100"], [class*="text-gray-100"] { color: #0f172a !important; } /* dark slate-900 */
+        [class*="text-slate-200"], [class*="text-gray-200"] { color: #1e293b !important; } /* dark slate-800 */
+        [class*="text-slate-300"], [class*="text-gray-300"] { color: #334155 !important; } /* dark slate-700 */
+        [class*="text-slate-400"], [class*="text-gray-400"] { color: #4b5563 !important; } /* dark gray-600 */
+        [class*="text-slate-500"], [class*="text-gray-500"] { color: #6b7280 !important; } /* gray-500 */
+        [class*="text-slate-600"], [class*="text-gray-600"] { color: #4b5563 !important; }
+
+        /* High contrast for colored status/accent text on Light Theme */
+        [class*="text-gold-200"], [class*="text-gold-300"], [class*="text-gold-400"] { color: #856434 !important; }
+        [class*="text-gold-500"] { color: #785a2c !important; }
+        [class*="text-emerald-200"], [class*="text-emerald-300"], [class*="text-emerald-400"] { color: #047857 !important; }
+        [class*="text-rose-200"], [class*="text-rose-300"], [class*="text-rose-400"] { color: #b91c1c !important; }
+        [class*="text-red-400"] { color: #b91c1c !important; }
+        [class*="text-amber-200"], [class*="text-amber-300"], [class*="text-amber-400"] { color: #b45309 !important; }
+        [class*="text-cyan-200"], [class*="text-cyan-300"], [class*="text-cyan-400"] { color: #0369a1 !important; }
+        [class*="text-blue-200"], [class*="text-blue-300"], [class*="text-blue-400"] { color: #1d4ed8 !important; }
 
         /* Pop out styling for toast notifications in light theme */
         #toast {
