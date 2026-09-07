@@ -6,15 +6,15 @@ const { test } = require('node:test');
 const vm = require('node:vm');
 const { JSDOM, VirtualConsole } = require('jsdom');
 
-function loadReport() {
+function loadReport(hash = '', compact = false) {
   const html = fs.readFileSync(path.join(__dirname, '../soul.html'), 'utf8');
   const dom = new JSDOM(html, {
     runScripts: 'outside-only',
-    url: 'http://localhost/soul.html',
+    url: 'http://localhost/soul.html' + hash,
     virtualConsole: new VirtualConsole(),
   });
   const { window } = dom;
-  window.matchMedia = () => ({ matches: false });
+  window.matchMedia = () => ({ matches: compact });
   window.HTMLElement.prototype.scrollIntoView = () => {};
   // Browser rendering is checked separately with Playwright; do not fetch CDNs here.
   window.Chart = class {
@@ -62,7 +62,7 @@ test('tables preserve norms, K correction, missing Mf scores and TRIN direction'
   try {
     assert.equal(document.querySelectorAll('#data-tables tbody tr').length, 163);
     assert.equal(document.querySelectorAll('.strength-card').length, 6);
-    assert.equal(document.querySelectorAll('.insight-card').length, 26);
+    assert.equal(document.querySelectorAll('.insight-card').length, 18);
     const lastCell = (section, code) => document.querySelector(
       `#${section} tr[data-scale="${code}"]`).lastElementChild.textContent;
     assert.equal(lastCell('sec-tci-main', 'NS'), '23 / 45 / 31 (중간)');
@@ -81,6 +81,35 @@ test('tables preserve norms, K correction, missing Mf scores and TRIN direction'
   } finally { dom.window.close(); }
 });
 
+test('life guides retain traceable evidence and valid navigation to every theme', () => {
+  const { dom, window, document } = loadReport();
+  try {
+    for (const who of ['wife', 'husband', 'couple']) {
+      const cards = document.querySelectorAll(`#${who}-insights .insight-card`);
+      assert.equal(cards.length, 6);
+      assert.equal(document.querySelectorAll(`#${who}-roadmap .roadmap-step`).length, 3);
+      for (const card of cards) {
+        assert.equal(card.querySelectorAll('.action-list li').length, 3);
+        assert.ok(card.querySelector('.risk-note').textContent.trim());
+        assert.ok(card.querySelector('.evidence-details summary'));
+        assert.ok(card.querySelector('.evidence-note').textContent.trim());
+        assert.ok(document.querySelector(`#${who}-nav a[href="#${card.id}"]`));
+      }
+    }
+    assert.equal(document.querySelectorAll('.question-block').length, 0);
+    for (const link of document.querySelectorAll('a[data-score-path]')) {
+      const reference = link.dataset.scorePerson + '/' + link.dataset.scorePath;
+      assert.ok(link.textContent.includes(window.scoreText(reference)) ||
+        link.textContent.includes(window.scoreText(reference, true)), reference);
+      assert.ok(document.querySelector(link.getAttribute('href')), reference);
+    }
+    const evidence = document.querySelector('#wife-insights a[data-score-path]');
+    evidence.click();
+    assert.equal(document.querySelector('.tab-content:not(.hidden)').id, 'tab-data');
+    assert.equal(window.location.hash, evidence.hash);
+  } finally { dom.window.close(); }
+});
+
 test('copy failure is reported accurately and tabs show only the selected panel', async () => {
   const { dom, window, document } = loadReport();
   try {
@@ -96,6 +125,39 @@ test('copy failure is reported accurately and tabs show only the selected panel'
       assert.equal(visible.length, 1);
       assert.equal(visible[0].id, `tab-${tab}`);
     }
+  } finally { dom.window.close(); }
+});
+
+test('opening a saved theme link reveals its panel and selects the matching tab', () => {
+  for (const [hash, who] of [
+    ['#guide-wife-work', 'wife'],
+    ['#guide-husband-cooperation', 'husband'],
+    ['#guide-couple-future', 'couple'],
+    ['#sec-tci-main', 'data'],
+  ]) {
+    const { dom, document } = loadReport(hash);
+    try {
+      assert.equal(document.querySelector('.tab-content:not(.hidden)').id, `tab-${who}`);
+      assert.equal(document.querySelector('[aria-current="page"]').id, `btn-tab-${who}`);
+    } finally { dom.window.close(); }
+  }
+});
+
+test('mobile topics open independently per person and printing restores reading state', () => {
+  const { dom, window, document } = loadReport('#guide-wife-boundaries', true);
+  try {
+    const openTopics = who => [...document.querySelectorAll(`#${who}-insights .theme-details[open]`)].map(e => e.parentElement.id);
+    assert.deepEqual(openTopics('wife'), ['guide-wife-boundaries']);
+    assert.deepEqual(openTopics('husband'), ['guide-husband-goals']);
+    window.revealGuide(document.getElementById('guide-wife-work'));
+    assert.deepEqual(openTopics('wife'), ['guide-wife-work']);
+    assert.equal(document.querySelector('#wife-nav [aria-current="location"]').hash, '#guide-wife-work');
+    const details = [...document.querySelectorAll('details')];
+    const previous = details.map(e => e.open);
+    window.dispatchEvent(new window.Event('beforeprint'));
+    assert.ok(details.every(e => e.open));
+    window.dispatchEvent(new window.Event('afterprint'));
+    assert.deepEqual(details.map(e => e.open), previous);
   } finally { dom.window.close(); }
 });
 
