@@ -1268,10 +1268,44 @@ MCP Server</div>
   const shells = [...document.querySelectorAll('.slide-shell')];
   const counter = document.getElementById('counter');
   let current = 0;
+  let hashNavigation = false;
 
-  const goTo = (index) => {
+  const aliases = new Map();
+  const registerAlias = (name, predicate) => {
+    const index = shells.findIndex(predicate);
+    if (index >= 0) aliases.set(name, index);
+  };
+
+  registerAlias('toc', shell => shell.querySelector('.toc-title')?.textContent.trim() === 'Content');
+  registerAlias('tone-common', shell => shell.querySelector('.tone-review-title')?.textContent.trim() === '공통 표현 교체 기준');
+  registerAlias('mobile', shell => shell.querySelector('.section-title')?.textContent.replace(/\s+/g, ' ').trim().startsWith('모바일 모니터링'));
+  registerAlias('mobile-core', shell => shell.querySelector('.side-title')?.textContent.replace(/\s+/g, ' ').trim() === '모바일 모니터링 : 핵심 기능');
+  registerAlias('mobile-alert', shell => shell.querySelector('.side-title')?.textContent.replace(/\s+/g, ' ').trim() === '모바일 모니터링 : 알림 및 대응');
+
+  const canonicalHash = index => `#!/slide-${index + 1}`;
+
+  const indexFromHash = () => {
+    const raw = decodeURIComponent(location.hash || '');
+    const numberMatch = raw.match(/^#!\/(?:slide-)?(\d+)$/);
+    if (numberMatch) {
+      const index = Number(numberMatch[1]) - 1;
+      return index >= 0 && index < shells.length ? index : null;
+    }
+    const aliasMatch = raw.match(/^#!\/([^/?#]+)$/);
+    if (aliasMatch && aliases.has(aliasMatch[1])) return aliases.get(aliasMatch[1]);
+    return null;
+  };
+
+  const updateHash = index => {
+    const nextHash = canonicalHash(index);
+    if (location.hash !== nextHash) history.replaceState(null, '', nextHash);
+  };
+
+  const goTo = (index, {behavior = 'smooth', updateUrl = true} = {}) => {
     current = Math.max(0, Math.min(shells.length - 1, index));
-    shells[current].scrollIntoView({behavior:'smooth', block:'start'});
+    shells[current].scrollIntoView({behavior, block:'start'});
+    counter.textContent = `${current + 1} / ${shells.length}`;
+    if (updateUrl) updateHash(current);
   };
 
   document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
@@ -1289,8 +1323,23 @@ MCP Server</div>
     if (!visible) return;
     current = Number(visible.target.dataset.index) - 1;
     counter.textContent = `${current + 1} / ${shells.length}`;
+    if (!hashNavigation) updateHash(current);
   }, {threshold:[0.35,0.6,0.85]});
   shells.forEach(s => observer.observe(s));
+
+  const navigateFromHash = () => {
+    const index = indexFromHash();
+    if (index === null) {
+      if (!location.hash) updateHash(0);
+      return;
+    }
+    hashNavigation = true;
+    goTo(index, {behavior:'auto', updateUrl:false});
+    window.setTimeout(() => { hashNavigation = false; }, 80);
+  };
+
+  window.addEventListener('hashchange', navigateFromHash);
+  navigateFromHash();
 </script>
 </body>
 </html>
