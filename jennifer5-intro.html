@@ -55,6 +55,8 @@
   .chip{font-size:1.02cqw;border:1px solid #ded8e6;border-radius:999px;padding:.48cqw .66cqw;background:#fff;color:#5d5862}
   .chip.accent{border-color:#d7c9ff;background:var(--accent-soft);color:#6d3fd7}
   .section-slide{padding:5.1cqw 4.5cqw;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr;column-gap:4cqw}
+  .beta-badge{display:inline-flex;align-items:center;margin-left:.5em;padding:.22em .58em;border-radius:999px;font-size:.28em;font-weight:800;letter-spacing:.08em;background:var(--accent-soft);color:var(--accent);vertical-align:middle;white-space:nowrap}
+  .beta-note{margin:1.05cqw 0 1.35cqw;padding:1.05cqw 1.25cqw;border:1px solid #ded2ff;border-radius:1cqw;background:var(--accent-soft);font-size:1.12cqw;line-height:1.48;color:var(--muted)}.beta-note b{color:var(--accent);margin-right:.45em}
   .section-title{font-size:6.0cqw;line-height:1.05;font-weight:700;letter-spacing:-.06em;margin:0;align-self:start}
   .section-number{min-width:10.5cqw;height:9.4cqw;border:1.6px solid #d6d1d9;border-radius:1.2cqw;display:flex;align-items:center;justify-content:center;font-size:8.2cqw;font-weight:700;letter-spacing:-.07em}
   .section-list{grid-column:1 / -1;align-self:center;margin:1.6cqw 0 0;font-size:1.82cqw;line-height:1.75;font-weight:700;letter-spacing:-.035em;white-space:pre-line}
@@ -378,7 +380,7 @@
 <div class="toc-group"><h3>클라우드</h3><div class="toc-item"><span class="n">85</span><span>쿠버네티스 통합 모니터링</span></div><div class="toc-item"><span class="n">87</span><span>Support CLOUD</span></div><div class="toc-item new"><span class="n">88</span><span>멀티 도메인 대시보드</span></div><div class="toc-item"><span class="n">89</span><span>애플리케이션 인사이트 대시보드</span></div><div class="toc-item"><span class="n">90</span><span>액티브 애플리케이션 차트</span></div></div>
 <div class="toc-group"><h3>AI</h3><div class="toc-item new"><span class="n">92</span><span>제니퍼 AI</span></div><div class="toc-item"><span class="n">93</span><span>이상치 탐지</span></div><div class="toc-item new"><span class="n">95</span><span>시계열 예측</span></div><div class="toc-item"><span class="n">96</span><span>X-View 패턴 인식</span></div><div class="toc-item"><span class="n">98</span><span>X-View 유사관계 분석</span></div><div class="toc-item new"><span class="n">99</span><span>애플리케이션 인사이트</span></div><div class="toc-item"><span class="n">100</span><span>Metrics 회귀 분석</span></div><div class="toc-item new"><span class="n">101–104</span><span>제니퍼 인사이트</span></div><div class="toc-item new"><span class="n">105</span><span>제니퍼 챗봇</span></div></div>
 <div class="toc-group"><h3 class="section-change">확장 기능</h3><div class="toc-item new"><span class="n">107</span><span>확장 기능</span></div><div class="toc-item new"><span class="n">108</span><span>어댑터</span></div><div class="toc-item new"><span class="n">109</span><span>Open API</span></div><div class="toc-item new"><span class="n">111</span><span>RDB Export</span></div><div class="toc-item new"><span class="n">112</span><span>MCP Server</span></div></div>
-<div class="toc-group"><h3 class="section-change">JENNIFER Mobile</h3><div class="toc-item new"><span class="n">114</span><span>핵심 기능</span></div><div class="toc-item new"><span class="n">115</span><span>알림 및 대응</span></div></div>
+<div class="toc-group"><h3 class="section-change">모바일 모니터링</h3><div class="toc-item new"><span class="n">114</span><span>핵심 기능</span></div><div class="toc-item new"><span class="n">115</span><span>알림 및 대응</span></div></div>
 </div></div>
 <div class="footer">제니퍼5 제품소개서</div><div class="page-no">1 / 37</div></article>
 <aside aria-label="편집 가이드" class="review-guide"><div class="guide-kicker">EDITOR GUIDE</div>
@@ -519,7 +521,7 @@
 <div class="overview-col"><h3>실시간 모니터링</h3><ul><li>액티브 서비스</li><li>X-View</li><li>실시간 / 사용자 정의 대시보드</li><li>대시보드 리플레이</li></ul></div>
 <div class="overview-col"><h3>성능 분석 · 진단</h3><ul><li>트랜잭션 · 프로파일 분석</li><li>스택트레이스 · SFR</li><li>애플리케이션 통계 · 변경 이력</li><li>에이전트 유틸리티</li></ul></div>
 <div class="overview-col"><h3>플랫폼 · 클라우드 · 보안</h3><ul><li>Java · .NET · PHP · Python · Node.js</li><li>OpenTelemetry</li><li>MSA · 멀티도메인 · 쿠버네티스 통합 모니터링</li><li>엔터프라이즈 보안</li></ul></div>
-<div class="overview-col"><h3>AI · 협업 · 확장</h3><ul><li>이상치 탐지 · 시계열 예측</li><li>제니퍼 인사이트 · 제니퍼 챗봇</li><li>Talk · JENNIFER Mobile</li><li>Open API · MCP Server</li></ul></div>
+<div class="overview-col"><h3>AI · 협업 · 확장</h3><ul><li>이상치 탐지 · 시계열 예측</li><li>제니퍼 인사이트 · 제니퍼 챗봇</li><li>Talk · 모바일 모니터링</li><li>Open API · MCP Server</li></ul></div>
 </div></main><div class="footer">제니퍼5 제품소개서</div><div class="page-no">6 / 37</div></article>
 <aside aria-label="편집 가이드" class="review-guide"><div class="guide-kicker">EDITOR GUIDE</div>
 <div class="guide-placement">최종 p13 · 기존 p13 수정</div><div class="guide-origin">기준: 원본 p13</div>
@@ -607,7 +609,7 @@
 <div class="feature-map-item"><b>트랜잭션 · MSA 분석</b><span>다양한 진입점 · 필터링 · 호출 관계 · 도메인 · 인스턴스 · MSA 분석</span></div>
 <div class="feature-map-item"><b>장애 · 현장 진단</b><span>EVENT 룰 · 알림 · 분석 · 애플리케이션 제어 · 에이전트 유틸리티 · 스냅샷 / 비교</span></div>
 <div class="feature-map-item"><b>AI · 협업</b><span>이상치 탐지 · 시계열 예측 · X-View 패턴 분석 · 제니퍼 인사이트 · Talk · 제니퍼 챗봇</span></div>
-<div class="feature-map-item"><b>클라우드 · 확장 · 보안</b><span>쿠버네티스 · 멀티도메인 · OpenTelemetry · 엔터프라이즈 보안 · Open API · MCP Server · JENNIFER Mobile</span></div>
+<div class="feature-map-item"><b>클라우드 · 확장 · 보안</b><span>쿠버네티스 · 멀티도메인 · OpenTelemetry · 엔터프라이즈 보안 · Open API · MCP Server · 모바일 모니터링</span></div>
 </div></main><div class="footer">제니퍼5 제품소개서</div><div class="page-no">10 / 37</div></article>
 <aside aria-label="편집 가이드" class="review-guide"><div class="guide-kicker">EDITOR GUIDE</div>
 <div class="guide-placement">최종 p18 · 기존 p17 수정</div><div class="guide-origin">기준: 원본 p17</div>
@@ -1184,24 +1186,25 @@ MCP Server</div>
 <div class="guide-section guide-source"><b>참고 근거</b><p>기존 제니퍼5 제품소개서 + product-introduction.md + 제니퍼5 설치가이드 + SAMANTHA 2026 중간공유 + 본 대화의 chat-report-server 구성 설명</p></div>
 <a class="guide-link" href="https://docs.google.com/presentation/d/164DHe9Dt3-OB-dUnSvMn_SzDGArlVqMaV344uHrAVoU/edit?slide=id.p110#slide=id.p110" rel="noopener noreferrer" target="_blank">원본 PPT p110 열기 ↗</a></aside></div></section><section class="slide-shell" data-index="35">
 <div class="review-layout"><article class="slide section-slide">
-<h1 class="section-title">JENNIFER<br/>Mobile</h1><div class="section-number">13</div>
+<h1 class="section-title">모바일 모니터링 <span class="beta-badge">BETA</span></h1><div class="section-number">13</div>
 <div class="section-list">대시보드
 알림 및 Web Push
 제니퍼 인사이트 채팅</div>
 <div class="footer">제니퍼5 제품소개서</div><div class="page-no">35 / 37</div>
 </article><aside aria-label="편집 가이드" class="review-guide"><div class="guide-kicker">EDITOR GUIDE</div>
-<div class="guide-placement">최종 p113 · 신규 Mobile 대제목</div>
+<div class="guide-placement">최종 p113 · 신규 모바일 모니터링 대제목</div>
 <div class="guide-origin">기준: 확장 기능 다음 신규 장</div>
-<div class="guide-section"><b>적용 방향</b><p class="guide-rationale">확장 기능 다음에 독립적인 JENNIFER Mobile 장을 추가합니다.</p></div>
+<div class="guide-section"><b>적용 방향</b><p class="guide-rationale">확장 기능 다음에 독립적인 모바일 모니터링 장을 추가합니다.</p></div>
 <div class="guide-section preserve-note"><b>원본 유지</b><p>기존 확장 기능과 연락처 페이지는 내용 변경 없이 유지하고, 그 사이에 Mobile 3페이지를 삽입합니다.</p></div>
-<div class="guide-section"><b>보완 / 확인</b><p>Mobile의 핵심은 <strong>① 대시보드 조회 ② 알림 조회 + Web Push ③ 서버 LLM 환경의 제니퍼 인사이트 채팅</strong> 세 가지로 정리합니다. PWA는 설치/실행 방식으로 보조 설명합니다.</p></div>
+<div class="guide-section"><b>보완 / 확인</b><p>모바일 모니터링의 핵심은 <strong>① 대시보드 조회 ② 알림 조회 + Web Push ③ 서버 LLM 환경의 제니퍼 인사이트 채팅</strong> 세 가지로 정리합니다. PWA는 설치/실행 방식으로 보조 설명합니다.</p></div><div class="guide-section"><b>Beta 표기</b><p>섹션 대제목의 BETA 배지는 유지하고, 기능 및 화면 구성은 변경될 수 있으며 데스크톱 기능과 제공 범위·업데이트 시점에 차이가 있을 수 있음을 본문에 함께 안내합니다.</p></div>
 <div class="comment-note"><b>댓글 체크</b><p>Content(p2) 댓글의 “확장 기능 다음에 모바일 장 추가” 요청을 반영했습니다.</p></div>
 <div class="guide-section guide-source"><b>참고 근거</b><p>기존 제니퍼5 제품소개서 + product-introduction.md + 제니퍼5 설치가이드 + SAMANTHA 2026 중간공유</p></div>
 <a class="guide-link" href="https://docs.google.com/presentation/d/164DHe9Dt3-OB-dUnSvMn_SzDGArlVqMaV344uHrAVoU/edit?slide=id.p110#slide=id.p110" rel="noopener noreferrer" target="_blank">원본 PPT p110 열기 ↗</a></aside></div></section><section class="slide-shell" data-index="36">
 <div class="review-layout"><article class="slide body-slide">
-<h1 class="side-title">JENNIFER Mobile :<br/>핵심 기능</h1>
+<h1 class="side-title">모바일 모니터링 :<br/>핵심 기능</h1>
 <main class="main">
-<p class="lead">JENNIFER Mobile은 스마트폰에서 운영에 필요한 핵심 기능을 바로 확인할 수 있도록 <b>대시보드 조회, 알림 및 Web Push, 제니퍼 인사이트 채팅</b>를 제공합니다. 모바일 브라우저에서 PWA 방식으로 홈 화면에 추가해 사용할 수 있습니다.</p>
+<p class="lead">모바일 모니터링은 스마트폰과 태블릿에서 운영에 필요한 핵심 기능을 바로 확인할 수 있도록 <b>대시보드 조회, 알림 및 Web Push, 제니퍼 인사이트 채팅</b>를 제공합니다. 모바일 브라우저에서 PWA 방식으로 홈 화면에 추가해 사용할 수 있습니다.</p>
+<div class="beta-note"><b>Beta 기능 안내</b>모바일 모니터링 기능은 베타로 제공되며, 기능 및 화면 구성은 제품 업데이트에 따라 변경될 수 있습니다. 데스크톱 기능과 제공 범위 또는 업데이트 시점에 차이가 있을 수 있습니다.</div>
 <div class="mobile-grid">
 <div class="panel white mobile-core-copy">
 <div class="feature-block"><span class="num-dot">1</span><h3 class="feature-title">대시보드 조회</h3><ul class="feature-list"><li>주요 실시간 차트와 서비스 상태를 모바일 화면에서 확인</li><li>터치 기반 화면 탐색으로 필요한 운영 정보를 빠르게 조회</li></ul></div>
@@ -1213,18 +1216,19 @@ MCP Server</div>
 </main>
 <div class="footer">제니퍼5 제품소개서</div><div class="page-no">36 / 37</div>
 </article><aside aria-label="편집 가이드" class="review-guide"><div class="guide-kicker">EDITOR GUIDE</div>
-<div class="guide-placement">최종 p114 · Mobile 1/2</div>
+<div class="guide-placement">최종 p114 · 모바일 모니터링 1/2</div>
 <div class="guide-origin">기준: 확장 기능 다음 신규 장</div>
-<div class="guide-section"><b>적용 방향</b><p class="guide-rationale">확장 기능 다음에 독립적인 JENNIFER Mobile 장을 추가합니다.</p></div>
+<div class="guide-section"><b>적용 방향</b><p class="guide-rationale">확장 기능 다음에 독립적인 모바일 모니터링 장을 추가합니다.</p></div>
 <div class="guide-section preserve-note"><b>원본 유지</b><p>기존 확장 기능과 연락처 페이지는 내용 변경 없이 유지하고, 그 사이에 Mobile 3페이지를 삽입합니다.</p></div>
 <div class="guide-section"><b>보완 / 확인</b><p>첫 본문 페이지에서는 핵심 기능을 세 가지로 한정합니다: <strong>대시보드 조회 / 알림 및 Web Push / 제니퍼 인사이트 채팅</strong>. PWA 홈 화면 추가는 세 기능을 사용하는 설치·실행 방식으로 설명합니다.</p><p><strong>대시보드·알림 조회 자체</strong>와 <strong>Web Push 사용 조건</strong>은 구분해서 설명합니다. 설치형 고객은 HTTP 또는 사설 인증서 HTTPS를 사용할 수 있으므로, Push 관련 제약은 다음 페이지의 참고사항으로 분리합니다.</p></div>
 <div class="guide-section"><b>화면 구성</b><p>우측에는 모바일 화면 3개를 병렬로 두고 각각 “대시보드 / 알림 / 제니퍼 인사이트”를 보여주면 기능 구분이 가장 빠르게 전달됩니다.</p></div>
 <div class="guide-section guide-source"><b>참고 근거</b><p>기존 제니퍼5 제품소개서 + product-introduction.md + 제니퍼5 설치가이드 + SAMANTHA 2026 중간공유</p></div>
 <a class="guide-link" href="https://docs.google.com/presentation/d/164DHe9Dt3-OB-dUnSvMn_SzDGArlVqMaV344uHrAVoU/edit?slide=id.p110#slide=id.p110" rel="noopener noreferrer" target="_blank">원본 PPT p110 열기 ↗</a></aside></div></section><section class="slide-shell" data-index="37">
 <div class="review-layout"><article class="slide body-slide">
-<h1 class="side-title">JENNIFER Mobile :<br/>알림 및 대응</h1>
+<h1 class="side-title">모바일 모니터링 :<br/>알림 및 대응</h1>
 <main class="main">
 <p class="lead">EVENT를 단순히 목록에서 확인하는 데 그치지 않고, <b>Web Push로 먼저 알림을 받은 뒤 모바일에서 상세 상태를 확인하고 필요하면 제니퍼 인사이트로 분석을 이어가는 흐름</b>을 제공합니다.</p>
+<div class="beta-note"><b>Beta 기능 안내</b>이 페이지의 기능 역시 베타로 제공되며, 기능 및 화면 구성은 변경될 수 있고 데스크톱 기능과 업데이트 시점에 차이가 있을 수 있습니다.</div>
 <div class="mobile-grid">
 <div class="panel white feature-stack">
 <div class="feature-block"><span class="num-dot">1</span><h3 class="feature-title">알림 및 Web Push</h3><ul class="feature-list"><li>EVENT 목록과 상세 상태 조회</li><li>지원 환경에서는 백그라운드·잠금 화면에서도 Web Push 알림 수신</li><li>푸시 알림에서 모바일 상태 확인 흐름으로 연결</li></ul></div>
@@ -1248,9 +1252,9 @@ MCP Server</div>
 </main>
 <div class="footer">제니퍼5 제품소개서</div><div class="page-no">37 / 37</div>
 </article><aside aria-label="편집 가이드" class="review-guide"><div class="guide-kicker">EDITOR GUIDE</div>
-<div class="guide-placement">최종 p115 · Mobile 2/2</div>
+<div class="guide-placement">최종 p115 · 모바일 모니터링 2/2</div>
 <div class="guide-origin">기준: 확장 기능 다음 신규 장 · 기존 연락처 페이지는 최종 p116 예상</div>
-<div class="guide-section"><b>적용 방향</b><p class="guide-rationale">확장 기능 다음에 독립적인 JENNIFER Mobile 장을 추가합니다.</p></div>
+<div class="guide-section"><b>적용 방향</b><p class="guide-rationale">확장 기능 다음에 독립적인 모바일 모니터링 장을 추가합니다.</p></div>
 <div class="guide-section preserve-note"><b>원본 유지</b><p>기존 확장 기능과 연락처 페이지는 내용 변경 없이 유지하고, 그 사이에 Mobile 3페이지를 삽입합니다.</p></div>
 <div class="guide-section"><b>보완 / 확인</b><p>이 페이지는 알림의 “조회”보다 <strong>Push 기반 선제 알림</strong>을 강조합니다. 제니퍼 인사이트는 서버 LLM 구성 환경에서 채팅을 제공한다는 조건을 함께 표기합니다.</p></div><div class="guide-section"><b>도식화 가이드</b><p>우측 상단에 <strong>EVENT 발생 → View Server → 외부 푸시 서비스 → 모바일 알림 → 대시보드·제니퍼 인사이트</strong> 흐름을 배치합니다. 설치형 JENNIFER가 모바일로 직접 푸시하는 구조로 오해되지 않도록, 외부 푸시 서비스를 별도 단계로 표시합니다.</p></div><div class="guide-section"><b>제약사항 · 설치형 환경 참고</b><p><strong>대시보드·알림 조회</strong>와 <strong>Web Push</strong>의 조건을 분리해서 설명합니다. 고객사가 HTTP로 운영하거나 사설 인증서를 사용할 수 있으므로, Web Push에는 HTTPS 기반 보안 컨텍스트가 필요하고 사설 인증서는 모바일 기기에서 신뢰 설정이 필요하다는 점을 참고로 표기합니다.</p><p>또한 View Server에서 브라우저·OS의 <strong>외부 푸시 서비스로 아웃바운드 통신</strong>이 가능해야 하므로 폐쇄망에서는 Web Push 기능이 제한될 수 있습니다. 실제 지원 범위는 고객사 네트워크·인증서·브라우저 정책을 함께 확인합니다.</p><p>제니퍼 인사이트 채팅은 chat-report-server와 LLM 연결 구성이 필요합니다.</p></div><div class="guide-section"><b>기술 기반 메시지</b><p>Spring 7 / Jetty 12 / Jakarta EE 11 / Servlet 6.1 현대화를 “Web Push가 이 버전 때문에 가능해졌다”는 직접 인과로 표현하지 말고, <strong>보안 대응과 최신 웹 기능 확장을 함께 뒷받침하는 서버 기반</strong>으로 연결합니다.</p></div>
 <div class="guide-section guide-source"><b>참고 근거</b><p>기존 제니퍼5 제품소개서 + product-introduction.md + 제니퍼5 설치가이드 + SAMANTHA 2026 중간공유</p></div>
