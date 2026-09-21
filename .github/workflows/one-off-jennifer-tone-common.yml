@@ -1,0 +1,70 @@
+name: One-off JENNIFER tone guide update
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-off-jennifer-tone-common.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Simplify common tone guidance links
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('jennifer5-intro.html')
+          html = path.read_text(encoding='utf-8')
+
+          marker = '<div class="tone-target-links">'
+          start = html.find(marker)
+          if start < 0:
+              raise SystemExit('tone-target-links block not found')
+          end = html.find('</div>', start)
+          if end < 0:
+              raise SystemExit('tone-target-links closing tag not found')
+          end += len('</div>')
+
+          replacement = '''<div class="tone-detail-link-wrap">
+          <span>세부 페이지별 완성 문구와 원본 페이지 링크는 다음 보라색 검토 슬라이드에서 확인합니다.</span>
+          <a class="tone-detail-link" href="#!/slide-4">세부 페이지별 교체 문구 보기 →</a>
+          </div>'''
+          html = html[:start] + replacement + html[end:]
+
+          if '.tone-detail-link-wrap{' not in html:
+              css = '''
+          .tone-detail-link-wrap{margin:1.05cqw 0 1.25cqw;padding:1cqw 1.15cqw;border:1px solid #d9cdf7;border-radius:1cqw;background:#fbf9ff;display:flex;align-items:center;justify-content:space-between;gap:1cqw;font-size:1cqw;line-height:1.55;color:#645e69}
+          .tone-detail-link{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;padding:.5cqw .8cqw;border-radius:999px;border:1px solid #cdbdf5;color:#6d46ca;text-decoration:none;background:#fff;font-weight:800;white-space:nowrap}
+          .tone-detail-link:hover{text-decoration:underline;background:#f5f0ff}
+          '''
+              html = html.replace('</style>', css + '\n</style>', 1)
+
+          if '실제 수정 페이지 바로가기' in html:
+              raise SystemExit('bulk page-link heading still remains')
+          if html.count('class="tone-detail-link"') != 1:
+              raise SystemExit('expected exactly one detail link')
+          if html.count('class="tone-copy-card"') < 4:
+              raise SystemExit('common tone cards appear to be missing')
+
+          path.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Commit updated artifact
+        shell: bash
+        run: |
+          if git diff --quiet -- jennifer5-intro.html; then
+            echo "No change detected"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add jennifer5-intro.html
+          git commit -m "Simplify common tone guidance navigation"
+          git push
