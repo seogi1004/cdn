@@ -326,6 +326,21 @@ table.grid { border-collapse: separate; border-spacing: 0; font-size: 12px; min-
 .plot .ytitle .pu { fill: var(--faint); }
 .tip .tsec { margin: 6px 0 2px; padding-top: 4px; border-top: 1px solid var(--line); font-size: 10.5px; color: var(--muted); font-weight: 600; }
 .tip .tsec:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+/* 조건 그룹별 툴팁: 차트와 표가 같은 구조를 사용 */
+.tip { min-width: 230px; max-width: min(360px, calc(100vw - 24px)); padding: 8px; background: var(--surface-200); border-color: var(--gray-300); box-shadow: var(--box-shadow-500); }
+.tip .th { color: var(--gray-600); font-size: 11px; line-height: 18px; margin-bottom: 6px; }
+.tip-group { border: 1px solid var(--gray-200); border-radius: 5px; padding: 7px 8px; }
+.tip-group + .tip-group { margin-top: 6px; }
+.tip-group-title { font-size: 12px; line-height: 18px; font-weight: 700; color: var(--gray-900); }
+.tip-group-period { margin: 1px 0 6px; color: var(--gray-600); font-size: 10px; line-height: 16px; overflow-wrap: anywhere; }
+.tip .tr { grid-template-columns: 8px minmax(0, 1fr) auto; }
+.tip .tr + .tr { margin-top: 5px; }
+.tip .tr > span { min-width: 0; }
+.tip .tr > span:not(.tv) { overflow-wrap: anywhere; }
+.tip .tr small { color: var(--gray-600); font-size: 10px; line-height: 15px; }
+.tip-unit { margin-left: 3px; color: var(--gray-600); font-family: var(--font-ui); font-size: 10px; }
+.tip-empty { color: var(--gray-600); font-family: var(--font-ui); font-size: 11px; }
+.table-tip { position: fixed; top: auto; z-index: 25; width: min(360px, calc(100vw - 24px)); min-width: 0; max-height: calc(100vh - 24px); overflow: hidden; }
 .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; background: var(--fg); color: var(--bg); border-radius: var(--r); padding: 9px 12px 9px 14px; display: flex; gap: 12px; align-items: center; font-size: 12.5px; box-shadow: 0 8px 24px rgba(0,0,0,.25); max-width: calc(100vw - 32px); }
 .toast button { border: 0; background: transparent; color: inherit; font-weight: 600; text-decoration: underline; padding: 0; }
 
@@ -609,34 +624,6 @@ input.ctl::placeholder { color: var(--gray-500); }
 .drillbar .fallbacks { padding: 5px 0 0; border: 0; border-top: 1px solid var(--gray-200); background: transparent; }
 .drillbar .fb { padding: 1px 6px; font-size: 11px; line-height: 18px; }
 .tblsel { margin: 8px 12px; padding: 6px 8px; border: 1px solid var(--primary-200); border-radius: 5px; background: var(--primary-100); }
-/* 최근 검색: 조건 요약을 위한 넓은 팝오버 */
-.recent-trigger { gap: 8px; flex-shrink: 0; }
-.recent-trigger[aria-expanded="true"] { background: var(--primary-100); color: var(--primary-800); box-shadow: inset 0 0 0 1px var(--primary-300); }
-.recent-trigger .recent-chevron { width: 12px; height: 12px; transition: transform .18s; }
-.recent-trigger[aria-expanded="true"] .recent-chevron { transform: rotate(180deg); }
-.pop.recent-pop { width: min(400px, calc(100vw - 32px)); min-width: 0; max-width: none; padding: 0; display: flex; flex-direction: column; overflow: hidden; border-radius: 8px; background: var(--surface-200); box-shadow: var(--box-shadow-500); }
-.recent-head { flex: none; padding: 16px; border-bottom: 1px solid var(--gray-200); }
-.recent-heading { display: flex; align-items: center; gap: 8px; }
-.recent-head h4 { margin: 0; font-size: 16px; line-height: 24px; font-weight: 700; color: var(--gray-900); }
-.recent-count { padding: 0 6px; border-radius: 4px; background: var(--gray-100); color: var(--gray-600); font-size: 12px; line-height: 20px; }
-.recent-head p { margin: 4px 0 0; color: var(--gray-600); font-size: 12px; line-height: 18px; }
-.recent-list { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px; }
-.recent-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; border: 0; border-radius: 6px; background: transparent; color: var(--gray-900); text-align: left; white-space: normal; transition: background-color .18s; }
-.recent-item + .recent-item { margin-top: 4px; }
-.recent-item:hover { background: var(--overlay-100); }
-.recent-item:focus-visible { outline: none; background: var(--primary-100); box-shadow: inset 0 0 0 1px var(--primary-300); }
-.recent-item:active { background: var(--overlay-300); }
-.recent-content { display: grid; gap: 5px; flex: 1; min-width: 0; }
-.recent-period { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 14px; line-height: 22px; font-weight: 700; }
-.recent-date { white-space: nowrap; font-variant-numeric: tabular-nums; }
-.recent-days { padding: 0 6px; border-radius: 4px; background: var(--gray-100); color: var(--gray-600); font-size: 12px; line-height: 18px; font-weight: 400; white-space: nowrap; }
-.recent-summary { color: var(--gray-800); font-size: 14px; line-height: 22px; overflow-wrap: anywhere; }
-.recent-meta { color: var(--gray-600); font-size: 12px; line-height: 18px; }
-.recent-arrow { display: flex; flex: none; color: var(--gray-500); }
-.recent-arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.recent-item:hover .recent-arrow, .recent-item:focus-visible .recent-arrow { color: var(--primary-800); }
-.recent-empty { padding: 24px 16px; text-align: center; color: var(--gray-600); font-size: 14px; line-height: 22px; }
-.recent-empty small { display: block; margin-top: 4px; font-size: 12px; }
 @media(max-width:640px) {
   .range-slider { width: clamp(110px, 38vw, 170px); }
   .basebar .sp { flex-basis: 100%; height: 0; }
@@ -652,7 +639,6 @@ input.ctl::placeholder { color: var(--gray-500); }
     <h1>DB 검색</h1>
     <span class="tag">통합 프로토타입 · 예시 데이터</span>
     <span class="sp"></span>
-    <button type="button" class="btn recent-trigger" data-act="recent" id="recentBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="recentSearchPop"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 4v4l2.5 1.5M2.5 8a5.5 5.5 0 1 0 1.6-3.9M2.5 2.5v2.5H5"/></svg>최근 검색<svg class="recent-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
   </header>
 
   <section class="panel cond" aria-label="검색 조건">
@@ -666,6 +652,7 @@ input.ctl::placeholder { color: var(--gray-500); }
 <div id="popHost"></div>
 <div id="drawerHost"></div>
 <div id="toastHost"></div>
+<div class="tip table-tip" id="tableTip" role="tooltip" hidden></div>
 
 <script>
 (() => {
@@ -679,6 +666,7 @@ const p2 = n => String(n).padStart(2, '0');
 const dayStart = ds => { const [y, m, d] = ds.split('-').map(Number); return Date.UTC(y, m - 1, d) / 1000; };
 const dstr = sec => new Date(sec * 1000).toISOString().slice(0, 10);
 const fmtDay = sec => { const d = new Date(sec * 1000); return `${d.getUTCMonth() + 1}/${d.getUTCDate()}(${WD[d.getUTCDay()]})`; };
+const periodLabel = (start, days) => `${fmtDay(start)}${days > 1 ? ` – ${fmtDay(start + (days - 1) * DAY)}` : ''} · ${days}일`;
 const fmtMD = sec => { const d = new Date(sec * 1000); return `${d.getUTCMonth() + 1}/${d.getUTCDate()}`; };
 const fmtClock = (sec, withSec) => { const d = new Date(sec * 1000); return p2(d.getUTCHours()) + ':' + p2(d.getUTCMinutes()) + (withSec ? ':' + p2(d.getUTCSeconds()) : ''); };
 const fmtRes = r => r >= 3600 ? r / 3600 + '시간' : r >= 60 ? r / 60 + '분' : r + '초';
@@ -725,16 +713,21 @@ const METRICS = {
   cpu: { id: 'cpu', name: 'CPU 사용률', unit: '%', aggs: ['AVG', 'MAX'], kinds: ['instance'] },
 };
 const unitOf = (mid, agg) => (mid === 'tps' && agg === 'SUM') ? '건' : METRICS[mid].unit;
-const INTERVALS = [60, 300, 600, 3600];
+const INTERVALS = [60, 300, 600, 3600, 7200, 10800, 14400, 21600, 28800, 43200, 86400];
 // Keep chart/table display density reasonable across a 1–90 day search range.
-// Every interval is a whole number of minutes (in seconds); the search can still be overridden manually.
+// Every interval is a whole number of minutes (in seconds); individual groups can choose a fixed interval.
 const AUTO_INTERVALS = [60, 300, 600, 900, 1800, 3600, 10800, 21600];
 const AUTO_MAX_POINTS = 720;
 function resolveBaseInterval(base) {
-  if (base.interval !== 'auto') return Number(base.interval);
   return AUTO_INTERVALS.find(r => base.days * DAY / r <= AUTO_MAX_POINTS) || AUTO_INTERVALS[AUTO_INTERVALS.length - 1];
 }
-const intervalLabel = base => base.interval === 'auto' ? `자동 (${fmtRes(resolveBaseInterval(base))})` : fmtRes(resolveBaseInterval(base));
+const intervalLabel = base => `자동 (${fmtRes(resolveBaseInterval(base))})`;
+function normalizeDefinition(raw) {
+  if (!raw || typeof raw !== 'object' || !raw.base || !Array.isArray(raw.groups)) return null;
+  const { interval, resolvedInterval, ...base } = raw.base;
+  const legacyInterval = INTERVALS.includes(Number(interval)) ? Number(interval) : null;
+  return { base, groups: raw.groups.map(g => g && typeof g === 'object' ? { ...g, interval: g.interval == null ? legacyInterval : g.interval } : g) };
+}
 const PALETTE = ['#2C67E6', '#E07A2E', '#159C8C', '#C2418A', '#7A59DB', '#8C9A22', '#D43F3F', '#2398CF', '#9B6A35', '#4F8A61'];
 
 /* ---------- 예시 데이터 생성 (시드 고정) ---------- */
@@ -778,7 +771,7 @@ function mkGroup(o = {}) {
   return g;
 }
 const state = {
-  base: { date: '2026-11-12', days: 7, interval: 'auto', opHours: false, weekendEx: false },
+  base: { date: '2026-11-12', days: 7, opHours: false, weekendEx: false },
   groups: [
     mkGroup({ kind: 'instance', targets: ['i-was01', 'i-was02', 'i-was03'], metric: 'tps' }),
     mkGroup({ period: { mode: 'shift', shift: -7 }, kind: 'instance', targets: ['i-was01'], metric: 'tps' }),
@@ -820,7 +813,7 @@ function runQuery(immediate) {
   const prevHidden = new Set((state.applied?.series || []).filter(s => s.hidden).map(s => s.key));
   const groups = state.groups.map((g, i) => {
     const shift = shiftOf(g, base);
-    return { no: i + 1, id: g.id, shift, interval: g.interval || base.resolvedInterval, intervalInherit: !g.interval, kind: g.kind, metric: g.metric, agg: g.agg, targets: [...g.targets], start: dayStart(base.date) + shift * DAY };
+    return { no: i + 1, id: g.id, period: { ...g.period }, shift, interval: g.interval || base.resolvedInterval, intervalInherit: !g.interval, kind: g.kind, metric: g.metric, agg: g.agg, targets: [...g.targets], start: dayStart(base.date) + shift * DAY };
   });
   const series = [];
   groups.forEach(g => g.targets.forEach(tid => {
@@ -832,9 +825,9 @@ function runQuery(immediate) {
   state.applied = { base, groups, series, def: defOf() };
   state.history = [{ from: 0, to: base.days * DAY, res: base.resolvedInterval, api: 'min', data: null }];
   state.sel = null; state.cell = null; state.errors = {};
-  saveRecent();
   renderBuilder();
   loadEntry(cur(), immediate ? 0 : 700, 'DB 집계 API로 검색 중…');
+  return true;
 }
 
 function loadEntry(entry, delay, msg) {
@@ -853,6 +846,7 @@ function filterOk(t, base) {
   return true;
 }
 
+function gcd(a, b) { while (b) { const r = a % b; a = b; b = r; } return a; }
 function compute(entry) {
   const A = state.applied; const out = { series: {}, rmin: Infinity };
   for (const s of A.series) {
@@ -869,7 +863,8 @@ function compute(entry) {
       vals[i] = (entry.api === 'min' && !filterOk(t, A.base)) ? NaN : bucket(s.tg, s.m.id, s.agg, t, res);
     }
     out.series[s.key] = { res, from, vals, fallback };
-    out.rmin = Math.min(out.rmin, res);
+    // A shared grid must include every group's sample times (e.g. 10 and 15 min → 5 min).
+    out.rmin = Number.isFinite(out.rmin) ? gcd(out.rmin, res) : res;
   }
   if (!isFinite(out.rmin)) out.rmin = entry.res;
   const r = out.rmin, rows = [];
@@ -888,6 +883,7 @@ function valAt(sd, o) {
   return sd.vals[i];
 }
 function valNear(sd, o) {
+  if (!sd?.vals.length) return { o: null, v: undefined };
   let i = Math.floor((o - sd.from) / sd.res); i = Math.max(0, Math.min(sd.vals.length - 1, i));
   return { o: sd.from + i * sd.res, v: sd.vals[i] };
 }
@@ -940,21 +936,18 @@ function fmtVal(v, unit) {
 }
 
 /* ---------- 조건 영역 렌더 ---------- */
-function renderBuilder() { renderBase(); renderGroups(); }
+function renderBuilder() { queueSessionSave(); renderBase(); renderGroups(); }
 function renderBase() {
   const b = state.base;
   const dirty = isDirty();
   const nLines = state.groups.reduce((a, g) => a + g.targets.length, 0);
   $('#basebar').innerHTML = `
-    <label class="field range-field" for="bDays"><span class="k">검색 범위</span>
+    <label class="field range-field" for="bDays" title="모든 조건 그룹에 동일한 검색 일수를 적용합니다."><span class="k">공통 검색 범위</span>
       <input class="range-slider" type="range" id="bDays" name="days" min="1" max="90" step="1" value="${b.days}" aria-label="검색 범위, 1일부터 90일까지" aria-valuetext="${b.days}일">
       <output class="range-value num" id="bDaysVal" for="bDays">${b.days}일</output>
     </label>
-    <span class="field"><span class="k">검색 기간</span>
+    <span class="field"><span class="k">기준 시작일</span>
       <input class="ctl num" type="date" id="bDate" value="${b.date}" aria-label="검색 시작일">
-    </span>
-    <span class="field"><span class="k">요약 간격</span>
-      ${ddHTML('bInt', '요약 간격', b.interval, 110)}
     </span>
     <label class="chk"><input type="checkbox" id="bOp" ${b.opHours ? 'checked' : ''}>운영시간 09:00–18:00</label>
     <label class="chk"><input type="checkbox" id="bWe" ${b.weekendEx ? 'checked' : ''}>주말 제외</label>
@@ -966,8 +959,8 @@ function renderBase() {
 function groupSummary(g, base) {
   const sh = shiftOf(g, base), bs = dayStart(base.date), n = g.targets.length;
   return {
-    date: g.period.mode === 'date' && !g.period.date ? '날짜 미정' : fmtDay(bs + sh * DAY) + (sh ? ` · ${shiftLabel(sh)}` : ''),
-    intv: g.interval ? fmtRes(g.interval) : `${intervalLabel(base)} (기준)`,
+    date: g.period.mode === 'date' && !g.period.date ? '날짜 미정' : periodLabel(bs + sh * DAY, base.days) + (sh ? ` · ${shiftLabel(sh)}` : ''),
+    intv: g.interval ? fmtRes(g.interval) : intervalLabel(base),
     tg: n ? `${KIND_TAB[g.kind]} · ${T[g.targets[0]].name}${n > 1 ? ` 외 ${n - 1}` : ''}` : '대상 없음',
     metric: `${METRICS[g.metric].name} ${g.agg}`, n,
   };
@@ -982,7 +975,7 @@ function renderGroupRows() {
     return `<div class="grow">
       <button class="gmain" data-act="edit" data-gi="${i}" aria-label="그룹 ${i + 1} 편집">
         <span class="gno">그룹 ${i + 1}</span>
-        <span class="tok"><em>날짜</em>${esc(s.date)}</span>
+        <span class="tok"><em>기간</em>${esc(s.date)}</span>
         <span class="tok"><em>간격</em>${esc(s.intv)}</span>
         <span class="tok ${s.n ? '' : 'miss'}" title="${esc(g.targets.map(id => T[id].name).join(', '))}"><em>대상</em>${esc(s.tg)}</span>
         <span class="tok"><em>지표</em>${esc(s.metric)}</span>
@@ -1005,7 +998,7 @@ function renderGroupModal() {
   host.innerHTML = `<div class="scrim gm" data-act="closeGroups"></div>
   <div class="gmodal" role="dialog" aria-modal="true" aria-label="조건 그룹">
     <div class="dh"><h3>조건 그룹</h3>${dirty ? '<span class="dirty">조건 변경됨 · 검색 전</span>' : ''}<button class="ibtn" data-act="closeGroups" aria-label="닫기">${ICON.x}</button></div>
-    <p class="gmsub">그룹 하나 = 날짜 → 간격 → 대상 여러 개 → 지표 하나. 대상마다 표 컬럼과 차트 라인이 하나씩 생겨요. 줄을 누르면 오른쪽 패널에서 편집해요.</p>
+    <p class="gmsub">모든 그룹의 검색 범위는 ${state.base.days}일로 같아요. 그룹마다 시작일·요약 간격·대상·지표를 정하고, 줄을 눌러 편집하세요.</p>
     <div class="gmbody">${renderGroupRows()}</div>
     <div class="gmfoot">
       <button class="btn sm" data-act="addGroup">${ICON.plus}조건 추가</button>
@@ -1019,7 +1012,9 @@ function renderGroupModal() {
 
 /* ---------- 결과 렌더 ---------- */
 function renderResults() {
+  queueSessionSave();
   const host = $('#res');
+  hideTableTooltip();
   const A = state.applied;
   if (!A) { host.innerHTML = '<div class="empty-state">아직 검색하지 않았어요. 조건을 정하고 <b>검색</b>를 누르세요.</div>'; return; }
   const e = cur();
@@ -1031,7 +1026,7 @@ function renderResults() {
   const filt = [A.base.opHours && '운영시간 09–18', A.base.weekendEx && '주말 제외'].filter(Boolean).join(' · ');
   host.innerHTML = `
     <div class="resbar">
-      <div class="applied">적용 조건 <b>${fmtDay(bs)}${A.base.days > 1 ? ` 부터 ${A.base.days}일` : ''}</b> · 요약 ${intervalLabel(A.base)}${filt ? ' · ' + filt : ''} · ${groupsTxt}${state.queriedAt ? ` · <span class="num">${fmtClock(state.queriedAt.getTime() / 1000 - state.queriedAt.getTimezoneOffset() * 60, true)}</span> 검색` : ''}${isDirty() ? ' · <span class="why">작성 중인 조건은 아직 반영 전</span>' : ''}</div>
+      <div class="applied">적용 조건 <b>모든 그룹 ${A.base.days}일</b> · 기준 ${fmtDay(bs)}${filt ? ' · ' + filt : ''} · ${groupsTxt}${state.queriedAt ? ` · <span class="num">${fmtClock(state.queriedAt.getTime() / 1000 - state.queriedAt.getTimezoneOffset() * 60, true)}</span> 검색` : ''}${isDirty() ? ' · <span class="why">작성 중인 조건은 아직 반영 전</span>' : ''}</div>
       <span class="sp"></span>
       <div class="seg" role="group" aria-label="보기">
         ${[['stack', '둘 다'], ['chart', '차트만'], ['table', '표만']].map(([v, l]) => `<button data-act="view" data-v="${v}" aria-pressed="${state.view === v}">${l}</button>`).join('')}
@@ -1057,7 +1052,7 @@ function renderChips() {
     const ss = A.series.filter(s => s.g === g);
     const m = METRICS[g.metric];
     return `<div class="cgrp">
-      <span class="cglabel"><b>그룹 ${g.no}</b> ${fmtDay(g.start)}${g.shift ? ` (${shiftLabel(g.shift)})` : ''} · ${fmtRes(g.interval)} · ${m.name} ${g.agg}</span>
+      <span class="cglabel"><b>그룹 ${g.no}</b> ${periodLabel(g.start, A.base.days)}${g.shift ? ` (${shiftLabel(g.shift)})` : ''} · ${fmtRes(g.interval)} · ${m.name} ${g.agg}</span>
       ${ss.map(s => s.status === 'fail'
         ? `<span class="chip fail" title="${esc(s.reason)}"><span>${esc(s.tg.name)}</span>&nbsp;· 실패: ${esc(s.reason)}<button class="ibtn" data-act="delSeries" data-key="${esc(s.key)}" aria-label="${esc(s.tg.name)} 삭제">${ICON.x}</button></span>`
         : `<span class="chip ${s.hidden ? 'off' : ''} ${state.emph === s.key ? 'emph' : ''}" style="--c:${colorOf(s)}" data-key="${esc(s.key)}">
@@ -1073,12 +1068,12 @@ function renderChips() {
 function renderDrillbar() {
   const A = state.applied, e = cur();
   const crumbs = state.history.map((h, i) => {
-    const lbl = i === 0 ? `전체 ${fmtDay(baseStart())}${A.base.days > 1 ? ` +${A.base.days - 1}일` : ''} · ${fmtRes(h.res)}` : `${rangeLabel(h.from, h.to, h.res < 60)} · ${fmtRes(h.res)}`;
+    const lbl = i === 0 ? `전체 ${periodLabel(baseStart(), A.base.days)}` : rangeLabel(h.from, h.to, h.res < 60);
     const step = i === 0 ? '전체' : `${i}단계`;
     const current = i === 0 ? `${fmtDay(baseStart())}${A.base.days > 1 ? ` – ${fmtDay(baseStart() + (A.base.days - 1) * DAY)}` : ''}` : rangeLabel(h.from, h.to, h.res < 60);
     return i === state.history.length - 1
       ? `<span class="drill-current" aria-current="step" title="${esc(lbl)}"><span>${step}</span><strong>${esc(current)}</strong></span>`
-      : `<button type="button" class="drill-step" data-act="level" data-i="${i}" title="${esc(lbl)}" aria-label="${step}로 이동: ${esc(lbl)}">${step}<small>${fmtRes(h.res)}</small></button>`;
+      : `<button type="button" class="drill-step" data-act="level" data-i="${i}" title="${esc(lbl)}" aria-label="${step}로 이동: ${esc(lbl)}">${step}</button>`;
   }).join('<span class="drill-separator" aria-hidden="true">›</span>');
   let selHTML = '';
   if (state.sel) {
@@ -1098,7 +1093,7 @@ function renderDrillbar() {
         <button type="button" class="drill-action" data-act="back" ${state.history.length > 1 ? '' : 'disabled'} title="한 단계 뒤로">${ICON.back}뒤로</button>
         <button type="button" class="drill-action" data-act="level" data-i="0" ${state.history.length > 1 ? '' : 'disabled'} title="전체 검색 기간으로 돌아가기">전체</button>
       </div></div>
-    <div class="drill-meta"><span class="api ${e.api}" title="${e.api === 'sec' ? '초 단위 세밀 검색. 운영시간·제외일 파라미터가 없어서 끊김 없는 구간만 확대해요.' : '분 이상 집계 검색. 그룹별 간격·운영시간·제외일을 적용해요.'}"><i></i>${API_NAME[e.api]} · ${fmtRes(e.res)}${e.data ? ` · ${rows.toLocaleString('ko-KR')}행` : ''}</span>
+    <div class="drill-meta"><span class="api ${e.api}" title="${e.api === 'sec' ? '초 단위 세밀 검색. 운영시간·제외일 파라미터가 없어서 끊김 없는 구간만 확대해요.' : '분 이상 집계 검색. 그룹별 간격·운영시간·제외일을 적용해요.'}"><i></i>${API_NAME[e.api]}${e.data ? ` · ${rows.toLocaleString('ko-KR')}행` : ''}</span>
       ${state.sel ? '' : `<span class="drill-hint">${hint}</span>`}</div>
     ${state.sel ? `<div class="drill-selection">${selHTML}</div>` : ''}
     ${fallbackTargets.length ? `<div class="fallbacks"><span class="fb" title="초 데이터가 없는 대상은 0으로 채우지 않고 기존 1분 데이터를 표시합니다.">${esc(fallbackTargets.join(', '))} · 초 데이터 없음 → 1분 데이터 유지</span></div>` : ''}`;
@@ -1136,7 +1131,19 @@ function colorOf(s) {
 }
 let chartGeo = [];
 function niceStep(raw) { const p = 10 ** Math.floor(Math.log10(raw)); const f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
-const XSTEPS = [1, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 10800, 21600, 43200, 86400, 172800];
+const XSTEPS = [1, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 10800, 14400, 21600, 28800, 43200, 86400, 172800];
+function chartTickStep(entry, series, maxTicks) {
+  // Hidden lines retain their conditions; failed lines have no effective data interval.
+  const smallest = series.reduce((min, s) => {
+    const res = s.status === 'ok' ? entry.data.series[s.key]?.res : null;
+    return res > 0 ? Math.min(min, res) : min;
+  }, Infinity);
+  const interval = Number.isFinite(smallest) ? smallest : Math.max(1, entry.res || 1);
+  // Reserve a label for each end when both ends fall on the shared zero-offset grid.
+  const required = Math.max(interval, (entry.to - entry.from) / Math.max(1, Math.floor(maxTicks) - 1));
+  return XSTEPS.find(step => step >= required && step % interval === 0)
+    || Math.ceil(required / interval) * interval;
+}
 function chartHeight(nPanels) {
   if (state.view === 'chart') return nPanels > 1 ? 230 : 380;
   if (state.view === 'side') return nPanels > 1 ? 190 : 320;
@@ -1206,6 +1213,7 @@ function panelHeight(n) {
 }
 // 지표별 칸을 위아래로 붙인 SVG 하나. X축은 맨 아래 한 번, 칸 이름은 구분선 위에.
 function drawCharts() {
+  hideTableTooltip();
   const host = $('#charts'); if (!host) { chartGeo = []; return; }
   const A = state.applied, e = cur();
   const ok = A.series.filter(s => s.status === 'ok' && e.data.series[s.key]);
@@ -1266,8 +1274,8 @@ function drawCharts() {
     g += `<clipPath id="pclip${pi}"><rect x="${CH.l}" y="${py0 - 2}" width="${pw}" height="${ph + 4}"/></clipPath>`;
     panelInfo.push({ name, ss: p.ss });
   });
-  const span = e.to - e.from; const maxTicks = Math.max(2, Math.floor(pw / 92));
-  const xs = XSTEPS.find(s => span / s <= maxTicks) || 172800;
+  const maxTicks = Math.max(2, Math.floor(pw / 92));
+  const xs = chartTickStep(e, ok, maxTicks);
   const withSec = xs < 60;
   for (let o = Math.ceil(e.from / xs) * xs; o <= e.to; o += xs) {
     const x = X(o);
@@ -1310,7 +1318,7 @@ document.addEventListener('pointermove', ev => {
     const x = Math.max(CH.l, Math.min(CH.l + drag.geo.pw, chartPos(ev, drag.geo)));
     if (Math.abs(x - drag.x0) > 5) drag.moved = true;
     if (drag.moved) { state.sel = snapRange(drag.o0, drag.geo.toO(x)); updateSelection(); }
-    state.hover = drag.geo.toO(x); updateHover(true);
+    state.hover = drag.geo.toO(x); state.hoverSrc = 'chart'; updateHover(true);
     return;
   }
   if (ov && cur()?.data) { const geo = chartGeo[+ov.dataset.ui]; state.hover = geo.toO(chartPos(ev, geo)); state.hoverSrc = 'chart'; updateHover(true); }
@@ -1339,28 +1347,65 @@ function updateSelection() {
   if (!drag && !tdrag) renderDrillbar();
 }
 
-let lastHoverRow = null;
+let lastHoverRow = null, tableTooltipPoint = null;
+function tooltipPeriodLabel(g) {
+  const days = state.applied.base.days;
+  return `${dstr(g.start)}${days > 1 ? ` – ${dstr(g.start + (days - 1) * DAY)}` : ''} · ${days}일`;
+}
+function hoverTooltipHTML(offset, series, { exact = false, axisOf = null } = {}) {
+  const A = state.applied, e = cur(), r = e.data.rmin;
+  const ho = Math.floor(offset / r) * r;
+  const visible = series.filter(s => !s.hidden && e.data.series[s.key]);
+  const sections = A.groups.map(g => ({ g, ss: visible.filter(s => s.g.id === g.id) })).filter(p => p.ss.length);
+  const row = s => {
+    const sd = e.data.series[s.key];
+    const sample = exact ? { o: offset, v: valAt(sd, offset) } : valNear(sd, offset);
+    const hasSample = sample.o != null && sample.v !== undefined;
+    const when = hasSample ? `${fmtDay(s.g.start + sample.o)} ${fmtClock(s.g.start + sample.o, sd.res < 60)}` : '해당 간격에 값 없음';
+    const a = axisOf?.[s.key], v = sample.v;
+    const value = v === undefined ? '<span class="tip-empty">빈 값</span>' : `${fmtVal(v, s.unit)}${Number.isFinite(v) ? `<span class="tip-unit">${esc(s.unit)}</span>` : ''}`;
+    return `<div class="tr"><i style="background:${colorOf(s)}"></i><span>${esc(s.tg.name)}<small>${esc(when)}${sd.fallback && e.api === 'sec' ? ' · 1분 데이터' : ''}</small></span><span class="tv">${value}${a?.per && Number.isFinite(v) ? `<small>${esc(a.fmt(a.f(s, v)))}</small>` : ''}</span></div>`;
+  };
+  return `<div class="th">${esc(clockOf(ho, r < 60))}${A.base.days > 1 ? '' : ` · ${fmtDay(baseStart())}`}</div>` + (sections.map(({ g, ss }) => {
+    const intervals = [...new Set(ss.map(s => e.data.series[s.key].res))].map(fmtRes).join(' / ');
+    return `<section class="tip-group"><div class="tip-group-title">그룹 ${g.no} · ${esc(ss[0].m.name)} ${esc(g.agg)}</div><div class="tip-group-period">${esc(tooltipPeriodLabel(g))} · ${esc(intervals)}</div>${ss.map(row).join('')}</section>`;
+  }).join('') || '<div class="tip-empty">표시할 라인이 없습니다.</div>');
+}
+function hideTableTooltip() {
+  const tip = $('#tableTip'); if (tip) tip.hidden = true;
+  tableTooltipPoint = null;
+}
+function positionTableTooltip() {
+  const tip = $('#tableTip'); if (!tip || tip.hidden || !tableTooltipPoint) return;
+  const { x, y } = tableTooltipPoint, gap = 14, pad = 12;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  const left = x + gap + w > window.innerWidth - pad ? x - gap - w : x + gap;
+  const top = y + gap + h > window.innerHeight - pad ? y - gap - h : y + gap;
+  tip.style.left = Math.max(pad, Math.min(left, window.innerWidth - w - pad)) + 'px';
+  tip.style.top = Math.max(pad, Math.min(top, window.innerHeight - h - pad)) + 'px';
+}
 function updateHover(follow) {
-  const e = cur(); if (!e?.data) return;
+  const e = cur(); if (!e?.data) { hideTableTooltip(); return; }
   const r = e.data.rmin;
   const ho = state.hover == null ? null : Math.floor(state.hover / r) * r;
+  const validHover = ho != null && ho >= e.from && ho < e.to;
+  if (state.hoverSrc !== 'table' || !validHover || state.loading || tdrag) hideTableTooltip();
   chartGeo.forEach(geo => {
     const xh = geo.svg.querySelector(`#xh${geo.ui}`); const tip = geo.el.querySelector('.tip');
-    if (ho == null || ho < e.from || ho >= e.to) { xh.setAttribute('visibility', 'hidden'); tip.hidden = true; return; }
+    if (!validHover) { xh.setAttribute('visibility', 'hidden'); tip.hidden = true; return; }
     const x = geo.X(state.hover);
     xh.setAttribute('visibility', 'visible'); xh.setAttribute('x1', x); xh.setAttribute('x2', x);
-    const withSec = r < 60;
-    const row = s => {
-      const sd = e.data.series[s.key]; const { o, v } = valNear(sd, state.hover);
-      const real = s.g.start + o; const a = geo.axisOf?.[s.key];
-      return `<div class="tr"><i style="background:${colorOf(s)}"></i><span>${esc(s.tg.name)}<small>그룹 ${s.g.no} · ${s.g.shift ? fmtDay(real) + ' ' : ''}${fmtClock(real, sd.res < 60)}${sd.fallback && e.api === 'sec' ? ' · 1분 데이터' : ''}</small></span><span class="tv">${fmtVal(v, s.unit)}${a?.per && v === v ? `<small>${a.fmt(a.f(s, v))}</small>` : ''}</span></div>`;
-    };
-    const secs = (geo.panels || [{ ss: geo.ss }]).map(p => ({ name: p.name, ss: p.ss.filter(s => !s.hidden) })).filter(p => p.ss.length);
-    tip.innerHTML = `<div class="th">${esc(clockOf(ho, withSec))}${state.applied.base.days > 1 ? '' : ` · ${fmtDay(baseStart())}`}</div>` + secs.map(p => (secs.length > 1 ? `<div class="tsec">${esc(p.name)}</div>` : '') + p.ss.map(row).join('')).join('');
+    if (state.hoverSrc === 'table') { tip.hidden = true; return; }
+    tip.innerHTML = hoverTooltipHTML(state.hover, geo.ss, { axisOf: geo.axisOf });
     tip.hidden = false;
     const tw = tip.offsetWidth; const left = x + 14 + tw > geo.el.clientWidth ? x - tw - 14 : x + 14;
     tip.style.left = Math.max(0, left) + 'px';
   });
+  if (state.hoverSrc === 'table' && validHover && tableTooltipPoint && !state.loading && !tdrag) {
+    const tip = $('#tableTip');
+    tip.innerHTML = hoverTooltipHTML(ho, tableSeries(), { exact: true });
+    tip.hidden = false; positionTableTooltip();
+  }
   // table row sync
   if (lastHoverRow) lastHoverRow.classList.remove('is-hover');
   lastHoverRow = null;
@@ -1377,10 +1422,11 @@ let tdrag = null;
 function tableSeries() { const A = state.applied, e = cur(); return A.series.filter(s => s.status === 'ok' && e.data.series[s.key]); }
 function tableHeight() { return state.view === 'table' ? 560 : state.view === 'side' ? Math.max(320, ($('#charts')?.offsetHeight || 360) - 32) : 340; }
 function renderTable() {
+  hideTableTooltip();
   const wrap = $('#tblwrap'); if (!wrap) return;
   const A = state.applied, e = cur(); const ss = tableSeries();
   const groups = A.groups.map(g => ({ g, ss: ss.filter(s => s.g === g) })).filter(x => x.ss.length);
-  const head1 = `<tr><th class="tc" rowspan="2">시간 <span style="color:var(--faint);font-weight:400">· ${fmtRes(e.data.rmin)}</span></th>${groups.map(({ g, ss }) => `<th class="gh gstart" colspan="${ss.length}" title="그룹 ${g.no}">그룹 ${g.no} · <b>${fmtDay(g.start)}</b> · ${fmtRes(e.api === 'min' ? g.interval : e.res)} · ${METRICS[g.metric].name} ${g.agg}</th>`).join('')}</tr>`;
+  const head1 = `<tr><th class="tc" rowspan="2">시간 <span style="color:var(--faint);font-weight:400">· ${fmtRes(e.data.rmin)}</span></th>${groups.map(({ g, ss }) => `<th class="gh gstart" colspan="${ss.length}" title="그룹 ${g.no}">그룹 ${g.no} · <b>${periodLabel(g.start, A.base.days)}</b> · ${fmtRes(e.api === 'min' ? g.interval : e.res)} · ${METRICS[g.metric].name} ${g.agg}</th>`).join('')}</tr>`;
   const head2 = `<tr>${groups.map(({ ss }) => ss.map((s, j) => `<th class="sh ${j === 0 ? 'gstart' : ''} ${s.hidden ? 'off' : ''} ${state.emph === s.key ? 'emph' : ''}" data-key="${esc(s.key)}" data-act="emph" title="누르면 차트에서 이 라인을 강조해요"><i style="background:${colorOf(s)}"></i>${esc(s.tg.name)}<small>${esc(s.unit)}</small></th>`).join('')).join('')}</tr>`;
   wrap.innerHTML = `<div class="tblscroll" id="tblscroll" tabindex="0" style="height:${tableHeight()}px" aria-label="시간 행 값 표"><table class="grid"><thead>${head1}${head2}</thead><tbody id="tbody"></tbody></table></div>
     <div class="tblsel" id="tblsel" hidden></div>
@@ -1435,12 +1481,26 @@ document.addEventListener('pointerdown', ev => {
 });
 document.addEventListener('pointerover', ev => {
   const tr = ev.target.closest?.('#tbody tr[data-o]');
-  if (tr) {
+  if (tr && cur()?.data && !state.loading) {
     const o = +tr.dataset.o;
     if (tdrag) { const r = cur().data.rmin; state.sel = { from: Math.min(tdrag.a, o), to: Math.max(tdrag.a, o) + r }; updateSelection(); }
+    tableTooltipPoint = { x: ev.clientX, y: ev.clientY };
     state.hover = o; state.hoverSrc = 'table'; updateHover(false);
   }
 });
+document.addEventListener('pointermove', ev => {
+  const tr = ev.target.closest?.('#tbody tr[data-o]');
+  if (!tr || !cur()?.data || state.loading || drag || tdrag) return;
+  const o = +tr.dataset.o;
+  tableTooltipPoint = { x: ev.clientX, y: ev.clientY };
+  if (state.hover !== o || state.hoverSrc !== 'table' || $('#tableTip').hidden) {
+    state.hover = o; state.hoverSrc = 'table'; updateHover(false);
+  } else positionTableTooltip();
+});
+document.addEventListener('scroll', hideTableTooltip, { capture: true, passive: true });
+document.addEventListener('change', hideTableTooltip);
+window.addEventListener('resize', hideTableTooltip, { passive: true });
+window.addEventListener('blur', hideTableTooltip);
 document.addEventListener('mouseleave', () => {}, true);
 document.addEventListener('mouseout', ev => {
   if (ev.target.closest?.('#tbody') && !ev.relatedTarget?.closest?.('#tbody') && state.hoverSrc === 'table') { state.hover = null; updateHover(false); }
@@ -1467,7 +1527,6 @@ function addMetricFromResult(gid) {
 
 /* ---------- Dropdown (vue-components-v2 Dropdown + MenuContainer 모양) ---------- */
 const DD = {
-  bInt: { items: () => [{ v: 'auto', l: intervalLabel({ ...state.base, interval: 'auto' }) }, ...INTERVALS.map(r => ({ v: r, l: fmtRes(r) }))], set: v => { state.base.interval = v === 'auto' ? 'auto' : +v; renderBuilder(); renderResults(); } },
   axisSel: {
     items: () => [{ group: '값 그대로', items: ['linear', 'log', 'symlog', 'sqrt'] }, { group: '라인별 변환', items: ['norm', 'z'] }].map(g => ({ group: g.group, items: g.items.map(k => ({ v: k, l: AXES[k].label })) })),
     set: v => { state.axis = v; drawCharts(); },
@@ -1476,7 +1535,7 @@ const DD = {
 const ICON_DROP = '<svg class="jdd-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"/></svg>';
 const ICON_CHECK = '<svg class="jmi-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>';
 function ddFlat(id) { return DD[id].items().flatMap(x => x.group ? x.items : [x]); }
-function ddValue(id) { return ({ bInt: state.base.interval, axisSel: state.axis })[id]; }
+function ddValue(id) { return ({ axisSel: state.axis })[id]; }
 function ddHTML(id, aria, value, minW) {
   const c = ddFlat(id).find(x => String(x.v) === String(value));
   return `<button type="button" class="jdd" id="${id}" data-dd="${id}" aria-haspopup="listbox" aria-expanded="false" aria-label="${esc(aria)}" style="min-width:${minW}px"><span class="jdd-l">${esc(c ? c.l : '선택')}</span>${ICON_DROP}</button>`;
@@ -1521,11 +1580,10 @@ function openPop(anchor, html, bind, options = {}) {
   pop.querySelector('button, input')?.focus();
 }
 function closePop(restoreFocus = false) {
-  const recent = $('#recentBtn'), wasRecent = recent?.getAttribute('aria-expanded') === 'true';
+  const trigger = $('.jdd.open');
   $('#popHost').innerHTML = '';
   $$('.jdd.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); });
-  recent?.setAttribute('aria-expanded', 'false');
-  if (restoreFocus && wasRecent) recent.focus();
+  if (restoreFocus) trigger?.focus();
 }
 let toastTimer;
 function toast(msg, actLabel, act) {
@@ -1577,7 +1635,7 @@ function renderEditor(first) {
     <div class="esum">${ed.why ? `<b>${esc(ed.why)}</b><br>` : ''}날짜 → 간격 → 대상 → 지표 순서로 정해요. 대상마다 표 컬럼과 차트 라인이 하나씩 생겨요.</div>
     <div class="ebody">
       <section class="esec ${ed.focus === 'date' ? 'flash' : ''}" id="secDate">
-        <h4><b>1</b>날짜 <span>기간 길이는 기준과 같아요 (${b.days}일 · 00:00부터)</span></h4>
+        <h4><b>1</b>시작일 <span>모든 그룹 공통 ${b.days}일 · 00:00부터</span></h4>
         <div class="opts">
           <button class="opt2" data-act="edPeriod" data-v="inherit" aria-pressed="${pv === 'inherit'}">기준 날짜<small>${fmtDay(bs)}</small></button>
           ${shifts.map(s => `<button class="opt2" data-act="edPeriod" data-v="s${s}" aria-pressed="${pv === 's' + s}">${-s}일 전<small>${fmtDay(bs + s * DAY)}</small></button>`).join('')}
@@ -1586,9 +1644,9 @@ function renderEditor(first) {
         ${g.period.mode === 'date' ? `<input class="ctl num" type="date" id="edDate" value="${g.period.date || ''}" aria-label="비교할 날짜" style="margin-top:8px">` : ''}
       </section>
       <section class="esec" id="secInt">
-        <h4><b>2</b>간격 <span>초 단위는 결과에서 구간을 확대하면 내려가요</span></h4>
+        <h4><b>2</b>요약 간격 <span>초 단위는 결과에서 구간을 확대하면 내려가요</span></h4>
         <div class="opts">
-          <button class="opt2 one" data-act="edInterval" data-v="" aria-pressed="${!g.interval}">기준 따름 · ${intervalLabel(b)}</button>
+          <button class="opt2 one" data-act="edInterval" data-v="" aria-pressed="${!g.interval}">${intervalLabel(b)}</button>
           ${INTERVALS.map(r => `<button class="opt2 one" data-act="edInterval" data-v="${r}" aria-pressed="${g.interval === r}">${fmtRes(r)}</button>`).join('')}
         </div>
       </section>
@@ -1618,7 +1676,7 @@ function renderEditor(first) {
       </section>
     </div>
     <div class="efoot">
-      <div class="eres">${n ? `<b>${fmtDay(bs + sh * DAY)}</b> · ${g.interval ? fmtRes(g.interval) : intervalLabel(b)} · <b>${esc(m.name)} ${g.agg}</b> · ${esc(names.slice(0, 3).join(', '))}${n > 3 ? ` 외 ${n - 3}` : ''} → <b>컬럼·라인 ${n}개</b>` : '대상을 고르면 만들어질 컬럼·라인이 여기 보여요.'}${issues.length ? `<span class="err">${esc(issues[0])}</span>` : ''}</div>
+      <div class="eres">${n ? `<b>${periodLabel(bs + sh * DAY, b.days)}</b> · ${g.interval ? fmtRes(g.interval) : intervalLabel(b)} · <b>${esc(m.name)} ${g.agg}</b> · ${esc(names.slice(0, 3).join(', '))}${n > 3 ? ` 외 ${n - 3}` : ''} → <b>컬럼·라인 ${n}개</b>` : '대상을 고르면 만들어질 컬럼·라인이 여기 보여요.'}${issues.length ? `<span class="err">${esc(issues[0])}</span>` : ''}</div>
       <div class="ebtns"><button class="btn" data-act="edCancel">취소</button><span class="sp"></span><button class="btn" data-act="edApply" ${issues.length ? 'disabled' : ''}>${ed.gi == null ? '추가' : '적용'}</button><button class="btn primary" data-act="edApplyRun" ${issues.length ? 'disabled' : ''}>${ed.gi == null ? '추가하고 검색' : '적용하고 검색'}</button></div>
     </div>
   </aside>`;
@@ -1643,45 +1701,6 @@ function applyEditor(run) {
   closeEditor(); renderBuilder(); renderResults();
   if (run) runQuery(false);
   else toast(`그룹 ${no}을(를) ${isNew ? '추가' : '수정'}했어요. 검색해야 결과에 반영돼요.`, '지금 검색', () => runQuery(false));
-}
-
-/* ---------- 최근 검색 (브라우저 저장) ---------- */
-const RKEY = 'dbsearch-proto.recent';
-function loadRecent() { try { return JSON.parse(localStorage.getItem(RKEY) || '[]'); } catch { return []; } }
-function saveRecent() {
-  try {
-    const def = defOf(); const list = loadRecent().filter(x => x.def !== def);
-    const label = state.groups.map((g, i) => `G${i + 1} ${METRICS[g.metric].name}×${g.targets.length}${shiftOf(g, state.base) ? ` ${shiftLabel(shiftOf(g, state.base))}` : ''}`).join(' · ');
-    list.unshift({ def, label, date: state.base.date, at: Date.now() });
-    localStorage.setItem(RKEY, JSON.stringify(list.slice(0, 8)));
-  } catch { /* 저장 불가 환경 */ }
-}
-function recentPop(anchor) {
-  if (anchor.getAttribute('aria-expanded') === 'true') { closePop(true); return; }
-  const list = loadRecent();
-  const items = list.map((x, i) => {
-    let days = '', period = esc(x.date), meta = '';
-    try {
-      const d = JSON.parse(x.def), base = d.base;
-      days = `${base.days}일`;
-      period = `<span class="recent-date">${esc(base.date)}</span>${base.days > 1 ? `<span aria-hidden="true">–</span><span class="recent-date">${dstr(dayStart(base.date) + (base.days - 1) * DAY)}</span>` : ''}`;
-      meta = `요약 ${intervalLabel(base)} · 조건 그룹 ${d.groups.length}개`;
-    } catch { /* 이전 저장 항목은 기존 요약으로 표시 */ }
-    return `<button type="button" class="recent-item" data-ri="${i}">
-      <span class="recent-content"><span class="recent-period">${period}${days ? `<span class="recent-days">${esc(days)}</span>` : ''}</span>
-        <span class="recent-summary">${esc(x.label)}</span>${meta ? `<span class="recent-meta">${esc(meta)}</span>` : ''}</span>
-      <span class="recent-arrow" aria-hidden="true">${ICON.chev}</span></button>`;
-  }).join('');
-  openPop(anchor, `<div class="recent-head"><div class="recent-heading"><h4 id="recentSearchTitle">최근 검색</h4><span class="recent-count">${list.length}개</span></div><p id="recentSearchDesc">선택하면 조건을 불러옵니다. 검색 결과는 저장하지 않아요.</p></div>
-    <div class="recent-list">${items || '<div class="recent-empty">최근 검색이 없습니다.<small>검색한 조건이 여기에 표시됩니다.</small></div>'}</div>`, pop => {
-    pop.id = 'recentSearchPop'; pop.setAttribute('aria-labelledby', 'recentSearchTitle'); pop.setAttribute('aria-describedby', 'recentSearchDesc');
-    anchor.setAttribute('aria-expanded', 'true');
-    pop.querySelectorAll('[data-ri]').forEach(b => b.onclick = () => {
-      const d = JSON.parse(list[+b.dataset.ri].def);
-      state.base = d.base; state.groups = d.groups.map(g => mkGroup(g)); closePop(true); renderBuilder(); renderResults();
-      toast('조건을 불러왔어요. 검색을 눌러 실행하세요.', '지금 검색', () => runQuery(false));
-    });
-  }, { className: 'recent-pop', align: 'end', maxHeight: 520 });
 }
 
 /* ---------- CSV ---------- */
@@ -1720,7 +1739,7 @@ document.addEventListener('keydown', ev => {
 /* ---------- 이벤트 ---------- */
 document.addEventListener('click', ev => {
   const pop = $('#popHost .pop');
-  if (pop && !pop.contains(ev.target) && !ev.target.closest('[data-act="cmpDate"],[data-act="addMetric"],[data-act="recent"],.jdd')) closePop();
+  if (pop && !pop.contains(ev.target) && !ev.target.closest('[data-act="cmpDate"],[data-act="addMetric"],.jdd')) closePop();
   const dd = ev.target.closest('.jdd');
   if (dd) { const wasOpen = dd.classList.contains('open'); closePop(); if (!wasOpen) ddOpen(dd); return; }
   const b = ev.target.closest('[data-act]'); if (!b) return;
@@ -1753,7 +1772,6 @@ document.addEventListener('click', ev => {
     case 'emph': { const k = b.dataset.key; state.emph = state.emph === k ? null : k; renderChips(); drawCharts(); renderTable(); break; }
     case 'cmpDate': cmpDateFromResult(b.dataset.key); break;
     case 'addMetric': addMetricFromResult(+b.dataset.gid); break;
-    case 'recent': recentPop(b); break;
     case 'delSeries': {
       const A = state.applied; const s = A.series.find(x => x.key === b.dataset.key); if (!s) break;
       const wasClean = !isDirty();
@@ -1802,7 +1820,6 @@ document.addEventListener('change', ev => {
   if (t.id === 'axisSel') { state.axis = t.value; drawCharts(); return; }
   if (t.id === 'bDate') { if (t.value) state.base.date = t.value; renderBuilder(); renderResults(); return; }
   if (t.id === 'bDays') { state.base.days = +t.value; renderBuilder(); renderResults(); return; }
-  if (t.id === 'bInt') { state.base.interval = t.value === 'auto' ? 'auto' : +t.value; renderBuilder(); renderResults(); return; }
   if (t.id === 'bOp') { state.base.opHours = t.checked; renderBuilder(); renderResults(); return; }
   if (t.id === 'bWe') { state.base.weekendEx = t.checked; renderBuilder(); renderResults(); return; }
   const f = t.dataset.f; if (!f) return;
@@ -1821,9 +1838,127 @@ document.addEventListener('change', ev => {
 let rz;
 new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { if (cur()?.data && !state.loading) { drawCharts(); if (state.view === 'side') { const sc = $('#tblscroll'); if (sc) { sc.style.height = tableHeight() + 'px'; renderRows(); } } } }); }).observe($('#res'));
 
-/* ---------- 시작: 예시 조건으로 바로 검색된 상태 ---------- */
-renderBuilder();
-runQuery(true);
+/* ---------- 작업 중인 조건 + 마지막 적용 조건 (브라우저 저장) ---------- */
+const SESSION_KEY = 'dbsearch-proto.session.v1';
+let sessionReady = false, sessionSaveTimer = 0;
+
+function sessionDefinition(base, groups, applied = false) {
+  return {
+    base: { date: base.date, days: base.days, opHours: !!base.opHours, weekendEx: !!base.weekendEx },
+    groups: groups.map(g => ({
+      id: g.id,
+      ...(applied ? { no: g.no } : {}),
+      period: { ...(g.period || { mode: g.shift ? 'shift' : 'inherit', shift: g.shift || -1, date: null }) },
+      interval: applied && g.intervalInherit ? null : (g.interval ?? null),
+      kind: g.kind, targets: [...g.targets], metric: g.metric, agg: g.agg,
+    })),
+  };
+}
+
+function readSessionDefinition(raw) {
+  if (!raw || typeof raw !== 'object' || !raw.base || !Array.isArray(raw.groups)) throw new Error('Invalid session definition');
+  const d = normalizeDefinition(raw);
+  const validDate = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && dstr(dayStart(value)) === value;
+  const b = d.base, days = b.days == null ? 7 : Number(b.days);
+  if (!validDate(b.date) || !Number.isInteger(days) || days < 1 || days > 90) throw new Error('Invalid session range');
+  const base = { date: b.date, days, opHours: b.opHours === true, weekendEx: b.weekendEx === true };
+  const groups = d.groups.map(g => {
+    if (!g || !Object.hasOwn(METRICS, g.metric) || !Object.hasOwn(KIND_LABEL, g.kind) || !Array.isArray(g.targets)) throw new Error('Invalid session group');
+    if (!g.targets.every(id => Object.hasOwn(T, id) && T[id].kind === g.kind)) throw new Error('Invalid session target');
+    if (!['AVG', 'MAX', 'SUM'].includes(g.agg)) throw new Error('Invalid session aggregation');
+    const period = { mode: 'inherit', shift: -1, date: null, ...(g.period || {}) };
+    if (!['inherit', 'shift', 'date'].includes(period.mode) || !Number.isSafeInteger(period.shift)) throw new Error('Invalid session period');
+    if (!Number.isFinite(new Date((dayStart(base.date) + period.shift * DAY) * 1000).getTime())) throw new Error('Invalid session shift');
+    if ((period.date != null && !validDate(period.date)) || (period.mode === 'date' && !period.date)) throw new Error('Invalid session comparison date');
+    const interval = g.interval == null || g.interval === 'auto' ? null : Number(g.interval);
+    if (interval != null && !INTERVALS.includes(interval)) throw new Error('Invalid session interval');
+    return { id: g.id, period, interval, kind: g.kind, targets: [...new Set(g.targets)], metric: g.metric, agg: g.agg };
+  });
+  return { base, groups };
+}
+
+function saveSession() {
+  if (!sessionReady) return false;
+  clearTimeout(sessionSaveTimer); sessionSaveTimer = 0;
+  try {
+    const A = state.applied;
+    const applied = A ? {
+      ...sessionDefinition(A.base, A.groups, true),
+      // Result deletion can change A.groups while a dirty draft keeps the original baseline.
+      def: A.def,
+      hidden: A.series.filter(s => s.hidden).map(s => s.key),
+    } : null;
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ version: 1, draft: sessionDefinition(state.base, state.groups), applied }));
+    return true;
+  } catch { return false; /* 저장 불가 환경에서도 검색은 계속 동작 */ }
+}
+
+function queueSessionSave() {
+  if (!sessionReady) return;
+  clearTimeout(sessionSaveTimer);
+  sessionSaveTimer = setTimeout(saveSession, 120);
+}
+
+function restoreSession() {
+  const previous = { ...state }, previousUid = uid;
+  const wasReady = sessionReady;
+  sessionReady = false;
+  try {
+    const saved = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    if (!saved || saved.version !== 1) return false;
+    const draft = readSessionDefinition(saved.draft);
+    const applied = saved.applied == null ? null : readSessionDefinition(saved.applied);
+    const baseline = applied && typeof saved.applied.def === 'string' ? readSessionDefinition(JSON.parse(saved.applied.def)) : applied;
+    if (applied?.groups.some(g => groupIssues(g).err.length)) return false;
+
+    // Keep matching IDs on both sides; allocate replacements only for damaged IDs.
+    const definitions = [draft, applied].filter(Boolean);
+    const validId = id => Number.isSafeInteger(id) && id > 0 && id < 2 ** 31;
+    let nextId = uid;
+    definitions.forEach(d => d.groups.forEach(g => { if (validId(g.id)) nextId = Math.max(nextId, g.id + 1); }));
+    definitions.forEach(d => {
+      const used = new Set();
+      d.groups.forEach(g => { if (!validId(g.id) || used.has(g.id)) g.id = nextId++; used.add(g.id); });
+    });
+    uid = nextId;
+    state.applied = null; state.history = []; state.loading = false;
+    state.sel = null; state.cell = null; state.hover = null; state.emph = null; state.errors = {}; state.queriedAt = null;
+    if (applied) {
+      state.base = applied.base; state.groups = applied.groups;
+      if (applied.groups.length) {
+        if (!runQuery(true)) throw new Error('Could not restore applied query');
+      } else {
+        // Every result can have been deleted, while a separate draft still exists.
+        const base = { ...applied.base, resolvedInterval: resolveBaseInterval(applied.base) };
+        state.applied = { base, groups: [], series: [], def: '' };
+        state.history = [{ from: 0, to: base.days * DAY, res: base.resolvedInterval, api: 'min', data: null }];
+        loadEntry(cur(), 0, '');
+      }
+      state.applied.def = JSON.stringify({ base: baseline.base, groups: baseline.groups.map(({ id, ...g }) => g) });
+      state.applied.groups.forEach((g, i) => {
+        const no = saved.applied.groups[i]?.no;
+        if (Number.isSafeInteger(no) && no > 0) g.no = no;
+      });
+      const hidden = new Set(Array.isArray(saved.applied.hidden) ? saved.applied.hidden.filter(k => typeof k === 'string') : []);
+      state.applied.series.forEach(s => { s.hidden = hidden.has(s.key); });
+    }
+    // Query the saved applied configuration first, then put back unsearched edits.
+    state.base = draft.base; state.groups = draft.groups;
+    renderBuilder(); renderResults();
+    return true;
+  } catch {
+    Object.assign(state, previous); uid = previousUid;
+    return false;
+  } finally { sessionReady = wasReady; }
+}
+
+window.addEventListener('pagehide', saveSession);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveSession(); });
+
+/* ---------- 시작: 저장된 조건 복원 또는 예시 검색 ---------- */
+if (!restoreSession()) { renderBuilder(); runQuery(true); }
+sessionReady = true;
+saveSession();
 })();
 </script>
 
