@@ -25,7 +25,9 @@ function loadChartModel() {
 
   // Execute the real model, tick helpers, selector expression, and loop bounds.
   // Only DOM rendering is stubbed; the loop collects offsets instead of SVG markup.
+  class FixedDate extends Date { static now() { return Date.parse('2026-11-12T03:00:00Z'); } }
   const context = vm.createContext({
+    Date: FixedDate,
     renderBuilder() {}, renderResults() {}, renderGroups() {},
     toast(message) { throw new Error(message); },
   });

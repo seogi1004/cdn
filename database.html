@@ -665,6 +665,8 @@ const WD = ['일', '월', '화', '수', '목', '금', '토'];
 const p2 = n => String(n).padStart(2, '0');
 const dayStart = ds => { const [y, m, d] = ds.split('-').map(Number); return Date.UTC(y, m - 1, d) / 1000; };
 const dstr = sec => new Date(sec * 1000).toISOString().slice(0, 10);
+// 오늘/상대 날짜는 한국 시간대로 계산하며 직접 선택한 날짜만 고정합니다.
+const todayKST = () => new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
 const fmtDay = sec => { const d = new Date(sec * 1000); return `${d.getUTCMonth() + 1}/${d.getUTCDate()}(${WD[d.getUTCDay()]})`; };
 const periodLabel = (start, days) => `${fmtDay(start)}${days > 1 ? ` – ${fmtDay(start + (days - 1) * DAY)}` : ''} · ${days}일`;
 const fmtMD = sec => { const d = new Date(sec * 1000); return `${d.getUTCMonth() + 1}/${d.getUTCDate()}`; };
@@ -684,7 +686,7 @@ const ICON = {
   target: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>',
 };
 
-/* ---------- 예시 대상·지표 ---------- */
+/* ---------- 예시 대상·매트릭 ---------- */
 const DOMAIN_GROUPS = [{ id: 'g-com', name: '커머스', domains: ['d1000', 'd2000'] }, { id: 'g-cmn', name: '공통', domains: ['d3000'] }];
 const DOMAINS = { d1000: 'Order Platform', d2000: 'Payment', d3000: 'Member' };
 const TARGETS = [
@@ -771,7 +773,7 @@ function mkGroup(o = {}) {
   return g;
 }
 const state = {
-  base: { date: '2026-11-12', days: 7, opHours: false, weekendEx: false },
+  base: { date: todayKST(), days: 7, opHours: false, weekendEx: false },
   groups: [
     mkGroup({ kind: 'instance', targets: ['i-was01', 'i-was02', 'i-was03'], metric: 'tps' }),
     mkGroup({ period: { mode: 'shift', shift: -7 }, kind: 'instance', targets: ['i-was01'], metric: 'tps' }),
@@ -788,7 +790,7 @@ function shiftOf(g, base) {
   if (g.period.mode === 'shift') return g.period.shift;
   return Math.round((dayStart(g.period.date) - dayStart(base.date)) / DAY);
 }
-const shiftLabel = s => s === 0 ? '기준 날짜' : s < 0 ? `${-s}일 전` : `${s}일 후`;
+const shiftLabel = s => s === 0 ? '오늘' : s < 0 ? `${-s}일 전` : `${s}일 후`;
 const defOf = () => JSON.stringify({ base: state.base, groups: state.groups.map(({ id, ...r }) => r) });
 const isDirty = () => !!state.applied && state.applied.def !== defOf();
 const cur = () => state.history[state.history.length - 1];
@@ -809,6 +811,7 @@ function runQuery(immediate) {
   state.errors = Object.fromEntries(state.groups.map(g => [g.id, true]));
   if (!state.groups.length) { toast('조건 그룹을 하나 이상 추가하세요.'); return; }
   if (bad.length) { renderGroups(); toast(`그룹 ${bad.join(', ')}의 조건을 확인하세요.`); return; }
+  state.base.date = todayKST(); // 검색 실행 당시 오늘을 사용
   const base = { ...state.base, resolvedInterval: resolveBaseInterval(state.base) };
   const prevHidden = new Set((state.applied?.series || []).filter(s => s.hidden).map(s => s.key));
   const groups = state.groups.map((g, i) => {
@@ -938,6 +941,7 @@ function fmtVal(v, unit) {
 /* ---------- 조건 영역 렌더 ---------- */
 function renderBuilder() { queueSessionSave(); renderBase(); renderGroups(); }
 function renderBase() {
+  state.base.date = todayKST();
   const b = state.base;
   const dirty = isDirty();
   const nLines = state.groups.reduce((a, g) => a + g.targets.length, 0);
@@ -946,20 +950,17 @@ function renderBase() {
       <input class="range-slider" type="range" id="bDays" name="days" min="1" max="90" step="1" value="${b.days}" aria-label="검색 범위, 1일부터 90일까지" aria-valuetext="${b.days}일">
       <output class="range-value num" id="bDaysVal" for="bDays">${b.days}일</output>
     </label>
-    <span class="field"><span class="k">기준 시작일</span>
-      <input class="ctl num" type="date" id="bDate" value="${b.date}" aria-label="검색 시작일">
-    </span>
+    <button class="btn gbtn" data-act="openGroups" aria-haspopup="dialog">${ICON.list}조건 그룹 <b>${state.groups.length}</b><small>라인 ${nLines}</small>${dirty ? '<i class="ddot" title="검색 전 변경 있음"></i>' : ''}</button>
     <label class="chk"><input type="checkbox" id="bOp" ${b.opHours ? 'checked' : ''}>운영시간 09:00–18:00</label>
     <label class="chk"><input type="checkbox" id="bWe" ${b.weekendEx ? 'checked' : ''}>주말 제외</label>
     <span class="sp"></span>
     ${dirty ? '<span class="dirty">조건 변경됨 · 검색 전</span>' : ''}
-    <button class="btn gbtn" data-act="openGroups" aria-haspopup="dialog">${ICON.list}조건 그룹 <b>${state.groups.length}</b><small>라인 ${nLines}</small>${dirty ? '<i class="ddot" title="검색 전 변경 있음"></i>' : ''}</button>
     <button class="btn primary ${dirty ? 'pulse' : ''}" data-act="query" id="queryBtn">검색</button>`;
 }
 function groupSummary(g, base) {
   const sh = shiftOf(g, base), bs = dayStart(base.date), n = g.targets.length;
   return {
-    date: g.period.mode === 'date' && !g.period.date ? '날짜 미정' : periodLabel(bs + sh * DAY, base.days) + (sh ? ` · ${shiftLabel(sh)}` : ''),
+    date: g.period.mode === 'date' && !g.period.date ? '날짜 미정' : periodLabel(bs + sh * DAY, base.days) + (sh && g.period.mode !== 'date' ? ` · ${shiftLabel(sh)}` : ''),
     intv: g.interval ? fmtRes(g.interval) : intervalLabel(base),
     tg: n ? `${KIND_TAB[g.kind]} · ${T[g.targets[0]].name}${n > 1 ? ` 외 ${n - 1}` : ''}` : '대상 없음',
     metric: `${METRICS[g.metric].name} ${g.agg}`, n,
@@ -978,7 +979,7 @@ function renderGroupRows() {
         <span class="tok"><em>기간</em>${esc(s.date)}</span>
         <span class="tok"><em>간격</em>${esc(s.intv)}</span>
         <span class="tok ${s.n ? '' : 'miss'}" title="${esc(g.targets.map(id => T[id].name).join(', '))}"><em>대상</em>${esc(s.tg)}</span>
-        <span class="tok"><em>지표</em>${esc(s.metric)}</span>
+        <span class="tok"><em>매트릭</em>${esc(s.metric)}</span>
         <span class="yield">→ 컬럼·라인 ${s.n}개</span>
         <span class="edit">편집</span>
       </button>
@@ -998,7 +999,7 @@ function renderGroupModal() {
   host.innerHTML = `<div class="scrim gm" data-act="closeGroups"></div>
   <div class="gmodal" role="dialog" aria-modal="true" aria-label="조건 그룹">
     <div class="dh"><h3>조건 그룹</h3>${dirty ? '<span class="dirty">조건 변경됨 · 검색 전</span>' : ''}<button class="ibtn" data-act="closeGroups" aria-label="닫기">${ICON.x}</button></div>
-    <p class="gmsub">모든 그룹의 검색 범위는 ${state.base.days}일로 같아요. 그룹마다 시작일·요약 간격·대상·지표를 정하고, 줄을 눌러 편집하세요.</p>
+    <p class="gmsub">모든 그룹의 검색 범위는 ${state.base.days}일로 같아요. 오늘 기준 상대 날짜나 직접 지정한 날짜, 요약 간격, 대상, 매트릭을 선택하세요.</p>
     <div class="gmbody">${renderGroupRows()}</div>
     <div class="gmfoot">
       <button class="btn" data-act="addGroup">${ICON.plus}조건 추가</button>
@@ -1026,7 +1027,7 @@ function renderResults() {
   const filt = [A.base.opHours && '운영시간 09–18', A.base.weekendEx && '주말 제외'].filter(Boolean).join(' · ');
   host.innerHTML = `
     <div class="resbar">
-      <div class="applied">적용 조건 <b>모든 그룹 ${A.base.days}일</b> · 기준 ${fmtDay(bs)}${filt ? ' · ' + filt : ''} · ${groupsTxt}${state.queriedAt ? ` · <span class="num">${fmtClock(state.queriedAt.getTime() / 1000 - state.queriedAt.getTimezoneOffset() * 60, true)}</span> 검색` : ''}${isDirty() ? ' · <span class="why">작성 중인 조건은 아직 반영 전</span>' : ''}</div>
+      <div class="applied">적용 조건 <b>모든 그룹 ${A.base.days}일</b> · 오늘 ${fmtDay(bs)}${filt ? ' · ' + filt : ''} · ${groupsTxt}${state.queriedAt ? ` · <span class="num">${fmtClock(state.queriedAt.getTime() / 1000 - state.queriedAt.getTimezoneOffset() * 60, true)}</span> 검색` : ''}${isDirty() ? ' · <span class="why">작성 중인 조건은 아직 반영 전</span>' : ''}</div>
       <span class="sp"></span>
       <div class="seg" role="group" aria-label="보기">
         ${[['stack', '둘 다'], ['chart', '차트만'], ['table', '표만']].map(([v, l]) => `<button data-act="view" data-v="${v}" aria-pressed="${state.view === v}">${l}</button>`).join('')}
@@ -1052,7 +1053,7 @@ function renderChips() {
     const ss = A.series.filter(s => s.g === g);
     const m = METRICS[g.metric];
     return `<div class="cgrp">
-      <span class="cglabel"><b>그룹 ${g.no}</b> ${periodLabel(g.start, A.base.days)}${g.shift ? ` (${shiftLabel(g.shift)})` : ''} · ${fmtRes(g.interval)} · ${m.name} ${g.agg}</span>
+      <span class="cglabel"><b>그룹 ${g.no}</b> ${periodLabel(g.start, A.base.days)}${g.shift && g.period.mode !== 'date' ? ` (${shiftLabel(g.shift)})` : ''} · ${fmtRes(g.interval)} · ${m.name} ${g.agg}</span>
       ${ss.map(s => s.status === 'fail'
         ? `<span class="chip fail" title="${esc(s.reason)}"><span>${esc(s.tg.name)}</span>&nbsp;· 실패: ${esc(s.reason)}<button class="ibtn" data-act="delSeries" data-key="${esc(s.key)}" aria-label="${esc(s.tg.name)} 삭제">${ICON.x}</button></span>`
         : `<span class="chip ${s.hidden ? 'off' : ''} ${state.emph === s.key ? 'emph' : ''}" style="--c:${colorOf(s)}" data-key="${esc(s.key)}">
@@ -1060,7 +1061,7 @@ function renderChips() {
             <button class="ibtn" data-act="cmpDate" data-key="${esc(s.key)}" title="이 라인을 다른 날짜와 비교" aria-label="${esc(s.tg.name)} 다른 날짜와 비교">${ICON.cal}</button>
             <button class="ibtn" data-act="delSeries" data-key="${esc(s.key)}" title="결과와 조건에서 삭제" aria-label="${esc(s.tg.name)} 삭제">${ICON.x}</button>
           </span>`).join('')}
-      <button class="btn sm ghost" data-act="addMetric" data-gid="${g.id}" title="같은 기간·대상으로 다른 지표 그룹 추가">${ICON.plus}다른 지표</button>
+      <button class="btn sm ghost" data-act="addMetric" data-gid="${g.id}" title="같은 기간·대상으로 다른 매트릭 그룹 추가">${ICON.plus}다른 매트릭</button>
     </div>`;
   }).join('');
 }
@@ -1106,7 +1107,7 @@ function renderDrillbar() {
 
 /* ---------- 차트 ---------- */
 const CH = { l: 74, r: 14, t: 10, b: 24 };
-// 한 차트에 합치기: 지표마다 색 계열, 같은 지표 안에서는 진하기로 구분
+// 한 차트에 합치기: 매트릭마다 색 계열, 같은 매트릭 안에서는 진하기로 구분
 const METRIC_HUE = { tps: 217, resp: 24, active: 150, cpu: 280 };
 let toneCache = { sig: '', map: new Map() };
 function isDark() { const r = document.documentElement; if (r.dataset.theme === 'dark') return true; if (r.dataset.theme === 'light') return false; return matchMedia('(prefers-color-scheme: dark)').matches; }
@@ -1157,7 +1158,7 @@ const AXES = {
   norm: { label: '0–100% 정규화', desc: '라인마다 자기 최솟값=0%, 최댓값=100%로 그려요. 모양 비교용이에요.' },
   z: { label: 'Z-점수', desc: '라인마다 평균=0, 표준편차=1로 맞춰요. 평소보다 튄 곳을 찾을 때 써요.' },
 };
-// 패널: 지표별(기본) 또는 한 차트에 합치기
+// 패널: 매트릭별(기본) 또는 한 차트에 합치기
 function chartPanels(ok) {
   const keyOf = s => `${s.m.id}|${s.agg}`;
   const keys = [...new Set(ok.map(keyOf))];
@@ -1211,7 +1212,7 @@ function panelHeight(n) {
   if (n === 1) return v === 'chart' ? 360 : v === 'side' ? 300 : 260;
   return v === 'chart' ? 190 : v === 'side' ? 150 : 140;
 }
-// 지표별 칸을 위아래로 붙인 SVG 하나. X축은 맨 아래 한 번, 칸 이름은 구분선 위에.
+// 매트릭별 칸을 위아래로 붙인 SVG 하나. X축은 맨 아래 한 번, 칸 이름은 구분선 위에.
 function drawCharts() {
   hideTableTooltip();
   const host = $('#charts'); if (!host) { chartGeo = []; return; }
@@ -1225,11 +1226,11 @@ function drawCharts() {
   const shifted = ok.some(s => s.g.shift);
   host.innerHTML = `<div class="ctool">
       ${keys.length > 1 ? `<div class="seg" role="group" aria-label="차트 나누기">
-        <button data-act="chartMode" data-v="split" aria-pressed="${!merged}">지표별 차트</button>
+        <button data-act="chartMode" data-v="split" aria-pressed="${!merged}">매트릭별 차트</button>
         <button data-act="chartMode" data-v="merged" aria-pressed="${merged}">한 차트에 합치기</button>
       </div>` : ''}
       <span class="field"><span class="k">Y축</span>${ddHTML('axisSel', 'Y축 종류', state.axis, 150)}</span>
-      <span class="k">${esc(ax.desc)}${state.axis !== 'linear' ? ' 툴팁·표·CSV는 원래 값이에요.' : ''}${mixed ? ' <span class="why">단위가 다른 지표가 한 축에 있어요.</span>' : ''}${shifted ? ' 날짜가 다른 라인은 같은 시각에 겹쳐 보여요.' : ''}</span>
+      <span class="k">${esc(ax.desc)}${state.axis !== 'linear' ? ' 툴팁·표·CSV는 원래 값이에요.' : ''}${mixed ? ' <span class="why">단위가 다른 매트릭가 한 축에 있어요.</span>' : ''}${shifted ? ' 날짜가 다른 라인은 같은 시각에 겹쳐 보여요.' : ''}</span>
     </div>` + (ok.length ? '<div class="chart" data-u="0"><div class="plot"><svg></svg><div class="tip" hidden></div></div></div>' : '<div class="empty-state">표시할 라인이 없어요.</div>');
   chartGeo = [];
   if (!ok.length) return;
@@ -1522,7 +1523,7 @@ function cmpDateFromResult(key) {
 function addMetricFromResult(gid) {
   const g = state.applied.groups.find(x => x.id === gid); if (!g) return;
   const next = Object.values(METRICS).find(m => m.id !== g.metric && m.kinds.includes(g.kind)) || METRICS.tps;
-  openEditor(null, { period: g.shift ? { mode: 'shift', shift: g.shift } : { mode: 'inherit' }, interval: g.intervalInherit ? null : g.interval, kind: g.kind, targets: g.targets, metric: next.id, agg: 'AVG' }, 'metric', `그룹 ${g.no}과 같은 날짜·대상으로 다른 지표 추가`);
+  openEditor(null, { period: g.shift ? { mode: 'shift', shift: g.shift } : { mode: 'inherit' }, interval: g.intervalInherit ? null : g.interval, kind: g.kind, targets: g.targets, metric: next.id, agg: 'AVG' }, 'metric', `그룹 ${g.no}과 같은 날짜·대상으로 다른 매트릭 추가`);
 }
 
 /* ---------- Dropdown (vue-components-v2 Dropdown + MenuContainer 모양) ---------- */
@@ -1594,7 +1595,7 @@ function toast(msg, actLabel, act) {
   toastTimer = setTimeout(() => host.innerHTML = '', actLabel ? 7000 : 3200);
 }
 
-/* ---------- 조건 편집 패널: 날짜·간격·대상·지표를 한곳에서 (대상 영역은 데이터 유틸리티 패널 구조) ---------- */
+/* ---------- 조건 편집 패널: 날짜·간격·대상·매트릭를 한곳에서 (대상 영역은 데이터 유틸리티 패널 구조) ---------- */
 const ed = { open: false, gi: null, g: null, q: '', selectedOnly: false, collapsed: new Set(), pending: null, focus: null, why: '' };
 function openEditor(gi, prefill, focus, why) {
   const src = gi != null ? state.groups[gi] : (prefill || { kind: state.groups[state.groups.length - 1]?.kind || 'instance', metric: 'tps' });
@@ -1619,7 +1620,7 @@ function edIssues() {
 }
 function renderEditor(first) {
   if (!ed.open) return;
-  const g = ed.g, b = state.base, bs = dayStart(b.date), sh = shiftOf(g, b), m = METRICS[g.metric], n = g.targets.size;
+  const g = ed.g, b = state.base, bs = dayStart(todayKST()), sh = shiftOf(g, { ...b, date: todayKST() }), m = METRICS[g.metric], n = g.targets.size;
   const host = $('#drawerHost');
   const prevScroll = host.querySelector('.ebody')?.scrollTop || 0;
   const keepQ = document.activeElement?.id === 'edQ';
@@ -1632,12 +1633,12 @@ function renderEditor(first) {
   host.innerHTML = `<div class="scrim" data-act="edCancel"></div>
   <aside class="drawer ed" role="dialog" aria-label="조건 편집">
     <div class="dh"><h3>${ed.gi == null ? '조건 추가' : `그룹 ${ed.gi + 1} 편집`}</h3><button class="ibtn" data-act="edCancel" aria-label="닫기">${ICON.x}</button></div>
-    <div class="esum">${ed.why ? `<b>${esc(ed.why)}</b><br>` : ''}날짜 → 간격 → 대상 → 지표 순서로 정해요. 대상마다 표 컬럼과 차트 라인이 하나씩 생겨요.</div>
+    <div class="esum">${ed.why ? `<b>${esc(ed.why)}</b><br>` : ''}날짜 → 요약 간격 → 대상 → 매트릭 순서로 정해요. 매트릭에는 AVG·MAX·SUM 같은 집계 함수가 포함돼요.</div>
     <div class="ebody">
       <section class="esec ${ed.focus === 'date' ? 'flash' : ''}" id="secDate">
         <h4><b>1</b>시작일 <span>모든 그룹 공통 ${b.days}일 · 00:00부터</span></h4>
         <div class="opts">
-          <button class="opt2" data-act="edPeriod" data-v="inherit" aria-pressed="${pv === 'inherit'}">기준 날짜<small>${fmtDay(bs)}</small></button>
+          <button class="opt2" data-act="edPeriod" data-v="inherit" aria-pressed="${pv === 'inherit'}">오늘<small>${fmtDay(bs)}</small></button>
           ${shifts.map(s => `<button class="opt2" data-act="edPeriod" data-v="s${s}" aria-pressed="${pv === 's' + s}">${-s}일 전<small>${fmtDay(bs + s * DAY)}</small></button>`).join('')}
           <button class="opt2" data-act="edPeriod" data-v="date" aria-pressed="${pv === 'date'}">날짜 선택<small>${g.period.mode === 'date' && g.period.date ? fmtDay(dayStart(g.period.date)) : '직접 고르기'}</small></button>
         </div>
@@ -1666,12 +1667,12 @@ function renderEditor(first) {
         }).join('') || '<div class="empty-state">검색된 결과가 없습니다.</div>'}</div>
       </section>
       <section class="esec ${ed.focus === 'metric' ? 'flash' : ''}" id="secMetric">
-        <h4><b>4</b>지표 <span>하나만 골라요 · 다른 지표는 조건을 하나 더 추가</span></h4>
-        <div class="mlist" role="radiogroup" aria-label="지표">${Object.values(METRICS).map(x => {
+        <h4><b>4</b>매트릭 <span>AVG·MAX·SUM 등 함수를 포함해 하나만 선택해요</span></h4>
+        <div class="mlist" role="radiogroup" aria-label="매트릭">${Object.values(METRICS).flatMap(x => x.aggs.map(agg => {
           const no = !x.kinds.includes(g.kind);
-          return `<button class="mrow ${x.id === g.metric ? 'on' : ''}" role="radio" aria-checked="${x.id === g.metric}" data-act="edMetric" data-v="${x.id}"><span>${x.name}</span><small>${x.unit} · ${x.aggs.join('/')}</small>${no ? `<small class="no">${KIND_LABEL[g.kind]} 미지원</small>` : ''}</button>`;
-        }).join('')}</div>
-        <div class="opts" style="margin-top:8px" role="group" aria-label="집계">${['AVG', 'MAX', 'SUM'].map(a => `<button class="opt2 one" data-act="edAgg" data-v="${a}" aria-pressed="${g.agg === a}" ${m.aggs.includes(a) ? '' : 'disabled title="이 지표는 지원하지 않아요"'}>${a}</button>`).join('')}</div>
+          const selected = x.id === g.metric && agg === g.agg;
+          return `<button class="mrow ${selected ? 'on' : ''}" role="radio" aria-checked="${selected}" data-act="edMetric" data-v="${x.id}|${agg}"><span>${x.name} ${agg}</span><small>${x.unit}</small>${no ? `<small class="no">${KIND_LABEL[g.kind]} 미지원</small>` : ''}</button>`;
+        })).join('')}</div>
         ${warn ? `<p class="why" style="margin:8px 0 0">${esc(warn)}</p>` : ''}
       </section>
     </div>
@@ -1753,10 +1754,9 @@ document.addEventListener('click', ev => {
     case 'edCancel': closeEditor(); break;
     case 'edApply': applyEditor(false); break;
     case 'edApplyRun': applyEditor(true); break;
-    case 'edPeriod': { const v = b.dataset.v, p = ed.g.period; if (v === 'inherit') p.mode = 'inherit'; else if (v === 'date') { p.mode = 'date'; p.date = p.date || dstr(dayStart(state.base.date) - 7 * DAY); } else { p.mode = 'shift'; p.shift = +v.slice(1); } renderEditor(); break; }
+    case 'edPeriod': { const v = b.dataset.v, p = ed.g.period; if (v === 'inherit') p.mode = 'inherit'; else if (v === 'date') { p.mode = 'date'; p.date = p.date || todayKST(); } else { p.mode = 'shift'; p.shift = +v.slice(1); } renderEditor(); break; }
     case 'edInterval': ed.g.interval = b.dataset.v ? +b.dataset.v : null; renderEditor(); break;
-    case 'edMetric': ed.g.metric = b.dataset.v; renderEditor(); break;
-    case 'edAgg': ed.g.agg = b.dataset.v; renderEditor(); break;
+    case 'edMetric': { const [mid, agg] = b.dataset.v.split('|'); ed.g.metric = mid; ed.g.agg = agg; renderEditor(); break; }
     case 'edKind': { const k = b.dataset.k; if (k === ed.g.kind) break; if (ed.g.targets.size) ed.pending = k; else ed.g.kind = k; renderEditor(); break; }
     case 'edKindYes': ed.g.kind = ed.pending; ed.pending = null; ed.g.targets.clear(); renderEditor(); break;
     case 'edKindNo': ed.pending = null; renderEditor(); break;
@@ -1909,6 +1909,11 @@ function restoreSession() {
     const draft = readSessionDefinition(saved.draft);
     const applied = saved.applied == null ? null : readSessionDefinition(saved.applied);
     const baseline = applied && typeof saved.applied.def === 'string' ? readSessionDefinition(JSON.parse(saved.applied.def)) : applied;
+    // 상대 날짜는 복원 시점의 오늘로 갱신하고, 직접 선택 날짜는 그대로 보존합니다.
+    const today = todayKST();
+    draft.base.date = today;
+    if (applied) applied.base.date = today;
+    if (baseline) baseline.base.date = today;
     if (applied?.groups.some(g => groupIssues(g).err.length)) return false;
 
     // Keep matching IDs on both sides; allocate replacements only for damaged IDs.

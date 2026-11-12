@@ -14,7 +14,10 @@ function loadSearchModel() {
 
   // Execute the real date, query, aggregation, and table-lookup functions.
   // Only rendering is stubbed; the extracted section has no boot code.
+  let currentDay = '2026-11-12';
+  class FixedDate extends Date { static now() { return Date.parse(`${currentDay}T03:00:00Z`); } }
   const context = vm.createContext({
+    Date: FixedDate,
     renderBuilder() {},
     renderResults() {},
     renderGroups() {},
@@ -25,7 +28,7 @@ function loadSearchModel() {
     context,
     { filename: sourcePath },
   );
-  return context.model;
+  return Object.assign(context.model, { setToday(day) { currentDay = day; } });
 }
 
 function epoch(date) {
@@ -127,7 +130,7 @@ test('draft range and group edits leave applied data and time labels unchanged u
   const starts = ['2026-11-12', '2026-11-05', '2026-10-01'];
   assert.equal(model.isDirty(), false);
 
-  model.state.base.date = '2026-12-01';
+  model.setToday('2026-12-01');
   model.state.base.days = 90;
   model.state.groups[0].metric = 'active';
   model.state.groups[1].period.shift = -14;
@@ -154,4 +157,18 @@ test('draft range and group edits leave applied data and time labels unchanged u
   assert.equal(model.state.applied.groups[2].start, epoch('2026-10-01'));
   assert.equal(model.clockOf(model.DAY, false), '12/2 00:00');
   assertChartSamplesMatchTable(model, model.cur());
+});
+
+test('group button sits beside range and matrix choices include aggregation', () => {
+  const html = fs.readFileSync(sourcePath, 'utf8');
+  const bar = html.slice(html.indexOf('function renderBase()'), html.indexOf('function groupSummary('));
+  assert.ok(bar.indexOf('data-act="openGroups"') > bar.indexOf('id="bDays"'));
+  assert.ok(bar.indexOf('data-act="openGroups"') < bar.indexOf('id="bOp"'));
+  assert.equal((bar.match(/data-act="openGroups"/g) || []).length, 1);
+  assert.ok(!bar.includes('id="bDate"'));
+  const edit = html.slice(html.indexOf('function renderEditor('), html.indexOf('function applyEditor('));
+  assert.ok(edit.includes('role="radiogroup" aria-label="매트릭"'));
+  assert.ok(edit.includes('x.aggs.map(agg =>'));
+  assert.ok(!edit.includes('data-act="edAgg"'));
+  assert.ok(edit.includes('>오늘<small>'));
 });

@@ -18,10 +18,12 @@ const fragment = html.slice(sessionStart, sessionEnd);
 const KEY = 'dbsearch-proto.session.v1';
 const plain = value => JSON.parse(JSON.stringify(value));
 
-function app(initial = {}, failStorage = false) {
+function app(initial = {}, failStorage = false, initialDay = '2026-11-12') {
   const storage = new Map(Object.entries(initial)), events = {}, timers = new Map();
-  let timerId = 0, writes = 0;
+  let timerId = 0, writes = 0, currentDay = initialDay;
+  class FixedDate extends Date { static now() { return Date.parse(`${currentDay}T03:00:00Z`); } }
   const context = vm.createContext({
+    Date: FixedDate,
     console,
     localStorage: {
       getItem(key) { if (failStorage) throw new Error('Blocked storage'); return storage.get(key) ?? null; },
@@ -43,6 +45,7 @@ function app(initial = {}, failStorage = false) {
       readSessionDefinition, ready: () => { sessionReady = true; }, getUid: () => uid };
   `, context, { filename: sourcePath });
   return { ...context.api, storage, events, timers, context, writes: () => writes,
+    setToday(day) { currentDay = day; },
     snapshot: () => ({ [KEY]: storage.get(KEY) }) };
 }
 
@@ -83,7 +86,7 @@ test('dirty draft, applied conditions, hidden series, periods, and IDs round-tri
 
   const b = app(a.snapshot());
   assert.equal(b.restoreSession(), true);
-  assert.deepEqual(plain({ base: b.state.base, groups: b.state.groups }), draftBefore);
+  assert.deepEqual(plain({ base: b.state.base, groups: b.state.groups }), { ...draftBefore, base: { ...draftBefore.base, date: '2026-11-12' } });
   assert.equal(b.state.applied.base.date, originalApplied.base.date);
   assert.equal(b.state.applied.base.days, 7);
   assert.deepEqual(plain(b.state.applied.groups.map(g => g.id)), originalApplied.groups.map(g => g.id));
@@ -258,4 +261,24 @@ test('page hide flushes the latest draft and blocked storage never prevents quer
   assert.equal(blocked.runQuery(true), true);
   blocked.ready();
   assert.equal(blocked.saveSession(), false);
+});
+
+test('relative groups advance to current KST day but directly selected dates remain fixed', () => {
+  const a = app();
+  a.state.groups[2].period = { mode: 'date', date: '2026-10-01', shift: -1 };
+  a.runQuery(true); a.ready(); a.saveSession();
+  const b = app(a.snapshot(), false, '2026-11-13');
+  assert.equal(b.restoreSession(), true);
+  assert.equal(b.state.base.date, '2026-11-13');
+  assert.equal(b.state.applied.base.date, '2026-11-13');
+  const day = g => new Date(g.start * 1000).toISOString().slice(0, 10);
+  assert.equal(day(b.state.applied.groups[0]), '2026-11-13');
+  assert.equal(day(b.state.applied.groups[1]), '2026-11-06');
+  assert.equal(day(b.state.applied.groups[2]), '2026-10-01');
+  assert.equal(b.isDirty(), false);
+  b.setToday('2026-11-14');
+  assert.equal(b.runQuery(true), true);
+  assert.equal(day(b.state.applied.groups[0]), '2026-11-14');
+  assert.equal(day(b.state.applied.groups[1]), '2026-11-07');
+  assert.equal(day(b.state.applied.groups[2]), '2026-10-01');
 });
