@@ -572,6 +572,43 @@ input.ctl::placeholder { color: var(--gray-500); }
 .range-slider::-moz-range-thumb { height: 12px; width: 12px; border: 2px solid var(--surface-100); background: var(--primary-700); border-radius: 50%; box-shadow: 0 0 0 1px var(--primary-700); }
 .range-slider:focus-visible { outline: 2px solid var(--primary-700); outline-offset: 2px; }
 .range-slider:disabled { opacity: .45; cursor: not-allowed; }
+/* 시간 범위 탐색: 일반 버튼과 분리한 24px 전용 컨트롤 */
+.drillbar { display: grid; gap: 6px; min-width: 0; margin: 10px 14px; padding: 8px 10px; border: 1px solid var(--gray-200); border-left: 3px solid var(--primary-300); border-radius: 6px; background: var(--gray-100); }
+.drill-main { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.drill-path { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.drill-label { flex: none; color: var(--gray-600); font-size: 11px; line-height: 18px; font-weight: 700; }
+.drill-trail { display: flex; align-items: center; gap: 3px; min-width: 0; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; }
+.drill-step { display: inline-flex; flex: none; align-items: center; gap: 5px; height: 24px; min-height: 24px; padding: 0 6px; border: 0; border-radius: 4px; background: transparent; color: var(--primary-800); font-size: 12px; line-height: 18px; }
+.drill-step small { color: var(--gray-600); font-size: 10px; }
+.drill-step:hover { background: var(--overlay-primary-100); }
+.drill-step:focus-visible { outline: none; box-shadow: inset 0 0 0 1px var(--primary-700); }
+.drill-separator { flex: none; color: var(--gray-400); font-size: 12px; }
+.drill-current { display: inline-flex; flex: none; align-items: center; gap: 7px; min-height: 24px; padding: 2px 7px; border-radius: 4px; background: var(--surface-100); color: var(--gray-900); font-size: 12px; line-height: 18px; }
+.drill-current > span { flex: none; color: var(--primary-800); font-size: 11px; }
+.drill-current strong { font-weight: 600; font-variant-numeric: tabular-nums; }
+.drill-actions { display: inline-flex; flex: none; align-items: center; overflow: hidden; border: 1px solid var(--gray-300); border-radius: 5px; background: var(--surface-100); }
+.drill-action { display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 4px; height: 24px; min-height: 24px; padding: 0 7px; border: 0; border-radius: 4px; background: transparent; color: var(--gray-800); font-size: 12px; line-height: 18px; white-space: nowrap; cursor: pointer; }
+.drill-actions .drill-action { border-radius: 0; }
+.drill-actions .drill-action + .drill-action { border-left: 1px solid var(--gray-200); }
+.drill-action svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.drill-action:hover:not(:disabled) { background: var(--overlay-100); color: var(--gray-900); }
+.drill-action:active:not(:disabled) { background: var(--overlay-200); }
+.drill-action:focus-visible { outline: none; box-shadow: inset 0 0 0 1px var(--primary-700); }
+.drill-action:disabled { color: var(--gray-400); cursor: not-allowed; }
+.drill-action.emphasis { background: var(--primary-100); color: var(--primary-800); }
+.drill-action.emphasis:hover:not(:disabled) { background: var(--primary-200); color: var(--primary-900); }
+.drill-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 11px; line-height: 18px; }
+.drillbar .api { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; font-size: 11px; line-height: 18px; color: var(--gray-700); }
+.drillbar .api i { width: 5px; height: 5px; }
+.drillbar .api.sec { color: var(--blue-900); }
+.drill-hint { color: var(--gray-600); }
+.drill-selection { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding-top: 6px; border-top: 1px solid var(--gray-200); }
+.drill-selection .selinfo, .tblsel .selinfo { gap: 5px; font-size: 12px; line-height: 18px; }
+.drill-selection .selinfo .num, .tblsel .selinfo .num { font-family: var(--font-ui); font-variant-numeric: tabular-nums; }
+.drill-selection .why, .tblsel .why { font-size: 11px; }
+.drillbar .fallbacks { padding: 5px 0 0; border: 0; border-top: 1px solid var(--gray-200); background: transparent; }
+.drillbar .fb { padding: 1px 6px; font-size: 11px; line-height: 18px; }
+.tblsel { margin: 8px 12px; padding: 6px 8px; border: 1px solid var(--primary-200); border-radius: 5px; background: var(--primary-100); }
 /* 최근 검색: 조건 요약을 위한 넓은 팝오버 */
 .recent-trigger { gap: 8px; flex-shrink: 0; }
 .recent-trigger[aria-expanded="true"] { background: var(--primary-100); color: var(--primary-800); box-shadow: inset 0 0 0 1px var(--primary-300); }
@@ -603,6 +640,10 @@ input.ctl::placeholder { color: var(--gray-500); }
 @media(max-width:640px) {
   .range-slider { width: clamp(110px, 38vw, 170px); }
   .basebar .sp { flex-basis: 100%; height: 0; }
+  .drillbar { margin-inline: 8px; }
+  .drill-label { display: none; }
+  .drill-main { gap: 6px; }
+  .drill-current { max-width: 220px; white-space: normal; }
 }
 </style>
 
@@ -998,8 +1039,7 @@ function renderResults() {
       <button class="btn" data-act="csv" ${e.data ? '' : 'disabled'}>${ICON.copy}현재 결과 CSV 복사</button>
     </div>
     <div class="chips" id="chips"></div>
-    <div class="drillbar" id="drillbar"></div>
-    <div id="fbHost"></div>
+    <section class="drillbar" id="drillbar" aria-label="시간 범위 탐색"></section>
     <div class="body ${state.view === 'side' ? 'side' : 'stack'}" id="body">
       ${state.view !== 'table' ? '<div class="charts" id="charts"></div>' : ''}
       ${state.view !== 'chart' ? '<div class="tblwrap" id="tblwrap"></div>' : ''}
@@ -1034,31 +1074,39 @@ function renderDrillbar() {
   const A = state.applied, e = cur();
   const crumbs = state.history.map((h, i) => {
     const lbl = i === 0 ? `전체 ${fmtDay(baseStart())}${A.base.days > 1 ? ` +${A.base.days - 1}일` : ''} · ${fmtRes(h.res)}` : `${rangeLabel(h.from, h.to, h.res < 60)} · ${fmtRes(h.res)}`;
-    return i === state.history.length - 1 ? `<span class="cur">${esc(lbl)}</span>` : `<button data-act="level" data-i="${i}">${esc(lbl)}</button>`;
-  }).join('<span class="sep">›</span>');
-  let selHTML;
+    const step = i === 0 ? '전체' : `${i}단계`;
+    const current = i === 0 ? `${fmtDay(baseStart())}${A.base.days > 1 ? ` – ${fmtDay(baseStart() + (A.base.days - 1) * DAY)}` : ''}` : rangeLabel(h.from, h.to, h.res < 60);
+    return i === state.history.length - 1
+      ? `<span class="drill-current" aria-current="step" title="${esc(lbl)}"><span>${step}</span><strong>${esc(current)}</strong></span>`
+      : `<button type="button" class="drill-step" data-act="level" data-i="${i}" title="${esc(lbl)}" aria-label="${step}로 이동: ${esc(lbl)}">${step}<small>${fmtRes(h.res)}</small></button>`;
+  }).join('<span class="drill-separator" aria-hidden="true">›</span>');
+  let selHTML = '';
   if (state.sel) {
     const c = canDrill(state.sel.from, state.sel.to);
     const n = e.data ? rowsIn(state.sel.from, state.sel.to) : 0;
     selHTML = `<span class="selinfo">선택 <b class="num">${rangeLabel(state.sel.from, state.sel.to, (e.data?.rmin ?? 60) < 60)}</b> (${n}행)</span>
-      ${c.ok ? `<button class="btn sm primary" data-act="zoomSel">${ICON.zoom}선택 구간 확대 → ${fmtRes(c.res)} · ${API_NAME[c.api]}</button>` : `<button class="btn sm" disabled>${ICON.zoom}선택 구간 확대</button><span class="why">${esc(c.why)}</span>`}
-      <button class="btn sm ghost" data-act="clearSel">선택 해제</button>`;
-  } else {
-    selHTML = `<span class="selinfo">${e.api === 'sec' && e.res === 1 ? '가장 세밀한 1초 단계예요.' : '차트에서 x축을 드래그하면 바로 확대돼요. 표는 시간 칸을 끌어 고른 뒤 확대하세요.'}</span>`;
+      ${c.ok ? `<button type="button" class="drill-action emphasis" data-act="zoomSel" title="선택 구간을 ${API_NAME[c.api]}로 확대">${ICON.zoom}확대 · ${fmtRes(c.res)}</button>` : `<button type="button" class="drill-action" disabled>${ICON.zoom}확대</button><span class="why">${esc(c.why)}</span>`}
+      <button type="button" class="drill-action" data-act="clearSel">선택 해제</button>`;
   }
   const rows = e.data?.rows.length ?? 0;
+  const fbs = e.data ? A.series.filter(s => e.data.series[s.key]?.fallback) : [];
+  const fallbackTargets = [...new Map(fbs.map(s => [s.tg.id, s.tg.name])).values()];
+  const hint = e.api === 'sec' && e.res === 1 ? '가장 세밀한 1초 단위입니다.' : '차트 드래그로 확대 · 표에서 시간 구간 선택 후 확대';
   $('#drillbar').innerHTML = `
-    <div class="crumbs" aria-label="드릴다운 경로">${crumbs}</div>
-    <span class="api ${e.api}" title="${e.api === 'sec' ? '초 단위 세밀 검색. 운영시간·제외일 파라미터가 없어서 끊김 없는 구간만 확대해요.' : '분 이상 집계 검색. 그룹별 간격·운영시간·제외일을 적용해요.'}"><i></i>${API_NAME[e.api]} · ${fmtRes(e.res)}${e.data ? ` · ${rows.toLocaleString('ko-KR')}행` : ''}</span>
-    <span class="sp"></span>
-    ${selHTML}
-    <button class="btn" data-act="back" ${state.history.length > 1 ? '' : 'disabled'} title="한 단계 뒤로">${ICON.back}뒤로</button>
-    <button class="btn" data-act="level" data-i="0" ${state.history.length > 1 ? '' : 'disabled'}>전체</button>`;
+    <div class="drill-main"><div class="drill-path"><span class="drill-label">시간 범위</span><nav class="drill-trail" aria-label="시간 범위 경로">${crumbs}</nav></div>
+      <div class="drill-actions" role="group" aria-label="시간 범위 이동">
+        <button type="button" class="drill-action" data-act="back" ${state.history.length > 1 ? '' : 'disabled'} title="한 단계 뒤로">${ICON.back}뒤로</button>
+        <button type="button" class="drill-action" data-act="level" data-i="0" ${state.history.length > 1 ? '' : 'disabled'} title="전체 검색 기간으로 돌아가기">전체</button>
+      </div></div>
+    <div class="drill-meta"><span class="api ${e.api}" title="${e.api === 'sec' ? '초 단위 세밀 검색. 운영시간·제외일 파라미터가 없어서 끊김 없는 구간만 확대해요.' : '분 이상 집계 검색. 그룹별 간격·운영시간·제외일을 적용해요.'}"><i></i>${API_NAME[e.api]} · ${fmtRes(e.res)}${e.data ? ` · ${rows.toLocaleString('ko-KR')}행` : ''}</span>
+      ${state.sel ? '' : `<span class="drill-hint">${hint}</span>`}</div>
+    ${state.sel ? `<div class="drill-selection">${selHTML}</div>` : ''}
+    ${fallbackTargets.length ? `<div class="fallbacks"><span class="fb" title="초 데이터가 없는 대상은 0으로 채우지 않고 기존 1분 데이터를 표시합니다.">${esc(fallbackTargets.join(', '))} · 초 데이터 없음 → 1분 데이터 유지</span></div>` : ''}`;
+  const trail = $('#drillbar .drill-trail');
+  trail.scrollLeft = trail.scrollWidth;
   // 표 바로 아래에도 같은 선택·확대 동작을 둠 (표에서 고른 뒤 위로 올라가지 않게)
   const ts = $('#tblsel');
   if (ts) { ts.hidden = !state.sel; ts.innerHTML = state.sel ? selHTML : ''; }
-  const fbs = e.data ? A.series.filter(s => e.data.series[s.key]?.fallback) : [];
-  $('#fbHost').innerHTML = fbs.length ? `<div class="fallbacks">${fbs.map(s => `<span class="fb">${esc(s.tg.name)} · 초 데이터 없음 → 1분 데이터 유지 (0으로 채우지 않음)</span>`).join('')}</div>` : '';
 }
 
 /* ---------- 차트 ---------- */
