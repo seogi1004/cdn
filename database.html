@@ -529,9 +529,9 @@ body { background: var(--surface-50); color: var(--gray-900); font-family: var(-
 .jm li.selected { background: var(--overlay-primary-100); }
 .jm li.selected .item-wrapper > span { color: var(--primary-800); }
 .jm li .jmi-check { width: 18px; height: 18px; fill: var(--primary-700); margin: 0 8px 0 6px; flex: none; }
-/* SelectButton (js-select-button small): 바탕 gray-100, 항목 gray-600 + 2px 투명 테두리, 선택은 gray-50 + gray-200 테두리 + primary-800 글자 */
-.seg { display: inline-flex; background: var(--gray-100); border-radius: 4px; box-shadow: none; border: 0; overflow: visible; }
-.seg button { height: 24px; padding: 0 8px; border: 2px solid transparent; border-radius: 4px; background: var(--gray-100); color: var(--gray-600); font-size: 12px; font-weight: 400; transition: background-color .18s, color .18s, border-color .18s; box-sizing: border-box; display: inline-flex; align-items: center; }
+/* SelectButton (js-select-button medium): 검색 버튼과 같은 32px / 14px */
+.seg { display: inline-flex; background: var(--gray-100); border-radius: 6px; box-shadow: none; border: 0; overflow: visible; }
+.seg button { height: 32px; padding: 0 12px; border: 2px solid transparent; border-radius: 6px; background: var(--gray-100); color: var(--gray-600); font-size: 14px; font-weight: 400; transition: background-color .18s, color .18s, border-color .18s; box-sizing: border-box; display: inline-flex; align-items: center; }
 .seg button + button { border-left: 2px solid transparent; margin-left: 2px; }
 .seg button:hover:not(:disabled) { background: var(--gray-100); color: var(--gray-900); }
 .seg button[aria-pressed="true"] { background: var(--gray-50); border-color: var(--gray-200); color: var(--primary-800); font-weight: 400; }
@@ -549,7 +549,8 @@ input.ctl::placeholder { color: var(--gray-500); }
 .ibtn, .chip .ibtn, .trow .chev { width: 24px; height: 24px; }
 .ibtn svg, .chip .ibtn svg, .btn.sm svg, .trow .chev svg { width: 14px; height: 14px; }
 .btn svg { width: 16px; height: 16px; }
-.chip, .chip .tg, .seg button, .grid td.tc .dr { height: 24px; font-size: 12px; }
+.chip, .chip .tg, .grid td.tc .dr { height: 24px; font-size: 12px; }
+.seg button { height: 32px; font-size: 14px; line-height: 22px; }
 .chip .tg { height: 24px; }
 .dtabs button, .opt2, .opt2.one, .mrow, .pop .opt, .crumbs button { min-height: 32px; font-size: 14px; }
 .opt2:not(.one) { height: 32px; padding: 0 10px; display: inline-flex; flex-direction: row; align-items: center; gap: 6px; }
@@ -571,6 +572,34 @@ input.ctl::placeholder { color: var(--gray-500); }
 .range-slider::-moz-range-thumb { height: 12px; width: 12px; border: 2px solid var(--surface-100); background: var(--primary-700); border-radius: 50%; box-shadow: 0 0 0 1px var(--primary-700); }
 .range-slider:focus-visible { outline: 2px solid var(--primary-700); outline-offset: 2px; }
 .range-slider:disabled { opacity: .45; cursor: not-allowed; }
+/* 최근 검색: 조건 요약을 위한 넓은 팝오버 */
+.recent-trigger { gap: 8px; flex-shrink: 0; }
+.recent-trigger[aria-expanded="true"] { background: var(--primary-100); color: var(--primary-800); box-shadow: inset 0 0 0 1px var(--primary-300); }
+.recent-trigger .recent-chevron { width: 12px; height: 12px; transition: transform .18s; }
+.recent-trigger[aria-expanded="true"] .recent-chevron { transform: rotate(180deg); }
+.pop.recent-pop { width: min(400px, calc(100vw - 32px)); min-width: 0; max-width: none; padding: 0; display: flex; flex-direction: column; overflow: hidden; border-radius: 8px; background: var(--surface-200); box-shadow: var(--box-shadow-500); }
+.recent-head { flex: none; padding: 16px; border-bottom: 1px solid var(--gray-200); }
+.recent-heading { display: flex; align-items: center; gap: 8px; }
+.recent-head h4 { margin: 0; font-size: 16px; line-height: 24px; font-weight: 700; color: var(--gray-900); }
+.recent-count { padding: 0 6px; border-radius: 4px; background: var(--gray-100); color: var(--gray-600); font-size: 12px; line-height: 20px; }
+.recent-head p { margin: 4px 0 0; color: var(--gray-600); font-size: 12px; line-height: 18px; }
+.recent-list { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px; }
+.recent-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; border: 0; border-radius: 6px; background: transparent; color: var(--gray-900); text-align: left; white-space: normal; transition: background-color .18s; }
+.recent-item + .recent-item { margin-top: 4px; }
+.recent-item:hover { background: var(--overlay-100); }
+.recent-item:focus-visible { outline: none; background: var(--primary-100); box-shadow: inset 0 0 0 1px var(--primary-300); }
+.recent-item:active { background: var(--overlay-300); }
+.recent-content { display: grid; gap: 5px; flex: 1; min-width: 0; }
+.recent-period { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 14px; line-height: 22px; font-weight: 700; }
+.recent-date { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.recent-days { padding: 0 6px; border-radius: 4px; background: var(--gray-100); color: var(--gray-600); font-size: 12px; line-height: 18px; font-weight: 400; white-space: nowrap; }
+.recent-summary { color: var(--gray-800); font-size: 14px; line-height: 22px; overflow-wrap: anywhere; }
+.recent-meta { color: var(--gray-600); font-size: 12px; line-height: 18px; }
+.recent-arrow { display: flex; flex: none; color: var(--gray-500); }
+.recent-arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.recent-item:hover .recent-arrow, .recent-item:focus-visible .recent-arrow { color: var(--primary-800); }
+.recent-empty { padding: 24px 16px; text-align: center; color: var(--gray-600); font-size: 14px; line-height: 22px; }
+.recent-empty small { display: block; margin-top: 4px; font-size: 12px; }
 @media(max-width:640px) {
   .range-slider { width: clamp(110px, 38vw, 170px); }
   .basebar .sp { flex-basis: 100%; height: 0; }
@@ -582,7 +611,7 @@ input.ctl::placeholder { color: var(--gray-500); }
     <h1>DB 검색</h1>
     <span class="tag">통합 프로토타입 · 예시 데이터</span>
     <span class="sp"></span>
-    <button class="btn sm" data-act="recent" id="recentBtn"><svg viewBox="0 0 16 16"><path d="M8 4v4l2.5 1.5M2.5 8a5.5 5.5 0 1 0 1.6-3.9M2.5 2.5v2.5H5"/></svg>최근 검색</button>
+    <button type="button" class="btn recent-trigger" data-act="recent" id="recentBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="recentSearchPop"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 4v4l2.5 1.5M2.5 8a5.5 5.5 0 1 0 1.6-3.9M2.5 2.5v2.5H5"/></svg>최근 검색<svg class="recent-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
   </header>
 
   <section class="panel cond" aria-label="검색 조건">
@@ -966,7 +995,7 @@ function renderResults() {
       <div class="seg" role="group" aria-label="보기">
         ${[['stack', '둘 다'], ['chart', '차트만'], ['table', '표만']].map(([v, l]) => `<button data-act="view" data-v="${v}" aria-pressed="${state.view === v}">${l}</button>`).join('')}
       </div>
-      <button class="btn sm" data-act="csv" ${e.data ? '' : 'disabled'}>${ICON.copy}현재 결과 CSV 복사</button>
+      <button class="btn" data-act="csv" ${e.data ? '' : 'disabled'}>${ICON.copy}현재 결과 CSV 복사</button>
     </div>
     <div class="chips" id="chips"></div>
     <div class="drillbar" id="drillbar"></div>
@@ -1023,8 +1052,8 @@ function renderDrillbar() {
     <span class="api ${e.api}" title="${e.api === 'sec' ? '초 단위 세밀 검색. 운영시간·제외일 파라미터가 없어서 끊김 없는 구간만 확대해요.' : '분 이상 집계 검색. 그룹별 간격·운영시간·제외일을 적용해요.'}"><i></i>${API_NAME[e.api]} · ${fmtRes(e.res)}${e.data ? ` · ${rows.toLocaleString('ko-KR')}행` : ''}</span>
     <span class="sp"></span>
     ${selHTML}
-    <button class="btn sm" data-act="back" ${state.history.length > 1 ? '' : 'disabled'} title="한 단계 뒤로">${ICON.back}뒤로</button>
-    <button class="btn sm" data-act="level" data-i="0" ${state.history.length > 1 ? '' : 'disabled'}>전체</button>`;
+    <button class="btn" data-act="back" ${state.history.length > 1 ? '' : 'disabled'} title="한 단계 뒤로">${ICON.back}뒤로</button>
+    <button class="btn" data-act="level" data-i="0" ${state.history.length > 1 ? '' : 'disabled'}>전체</button>`;
   // 표 바로 아래에도 같은 선택·확대 동작을 둠 (표에서 고른 뒤 위로 올라가지 않게)
   const ts = $('#tblsel');
   if (ts) { ts.hidden = !state.sel; ts.innerHTML = state.sel ? selHTML : ''; }
@@ -1427,18 +1456,29 @@ function ddOpen(btn) {
 }
 
 /* ---------- 팝오버 / 토스트 ---------- */
-function openPop(anchor, html, bind) {
+function openPop(anchor, html, bind, options = {}) {
   closePop();
-  const pop = document.createElement('div'); pop.className = 'pop'; pop.innerHTML = html; pop.setAttribute('role', 'dialog');
+  const pop = document.createElement('div'); pop.className = `pop${options.className ? ' ' + options.className : ''}`; pop.innerHTML = html; pop.setAttribute('role', 'dialog');
   $('#popHost').appendChild(pop);
   const r = anchor.getBoundingClientRect();
-  const left = Math.min(window.innerWidth - pop.offsetWidth - 16, Math.max(16, r.left));
+  if (options.maxHeight) {
+    const available = Math.max(window.innerHeight - r.bottom - 22, r.top - 22, 0);
+    pop.style.maxHeight = Math.min(options.maxHeight, available) + 'px';
+  }
+  const x = options.align === 'end' ? r.right - pop.offsetWidth : r.left;
+  const left = Math.max(16, Math.min(window.innerWidth - pop.offsetWidth - 16, x));
   const top = r.bottom + 6 + pop.offsetHeight > window.innerHeight ? r.top - pop.offsetHeight - 6 : r.bottom + 6;
   pop.style.left = left + 'px'; pop.style.top = Math.max(8, top) + 'px';
   bind?.(pop);
   pop.querySelector('button, input')?.focus();
 }
-function closePop() { $('#popHost').innerHTML = ''; $$('.jdd.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }); }
+function closePop(restoreFocus = false) {
+  const recent = $('#recentBtn'), wasRecent = recent?.getAttribute('aria-expanded') === 'true';
+  $('#popHost').innerHTML = '';
+  $$('.jdd.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); });
+  recent?.setAttribute('aria-expanded', 'false');
+  if (restoreFocus && wasRecent) recent.focus();
+}
 let toastTimer;
 function toast(msg, actLabel, act) {
   clearTimeout(toastTimer);
@@ -1569,14 +1609,31 @@ function saveRecent() {
   } catch { /* 저장 불가 환경 */ }
 }
 function recentPop(anchor) {
+  if (anchor.getAttribute('aria-expanded') === 'true') { closePop(true); return; }
   const list = loadRecent();
-  openPop(anchor, `<h4>최근 검색 · 조건만 다시 불러와요 (결과는 보관 안 함)</h4>${list.length ? list.map((x, i) => `<button class="opt" data-ri="${i}"><span>${esc(x.label)}</span><small>${esc(x.date)}</small></button>`).join('') : '<div class="opt" style="color:var(--faint)">아직 없어요</div>'}`, pop => {
+  const items = list.map((x, i) => {
+    let days = '', period = esc(x.date), meta = '';
+    try {
+      const d = JSON.parse(x.def), base = d.base;
+      days = `${base.days}일`;
+      period = `<span class="recent-date">${esc(base.date)}</span>${base.days > 1 ? `<span aria-hidden="true">–</span><span class="recent-date">${dstr(dayStart(base.date) + (base.days - 1) * DAY)}</span>` : ''}`;
+      meta = `요약 ${intervalLabel(base)} · 조건 그룹 ${d.groups.length}개`;
+    } catch { /* 이전 저장 항목은 기존 요약으로 표시 */ }
+    return `<button type="button" class="recent-item" data-ri="${i}">
+      <span class="recent-content"><span class="recent-period">${period}${days ? `<span class="recent-days">${esc(days)}</span>` : ''}</span>
+        <span class="recent-summary">${esc(x.label)}</span>${meta ? `<span class="recent-meta">${esc(meta)}</span>` : ''}</span>
+      <span class="recent-arrow" aria-hidden="true">${ICON.chev}</span></button>`;
+  }).join('');
+  openPop(anchor, `<div class="recent-head"><div class="recent-heading"><h4 id="recentSearchTitle">최근 검색</h4><span class="recent-count">${list.length}개</span></div><p id="recentSearchDesc">선택하면 조건을 불러옵니다. 검색 결과는 저장하지 않아요.</p></div>
+    <div class="recent-list">${items || '<div class="recent-empty">최근 검색이 없습니다.<small>검색한 조건이 여기에 표시됩니다.</small></div>'}</div>`, pop => {
+    pop.id = 'recentSearchPop'; pop.setAttribute('aria-labelledby', 'recentSearchTitle'); pop.setAttribute('aria-describedby', 'recentSearchDesc');
+    anchor.setAttribute('aria-expanded', 'true');
     pop.querySelectorAll('[data-ri]').forEach(b => b.onclick = () => {
       const d = JSON.parse(list[+b.dataset.ri].def);
-      state.base = d.base; state.groups = d.groups.map(g => mkGroup(g)); closePop(); renderBuilder(); renderResults();
-      toast('조건을 불러왔어요. 검색를 눌러 실행하세요.', '지금 검색', () => runQuery(false));
+      state.base = d.base; state.groups = d.groups.map(g => mkGroup(g)); closePop(true); renderBuilder(); renderResults();
+      toast('조건을 불러왔어요. 검색을 눌러 실행하세요.', '지금 검색', () => runQuery(false));
     });
-  });
+  }, { className: 'recent-pop', align: 'end', maxHeight: 520 });
 }
 
 /* ---------- CSV ---------- */
@@ -1598,7 +1655,7 @@ function fallbackCopy(text, msg) {
   ta.remove();
 }
 document.addEventListener('keydown', ev => {
-  if (ev.key === 'Escape') { if ($('#popHost').innerHTML) closePop(); else if (ed.open) closeEditor(); else if (state.gmOpen) { state.gmOpen = false; renderGroupModal(); } else if (state.sel) { state.sel = null; updateSelection(); } return; }
+  if (ev.key === 'Escape') { if ($('#popHost').innerHTML) closePop(true); else if (ed.open) closeEditor(); else if (state.gmOpen) { state.gmOpen = false; renderGroupModal(); } else if (state.sel) { state.sel = null; updateSelection(); } return; }
   if ((ev.metaKey || ev.ctrlKey) && ev.key.toLowerCase() === 'c' && document.activeElement?.id === 'tblscroll') {
     const e = cur(); if (!e?.data) return;
     if (state.cell) {
